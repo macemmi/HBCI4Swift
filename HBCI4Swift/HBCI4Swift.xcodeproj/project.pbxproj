@@ -1,0 +1,788 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B19B35981AF1792A00F20B9A /* HBCI4Swift.h in Headers */ = {isa = PBXBuildFile; fileRef = B19B35971AF1792A00F20B9A /* HBCI4Swift.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B19B359E1AF1792B00F20B9A /* HBCI4Swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B19B35921AF1792A00F20B9A /* HBCI4Swift.framework */; };
+		B19B35A51AF1792B00F20B9A /* HBCI4SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35A41AF1792B00F20B9A /* HBCI4SwiftTests.swift */; };
+		B19B35BF1AF28AC500F20B9A /* hbci300.xml in Resources */ = {isa = PBXBuildFile; fileRef = B19B35AF1AF28AC500F20B9A /* hbci300.xml */; };
+		B19B35C01AF28AC500F20B9A /* hbci300.xml in Resources */ = {isa = PBXBuildFile; fileRef = B19B35AF1AF28AC500F20B9A /* hbci300.xml */; };
+		B19B35C11AF28AC500F20B9A /* hbci220.xml in Resources */ = {isa = PBXBuildFile; fileRef = B19B35B01AF28AC500F20B9A /* hbci220.xml */; };
+		B19B35C21AF28AC500F20B9A /* hbci220.xml in Resources */ = {isa = PBXBuildFile; fileRef = B19B35B01AF28AC500F20B9A /* hbci220.xml */; };
+		B19B35C31AF28AC500F20B9A /* CChar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35B11AF28AC500F20B9A /* CChar.swift */; };
+		B19B35C41AF28AC500F20B9A /* CChar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35B11AF28AC500F20B9A /* CChar.swift */; };
+		B19B35C51AF28AC500F20B9A /* HBCISyntax.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35B21AF28AC500F20B9A /* HBCISyntax.swift */; };
+		B19B35C61AF28AC500F20B9A /* HBCISyntax.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35B21AF28AC500F20B9A /* HBCISyntax.swift */; };
+		B19B35C71AF28AC500F20B9A /* HBCISyntaxElementReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35B31AF28AC500F20B9A /* HBCISyntaxElementReference.swift */; };
+		B19B35C81AF28AC500F20B9A /* HBCISyntaxElementReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35B31AF28AC500F20B9A /* HBCISyntaxElementReference.swift */; };
+		B19B35C91AF28AC500F20B9A /* HBCISyntaxElementDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35B41AF28AC500F20B9A /* HBCISyntaxElementDescription.swift */; };
+		B19B35CA1AF28AC500F20B9A /* HBCISyntaxElementDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35B41AF28AC500F20B9A /* HBCISyntaxElementDescription.swift */; };
+		B19B35CB1AF28AC500F20B9A /* HBCIDataElementDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35B51AF28AC500F20B9A /* HBCIDataElementDescription.swift */; };
+		B19B35CC1AF28AC500F20B9A /* HBCIDataElementDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35B51AF28AC500F20B9A /* HBCIDataElementDescription.swift */; };
+		B19B35CD1AF28AC500F20B9A /* HBCIDataElementGroupDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35B61AF28AC500F20B9A /* HBCIDataElementGroupDescription.swift */; };
+		B19B35CE1AF28AC500F20B9A /* HBCIDataElementGroupDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35B61AF28AC500F20B9A /* HBCIDataElementGroupDescription.swift */; };
+		B19B35CF1AF28AC500F20B9A /* HBCISegmentDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35B71AF28AC500F20B9A /* HBCISegmentDescription.swift */; };
+		B19B35D01AF28AC500F20B9A /* HBCISegmentDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35B71AF28AC500F20B9A /* HBCISegmentDescription.swift */; };
+		B19B35D11AF28AC500F20B9A /* HBCIMessageDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35B81AF28AC500F20B9A /* HBCIMessageDescription.swift */; };
+		B19B35D21AF28AC500F20B9A /* HBCIMessageDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35B81AF28AC500F20B9A /* HBCIMessageDescription.swift */; };
+		B19B35D31AF28AC500F20B9A /* HBCISegmentVersions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35B91AF28AC500F20B9A /* HBCISegmentVersions.swift */; };
+		B19B35D41AF28AC500F20B9A /* HBCISegmentVersions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35B91AF28AC500F20B9A /* HBCISegmentVersions.swift */; };
+		B19B35D51AF28AC500F20B9A /* HBCISyntaxElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35BA1AF28AC500F20B9A /* HBCISyntaxElement.swift */; };
+		B19B35D61AF28AC500F20B9A /* HBCISyntaxElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35BA1AF28AC500F20B9A /* HBCISyntaxElement.swift */; };
+		B19B35D71AF28AC500F20B9A /* HBCIDataElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35BB1AF28AC500F20B9A /* HBCIDataElement.swift */; };
+		B19B35D81AF28AC500F20B9A /* HBCIDataElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35BB1AF28AC500F20B9A /* HBCIDataElement.swift */; };
+		B19B35D91AF28AC500F20B9A /* HBCIDataElementGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35BC1AF28AC500F20B9A /* HBCIDataElementGroup.swift */; };
+		B19B35DA1AF28AC500F20B9A /* HBCIDataElementGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35BC1AF28AC500F20B9A /* HBCIDataElementGroup.swift */; };
+		B19B35DB1AF28AC500F20B9A /* HBCISegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35BD1AF28AC500F20B9A /* HBCISegment.swift */; };
+		B19B35DC1AF28AC500F20B9A /* HBCISegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35BD1AF28AC500F20B9A /* HBCISegment.swift */; };
+		B19B35DD1AF28AC500F20B9A /* HBCIMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35BE1AF28AC500F20B9A /* HBCIMessage.swift */; };
+		B19B35DE1AF28AC500F20B9A /* HBCIMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35BE1AF28AC500F20B9A /* HBCIMessage.swift */; };
+		B19B35E21AF28B1500F20B9A /* HBCIAnonymousDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35E01AF28B1500F20B9A /* HBCIAnonymousDialog.swift */; };
+		B19B35E31AF28B1500F20B9A /* HBCIAnonymousDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35E01AF28B1500F20B9A /* HBCIAnonymousDialog.swift */; };
+		B19B35E41AF28B1500F20B9A /* HBCIDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35E11AF28B1500F20B9A /* HBCIDialog.swift */; };
+		B19B35E51AF28B1500F20B9A /* HBCIDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35E11AF28B1500F20B9A /* HBCIDialog.swift */; };
+		B19B35EB1AF28B4900F20B9A /* HBCISepaGeneratorFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35E71AF28B4900F20B9A /* HBCISepaGeneratorFactory.swift */; };
+		B19B35EC1AF28B4900F20B9A /* HBCISepaGeneratorFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35E71AF28B4900F20B9A /* HBCISepaGeneratorFactory.swift */; };
+		B19B35ED1AF28B4900F20B9A /* HBCISepaGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35E81AF28B4900F20B9A /* HBCISepaGenerator.swift */; };
+		B19B35EE1AF28B4900F20B9A /* HBCISepaGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35E81AF28B4900F20B9A /* HBCISepaGenerator.swift */; };
+		B19B35EF1AF28B4900F20B9A /* HBCISepaGeneratorCredit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35E91AF28B4900F20B9A /* HBCISepaGeneratorCredit.swift */; };
+		B19B35F01AF28B4900F20B9A /* HBCISepaGeneratorCredit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35E91AF28B4900F20B9A /* HBCISepaGeneratorCredit.swift */; };
+		B19B35F11AF28B4900F20B9A /* HBCISepaGenerator_001_003_03.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35EA1AF28B4900F20B9A /* HBCISepaGenerator_001_003_03.swift */; };
+		B19B35F21AF28B4900F20B9A /* HBCISepaGenerator_001_003_03.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35EA1AF28B4900F20B9A /* HBCISepaGenerator_001_003_03.swift */; };
+		B19B35FA1AF28BA500F20B9A /* HBCIString.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35F81AF28BA500F20B9A /* HBCIString.swift */; };
+		B19B35FB1AF28BA500F20B9A /* HBCIString.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35F81AF28BA500F20B9A /* HBCIString.swift */; };
+		B19B35FC1AF28BA500F20B9A /* HBCIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35F91AF28BA500F20B9A /* HBCIExtensions.swift */; };
+		B19B35FD1AF28BA500F20B9A /* HBCIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35F91AF28BA500F20B9A /* HBCIExtensions.swift */; };
+		B19B36011AF28BB900F20B9A /* HBCIResultMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35FE1AF28BB900F20B9A /* HBCIResultMessage.swift */; };
+		B19B36021AF28BB900F20B9A /* HBCIResultMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35FE1AF28BB900F20B9A /* HBCIResultMessage.swift */; };
+		B19B36031AF28BB900F20B9A /* HBCICustomMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35FF1AF28BB900F20B9A /* HBCICustomMessage.swift */; };
+		B19B36041AF28BB900F20B9A /* HBCICustomMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35FF1AF28BB900F20B9A /* HBCICustomMessage.swift */; };
+		B19B36051AF28BB900F20B9A /* HBCIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B36001AF28BB900F20B9A /* HBCIResponse.swift */; };
+		B19B36061AF28BB900F20B9A /* HBCIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B36001AF28BB900F20B9A /* HBCIResponse.swift */; };
+		B19B360D1AF28BCE00F20B9A /* HBCIOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B36071AF28BCE00F20B9A /* HBCIOrder.swift */; };
+		B19B360E1AF28BCE00F20B9A /* HBCIOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B36071AF28BCE00F20B9A /* HBCIOrder.swift */; };
+		B19B360F1AF28BCE00F20B9A /* HBCIStatementsOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B36081AF28BCE00F20B9A /* HBCIStatementsOrder.swift */; };
+		B19B36101AF28BCE00F20B9A /* HBCIStatementsOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B36081AF28BCE00F20B9A /* HBCIStatementsOrder.swift */; };
+		B19B36111AF28BCE00F20B9A /* HBCIBalanceOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B36091AF28BCE00F20B9A /* HBCIBalanceOrder.swift */; };
+		B19B36121AF28BCE00F20B9A /* HBCIBalanceOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B36091AF28BCE00F20B9A /* HBCIBalanceOrder.swift */; };
+		B19B36131AF28BCE00F20B9A /* HBCITanOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B360A1AF28BCE00F20B9A /* HBCITanOrder.swift */; };
+		B19B36141AF28BCE00F20B9A /* HBCITanOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B360A1AF28BCE00F20B9A /* HBCITanOrder.swift */; };
+		B19B36151AF28BCE00F20B9A /* HBCISepaTransferOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B360B1AF28BCE00F20B9A /* HBCISepaTransferOrder.swift */; };
+		B19B36161AF28BCE00F20B9A /* HBCISepaTransferOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B360B1AF28BCE00F20B9A /* HBCISepaTransferOrder.swift */; };
+		B19B36171AF28BCE00F20B9A /* HBCITanMediaOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B360C1AF28BCE00F20B9A /* HBCITanMediaOrder.swift */; };
+		B19B36181AF28BCE00F20B9A /* HBCITanMediaOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B360C1AF28BCE00F20B9A /* HBCITanMediaOrder.swift */; };
+		B19B361D1AF28BE500F20B9A /* HBCIParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B36191AF28BE500F20B9A /* HBCIParameters.swift */; };
+		B19B361E1AF28BE500F20B9A /* HBCIParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B36191AF28BE500F20B9A /* HBCIParameters.swift */; };
+		B19B361F1AF28BE500F20B9A /* HBCIPinTanInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B361A1AF28BE500F20B9A /* HBCIPinTanInformation.swift */; };
+		B19B36201AF28BE500F20B9A /* HBCIPinTanInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B361A1AF28BE500F20B9A /* HBCIPinTanInformation.swift */; };
+		B19B36211AF28BE500F20B9A /* HBCITanProcessInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B361B1AF28BE500F20B9A /* HBCITanProcessInformation.swift */; };
+		B19B36221AF28BE500F20B9A /* HBCITanProcessInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B361B1AF28BE500F20B9A /* HBCITanProcessInformation.swift */; };
+		B19B36231AF28BE500F20B9A /* HBCITanMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B361C1AF28BE500F20B9A /* HBCITanMethod.swift */; };
+		B19B36241AF28BE500F20B9A /* HBCITanMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B361C1AF28BE500F20B9A /* HBCITanMethod.swift */; };
+		B19B362B1AF28BF900F20B9A /* HBCIUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B36251AF28BF900F20B9A /* HBCIUser.swift */; };
+		B19B362C1AF28BF900F20B9A /* HBCIUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B36251AF28BF900F20B9A /* HBCIUser.swift */; };
+		B19B362D1AF28BF900F20B9A /* HBCIStatement.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B36261AF28BF900F20B9A /* HBCIStatement.swift */; };
+		B19B362E1AF28BF900F20B9A /* HBCIStatement.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B36261AF28BF900F20B9A /* HBCIStatement.swift */; };
+		B19B362F1AF28BF900F20B9A /* HBCIAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B36271AF28BF900F20B9A /* HBCIAccount.swift */; };
+		B19B36301AF28BF900F20B9A /* HBCIAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B36271AF28BF900F20B9A /* HBCIAccount.swift */; };
+		B19B36311AF28BF900F20B9A /* HBCIAccountBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B36281AF28BF900F20B9A /* HBCIAccountBalance.swift */; };
+		B19B36321AF28BF900F20B9A /* HBCIAccountBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B36281AF28BF900F20B9A /* HBCIAccountBalance.swift */; };
+		B19B36331AF28BF900F20B9A /* HBCISepaTransfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B36291AF28BF900F20B9A /* HBCISepaTransfer.swift */; };
+		B19B36341AF28BF900F20B9A /* HBCISepaTransfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B36291AF28BF900F20B9A /* HBCISepaTransfer.swift */; };
+		B19B36351AF28BF900F20B9A /* HBCITanMedium.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B362A1AF28BF900F20B9A /* HBCITanMedium.swift */; };
+		B19B36361AF28BF900F20B9A /* HBCITanMedium.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B362A1AF28BF900F20B9A /* HBCITanMedium.swift */; };
+		B19B363F1AF28C1800F20B9A /* HBCILog.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B36371AF28C1800F20B9A /* HBCILog.swift */; };
+		B19B36401AF28C1800F20B9A /* HBCILog.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B36371AF28C1800F20B9A /* HBCILog.swift */; };
+		B19B36411AF28C1800F20B9A /* HBCIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B36381AF28C1800F20B9A /* HBCIError.swift */; };
+		B19B36421AF28C1800F20B9A /* HBCIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B36381AF28C1800F20B9A /* HBCIError.swift */; };
+		B19B36431AF28C1800F20B9A /* HBCIConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B36391AF28C1800F20B9A /* HBCIConnection.swift */; };
+		B19B36441AF28C1800F20B9A /* HBCIConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B36391AF28C1800F20B9A /* HBCIConnection.swift */; };
+		B19B36451AF28C1800F20B9A /* HBCIUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B363A1AF28C1800F20B9A /* HBCIUtils.swift */; };
+		B19B36461AF28C1800F20B9A /* HBCIUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B363A1AF28C1800F20B9A /* HBCIUtils.swift */; };
+		B19B36471AF28C1800F20B9A /* HBCIMT94xParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B363B1AF28C1800F20B9A /* HBCIMT94xParser.swift */; };
+		B19B36481AF28C1800F20B9A /* HBCIMT94xParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B363B1AF28C1800F20B9A /* HBCIMT94xParser.swift */; };
+		B19B36491AF28C1800F20B9A /* HBCITanProcess_2.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B363C1AF28C1800F20B9A /* HBCITanProcess_2.swift */; };
+		B19B364A1AF28C1800F20B9A /* HBCITanProcess_2.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B363C1AF28C1800F20B9A /* HBCITanProcess_2.swift */; };
+		B19B364B1AF28C1800F20B9A /* HBCISigningOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B363D1AF28C1800F20B9A /* HBCISigningOption.swift */; };
+		B19B364C1AF28C1800F20B9A /* HBCISigningOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B363D1AF28C1800F20B9A /* HBCISigningOption.swift */; };
+		B19B364D1AF28C1800F20B9A /* HBCICallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B363E1AF28C1800F20B9A /* HBCICallback.swift */; };
+		B19B364E1AF28C1800F20B9A /* HBCICallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B363E1AF28C1800F20B9A /* HBCICallback.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B19B359F1AF1792B00F20B9A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B19B35891AF1792A00F20B9A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B19B35911AF1792A00F20B9A;
+			remoteInfo = HBCI4Swift;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		B19B35921AF1792A00F20B9A /* HBCI4Swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HBCI4Swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B19B35961AF1792A00F20B9A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B19B35971AF1792A00F20B9A /* HBCI4Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBCI4Swift.h; sourceTree = "<group>"; };
+		B19B359D1AF1792B00F20B9A /* HBCI4SwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HBCI4SwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B19B35A31AF1792B00F20B9A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B19B35A41AF1792B00F20B9A /* HBCI4SwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCI4SwiftTests.swift; sourceTree = "<group>"; };
+		B19B35AF1AF28AC500F20B9A /* hbci300.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = hbci300.xml; sourceTree = "<group>"; };
+		B19B35B01AF28AC500F20B9A /* hbci220.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = hbci220.xml; sourceTree = "<group>"; };
+		B19B35B11AF28AC500F20B9A /* CChar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CChar.swift; sourceTree = "<group>"; };
+		B19B35B21AF28AC500F20B9A /* HBCISyntax.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISyntax.swift; sourceTree = "<group>"; };
+		B19B35B31AF28AC500F20B9A /* HBCISyntaxElementReference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISyntaxElementReference.swift; sourceTree = "<group>"; };
+		B19B35B41AF28AC500F20B9A /* HBCISyntaxElementDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISyntaxElementDescription.swift; sourceTree = "<group>"; };
+		B19B35B51AF28AC500F20B9A /* HBCIDataElementDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIDataElementDescription.swift; sourceTree = "<group>"; };
+		B19B35B61AF28AC500F20B9A /* HBCIDataElementGroupDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIDataElementGroupDescription.swift; sourceTree = "<group>"; };
+		B19B35B71AF28AC500F20B9A /* HBCISegmentDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISegmentDescription.swift; sourceTree = "<group>"; };
+		B19B35B81AF28AC500F20B9A /* HBCIMessageDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIMessageDescription.swift; sourceTree = "<group>"; };
+		B19B35B91AF28AC500F20B9A /* HBCISegmentVersions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISegmentVersions.swift; sourceTree = "<group>"; };
+		B19B35BA1AF28AC500F20B9A /* HBCISyntaxElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISyntaxElement.swift; sourceTree = "<group>"; };
+		B19B35BB1AF28AC500F20B9A /* HBCIDataElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIDataElement.swift; sourceTree = "<group>"; };
+		B19B35BC1AF28AC500F20B9A /* HBCIDataElementGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIDataElementGroup.swift; sourceTree = "<group>"; };
+		B19B35BD1AF28AC500F20B9A /* HBCISegment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISegment.swift; sourceTree = "<group>"; };
+		B19B35BE1AF28AC500F20B9A /* HBCIMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIMessage.swift; sourceTree = "<group>"; };
+		B19B35E01AF28B1500F20B9A /* HBCIAnonymousDialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIAnonymousDialog.swift; sourceTree = "<group>"; };
+		B19B35E11AF28B1500F20B9A /* HBCIDialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIDialog.swift; sourceTree = "<group>"; };
+		B19B35E71AF28B4900F20B9A /* HBCISepaGeneratorFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaGeneratorFactory.swift; sourceTree = "<group>"; };
+		B19B35E81AF28B4900F20B9A /* HBCISepaGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaGenerator.swift; sourceTree = "<group>"; };
+		B19B35E91AF28B4900F20B9A /* HBCISepaGeneratorCredit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaGeneratorCredit.swift; sourceTree = "<group>"; };
+		B19B35EA1AF28B4900F20B9A /* HBCISepaGenerator_001_003_03.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaGenerator_001_003_03.swift; sourceTree = "<group>"; };
+		B19B35F81AF28BA500F20B9A /* HBCIString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIString.swift; sourceTree = "<group>"; };
+		B19B35F91AF28BA500F20B9A /* HBCIExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIExtensions.swift; sourceTree = "<group>"; };
+		B19B35FE1AF28BB900F20B9A /* HBCIResultMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIResultMessage.swift; sourceTree = "<group>"; };
+		B19B35FF1AF28BB900F20B9A /* HBCICustomMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCICustomMessage.swift; sourceTree = "<group>"; };
+		B19B36001AF28BB900F20B9A /* HBCIResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIResponse.swift; sourceTree = "<group>"; };
+		B19B36071AF28BCE00F20B9A /* HBCIOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIOrder.swift; sourceTree = "<group>"; };
+		B19B36081AF28BCE00F20B9A /* HBCIStatementsOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIStatementsOrder.swift; sourceTree = "<group>"; };
+		B19B36091AF28BCE00F20B9A /* HBCIBalanceOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIBalanceOrder.swift; sourceTree = "<group>"; };
+		B19B360A1AF28BCE00F20B9A /* HBCITanOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCITanOrder.swift; sourceTree = "<group>"; };
+		B19B360B1AF28BCE00F20B9A /* HBCISepaTransferOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaTransferOrder.swift; sourceTree = "<group>"; };
+		B19B360C1AF28BCE00F20B9A /* HBCITanMediaOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCITanMediaOrder.swift; sourceTree = "<group>"; };
+		B19B36191AF28BE500F20B9A /* HBCIParameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIParameters.swift; sourceTree = "<group>"; };
+		B19B361A1AF28BE500F20B9A /* HBCIPinTanInformation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIPinTanInformation.swift; sourceTree = "<group>"; };
+		B19B361B1AF28BE500F20B9A /* HBCITanProcessInformation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCITanProcessInformation.swift; sourceTree = "<group>"; };
+		B19B361C1AF28BE500F20B9A /* HBCITanMethod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCITanMethod.swift; sourceTree = "<group>"; };
+		B19B36251AF28BF900F20B9A /* HBCIUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIUser.swift; sourceTree = "<group>"; };
+		B19B36261AF28BF900F20B9A /* HBCIStatement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIStatement.swift; sourceTree = "<group>"; };
+		B19B36271AF28BF900F20B9A /* HBCIAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIAccount.swift; sourceTree = "<group>"; };
+		B19B36281AF28BF900F20B9A /* HBCIAccountBalance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIAccountBalance.swift; sourceTree = "<group>"; };
+		B19B36291AF28BF900F20B9A /* HBCISepaTransfer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaTransfer.swift; sourceTree = "<group>"; };
+		B19B362A1AF28BF900F20B9A /* HBCITanMedium.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCITanMedium.swift; sourceTree = "<group>"; };
+		B19B36371AF28C1800F20B9A /* HBCILog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCILog.swift; sourceTree = "<group>"; };
+		B19B36381AF28C1800F20B9A /* HBCIError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIError.swift; sourceTree = "<group>"; };
+		B19B36391AF28C1800F20B9A /* HBCIConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIConnection.swift; sourceTree = "<group>"; };
+		B19B363A1AF28C1800F20B9A /* HBCIUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIUtils.swift; sourceTree = "<group>"; };
+		B19B363B1AF28C1800F20B9A /* HBCIMT94xParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIMT94xParser.swift; sourceTree = "<group>"; };
+		B19B363C1AF28C1800F20B9A /* HBCITanProcess_2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCITanProcess_2.swift; sourceTree = "<group>"; };
+		B19B363D1AF28C1800F20B9A /* HBCISigningOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISigningOption.swift; sourceTree = "<group>"; };
+		B19B363E1AF28C1800F20B9A /* HBCICallback.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCICallback.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B19B358E1AF1792A00F20B9A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B19B359A1AF1792B00F20B9A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B19B359E1AF1792B00F20B9A /* HBCI4Swift.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B19B35881AF1792A00F20B9A = {
+			isa = PBXGroup;
+			children = (
+				B19B35941AF1792A00F20B9A /* HBCI4Swift */,
+				B19B35A11AF1792B00F20B9A /* HBCI4SwiftTests */,
+				B19B35931AF1792A00F20B9A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B19B35931AF1792A00F20B9A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B19B35921AF1792A00F20B9A /* HBCI4Swift.framework */,
+				B19B359D1AF1792B00F20B9A /* HBCI4SwiftTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B19B35941AF1792A00F20B9A /* HBCI4Swift */ = {
+			isa = PBXGroup;
+			children = (
+				B19B35F71AF28B8600F20B9A /* Extensions */,
+				B19B35AE1AF28AA900F20B9A /* Syntax */,
+				B19B35F61AF28B7600F20B9A /* Message */,
+				B19B35DF1AF28AE400F20B9A /* Dialog */,
+				B19B35F41AF28B6100F20B9A /* Parameters */,
+				B19B35F31AF28B5200F20B9A /* Structures */,
+				B19B35E61AF28B3700F20B9A /* Sepa */,
+				B19B35F51AF28B7000F20B9A /* Orders */,
+				B19B36371AF28C1800F20B9A /* HBCILog.swift */,
+				B19B36381AF28C1800F20B9A /* HBCIError.swift */,
+				B19B36391AF28C1800F20B9A /* HBCIConnection.swift */,
+				B19B363A1AF28C1800F20B9A /* HBCIUtils.swift */,
+				B19B363B1AF28C1800F20B9A /* HBCIMT94xParser.swift */,
+				B19B363C1AF28C1800F20B9A /* HBCITanProcess_2.swift */,
+				B19B363D1AF28C1800F20B9A /* HBCISigningOption.swift */,
+				B19B363E1AF28C1800F20B9A /* HBCICallback.swift */,
+				B19B35971AF1792A00F20B9A /* HBCI4Swift.h */,
+				B19B35951AF1792A00F20B9A /* Supporting Files */,
+			);
+			path = HBCI4Swift;
+			sourceTree = "<group>";
+		};
+		B19B35951AF1792A00F20B9A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				B19B35961AF1792A00F20B9A /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		B19B35A11AF1792B00F20B9A /* HBCI4SwiftTests */ = {
+			isa = PBXGroup;
+			children = (
+				B19B35A41AF1792B00F20B9A /* HBCI4SwiftTests.swift */,
+				B19B35A21AF1792B00F20B9A /* Supporting Files */,
+			);
+			path = HBCI4SwiftTests;
+			sourceTree = "<group>";
+		};
+		B19B35A21AF1792B00F20B9A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				B19B35A31AF1792B00F20B9A /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		B19B35AE1AF28AA900F20B9A /* Syntax */ = {
+			isa = PBXGroup;
+			children = (
+				B19B35AF1AF28AC500F20B9A /* hbci300.xml */,
+				B19B35B01AF28AC500F20B9A /* hbci220.xml */,
+				B19B35B11AF28AC500F20B9A /* CChar.swift */,
+				B19B35B21AF28AC500F20B9A /* HBCISyntax.swift */,
+				B19B35B31AF28AC500F20B9A /* HBCISyntaxElementReference.swift */,
+				B19B35B41AF28AC500F20B9A /* HBCISyntaxElementDescription.swift */,
+				B19B35B51AF28AC500F20B9A /* HBCIDataElementDescription.swift */,
+				B19B35B61AF28AC500F20B9A /* HBCIDataElementGroupDescription.swift */,
+				B19B35B71AF28AC500F20B9A /* HBCISegmentDescription.swift */,
+				B19B35B81AF28AC500F20B9A /* HBCIMessageDescription.swift */,
+				B19B35B91AF28AC500F20B9A /* HBCISegmentVersions.swift */,
+				B19B35BA1AF28AC500F20B9A /* HBCISyntaxElement.swift */,
+				B19B35BB1AF28AC500F20B9A /* HBCIDataElement.swift */,
+				B19B35BC1AF28AC500F20B9A /* HBCIDataElementGroup.swift */,
+				B19B35BD1AF28AC500F20B9A /* HBCISegment.swift */,
+				B19B35BE1AF28AC500F20B9A /* HBCIMessage.swift */,
+			);
+			name = Syntax;
+			sourceTree = "<group>";
+		};
+		B19B35DF1AF28AE400F20B9A /* Dialog */ = {
+			isa = PBXGroup;
+			children = (
+				B19B35E01AF28B1500F20B9A /* HBCIAnonymousDialog.swift */,
+				B19B35E11AF28B1500F20B9A /* HBCIDialog.swift */,
+			);
+			name = Dialog;
+			sourceTree = "<group>";
+		};
+		B19B35E61AF28B3700F20B9A /* Sepa */ = {
+			isa = PBXGroup;
+			children = (
+				B19B35E71AF28B4900F20B9A /* HBCISepaGeneratorFactory.swift */,
+				B19B35E81AF28B4900F20B9A /* HBCISepaGenerator.swift */,
+				B19B35E91AF28B4900F20B9A /* HBCISepaGeneratorCredit.swift */,
+				B19B35EA1AF28B4900F20B9A /* HBCISepaGenerator_001_003_03.swift */,
+			);
+			name = Sepa;
+			sourceTree = "<group>";
+		};
+		B19B35F31AF28B5200F20B9A /* Structures */ = {
+			isa = PBXGroup;
+			children = (
+				B19B36251AF28BF900F20B9A /* HBCIUser.swift */,
+				B19B36261AF28BF900F20B9A /* HBCIStatement.swift */,
+				B19B36271AF28BF900F20B9A /* HBCIAccount.swift */,
+				B19B36281AF28BF900F20B9A /* HBCIAccountBalance.swift */,
+				B19B36291AF28BF900F20B9A /* HBCISepaTransfer.swift */,
+				B19B362A1AF28BF900F20B9A /* HBCITanMedium.swift */,
+			);
+			name = Structures;
+			sourceTree = "<group>";
+		};
+		B19B35F41AF28B6100F20B9A /* Parameters */ = {
+			isa = PBXGroup;
+			children = (
+				B19B36191AF28BE500F20B9A /* HBCIParameters.swift */,
+				B19B361A1AF28BE500F20B9A /* HBCIPinTanInformation.swift */,
+				B19B361B1AF28BE500F20B9A /* HBCITanProcessInformation.swift */,
+				B19B361C1AF28BE500F20B9A /* HBCITanMethod.swift */,
+			);
+			name = Parameters;
+			sourceTree = "<group>";
+		};
+		B19B35F51AF28B7000F20B9A /* Orders */ = {
+			isa = PBXGroup;
+			children = (
+				B19B36071AF28BCE00F20B9A /* HBCIOrder.swift */,
+				B19B36081AF28BCE00F20B9A /* HBCIStatementsOrder.swift */,
+				B19B36091AF28BCE00F20B9A /* HBCIBalanceOrder.swift */,
+				B19B360A1AF28BCE00F20B9A /* HBCITanOrder.swift */,
+				B19B360B1AF28BCE00F20B9A /* HBCISepaTransferOrder.swift */,
+				B19B360C1AF28BCE00F20B9A /* HBCITanMediaOrder.swift */,
+			);
+			name = Orders;
+			sourceTree = "<group>";
+		};
+		B19B35F61AF28B7600F20B9A /* Message */ = {
+			isa = PBXGroup;
+			children = (
+				B19B35FE1AF28BB900F20B9A /* HBCIResultMessage.swift */,
+				B19B35FF1AF28BB900F20B9A /* HBCICustomMessage.swift */,
+				B19B36001AF28BB900F20B9A /* HBCIResponse.swift */,
+			);
+			name = Message;
+			sourceTree = "<group>";
+		};
+		B19B35F71AF28B8600F20B9A /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				B19B35F81AF28BA500F20B9A /* HBCIString.swift */,
+				B19B35F91AF28BA500F20B9A /* HBCIExtensions.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		B19B358F1AF1792A00F20B9A /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B19B35981AF1792A00F20B9A /* HBCI4Swift.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		B19B35911AF1792A00F20B9A /* HBCI4Swift */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B19B35A81AF1792B00F20B9A /* Build configuration list for PBXNativeTarget "HBCI4Swift" */;
+			buildPhases = (
+				B19B358D1AF1792A00F20B9A /* Sources */,
+				B19B358E1AF1792A00F20B9A /* Frameworks */,
+				B19B358F1AF1792A00F20B9A /* Headers */,
+				B19B35901AF1792A00F20B9A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HBCI4Swift;
+			productName = HBCI4Swift;
+			productReference = B19B35921AF1792A00F20B9A /* HBCI4Swift.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		B19B359C1AF1792B00F20B9A /* HBCI4SwiftTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B19B35AB1AF1792B00F20B9A /* Build configuration list for PBXNativeTarget "HBCI4SwiftTests" */;
+			buildPhases = (
+				B19B35991AF1792B00F20B9A /* Sources */,
+				B19B359A1AF1792B00F20B9A /* Frameworks */,
+				B19B359B1AF1792B00F20B9A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B19B35A01AF1792B00F20B9A /* PBXTargetDependency */,
+			);
+			name = HBCI4SwiftTests;
+			productName = HBCI4SwiftTests;
+			productReference = B19B359D1AF1792B00F20B9A /* HBCI4SwiftTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B19B35891AF1792A00F20B9A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0630;
+				ORGANIZATIONNAME = "Frank Emminghaus";
+				TargetAttributes = {
+					B19B35911AF1792A00F20B9A = {
+						CreatedOnToolsVersion = 6.3;
+					};
+					B19B359C1AF1792B00F20B9A = {
+						CreatedOnToolsVersion = 6.3;
+					};
+				};
+			};
+			buildConfigurationList = B19B358C1AF1792A00F20B9A /* Build configuration list for PBXProject "HBCI4Swift" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = B19B35881AF1792A00F20B9A;
+			productRefGroup = B19B35931AF1792A00F20B9A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B19B35911AF1792A00F20B9A /* HBCI4Swift */,
+				B19B359C1AF1792B00F20B9A /* HBCI4SwiftTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B19B35901AF1792A00F20B9A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B19B35C11AF28AC500F20B9A /* hbci220.xml in Resources */,
+				B19B35BF1AF28AC500F20B9A /* hbci300.xml in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B19B359B1AF1792B00F20B9A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B19B35C21AF28AC500F20B9A /* hbci220.xml in Resources */,
+				B19B35C01AF28AC500F20B9A /* hbci300.xml in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B19B358D1AF1792A00F20B9A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B19B364B1AF28C1800F20B9A /* HBCISigningOption.swift in Sources */,
+				B19B36131AF28BCE00F20B9A /* HBCITanOrder.swift in Sources */,
+				B19B36431AF28C1800F20B9A /* HBCIConnection.swift in Sources */,
+				B19B360D1AF28BCE00F20B9A /* HBCIOrder.swift in Sources */,
+				B19B36471AF28C1800F20B9A /* HBCIMT94xParser.swift in Sources */,
+				B19B36411AF28C1800F20B9A /* HBCIError.swift in Sources */,
+				B19B36111AF28BCE00F20B9A /* HBCIBalanceOrder.swift in Sources */,
+				B19B36031AF28BB900F20B9A /* HBCICustomMessage.swift in Sources */,
+				B19B35D71AF28AC500F20B9A /* HBCIDataElement.swift in Sources */,
+				B19B364D1AF28C1800F20B9A /* HBCICallback.swift in Sources */,
+				B19B35E41AF28B1500F20B9A /* HBCIDialog.swift in Sources */,
+				B19B362B1AF28BF900F20B9A /* HBCIUser.swift in Sources */,
+				B19B35EB1AF28B4900F20B9A /* HBCISepaGeneratorFactory.swift in Sources */,
+				B19B35C91AF28AC500F20B9A /* HBCISyntaxElementDescription.swift in Sources */,
+				B19B35EF1AF28B4900F20B9A /* HBCISepaGeneratorCredit.swift in Sources */,
+				B19B35E21AF28B1500F20B9A /* HBCIAnonymousDialog.swift in Sources */,
+				B19B36451AF28C1800F20B9A /* HBCIUtils.swift in Sources */,
+				B19B36151AF28BCE00F20B9A /* HBCISepaTransferOrder.swift in Sources */,
+				B19B35CD1AF28AC500F20B9A /* HBCIDataElementGroupDescription.swift in Sources */,
+				B19B36331AF28BF900F20B9A /* HBCISepaTransfer.swift in Sources */,
+				B19B36211AF28BE500F20B9A /* HBCITanProcessInformation.swift in Sources */,
+				B19B36351AF28BF900F20B9A /* HBCITanMedium.swift in Sources */,
+				B19B35FC1AF28BA500F20B9A /* HBCIExtensions.swift in Sources */,
+				B19B36051AF28BB900F20B9A /* HBCIResponse.swift in Sources */,
+				B19B362D1AF28BF900F20B9A /* HBCIStatement.swift in Sources */,
+				B19B35F11AF28B4900F20B9A /* HBCISepaGenerator_001_003_03.swift in Sources */,
+				B19B35CF1AF28AC500F20B9A /* HBCISegmentDescription.swift in Sources */,
+				B19B35D91AF28AC500F20B9A /* HBCIDataElementGroup.swift in Sources */,
+				B19B35C51AF28AC500F20B9A /* HBCISyntax.swift in Sources */,
+				B19B36491AF28C1800F20B9A /* HBCITanProcess_2.swift in Sources */,
+				B19B35CB1AF28AC500F20B9A /* HBCIDataElementDescription.swift in Sources */,
+				B19B35ED1AF28B4900F20B9A /* HBCISepaGenerator.swift in Sources */,
+				B19B36311AF28BF900F20B9A /* HBCIAccountBalance.swift in Sources */,
+				B19B36231AF28BE500F20B9A /* HBCITanMethod.swift in Sources */,
+				B19B35C31AF28AC500F20B9A /* CChar.swift in Sources */,
+				B19B35D11AF28AC500F20B9A /* HBCIMessageDescription.swift in Sources */,
+				B19B35D51AF28AC500F20B9A /* HBCISyntaxElement.swift in Sources */,
+				B19B363F1AF28C1800F20B9A /* HBCILog.swift in Sources */,
+				B19B35C71AF28AC500F20B9A /* HBCISyntaxElementReference.swift in Sources */,
+				B19B35FA1AF28BA500F20B9A /* HBCIString.swift in Sources */,
+				B19B361D1AF28BE500F20B9A /* HBCIParameters.swift in Sources */,
+				B19B35D31AF28AC500F20B9A /* HBCISegmentVersions.swift in Sources */,
+				B19B35DB1AF28AC500F20B9A /* HBCISegment.swift in Sources */,
+				B19B35DD1AF28AC500F20B9A /* HBCIMessage.swift in Sources */,
+				B19B36171AF28BCE00F20B9A /* HBCITanMediaOrder.swift in Sources */,
+				B19B360F1AF28BCE00F20B9A /* HBCIStatementsOrder.swift in Sources */,
+				B19B362F1AF28BF900F20B9A /* HBCIAccount.swift in Sources */,
+				B19B361F1AF28BE500F20B9A /* HBCIPinTanInformation.swift in Sources */,
+				B19B36011AF28BB900F20B9A /* HBCIResultMessage.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B19B35991AF1792B00F20B9A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B19B36201AF28BE500F20B9A /* HBCIPinTanInformation.swift in Sources */,
+				B19B35CC1AF28AC500F20B9A /* HBCIDataElementDescription.swift in Sources */,
+				B19B35A51AF1792B00F20B9A /* HBCI4SwiftTests.swift in Sources */,
+				B19B362E1AF28BF900F20B9A /* HBCIStatement.swift in Sources */,
+				B19B36321AF28BF900F20B9A /* HBCIAccountBalance.swift in Sources */,
+				B19B35D81AF28AC500F20B9A /* HBCIDataElement.swift in Sources */,
+				B19B36041AF28BB900F20B9A /* HBCICustomMessage.swift in Sources */,
+				B19B35E31AF28B1500F20B9A /* HBCIAnonymousDialog.swift in Sources */,
+				B19B364C1AF28C1800F20B9A /* HBCISigningOption.swift in Sources */,
+				B19B35DA1AF28AC500F20B9A /* HBCIDataElementGroup.swift in Sources */,
+				B19B36101AF28BCE00F20B9A /* HBCIStatementsOrder.swift in Sources */,
+				B19B36181AF28BCE00F20B9A /* HBCITanMediaOrder.swift in Sources */,
+				B19B35F01AF28B4900F20B9A /* HBCISepaGeneratorCredit.swift in Sources */,
+				B19B36361AF28BF900F20B9A /* HBCITanMedium.swift in Sources */,
+				B19B36141AF28BCE00F20B9A /* HBCITanOrder.swift in Sources */,
+				B19B35CE1AF28AC500F20B9A /* HBCIDataElementGroupDescription.swift in Sources */,
+				B19B35DC1AF28AC500F20B9A /* HBCISegment.swift in Sources */,
+				B19B35D61AF28AC500F20B9A /* HBCISyntaxElement.swift in Sources */,
+				B19B35C61AF28AC500F20B9A /* HBCISyntax.swift in Sources */,
+				B19B36221AF28BE500F20B9A /* HBCITanProcessInformation.swift in Sources */,
+				B19B36341AF28BF900F20B9A /* HBCISepaTransfer.swift in Sources */,
+				B19B35EE1AF28B4900F20B9A /* HBCISepaGenerator.swift in Sources */,
+				B19B35FD1AF28BA500F20B9A /* HBCIExtensions.swift in Sources */,
+				B19B36021AF28BB900F20B9A /* HBCIResultMessage.swift in Sources */,
+				B19B35DE1AF28AC500F20B9A /* HBCIMessage.swift in Sources */,
+				B19B36441AF28C1800F20B9A /* HBCIConnection.swift in Sources */,
+				B19B35D01AF28AC500F20B9A /* HBCISegmentDescription.swift in Sources */,
+				B19B364A1AF28C1800F20B9A /* HBCITanProcess_2.swift in Sources */,
+				B19B36301AF28BF900F20B9A /* HBCIAccount.swift in Sources */,
+				B19B35C81AF28AC500F20B9A /* HBCISyntaxElementReference.swift in Sources */,
+				B19B361E1AF28BE500F20B9A /* HBCIParameters.swift in Sources */,
+				B19B35D41AF28AC500F20B9A /* HBCISegmentVersions.swift in Sources */,
+				B19B364E1AF28C1800F20B9A /* HBCICallback.swift in Sources */,
+				B19B36241AF28BE500F20B9A /* HBCITanMethod.swift in Sources */,
+				B19B35E51AF28B1500F20B9A /* HBCIDialog.swift in Sources */,
+				B19B35FB1AF28BA500F20B9A /* HBCIString.swift in Sources */,
+				B19B360E1AF28BCE00F20B9A /* HBCIOrder.swift in Sources */,
+				B19B36401AF28C1800F20B9A /* HBCILog.swift in Sources */,
+				B19B36121AF28BCE00F20B9A /* HBCIBalanceOrder.swift in Sources */,
+				B19B36061AF28BB900F20B9A /* HBCIResponse.swift in Sources */,
+				B19B36481AF28C1800F20B9A /* HBCIMT94xParser.swift in Sources */,
+				B19B35C41AF28AC500F20B9A /* CChar.swift in Sources */,
+				B19B35EC1AF28B4900F20B9A /* HBCISepaGeneratorFactory.swift in Sources */,
+				B19B36461AF28C1800F20B9A /* HBCIUtils.swift in Sources */,
+				B19B36421AF28C1800F20B9A /* HBCIError.swift in Sources */,
+				B19B35CA1AF28AC500F20B9A /* HBCISyntaxElementDescription.swift in Sources */,
+				B19B362C1AF28BF900F20B9A /* HBCIUser.swift in Sources */,
+				B19B35F21AF28B4900F20B9A /* HBCISepaGenerator_001_003_03.swift in Sources */,
+				B19B35D21AF28AC500F20B9A /* HBCIMessageDescription.swift in Sources */,
+				B19B36161AF28BCE00F20B9A /* HBCISepaTransferOrder.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B19B35A01AF1792B00F20B9A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B19B35911AF1792A00F20B9A /* HBCI4Swift */;
+			targetProxy = B19B359F1AF1792B00F20B9A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		B19B35A61AF1792B00F20B9A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		B19B35A71AF1792B00F20B9A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		B19B35A91AF1792B00F20B9A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = HBCI4Swift/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		B19B35AA1AF1792B00F20B9A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = HBCI4Swift/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		B19B35AC1AF1792B00F20B9A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = HBCI4SwiftTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		B19B35AD1AF1792B00F20B9A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = HBCI4SwiftTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B19B358C1AF1792A00F20B9A /* Build configuration list for PBXProject "HBCI4Swift" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B19B35A61AF1792B00F20B9A /* Debug */,
+				B19B35A71AF1792B00F20B9A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B19B35A81AF1792B00F20B9A /* Build configuration list for PBXNativeTarget "HBCI4Swift" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B19B35A91AF1792B00F20B9A /* Debug */,
+				B19B35AA1AF1792B00F20B9A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		B19B35AB1AF1792B00F20B9A /* Build configuration list for PBXNativeTarget "HBCI4SwiftTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B19B35AC1AF1792B00F20B9A /* Debug */,
+				B19B35AD1AF1792B00F20B9A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B19B35891AF1792A00F20B9A /* Project object */;
+}
