@@ -8,24 +8,24 @@
 
 import Foundation
 
-class HBCIBalanceOrder : HBCIOrder {
-    var iban:String?
-    var bic:String?
-    var accountNumber:String?
-    var accountSubNumber:String?
-    var bankCode:String?
-    var bookedBalance:HBCIAccountBalance?
-    var pendingBalance:HBCIAccountBalance?
+public class HBCIBalanceOrder : HBCIOrder {
+    public var iban:String?
+    public var bic:String?
+    public var accountNumber:String?
+    public var accountSubNumber:String?
+    public var bankCode:String?
+    public var bookedBalance:HBCIAccountBalance?
+    public var pendingBalance:HBCIAccountBalance?
     
     
-    init?(message: HBCICustomMessage) {
+    public init?(message: HBCICustomMessage) {
         super.init(name: "Balance", message: message);
         if self.segment == nil {
             return nil;
         }
     }
     
-    func enqueue() ->Bool {
+    public func enqueue() ->Bool {
         if bankCode == nil || accountNumber == nil {
             logError(self.name + " order has no BLZ or Account information");
             return false;

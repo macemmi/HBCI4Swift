@@ -19,6 +19,10 @@ public class HBCIParameters {
     
     init() {}
     
+    public func data() ->NSData? {
+        return bpData;
+    }
+    
     init(segments:Array<HBCISegment>, syntax:HBCISyntax) {
         self.syntax = syntax;
         for seg in segments {
@@ -131,11 +135,11 @@ public class HBCIParameters {
                 }
             }
         }
-        
         self.init(segments: segments, syntax: syntax);
+        bpData = data;
     }
     
-    func getTanMethods() ->Array<HBCITanMethod> {
+    public func getTanMethods() ->Array<HBCITanMethod> {
         var result = Array<HBCITanMethod>();
         
         for segment in bpSegments {
@@ -151,7 +155,7 @@ public class HBCIParameters {
         return result;
     }
     
-    func supportedVersionsForOrder(name:String) ->Array<Int> {
+    public func supportedVersionsForOrder(name:String) ->Array<Int> {
         var versions = Array<Int>();
         
         for seg in bpSegments {
@@ -163,7 +167,7 @@ public class HBCIParameters {
         return versions;
     }
     
-    func isOrderSupportedForAccount(order:HBCIOrder, number:String, subNumber:String? = nil) ->Bool {
+    public func isOrderSupportedForAccount(order:HBCIOrder, number:String, subNumber:String? = nil) ->Bool {
         
         for seg in bpSegments {
             if seg.name == "KInfo" {
@@ -208,7 +212,7 @@ public class HBCIParameters {
         return false;
     }
     
-    func supportedOrdersForAccount(number:String, subNumber:String? = nil) ->Array<HBCIOrderName> {
+    public func supportedOrdersForAccount(number:String, subNumber:String? = nil) ->Array<HBCIOrderName> {
         var orderNames = Array<HBCIOrderName>();
         var found = false;
         
@@ -259,7 +263,7 @@ public class HBCIParameters {
         return orderNames;
     }
     
-    func supportedOrderNamesForAccount(number:String, subNumber:String?) ->Array<String> {
+    public func supportedOrderNamesForAccount(number:String, subNumber:String?) ->Array<String> {
         var orderNames = Array<String>();
         
         let orders = supportedOrdersForAccount(number, subNumber: subNumber);

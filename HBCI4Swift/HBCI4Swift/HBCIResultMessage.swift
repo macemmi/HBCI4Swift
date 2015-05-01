@@ -227,6 +227,7 @@ public class HBCIResultMessage {
         var bpData = NSMutableData();
         
         for data in segmentData {
+            println(NSString(data: data, encoding: NSISOLatin1StringEncoding));
             if let code = NSString(bytes: data.bytes, length: 5, encoding: NSISOLatin1StringEncoding) {
                 if code == "HIUPA" || code == "HIUPD" || code == "HIBPA" ||
                     (code.hasPrefix("HI") && code.hasSuffix("S")) {
@@ -235,7 +236,7 @@ public class HBCIResultMessage {
                 }
             }
             if let code = NSString(bytes: data.bytes, length: 6, encoding: NSISOLatin1StringEncoding) {
-                if code.hasPrefix("HI") && code.hasSuffix("S") {
+                if code == "DIPINS" || (code.hasPrefix("HI") && code.hasSuffix("S")) {
                         bpData.appendData(data);
                 }
             }

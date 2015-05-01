@@ -8,17 +8,17 @@
 
 import Foundation
 
-class HBCISepaTransferOrder : HBCIOrder {
-    var transfer:HBCISepaTransfer?
+public class HBCISepaTransferOrder : HBCIOrder {
+    public var transfer:HBCISepaTransfer?
     
-    init?(message: HBCICustomMessage) {
+    public init?(message: HBCICustomMessage) {
         super.init(name: "SepaTransfer", message: message);
         if self.segment == nil {
             return nil;
         }
     }
     
-    func enqueue() ->Bool {
+    public func enqueue() ->Bool {
         if let seg = msg.segmentWithName("SepaTransfer") {
             if let sepaTransfer = self.transfer {
                 // create SEPA data

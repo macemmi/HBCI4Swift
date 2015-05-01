@@ -10,21 +10,24 @@ import Foundation
 
 let unknown = "<unknown>";
 
-enum TanProcess:String {
+public enum TanProcess:String {
     case none = "0", process1 = "1", process2 = "2"
 }
 
-class HBCITanMethod {
-    let identifier:String!
-    let inputInfo:String!
-    let name:String!
-    let format:String!
-    let maxTanLength:Int!
-    var needTanMedia:String?
-    var process:TanProcess!
-    var zkaMethodName:String?
-    var zkaMethodVersion:String?
-    var numActiveMedia:Int?
+public class HBCITanMethod {
+    public let
+    identifier:String!,
+    inputInfo:String!,
+    name:String!,
+    format:String!,
+    maxTanLength:Int!
+    
+    public var
+    needTanMedia:String?,
+    process:TanProcess!,
+    zkaMethodName:String?,
+    zkaMethodVersion:String?,
+    numActiveMedia:Int?
     
     
     init?(element:HBCISyntaxElement, version:Int) {

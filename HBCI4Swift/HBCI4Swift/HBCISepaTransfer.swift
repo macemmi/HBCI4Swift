@@ -8,15 +8,15 @@
 
 import Foundation
 
-class HBCISepaTransfer {
-    class Item {
-        var remoteIban:String
-        var remoteBic:String
-        var remoteName:String
-        var purpose:String?
-        var endToEndId:String?
-        var currency:String
-        var value:NSDecimalNumber
+public class HBCISepaTransfer {
+    public class Item {
+        public var remoteIban:String
+        public var remoteBic:String
+        public var remoteName:String
+        public var purpose:String?
+        public var endToEndId:String?
+        public var currency:String
+        public var value:NSDecimalNumber
         
         init(iban:String, bic:String, name:String, value:NSDecimalNumber, currency:String) {
             remoteIban = iban;
@@ -27,23 +27,23 @@ class HBCISepaTransfer {
         }
     }
     
-    var sourceIban:String
-    var sourceBic:String
-    var sourceName:String
-    var batchbook:Bool = false;
-    var sepaId:String?
-    var paymentInfoId:String?
-    var date:NSDate?
+    public var sourceIban:String
+    public var sourceBic:String
+    public var sourceName:String
+    public var batchbook:Bool = false;
+    public var sepaId:String?
+    public var paymentInfoId:String?
+    public var date:NSDate?
     
-    var items = Array<HBCISepaTransfer.Item>();
+    public var items = Array<HBCISepaTransfer.Item>();
     
-    init(iban:String, bic:String, name:String) {
+    public init(iban:String, bic:String, name:String) {
         sourceIban = iban;
         sourceBic = bic;
         sourceName = name;
     }
     
-    func validate() ->Bool {
+    public func validate() ->Bool {
         if items.count == 0 {
             logError("SEPA Transfer: no transfer items");
             return false;

@@ -8,12 +8,12 @@
 
 import Foundation
 
-class HBCIAccount {
-    var accountNumber:String?
-    var accountSubNumber:String?
-    var bankCode:String?
-    var iban:String?
-    var bic:String?
-    var name:String?
-    var owner:String?
+public class HBCIAccount {
+    public var accountNumber:String?
+    public var accountSubNumber:String?
+    public var bankCode:String?
+    public var iban:String?
+    public var bic:String?
+    public var name:String?
+    public var owner:String?
 }

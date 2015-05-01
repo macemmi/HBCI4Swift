@@ -25,7 +25,7 @@ public struct HBCITanMedium {
     var activatedOn:NSDate?
     
     
-    init?(element: HBCISyntaxElement) {
+    init?(element: HBCISyntaxElement, version:Int) {
         if let cat = element.elementValueForPath("mediacategory") as? String {
             self.category = cat;
         } else {
@@ -41,16 +41,25 @@ public struct HBCITanMedium {
         }
         self.cardNumber = element.elementValueForPath("cardnumber") as? String;
         self.cardSeqNumber = element.elementValueForPath("cardseqnumber") as? String;
-        self.cardType = element.elementValueForPath("cardtype") as? Int;
-        self.validFrom = element.elementValueForPath("validfrom") as? NSDate;
-        self.validTo = element.elementValueForPath("validto") as? NSDate;
         self.tanListNumber = element.elementValueForPath("tanlistnumber") as? String;
-        self.name = element.elementValueForPath("medianame") as? String;
-        self.mobileNumber = element.elementValueForPath("mobilenumber") as? String;
-        self.mobileNumberSecure = element.elementValueForPath("mobilenumber_secure") as? String;
         self.freeTans = element.elementValueForPath("freetans") as? Int;
         self.lastUse = element.elementValueForPath("lastuse") as? NSDate;
         self.activatedOn = element.elementValueForPath("activatedon") as? NSDate;
+        
+        if version > 1 {
+            self.cardType = element.elementValueForPath("cardtype") as? Int;
+            self.validFrom = element.elementValueForPath("validfrom") as? NSDate;
+            self.validTo = element.elementValueForPath("validto") as? NSDate;
+            self.name = element.elementValueForPath("medianame") as? String;
+        }
+        
+        if version > 2 {
+            self.mobileNumberSecure = element.elementValueForPath("mobilenumber_secure") as? String;
+        }
+        
+        if version > 3 {
+            self.mobileNumber = element.elementValueForPath("mobilenumber") as? String;
+        }
     }
     
 }

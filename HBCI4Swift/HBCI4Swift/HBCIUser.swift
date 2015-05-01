@@ -9,23 +9,33 @@
 import Foundation
 
 public class HBCIUser {
-    public var
-    bankCode:String?,
-    hbciVersion:String?,
-    bankURL:String?,
-    userId:String?,
-    customerId:String?,
-    sysId:String?,
-    tanMethod:String?,
-    tanMediumName:String?,
-    pin:String?,
-    parameters = HBCIParameters();
+    public let bankCode:String;
+    public let hbciVersion:String;
+    public let bankURL:String;
+    public let userId:String;
+    public let customerId:String;
     
-    public init() {
+    public var sysId:String?
+    public var tanMethod:String?
+    public var tanMediumName:String?
+    public var pin:String?
+    public var parameters = HBCIParameters();
+    
+    public init(userId:String, customerId:String, bankCode:String, hbciVersion:String, bankURLString:String) {
+        self.userId = userId;
+        self.customerId = customerId;
+        self.bankCode = bankCode;
+        self.hbciVersion = hbciVersion;
+        self.bankURL = bankURLString;
     }
     
-    class func newInstance() ->HBCIUser {
-        return HBCIUser();
+    public func setParameterData(data:NSData, error:NSErrorPointer) ->Bool {
+        if let syntax = HBCISyntax.syntaxWithVersion(hbciVersion, error: error) {
+            if let params = HBCIParameters(data: data, syntax: syntax) {
+                self.parameters = params;
+                return true;
+            }
+        }
+        return false;
     }
-    
 }

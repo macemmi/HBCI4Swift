@@ -8,10 +8,10 @@
 
 import Foundation
 
-struct HBCIAccountBalance {
-    let value:NSDecimalNumber;
-    let postingDate:NSDate;
-    let currency:String;
+public struct HBCIAccountBalance {
+    public let value:NSDecimalNumber;
+    public let postingDate:NSDate;
+    public let currency:String;
     
     init(value:NSDecimalNumber, date:NSDate, currency:String) {
         self.value = value;

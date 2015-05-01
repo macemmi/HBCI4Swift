@@ -8,60 +8,60 @@
 
 import Foundation
 
-class HBCIStatementItem {
-    var valutaDate:NSDate?
-    var date:NSDate?
-    var docDate:NSDate?
+public class HBCIStatementItem {
+    public var valutaDate:NSDate?
+    public var date:NSDate?
+    public var docDate:NSDate?
     
-    var value:NSDecimalNumber?
-    var origValue:NSDecimalNumber?
-    var charge:NSDecimalNumber?
+    public var value:NSDecimalNumber?
+    public var origValue:NSDecimalNumber?
+    public var charge:NSDecimalNumber?
     
-    var remoteName:String?
-    var remoteIBAN:String?
-    var remoteBIC:String?
-    var remoteBankCode, remoteAccountNumber, remoteAccountSubNumber:String?
-    var remoteCountry:String?
+    public var remoteName:String?
+    public var remoteIBAN:String?
+    public var remoteBIC:String?
+    public var remoteBankCode, remoteAccountNumber, remoteAccountSubNumber:String?
+    public var remoteCountry:String?
     
-    var purpose:String?
+    public var purpose:String?
     
-    //var localBankCode, localAccountNumber, localAccountSubNumber: String?
+    //public var localBankCode, localAccountNumber, localAccountSubNumber: String?
 
-    var ccNumberUms:String?
-    var ccChargeKey: String?
-    var ccChargeForeign: String?
-    var ccChargeTerminal: String?
-    var ccSettlementRef: String?
-    var origCurrency: String?
-    var isSettled:Bool?
+    public var ccNumberUms:String?
+    public var ccChargeKey: String?
+    public var ccChargeForeign: String?
+    public var ccChargeTerminal: String?
+    public var ccSettlementRef: String?
+    public var origCurrency: String?
+    public var isSettled:Bool?
     
-    var customerReference:String?
-    var bankReference:String?
-    var transactionText:String?
-    var transactionCode:Int?
-    var postingKey:String?
-    var currency:String?
-    var primaNota:String?
+    public var customerReference:String?
+    public var bankReference:String?
+    public var transactionText:String?
+    public var transactionCode:Int?
+    public var postingKey:String?
+    public var currency:String?
+    public var primaNota:String?
     
-    var isCancellation:Bool?
-    var isSEPA:Bool?
+    public var isCancellation:Bool?
+    public var isSEPA:Bool?
     
     init() {}
 }
 
-class HBCIStatement {
-    var orderRef:String?
-    var statementRef:String?
-    var statementNumber:String?
-    var accountName:String?
-    var localAccountNumber, localBankCode, localIBAN, localBIC:String?
+public class HBCIStatement {
+    public var orderRef:String?
+    public var statementRef:String?
+    public var statementNumber:String?
+    public var accountName:String?
+    public var localAccountNumber, localBankCode, localIBAN, localBIC:String?
     
-    var startBalance:HBCIAccountBalance?
-    var endBalance:HBCIAccountBalance?
-    var valutaBalance:HBCIAccountBalance?
-    var futureValutaBalance:HBCIAccountBalance?
+    public var startBalance:HBCIAccountBalance?
+    public var endBalance:HBCIAccountBalance?
+    public var valutaBalance:HBCIAccountBalance?
+    public var futureValutaBalance:HBCIAccountBalance?
     
-    var statementItems = Array<HBCIStatementItem>();
+    public var statementItems = Array<HBCIStatementItem>();
     
     init() {}
 }

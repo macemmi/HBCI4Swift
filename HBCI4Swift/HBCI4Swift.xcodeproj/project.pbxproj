@@ -322,7 +322,6 @@
 				B19B36271AF28BF900F20B9A /* HBCIAccount.swift */,
 				B19B36281AF28BF900F20B9A /* HBCIAccountBalance.swift */,
 				B19B36291AF28BF900F20B9A /* HBCISepaTransfer.swift */,
-				B19B362A1AF28BF900F20B9A /* HBCITanMedium.swift */,
 			);
 			name = Structures;
 			sourceTree = "<group>";
@@ -334,6 +333,7 @@
 				B19B361A1AF28BE500F20B9A /* HBCIPinTanInformation.swift */,
 				B19B361B1AF28BE500F20B9A /* HBCITanProcessInformation.swift */,
 				B19B361C1AF28BE500F20B9A /* HBCITanMethod.swift */,
+				B19B362A1AF28BF900F20B9A /* HBCITanMedium.swift */,
 			);
 			name = Parameters;
 			sourceTree = "<group>";
@@ -773,6 +773,7 @@
 				B19B35AA1AF1792B00F20B9A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B19B35AB1AF1792B00F20B9A /* Build configuration list for PBXNativeTarget "HBCI4SwiftTests" */ = {
 			isa = XCConfigurationList;
@@ -781,6 +782,7 @@
 				B19B35AD1AF1792B00F20B9A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

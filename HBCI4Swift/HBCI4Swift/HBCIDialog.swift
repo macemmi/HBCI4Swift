@@ -24,16 +24,12 @@ public class HBCIDialog {
     
     public init?(user:HBCIUser, error:NSErrorPointer) {
         self.user = user;
-        if let hbciVersion = user.hbciVersion {
-            self.hbciVersion = hbciVersion;
-            if let syntax = HBCISyntax.syntaxWithVersion(hbciVersion, error: error) {
-                self.syntax = syntax;
-                if let urlString = user.bankURL {
-                    if let url = NSURL(string:urlString) {
-                        self.connection = HBCIConnection(url: url);
-                        return;
-                    }
-                }
+        self.hbciVersion = user.hbciVersion;
+        if let syntax = HBCISyntax.syntaxWithVersion(hbciVersion, error: error) {
+            self.syntax = syntax;
+            if let url = NSURL(string:user.bankURL) {
+                self.connection = HBCIConnection(url: url);
+                return;
             }
         }
         return nil;
@@ -107,20 +103,12 @@ public class HBCIDialog {
         
         let secref = "\(arc4random())";
         
-        if user.userId == nil {
-            logError("Signing failed: missing userId");
-            return false;
-        }
         if user.tanMethod == nil {
             logError("Signing failed: missing tanMethod");
             return false;
         }
         if user.sysId == nil {
             logError("Signing failed: missing sysId");
-            return false;
-        }
-        if user.bankCode == nil {
-            logError("Signing failed: missing bankCode");
             return false;
         }
         if user.pin == nil {
@@ -141,7 +129,7 @@ public class HBCIDialog {
             "SigHead.SecIdnDetails.sysid":user.sysId!, "SigHead.secref":"1", "SigHead.SecTimestamp.type":"1",
             "SigHead.SecTimestamp.date":NSDate(), "SigHead.SecTimestamp.time":NSDate(), "SigHead.HashAlg.alg":"999",
             "SigHead.SigAlg.alg":"10", "SigHead.SigAlg.mode":"16", "SigHead.KeyName.country":"280",
-            "SigHead.KeyName.blz":user.bankCode!, "SigHead.KeyName.userid":user.userId!, "SigHead.KeyName.keytype":"S",
+            "SigHead.KeyName.blz":user.bankCode, "SigHead.KeyName.userid":user.userId, "SigHead.KeyName.keytype":"S",
             "SigHead.KeyName.keynum":"0", "SigHead.KeyName.keyversion":"0", "SigTail.seccheckref":secref,
             "SigTail.UserSig.pin":user.pin!
         ];
@@ -168,16 +156,8 @@ public class HBCIDialog {
         let encKeyData = NSData(bytes: encKey, length: 8);
         free(encKey);
         
-        if user.userId == nil {
-            logError("Signing failed: missing userId");
-            return false;
-        }
         if user.sysId == nil {
             logError("Signing failed: missing sysId");
-            return false;
-        }
-        if user.bankCode == nil {
-            logError("Signing failed: missing bankCode");
             return false;
         }
         
@@ -193,8 +173,8 @@ public class HBCIDialog {
             "CryptHead.secfunc":"998", "CryptHead.role":"1", "CryptHead.SecIdnDetails.func":"1",
             "CryptHead.SecIdnDetails.sysid":user.sysId!, "CryptHead.SecTimestamp.date":NSDate(), "CryptHead.SecTimestamp.time":NSDate(),
             "CryptHead.CryptAlg.mode":"2", "CryptHead.CryptAlg.alg":"13", "CryptHead.CryptAlg.enckey":encKeyData,
-            "CryptHead.CryptAlg.keytype":"5", "CryptHead.KeyName.country":"280", "CryptHead.KeyName.blz":user.bankCode!,
-            "CryptHead.KeyName.userid":user.userId!, "CryptHead.KeyName.keynum":"0", "CryptHead.KeyName.keyversion":"0",
+            "CryptHead.CryptAlg.keytype":"5", "CryptHead.KeyName.country":"280", "CryptHead.KeyName.blz":user.bankCode,
+            "CryptHead.KeyName.userid":user.userId, "CryptHead.KeyName.keynum":"0", "CryptHead.KeyName.keyversion":"0",
             "CryptHead.compfunc":"0"
         ];
         
@@ -251,20 +231,12 @@ public class HBCIDialog {
     }
     
     public func dialogInit(error:NSErrorPointer) ->HBCIResultMessage? {
-        if user.customerId == nil {
-            logError("Dialog Init failed: missing customerId");
-            return nil;
-        }
         if user.sysId == nil {
             logError("Dialog Init failed: missing sysId");
             return nil;
         }
-        if user.bankCode == nil {
-            logError("Dialog Init failed: missing bankCode");
-            return nil;
-        }
         
-        let values:Dictionary<String,AnyObject> = ["Idn.KIK.country":"280", "Idn.KIK.blz":user.bankCode!, "Idn.customerid":user.customerId!,
+        let values:Dictionary<String,AnyObject> = ["Idn.KIK.country":"280", "Idn.KIK.blz":user.bankCode, "Idn.customerid":user.customerId,
             "Idn.sysid":user.sysId!, "Idn.sysStatus":"1", "ProcPrep.BPD":user.parameters.bpdVersion,
             "ProcPrep.UPD":user.parameters.updVersion, "ProcPrep.lang":"0", "ProcPrep.prodName":"PecuniaBanking",
             "ProcPrep.prodVersion":"100"
@@ -287,19 +259,10 @@ public class HBCIDialog {
     }
     
     public func syncInit(error:NSErrorPointer) ->HBCIResultMessage? {
-        if user.customerId == nil {
-            logError("Dialog Init failed: missing customerId");
-            return nil;
-        }
-        if user.bankCode == nil {
-            logError("Dialog Init failed: missing bankCode");
-            return nil;
-        }
-        
         user.tanMethod = "999";
         user.sysId = "0";
         
-        let values:Dictionary<String,AnyObject> = ["Idn.KIK.country":"280", "Idn.KIK.blz":user.bankCode!, "Idn.customerid":user.customerId!,
+        let values:Dictionary<String,AnyObject> = ["Idn.KIK.country":"280", "Idn.KIK.blz":user.bankCode, "Idn.customerid":user.customerId,
             "Idn.sysid":"0", "Idn.sysStatus":"1", "ProcPrep.BPD":"0", "Sync.mode":0,
             "ProcPrep.UPD":"0", "ProcPrep.lang":"0", "ProcPrep.prodName":"PecuniaBanking",
             "ProcPrep.prodVersion":"100"

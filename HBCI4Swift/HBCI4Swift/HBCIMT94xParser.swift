@@ -480,9 +480,9 @@ class HBCIMT94xParser {
     
     func parse() ->Array<HBCIStatement>? {
         var statements = Array<HBCIStatement>();
-        let rawStatements = self.mt94xString.componentsSeparatedByString(":20:");
+        let rawStatements = self.mt94xString.componentsSeparatedByString(":20:") as! [String];
         for raw in rawStatements {
-            if raw.length > 2 {
+            if count(raw) > 2 {
                 var trimmed = raw.stringByReplacingOccurrencesOfString("@@", withString: "") as NSString;
                 trimmed = trimmed.stringByReplacingOccurrencesOfString("\n", withString: "");
                 trimmed = trimmed.stringByReplacingOccurrencesOfString("\r", withString: "");

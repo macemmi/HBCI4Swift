@@ -61,9 +61,10 @@ public class HBCITanMediaOrder : HBCIOrder {
         super.updateResult(result);
         
         if let retSeg = self.resultSegment {
+            let version = retSeg.elementValueForPath("SegHead.version") as? Int;
             let degs = retSeg.elementsForPath("MediaInfo");
             for deg in degs {
-                if let medium = HBCITanMedium(element: deg) {
+                if let medium = HBCITanMedium(element: deg, version: version!) {
                     tanMedia.append(medium);
                 }
             }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum HBCIOrderName:String {
+public enum HBCIOrderName:String {
     case Statements = "Statements";
 }
 

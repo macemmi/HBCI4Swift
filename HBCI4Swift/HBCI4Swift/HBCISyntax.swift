@@ -241,7 +241,7 @@ class HBCISyntax {
         } else {
             // load syntax
             var path = NSBundle.mainBundle().bundlePath;
-            path = path + "/Contents/Frameworks/HBCIFramework.framework/Resources/hbci\(version).xml";
+            path = path + "/Contents/Frameworks/HBCI4Swift.framework/Resources/hbci\(version).xml";
             if let syntax = HBCISyntax(path: path, error: error) {
                 syntaxVersions[version] = syntax;
                 return syntax;
