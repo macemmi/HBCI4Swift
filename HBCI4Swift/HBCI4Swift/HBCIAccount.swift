@@ -9,11 +9,62 @@
 import Foundation
 
 public class HBCIAccount {
-    public var accountNumber:String?
-    public var accountSubNumber:String?
-    public var bankCode:String?
+    public let number:String!
+    public let subNumber:String?
+    public let bankCode:String!
     public var iban:String?
     public var bic:String?
     public var name:String?
-    public var owner:String?
+    public let owner:String!
+    public let currency:String!
+    public var type:String?
+    public var allowed = Array<String>();
+    
+    public init(number:String, subNumber:String?, bankCode:String, owner:String, currency:String) {
+        self.number = number;
+        self.subNumber = subNumber;
+        self.bankCode = bankCode;
+        self.owner = owner;
+        self.currency = currency;
+    }
+    
+    init?(segment:HBCISegment) {
+        self.number = segment.elementValueForPath("KTV.number") as? String;
+        self.subNumber = segment.elementValueForPath("KTV.subnumber") as? String;
+        self.bankCode = segment.elementValueForPath("KTV.KIK.blz") as? String;
+        var owner = segment.elementValueForPath("name1") as? String;
+        if owner != nil {
+            if let name2 = segment.elementValueForPath("name2") as? String {
+                owner = owner! + name2;
+            }
+        }
+        self.owner = owner;
+        self.name = segment.elementValueForPath("konto") as? String;
+        self.currency = segment.elementValueForPath("cur") as? String;
+        
+        if segment.version >= 5 {
+            self.type = segment.elementValueForPath("acctype") as? String;
+        }
+        
+        if segment.version >= 6 {
+            self.iban = segment.elementValueForPath("iban") as? String;
+        }
+        
+        if self.number == nil || self.bankCode == nil || self.owner == nil || self.currency == nil {
+            return nil;
+        }
+        
+        // allowed processes
+        let syntax = segment.descr.syntax;
+        if let allowedGVs = segment.elementsForPath("AllowedGV") as? Array<HBCIDataElementGroup> {
+            for deg in allowedGVs {
+                if let code = deg.elementValueForPath("code") as? String {
+                    // translate code to String
+                    if let segv = syntax.codes[code] {
+                        allowed.append(segv.identifier);
+                    }
+                }
+            }
+        }
+    }
 }

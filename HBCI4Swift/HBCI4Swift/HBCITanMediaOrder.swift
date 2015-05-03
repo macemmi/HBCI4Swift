@@ -9,11 +9,8 @@
 import Foundation
 
 public class HBCITanMediaOrder : HBCIOrder {
-    public var accountNumber:String?,
-    accountSubNumber:String?,
-    bankCode:String?,
-    mediaType:String?,
-    mediaCategory:String?
+    public var mediaType:String?
+    public var mediaCategory:String?
     
     // result
     public var tanMedia = Array<HBCITanMedium>();
@@ -26,18 +23,6 @@ public class HBCITanMediaOrder : HBCIOrder {
     }
     
     public func enqueue() ->Bool {
-        /*
-        if bankCode == nil || accountNumber == nil {
-            logError(self.name + " order has no BLZ or Account information");
-            return false;
-        }
-        
-        // check if order is supported
-        if !user.parameters.isOrderSupportedForAccount(self, number: accountNumber!, subNumber: accountSubNumber) {
-            logError(self.name + " is not supported for account " + accountNumber!);
-            return false;
-        }
-        */
         if segment.version >= 4 {
             if let cat = self.mediaCategory {
                 segment.setElementValue(cat, path: "mediacategory");

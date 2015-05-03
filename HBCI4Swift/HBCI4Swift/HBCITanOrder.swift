@@ -64,8 +64,11 @@ class HBCITanOrder : HBCIOrder {
         // get challenge information
         if let seg = self.resultSegment {
             self.challenge = seg.elementValueForPath("challenge") as? String;
-            self.challenge_hdd_uc = seg.elementValueForPath("challenge_hdd_uc") as? NSData;
-            self.orderRef = seg.elementValueForPath("orderref") as? String
+            self.orderRef = seg.elementValueForPath("orderref") as? String;
+            
+            if seg.version > 3 {
+                self.challenge_hdd_uc = seg.elementValueForPath("challenge_hdd_uc") as? NSData;
+            }
         }
     }
 

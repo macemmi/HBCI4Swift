@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum HBCIErrorCodes:Int {
+public enum HBCIErrorCodes:Int {
     case URLError = 1, SyntaxFileError
 }
 

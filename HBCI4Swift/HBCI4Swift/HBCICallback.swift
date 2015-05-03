@@ -18,7 +18,7 @@ public class HBCICallbackConsole : HBCICallback {
     public init() {}
     
     public func getTan(userId:String, challenge:String?, challenge_hdd_uc:NSData?) ->String {
-        print("Enter TAN: ");
+        print("Enter TAN (challenge:\(challenge)): ");
         let stdIn = NSFileHandle.fileHandleWithStandardInput();
         var data = stdIn.availableData.mutableCopy() as! NSMutableData;
         data.length--;

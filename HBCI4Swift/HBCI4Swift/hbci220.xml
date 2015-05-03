@@ -688,13 +688,6 @@
             <DE name="time" type="Time"/>
         </DEGdef>
         
-        <DEGdef id="ParSEPAInfo">
-            <DE name="cansingleaccquery" type="JN"/>
-            <DE name="cannationalacc" type="JN"/>
-            <DE name="canstructusage" type="JN"/>
-            <DE name="suppformats" type="AN" maxsize="256" minnum="0" maxnum="99"/>
-        </DEGdef>
-        
         <DEGdef id="TANMediaInfo1">
             <DE name="mediacategory" type="AN" maxsize="1"/>
             <DE name="status" type="Code" maxsize="1"/>
@@ -809,7 +802,22 @@
                 <validvalue>4</validvalue>
             </valids>
         </DEGdef>        
-
+        
+        <DEGdef id="SepaAccInfo">
+            <DE name="sepa" type="JN"/>
+            <DE name="iban" type="AN" maxsize="34" minnum="0"/>
+            <DE name="bic" type="AN" maxsize="11" minnum="0"/>
+            <DE name="number" type="ID"/>
+            <DE name="subnumber" type="ID" minnum="0"/>
+            <DEG type="KIK"/>
+        </DEGdef>
+        
+        <DEGdef id="ParSepaInfo">
+            <DE name="cansingleaccquery" type="JN"/>
+            <DE name="cannationalacc" type="JN"/>
+            <DE name="canstructusage" type="JN"/>
+            <DE name="suppformats" type="AN" maxsize="256" minnum="0" maxnum="99"/>
+        </DEGdef>
         
 
     </DEGs>
@@ -1178,16 +1186,7 @@
             </valids>
 
         </SEGdef>
-        
-        <SEGdef id="SepaInfoPar" code="HISPAS">
-            <SEGVersion id="1">
-                &GVP2;
-                <DEG type="ParSEPAInfo"/>
-                &SecClassValids;
-            </SEGVersion>
-        </SEGdef>
-        
-        
+                
         <SEGdef id="TANPar" code="HITANS">
             <SEGVersion id="1">
                 &GVP2;
@@ -1594,6 +1593,29 @@
                 &GVP2;
             </SEGVersion>
             
+            &SecClassValids;
+        </SEGdef>
+        
+        <SEGdef id="SepaInfo" code="HKSPA">
+            <SEGVersion id="1">
+                <DEG type="SegHead" name="SegHead"/>
+                <DEG type="KTV2" name="KTV" minnum="0" maxnum="999"/>
+            </SEGVersion>
+        </SEGdef>
+        
+        <SEGdef id="SepaInfoRes" code="HISPA">
+            <SEGVersion id="1">
+                <DEG type="SegHead" name="SegHead"/>
+                <DEG type="SepaAccInfo" name="info" minnum="0" maxnum="999"/>
+            </SEGVersion>
+        </SEGdef>
+        
+        <SEGdef id="SepaInfoPar" code="HISPAS">
+            <SEGVersion id="1">
+                &GVP2;
+                <DEG type="ParSepaInfo"/>
+            </SEGVersion>
+                
             &SecClassValids;
         </SEGdef>
 

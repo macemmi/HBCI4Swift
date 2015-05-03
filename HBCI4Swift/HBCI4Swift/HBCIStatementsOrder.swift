@@ -9,15 +9,11 @@
 import Foundation
 
 public class HBCIStatementsOrder: HBCIOrder {
-    public var
-    iban:String?,
-    bic:String?,
-    accountNumber:String?,
-    accountSubNumber:String?,
-    bankCode:String?,
-    statements:Array<HBCIStatement>?
+    public let account:HBCIAccount;
+    public var statements:Array<HBCIStatement>?
 
-    public init?(message: HBCICustomMessage) {
+    public init?(message: HBCICustomMessage, account:HBCIAccount) {
+        self.account = account;
         super.init(name: "Statements", message: message);
         if self.segment == nil {
             return nil;
@@ -25,14 +21,9 @@ public class HBCIStatementsOrder: HBCIOrder {
     }
 
     public func enqueue() ->Bool {
-        if bankCode == nil || accountNumber == nil {
-            logError(self.name + " order has no BLZ or Account information");
-            return false;
-        }
-        
         // check if order is supported
-        if !user.parameters.isOrderSupportedForAccount(self, number: accountNumber!, subNumber: accountSubNumber) {
-            logError(self.name + " is not supported for account " + accountNumber!);
+        if !user.parameters.isOrderSupportedForAccount(self, number: account.number, subNumber: account.subNumber) {
+            logError(self.name + " is not supported for account " + account.number);
             return false;
         }
         
@@ -40,12 +31,12 @@ public class HBCIStatementsOrder: HBCIOrder {
         // later we check if account supports this as well
         if segment.version >= 7 {
             // we have the SEPA version
-            if iban == nil || bic == nil {
-                logError("Statements order has no IBAN or BIC information");
+            if account.iban == nil || account.bic == nil {
+                logError("Account has no IBAN or BIC information");
                 return false;
             }
             
-            let values:Dictionary<String,AnyObject> = ["KTV.bic":bic!, "KTV.iban":iban!, "allaccounts":false];
+            let values:Dictionary<String,AnyObject> = ["KTV.bic":account.bic!, "KTV.iban":account.iban!, "allaccounts":false];
             if !segment.setElementValues(values) {
                 logError("Statements order values could not be set");
                 return false;
@@ -54,9 +45,9 @@ public class HBCIStatementsOrder: HBCIOrder {
             // add to message
             msg.addOrder(self);
         } else {
-            var values:Dictionary<String,AnyObject> = ["KTV.number":accountNumber!, "KTV.KIK.country":"280", "KTV.KIK.blz":bankCode!, "allaccounts":false];
-            if accountSubNumber != nil {
-                values["KTV.subnumber"] = accountSubNumber!
+            var values:Dictionary<String,AnyObject> = ["KTV.number":account.number, "KTV.KIK.country":"280", "KTV.KIK.blz":account.bankCode, "allaccounts":false];
+            if account.subNumber != nil {
+                values["KTV.subnumber"] = account.subNumber!
             }
             if !segment.setElementValues(values) {
                 logError("Statements Order values could not be set");

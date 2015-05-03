@@ -54,11 +54,11 @@ class HBCISepaGenerator {
     }
     
     func setNamespace() {
-        // first remove .xsd substring to get location
-        var range = Range<String.Index>(start: urn.startIndex, end: advance(urn.endIndex, -4));
-        let location = urn.substringWithRange(range);
-        range = Range<String.Index>(start: advance(urn.endIndex, -19), end: urn.endIndex);
-        let schema = urn.substringWithRange(range);
+        // first remove .xsd substring (if existing) to get location
+        let location = urn.stringByReplacingOccurrencesOfString(".xsd", withString: "", options: NSStringCompareOptions.allZeros, range: nil);
+        
+        var range = Range<String.Index>(start: advance(location.endIndex, -15), end: location.endIndex);
+        let schema = location.substringWithRange(range) + ".xsd";
         
         var namespace = NSXMLNode(kind: NSXMLNodeKind.NSXMLNamespaceKind);
         namespace.stringValue = location;

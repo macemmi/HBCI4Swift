@@ -27,7 +27,7 @@ class HBCISepaGenerator_001_003_03 : HBCISepaGenerator, HBCISepaGeneratorCredit 
         root.setStringValueForPath(transfer.sepaId ?? defaultMessageId(), path: "CstmrCdtTrfInitn.GrpHdr.MsgId");
         root.setStringValueForPath(sepaISODateString(), path: "CstmrCdtTrfInitn.GrpHdr.CreDtTm");
         root.setStringValueForPath(transfer.items.count.description, path: "CstmrCdtTrfInitn.GrpHdr.NbOfTxs");
-        root.setStringValueForPath(transfer.sourceName, path: "CstmrCdtTrfInitn.GrpHdr.InitgPty.Nm");
+        root.setStringValueForPath(transfer.account.owner, path: "CstmrCdtTrfInitn.GrpHdr.InitgPty.Nm");
         
         // Payment Info
         root.setStringValueForPath(transfer.paymentInfoId ?? defaultMessageId() , path: "CstmrCdtTrfInitn.PmtInf.PmtInfId");
@@ -43,9 +43,9 @@ class HBCISepaGenerator_001_003_03 : HBCISepaGenerator, HBCISepaGeneratorCredit 
         
         root.setStringValueForPath("SEPA", path: "CstmrCdtTrfInitn.PmtInf.PmtTpInf.SvcLvl.Cd");
         root.setStringValueForPath(transfer.date == nil ? "1999-01-01":sepaDateString(transfer.date!), path: "CstmrCdtTrfInitn.PmtInf.ReqdExctnDt");
-        root.setStringValueForPath(transfer.sourceName, path: "CstmrCdtTrfInitn.PmtInf.Dbtr.Nm");
-        root.setStringValueForPath(transfer.sourceIban, path: "CstmrCdtTrfInitn.PmtInf.DbtrAcct.Id.IBAN");
-        root.setStringValueForPath(transfer.sourceBic, path: "CstmrCdtTrfInitn.PmtInf.DbtrAgt.FinInstnId.BIC");
+        root.setStringValueForPath(transfer.account.owner, path: "CstmrCdtTrfInitn.PmtInf.Dbtr.Nm");
+        root.setStringValueForPath(transfer.account.iban!, path: "CstmrCdtTrfInitn.PmtInf.DbtrAcct.Id.IBAN");
+        root.setStringValueForPath(transfer.account.bic!, path: "CstmrCdtTrfInitn.PmtInf.DbtrAgt.FinInstnId.BIC");
         root.setStringValueForPath("SLEV", path: "CstmrCdtTrfInitn.PmtInf.ChrgBr");
         
         // Transaction Info

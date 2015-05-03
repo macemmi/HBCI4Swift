@@ -18,7 +18,7 @@ public class HBCISepaTransfer {
         public var currency:String
         public var value:NSDecimalNumber
         
-        init(iban:String, bic:String, name:String, value:NSDecimalNumber, currency:String) {
+        public init(iban:String, bic:String, name:String, value:NSDecimalNumber, currency:String) {
             remoteIban = iban;
             remoteBic = bic;
             remoteName = name;
@@ -27,9 +27,7 @@ public class HBCISepaTransfer {
         }
     }
     
-    public var sourceIban:String
-    public var sourceBic:String
-    public var sourceName:String
+    public var account:HBCIAccount;
     public var batchbook:Bool = false;
     public var sepaId:String?
     public var paymentInfoId:String?
@@ -37,16 +35,23 @@ public class HBCISepaTransfer {
     
     public var items = Array<HBCISepaTransfer.Item>();
     
-    public init(iban:String, bic:String, name:String) {
-        sourceIban = iban;
-        sourceBic = bic;
-        sourceName = name;
+    public init(account:HBCIAccount) {
+        self.account = account;
     }
     
     public func validate() ->Bool {
         if items.count == 0 {
             logError("SEPA Transfer: no transfer items");
             return false;
+        }
+        
+        if account.iban == nil {
+            logError("SEPA Transfer: missing IBAN");
+            return false;
+        }
+        
+        if account.bic == nil {
+            logError("SEPA Transfer: missing BIC");
         }
         
         return true;

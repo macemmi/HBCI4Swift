@@ -314,4 +314,42 @@ public class HBCISyntaxElement {
         return success;
     }
     
+    public func addElement(name:String) ->HBCISyntaxElement? {
+        var idx = 0;
+        var reference:HBCISyntaxElementReference?
+        
+        // first get reference with name
+        for ref in self.descr.children {
+            if ref.name == name {
+                // now check if it is a multi element
+                if ref.maxnum <= 1 {
+                    logError("Element \(name) could not be added - only one instance is allowed");
+                    return nil;
+                }
+                reference = ref;
+                break;
+            }
+        }
+        if reference == nil {
+            logError("Reference for \(name) could not be found");
+            return nil;
+        }
+        
+        while idx < children.count {
+            let childElem = children[idx];
+            if childElem.name == name {
+                // now we have the right child element
+                if var child = reference!.elemDescr.compose() {
+                    child.name = reference!.name;
+                    self.children.append(child);
+                    return child;
+                } else {
+                    return nil;
+                }
+            }
+            idx++;
+        }
+        return nil;
+    }
+    
 }

@@ -9,24 +9,28 @@
 import Foundation
 
 public class HBCISepaTransferOrder : HBCIOrder {
-    public var transfer:HBCISepaTransfer?
+    public let transfer:HBCISepaTransfer;
     
-    public init?(message: HBCICustomMessage) {
+    public init?(message: HBCICustomMessage, transfer:HBCISepaTransfer) {
+        self.transfer = transfer;
         super.init(name: "SepaTransfer", message: message);
         if self.segment == nil {
             return nil;
         }
+        
     }
     
     public func enqueue() ->Bool {
+        if !transfer.validate() {
+            return false;
+        }
+        
         if let seg = msg.segmentWithName("SepaTransfer") {
-            if let sepaTransfer = self.transfer {
-                // create SEPA data
-                if let gen = HBCISepaGeneratorFactory.creditGenerator(self.user) {
-                    if let data = gen.documentForTransfer(sepaTransfer) {
-                        
-                        var values:Dictionary<String,AnyObject> = ["My.iban":sepaTransfer.sourceIban, "My.bic":sepaTransfer.sourceBic, "sepapain":data, "sepadescr":gen.getURN()];
-                        
+            // create SEPA data
+            if let gen = HBCISepaGeneratorFactory.creditGenerator(self.user) {
+                if let data = gen.documentForTransfer(transfer) {
+                    if let iban = transfer.account.iban, bic = transfer.account.bic {
+                        var values:Dictionary<String,AnyObject> = ["My.iban":iban, "My.bic":bic, "sepapain":data, "sepadescr":gen.getURN()];
                         if seg.setElementValues(values) {
                             self.segment = seg;
                             
@@ -36,10 +40,15 @@ public class HBCISepaTransferOrder : HBCIOrder {
                         } else {
                             logError("Could not set values for SepaTransfer");
                         }
-                    } 
+                    } else {
+                        if transfer.account.iban == nil {
+                            logError("IBAN is missing for SEPA transfer");
+                        }
+                        if transfer.account.bic == nil {
+                            logError("BIC is missing for SEPA transfer");
+                        }
+                    }
                 }
-            } else {
-                logError("HBCISepaTransfer: no transfer data");
             }
         }
         return false;

@@ -287,7 +287,7 @@ public class HBCIParameters {
         var result:[(version:String, urn:String)] = [];
         for seg in bpSegments {
             if seg.name == "SepaInfoPar" {
-                if let formats = seg.elementValuesForPath("ParSEPAInfo.suppformats") as? [String] {
+                if let formats = seg.elementValuesForPath("ParSepaInfo.suppformats") as? [String] {
                     for urn in formats {
                         if let version = sepaVersion(urn) {
                             let tup:(version:String,urn:String) = (version, urn);
@@ -299,6 +299,19 @@ public class HBCIParameters {
         }
         // sort array by version
         result.sort({$0.version > $1.version})
+        return result;
+    }
+    
+    public func getAccounts() ->Array<HBCIAccount> {
+        var result = Array<HBCIAccount>();
+        
+        for seg in bpSegments {
+            if seg.name == "KInfo" {
+                if let account = HBCIAccount(segment: seg) {
+                    result.append(account);
+                }
+            }
+        }
         return result;
     }
     
