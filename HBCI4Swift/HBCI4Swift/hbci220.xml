@@ -819,6 +819,49 @@
             <DE name="suppformats" type="AN" maxsize="256" minnum="0" maxnum="99"/>
         </DEGdef>
         
+        <DEGdef id="ParSepaDatedTransfer">
+            <DE name="minpretime" type="Num" maxsize="4"/>
+            <DE name="maxpretime" type="Num" maxsize="4"/>
+        </DEGdef>
+        
+        <DEGdef id="ParSepaInternalTransfer">
+            <DE name="PurposeCodes" type="AN" maxsize="4096" minnum="0" maxnum="1"/>
+            <DE name="suppformats" type="AN" maxsize="256" minnum="0" maxnum="9"/>
+        </DEGdef>
+        
+        <DEGdef id="StandingOrderDetails">
+            <DE name="firstdate" type="Date"/>
+            <DE name="timeunit" type="Code" maxsize="1"/>
+            <DE name="turnus" type="Num" maxsize="2"/>
+            <DE name="execday" type="Num" maxsize="2"/>
+            <DE name="lastdate" type="Date" minnum="0"/>
+
+            <valids path="timeunit">
+                <validvalue>M</validvalue>
+                <validvalue>W</validvalue>
+            </valids>
+        </DEGdef>
+        
+        <DEGdef id="SkipSchedule"> <!-- 3.0 -->
+            <DE name="annual" type="JN"/>
+            <DE name="startdate" type="Date" minnum="0"/>
+            <DE name="enddate" type="Date" minnum="0"/>
+            <DE name="number" type="Num" maxsize="2" minnum="0"/>
+            <DEG type="BTG" name="newvalue" minnum="0"/>
+        </DEGdef>
+
+        <DEGdef id="ParSepaStandingOrderNew">
+            <DE name="maxusage" type="Num" maxsize="2"/>
+            <DE name="minpretime" type="Num" maxsize="4"/>
+            <DE name="maxpretime" type="Num" maxsize="4"/>
+            <DE name="turnusmonths" type="Dig" maxsize="24"/>
+            <DE name="dayspermonth" type="Dig" maxsize="64"/>
+            <DE name="turnusweeks" type="Dig" maxsize="104" minnum="0"/>
+            <DE name="daysperweek" type="Dig" maxsize="7" minnum="0"/>
+        </DEGdef>
+
+
+
 
     </DEGs>
     
@@ -1618,7 +1661,111 @@
                 
             &SecClassValids;
         </SEGdef>
-
+        
+        <SEGdef id="SepaDatedTransfer" code="HKCSE">
+            <SEGVersion id="1">
+                <DEG type="SegHead" name="SegHead"/>
+                <DEG type="KTVInt" name="My"/>
+                <DE name="sepadescr" type="AN" maxsize="256"/>
+                <DE name="sepapain" type="Bin" maxsize="0"/>                
+            </SEGVersion>
+        </SEGdef>
+        
+        <SEGdef id="SepaDatedTransferRes" code="HICSE">
+            <SEGVersion id="1">
+                <DEG type="SegHead" name="SegHead"/>
+                <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
+            </SEGVersion>
+        </SEGdef>
+        
+        <SEGdef id="SepaDatedTransferPar" code="HICSES">
+            <SEGVersion id="1">
+                &GVP2;
+                <DEG type="ParSepaDatedTransfer"/>
+            </SEGVersion>
+        </SEGdef>
+        
+        <SEGdef id="SepaInternalTransfer" code="HKCUM">
+            <SEGVersion id="1">
+                <DEG type="SegHead" name="SegHead"/>
+                <DEG type="KTVInt" name="My"/>
+                <DE name="sepadescr" type="AN" maxsize="256"/>
+                <DE name="sepapain" type="Bin" maxsize="0"/>
+            </SEGVersion>
+        </SEGdef>
+        
+        <!-- no result message for internal sepa transfer -->
+        
+        <SEGdef id="SepaInternalTransferPar" code="HICUMS">
+            <SEGVersion id="1">
+                &GVP2; 
+                <DEG type="ParSepaInternalTransfer" />
+                &SecClassValids;
+            </SEGVersion>
+        </SEGdef>
+        
+        <!-- ================== SEPA Standing Orders ========================= -->
+        
+        <SEGdef id="SepaStandingOrderList" code="HKCDB">
+            <SEGVersion id="1">
+                <DEG type="SegHead" name="SegHead"/>
+                <DEG type="KTVInt" name="My"/>
+                <DE name="sepadescr" type="AN" maxsize="256" minnum="1" maxnum="99"/>
+                <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
+                <DE name="maxentries" type="Num" maxsize="4" minnum="0"/>
+                <DE name="offset" type="AN" maxsize="35" minnum="0"/>
+            </SEGVersion>
+        </SEGdef>
+        
+        <SEGdef id="SepaStandingOrderListRes" code="HICDB">
+            <SEGVersion id="1">
+                <DEG type="SegHead" name="SegHead"/>
+                <DEG type="KTVInt" name="My"/>
+                <DE name="sepadescr" type="AN" maxsize="256" minnum="0"/>
+                <DE name="sepapain" type="Bin" maxsize="0"/>
+                <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
+                <DEG type="StandingOrderDetails"/>
+                <DEG type="SkipSchedule" name="Skip" minnum="0"/>
+                <DE name="canchange" type="JN" minnum="0"/>
+                <DE name="canskip" type="JN" minnum="0"/>
+                <DE name="candel" type="JN" minnum="0"/>                
+            </SEGVersion>
+        </SEGdef>
+        
+        <SEGdef id="SepaStandingOrderListPar" code="HICDBS">
+            <SEGVersion id="1">
+                &GVP2;
+                <DE name="maxentries_allowed" type="JN"/>
+                &SecClassValids;
+            </SEGVersion>
+        </SEGdef>
+        
+        <SEGdef id="SepaStandingOrderNew" code="HICDE">
+            <SEGVersion id="1">
+                <DEG type="SegHead" name="SegHead"/>
+                <DEG type="KTVInt" name="My"/>
+                <DE name="sepadescr" type="AN" maxsize="256"/>
+                <DE name="sepapain" type="Bin" maxsize="0"/>
+                <DEG type="StandingOrderDetails"/>                
+            </SEGVersion>
+        </SEGdef>
+        
+        <SEGdef id="SepaStandingOrderNewRes" code="HICDE">
+            <SEGVersion id="1">
+                <DEG type="SegHead" name="SegHead"/>
+                <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
+            </SEGVersion>
+        </SEGdef>
+        
+        <SEGdef id="SepaStandingOrderNewPar" code="HICDES">
+            <SEGVersion id="1">
+                &GVP2;
+                <DEG type="ParSepaStandingOrderNew"/>            
+                &SecClassValids;
+            </SEGVersion>
+        </SEGdef>
+        
+        
     </SEGs>
     
     <MSGs>

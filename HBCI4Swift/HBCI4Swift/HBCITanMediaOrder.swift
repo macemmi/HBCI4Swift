@@ -23,6 +23,12 @@ public class HBCITanMediaOrder : HBCIOrder {
     }
     
     public func enqueue() ->Bool {
+        // check if order is supported
+        if !user.parameters.isOrderSupported(self) {
+            logError(self.name + " is not supported for user " + user.userId);
+            return false;
+        }
+        
         if segment.version >= 4 {
             if let cat = self.mediaCategory {
                 segment.setElementValue(cat, path: "mediacategory");

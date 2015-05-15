@@ -8,11 +8,6 @@
 
 import Foundation
 
-public enum HBCIOrderName:String {
-    case Statements = "Statements";
-}
-
-
 public class HBCIOrder {
     let msg: HBCICustomMessage;
     let user:HBCIUser;

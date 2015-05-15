@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		B14184331AF5610000F9B6FA /* HBCISepaInfoOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14184321AF5610000F9B6FA /* HBCISepaInfoOrder.swift */; };
 		B14184341AF5610000F9B6FA /* HBCISepaInfoOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14184321AF5610000F9B6FA /* HBCISepaInfoOrder.swift */; };
+		B14184371B0634B300F9B6FA /* HBCISepaDatedTransferOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14184361B0634B300F9B6FA /* HBCISepaDatedTransferOrder.swift */; };
+		B14184381B0634B300F9B6FA /* HBCISepaDatedTransferOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14184361B0634B300F9B6FA /* HBCISepaDatedTransferOrder.swift */; };
+		B141843A1B06902500F9B6FA /* HBCISepaInternalTransferOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14184391B06902500F9B6FA /* HBCISepaInternalTransferOrder.swift */; };
+		B141843B1B06902500F9B6FA /* HBCISepaInternalTransferOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14184391B06902500F9B6FA /* HBCISepaInternalTransferOrder.swift */; };
+		B141843D1B06925800F9B6FA /* HBCIAbstractSepaTransferOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B141843C1B06925800F9B6FA /* HBCIAbstractSepaTransferOrder.swift */; };
+		B141843E1B06925800F9B6FA /* HBCIAbstractSepaTransferOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B141843C1B06925800F9B6FA /* HBCIAbstractSepaTransferOrder.swift */; };
 		B19B35981AF1792A00F20B9A /* HBCI4Swift.h in Headers */ = {isa = PBXBuildFile; fileRef = B19B35971AF1792A00F20B9A /* HBCI4Swift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B19B359E1AF1792B00F20B9A /* HBCI4Swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B19B35921AF1792A00F20B9A /* HBCI4Swift.framework */; };
 		B19B35A51AF1792B00F20B9A /* HBCI4SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35A41AF1792B00F20B9A /* HBCI4SwiftTests.swift */; };
@@ -128,6 +134,9 @@
 
 /* Begin PBXFileReference section */
 		B14184321AF5610000F9B6FA /* HBCISepaInfoOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaInfoOrder.swift; sourceTree = "<group>"; };
+		B14184361B0634B300F9B6FA /* HBCISepaDatedTransferOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaDatedTransferOrder.swift; sourceTree = "<group>"; };
+		B14184391B06902500F9B6FA /* HBCISepaInternalTransferOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaInternalTransferOrder.swift; sourceTree = "<group>"; };
+		B141843C1B06925800F9B6FA /* HBCIAbstractSepaTransferOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIAbstractSepaTransferOrder.swift; sourceTree = "<group>"; };
 		B19B35921AF1792A00F20B9A /* HBCI4Swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HBCI4Swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B19B35961AF1792A00F20B9A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B19B35971AF1792A00F20B9A /* HBCI4Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBCI4Swift.h; sourceTree = "<group>"; };
@@ -348,7 +357,10 @@
 				B19B36081AF28BCE00F20B9A /* HBCIStatementsOrder.swift */,
 				B19B36091AF28BCE00F20B9A /* HBCIBalanceOrder.swift */,
 				B19B360A1AF28BCE00F20B9A /* HBCITanOrder.swift */,
+				B141843C1B06925800F9B6FA /* HBCIAbstractSepaTransferOrder.swift */,
 				B19B360B1AF28BCE00F20B9A /* HBCISepaTransferOrder.swift */,
+				B14184391B06902500F9B6FA /* HBCISepaInternalTransferOrder.swift */,
+				B14184361B0634B300F9B6FA /* HBCISepaDatedTransferOrder.swift */,
 				B19B360C1AF28BCE00F20B9A /* HBCITanMediaOrder.swift */,
 				B14184321AF5610000F9B6FA /* HBCISepaInfoOrder.swift */,
 			);
@@ -485,6 +497,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B141843D1B06925800F9B6FA /* HBCIAbstractSepaTransferOrder.swift in Sources */,
 				B19B364B1AF28C1800F20B9A /* HBCISigningOption.swift in Sources */,
 				B19B36131AF28BCE00F20B9A /* HBCITanOrder.swift in Sources */,
 				B19B36431AF28C1800F20B9A /* HBCIConnection.swift in Sources */,
@@ -507,6 +520,7 @@
 				B19B36331AF28BF900F20B9A /* HBCISepaTransfer.swift in Sources */,
 				B19B36211AF28BE500F20B9A /* HBCITanProcessInformation.swift in Sources */,
 				B19B36351AF28BF900F20B9A /* HBCITanMedium.swift in Sources */,
+				B14184371B0634B300F9B6FA /* HBCISepaDatedTransferOrder.swift in Sources */,
 				B19B35FC1AF28BA500F20B9A /* HBCIExtensions.swift in Sources */,
 				B19B36051AF28BB900F20B9A /* HBCIResponse.swift in Sources */,
 				B19B362D1AF28BF900F20B9A /* HBCIStatement.swift in Sources */,
@@ -519,6 +533,7 @@
 				B14184331AF5610000F9B6FA /* HBCISepaInfoOrder.swift in Sources */,
 				B19B35ED1AF28B4900F20B9A /* HBCISepaGenerator.swift in Sources */,
 				B19B36311AF28BF900F20B9A /* HBCIAccountBalance.swift in Sources */,
+				B141843A1B06902500F9B6FA /* HBCISepaInternalTransferOrder.swift in Sources */,
 				B19B36231AF28BE500F20B9A /* HBCITanMethod.swift in Sources */,
 				B19B35C31AF28AC500F20B9A /* CChar.swift in Sources */,
 				B19B35D11AF28AC500F20B9A /* HBCIMessageDescription.swift in Sources */,
@@ -559,6 +574,7 @@
 				B19B36141AF28BCE00F20B9A /* HBCITanOrder.swift in Sources */,
 				B19B35CE1AF28AC500F20B9A /* HBCIDataElementGroupDescription.swift in Sources */,
 				B19B35DC1AF28AC500F20B9A /* HBCISegment.swift in Sources */,
+				B141843B1B06902500F9B6FA /* HBCISepaInternalTransferOrder.swift in Sources */,
 				B19B35D61AF28AC500F20B9A /* HBCISyntaxElement.swift in Sources */,
 				B19B35C61AF28AC500F20B9A /* HBCISyntax.swift in Sources */,
 				B19B36221AF28BE500F20B9A /* HBCITanProcessInformation.swift in Sources */,
@@ -579,7 +595,9 @@
 				B19B36241AF28BE500F20B9A /* HBCITanMethod.swift in Sources */,
 				B19B35E51AF28B1500F20B9A /* HBCIDialog.swift in Sources */,
 				B19B35FB1AF28BA500F20B9A /* HBCIString.swift in Sources */,
+				B141843E1B06925800F9B6FA /* HBCIAbstractSepaTransferOrder.swift in Sources */,
 				B19B360E1AF28BCE00F20B9A /* HBCIOrder.swift in Sources */,
+				B14184381B0634B300F9B6FA /* HBCISepaDatedTransferOrder.swift in Sources */,
 				B19B36401AF28C1800F20B9A /* HBCILog.swift in Sources */,
 				B19B36121AF28BCE00F20B9A /* HBCIBalanceOrder.swift in Sources */,
 				B19B36061AF28BB900F20B9A /* HBCIResponse.swift in Sources */,

@@ -31,7 +31,7 @@ class HBCITanOrder : HBCIOrder {
     }
     
     func enqueue() ->Bool {
-        if let seg = msg.segmentWithName("TAN"), process = self.process {
+        if let process = self.process {
             var values:Dictionary<String,AnyObject> = ["process":process];
             if tanMediumName != nil {
                 values["tanmedia"] = tanMediumName!
@@ -44,15 +44,14 @@ class HBCITanOrder : HBCIOrder {
                 values["orderref"] = orderRef;
             }
             
-            if seg.setElementValues(values) {
-                self.segment = seg;
+            if segment.setElementValues(values) {
                 msg.addOrder(self);
             } else {
                 logError("Values could not be set for TAN order");
                 return false;
             }
         } else {
-            logError("Could not create TAN order");
+            logError("Could not create TAN order - missing process info");
             return false;
         }
         return true;

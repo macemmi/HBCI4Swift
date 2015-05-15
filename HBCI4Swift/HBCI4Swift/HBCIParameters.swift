@@ -167,6 +167,34 @@ public class HBCIParameters {
         return versions;
     }
     
+    public func isOrderSupported(order:HBCIOrder) ->Bool {
+        
+        for seg in bpSegments {
+            if seg.name == "KInfo" {
+                // we don't look for accounts just check if the order is supported in general (e.g. to get TAN media)
+                let allowed = seg.elementsForPath("AllowedGV");
+                for deg in allowed {
+                    if let code = deg.elementValueForPath("code") as? String {
+                        
+                        if code != order.segment.code {
+                            continue;
+                        }
+                        
+                        // now check if job is supported in pinTanInfos
+                        if let ptInfos = self.pinTanInfos {
+                            if ptInfos.supportedSegs[code] == nil {
+                                // this is not supported via PIN/TAN
+                                return false;
+                            }
+                        }
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    
     public func isOrderSupportedForAccount(order:HBCIOrder, number:String, subNumber:String? = nil) ->Bool {
         
         for seg in bpSegments {
@@ -212,8 +240,8 @@ public class HBCIParameters {
         return false;
     }
     
-    public func supportedOrdersForAccount(number:String, subNumber:String? = nil) ->Array<HBCIOrderName> {
-        var orderNames = Array<HBCIOrderName>();
+    public func supportedOrdersForAccount(number:String, subNumber:String? = nil) ->Array<String> {
+        var orderNames = Array<String>();
         var found = false;
         
         for seg in bpSegments {
@@ -247,9 +275,9 @@ public class HBCIParameters {
                             }
                         }
                         
-                        switch code {
-                        case "HKKAZ": orderNames.append(HBCIOrderName.Statements);
-                        default: continue;
+                        // transfer code to order names
+                        if let segv = syntax.codes[code] {
+                            orderNames.append(segv.identifier);
                         }
                     }
                 }
@@ -259,16 +287,6 @@ public class HBCIParameters {
         
         if !found {
             logError("No account information record for account \(number) found");
-        }
-        return orderNames;
-    }
-    
-    public func supportedOrderNamesForAccount(number:String, subNumber:String?) ->Array<String> {
-        var orderNames = Array<String>();
-        
-        let orders = supportedOrdersForAccount(number, subNumber: subNumber);
-        for order in orders {
-            orderNames.append(order.rawValue);
         }
         return orderNames;
     }
