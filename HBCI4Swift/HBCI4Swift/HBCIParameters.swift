@@ -291,32 +291,23 @@ public class HBCIParameters {
         return orderNames;
     }
     
-    func sepaVersion(urn:String) ->String? {
-        var error:NSError?
-        let pattern = "[0-9]{3}.[0-9]{3}.[0-9]{2}";
-        
-        if let match = urn.rangeOfString(pattern, options: NSStringCompareOptions.RegularExpressionSearch, range: nil, locale: nil) {
-            return urn.substringWithRange(match);
-        }
-        return nil;
-    }
-    
-    func sepaFormats(orderName:String?) ->[(version:String, urn:String)] {
-        var result:[(version:String, urn:String)] = [];
+    func sepaFormats(type:HBCISepaFormatType, orderName:String?) ->[HBCISepaFormat] {
+        var result:[HBCISepaFormat] = [];
         for seg in bpSegments {
             if seg.name == "SepaInfoPar" {
                 if let formats = seg.elementValuesForPath("ParSepaInfo.suppformats") as? [String] {
                     for urn in formats {
-                        if let version = sepaVersion(urn) {
-                            let tup:(version:String,urn:String) = (version, urn);
-                            result.append(tup);
+                        if let format = HBCISepaFormat(urn: urn) {
+                            if format.type == type {
+                                result.append(format);
+                            }
                         }
                     }
                 }
             }
         }
         // sort array by version
-        result.sort({$0.version > $1.version})
+        result.sort({$1 < $0})
         return result;
     }
     

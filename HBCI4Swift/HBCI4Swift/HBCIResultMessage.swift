@@ -296,6 +296,18 @@ public class HBCIResultMessage {
         return nil;
     }
     
+    func segmentsWithReference(number:Int, orderName:String) ->Array<HBCISegment> {
+        var segs = Array<HBCISegment>();
+        for segment in self.segments {
+            if segment.name == orderName + "Res" {
+                if let num = segment.elementValueForPath("SegHead.ref") as? Int {
+                    segs.append(segment);
+                }
+            }
+        }
+        return segs;
+    }
+    
     func responsesForSegmentWithNumber(number:Int) ->Array<HBCIOrderResponse>? {
         for segment in self.segments {
             if segment.name == "RetSeg" {

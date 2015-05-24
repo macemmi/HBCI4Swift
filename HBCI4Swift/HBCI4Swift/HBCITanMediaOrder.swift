@@ -51,7 +51,7 @@ public class HBCITanMediaOrder : HBCIOrder {
     override func updateResult(result:HBCIResultMessage) {
         super.updateResult(result);
         
-        if let retSeg = self.resultSegment {
+        if let retSeg = resultSegments.first {
             let version = retSeg.elementValueForPath("SegHead.version") as? Int;
             let degs = retSeg.elementsForPath("MediaInfo");
             for deg in degs {

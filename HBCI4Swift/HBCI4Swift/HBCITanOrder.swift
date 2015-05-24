@@ -61,7 +61,7 @@ class HBCITanOrder : HBCIOrder {
         super.updateResult(result);
         
         // get challenge information
-        if let seg = self.resultSegment {
+        if let seg = resultSegments.first {
             self.challenge = seg.elementValueForPath("challenge") as? String;
             self.orderRef = seg.elementValueForPath("orderref") as? String;
             

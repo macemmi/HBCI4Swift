@@ -860,7 +860,12 @@
             <DE name="daysperweek" type="Dig" maxsize="7" minnum="0"/>
         </DEGdef>
 
-
+        <DEGdef id="ParSepaCollectiveTransfer">
+            <DE name="maxnum" type="Num" maxsize="7" />
+            <DE name="needtotal" type="JN" />
+            <DE name="cansingletransfer" type="JN" />
+        </DEGdef>
+        
 
 
     </DEGs>
@@ -1543,6 +1548,8 @@
             </SEGVersion>
         </SEGdef>
         
+        <!-- ================== SEPA Transfer  ========================= -->        
+        
         <SEGdef id="SepaTransfer" code="HKCCS">
             <SEGVersion id="1">
                 <DEG type="SegHead" name="SegHead"/>
@@ -1558,6 +1565,30 @@
                  &SecClassValids;
             </SEGVersion>
         </SEGdef>
+        
+        <!-- ================== SEPA Collective Transfer ========================= -->
+
+        <SEGdef id="SepaCollectiveTransfer" code="HKCCM">
+            <SEGVersion id="1">
+                <DEG type="SegHead" name="SegHead" />
+                <DEG type="KTVInt" name="My" />
+                <DEG type="BTG" name="Total" minnum="0" />
+                <DE type="JN" name="singletransfers" minnum="0" />
+                <DE type="AN" name="sepadescr" maxsize="256" />
+                <DE type="Bin" name="sepapain" maxsize="0" />
+            </SEGVersion>
+        </SEGdef>
+        
+        <SEGdef id="SepaCollectiveTransferPar" code="HICCMS">
+            <SEGVersion id="1">
+                &GVP2;
+                <DEG type="ParSepaCollectiveTransfer"/>
+                &SecClassValids;
+            </SEGVersion>    
+        </SEGdef>
+        
+        <!-- ================== SEPA TAN Media ========================= -->
+        
         
         <SEGdef id="TANMediaList" code="HKTAB">
             <SEGVersion id="1">
@@ -1639,6 +1670,8 @@
             &SecClassValids;
         </SEGdef>
         
+        <!-- ================== SEPA Account Information ========================= -->        
+        
         <SEGdef id="SepaInfo" code="HKSPA">
             <SEGVersion id="1">
                 <DEG type="SegHead" name="SegHead"/>
@@ -1662,6 +1695,8 @@
             &SecClassValids;
         </SEGdef>
         
+        <!-- ================== SEPA Dated Transfer ========================= -->
+        
         <SEGdef id="SepaDatedTransfer" code="HKCSE">
             <SEGVersion id="1">
                 <DEG type="SegHead" name="SegHead"/>
@@ -1684,6 +1719,8 @@
                 <DEG type="ParSepaDatedTransfer"/>
             </SEGVersion>
         </SEGdef>
+        
+        <!-- ================== SEPA Internal Transfer ========================= -->
         
         <SEGdef id="SepaInternalTransfer" code="HKCUM">
             <SEGVersion id="1">
@@ -1724,7 +1761,7 @@
                 <DE name="sepadescr" type="AN" maxsize="256" minnum="0"/>
                 <DE name="sepapain" type="Bin" maxsize="0"/>
                 <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
-                <DEG type="StandingOrderDetails"/>
+                <DEG type="StandingOrderDetails" name="details"/>
                 <DEG type="SkipSchedule" name="Skip" minnum="0"/>
                 <DE name="canchange" type="JN" minnum="0"/>
                 <DE name="canskip" type="JN" minnum="0"/>
@@ -1740,13 +1777,13 @@
             </SEGVersion>
         </SEGdef>
         
-        <SEGdef id="SepaStandingOrderNew" code="HICDE">
+        <SEGdef id="SepaStandingOrderNew" code="HKCDE">
             <SEGVersion id="1">
                 <DEG type="SegHead" name="SegHead"/>
                 <DEG type="KTVInt" name="My"/>
                 <DE name="sepadescr" type="AN" maxsize="256"/>
                 <DE name="sepapain" type="Bin" maxsize="0"/>
-                <DEG type="StandingOrderDetails"/>                
+                <DEG type="StandingOrderDetails" name="details"/>                
             </SEGVersion>
         </SEGdef>
         

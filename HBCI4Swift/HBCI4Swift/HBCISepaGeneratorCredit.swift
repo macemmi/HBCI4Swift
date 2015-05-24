@@ -11,5 +11,5 @@ import Foundation
 protocol HBCISepaGeneratorCredit {
     
     func documentForTransfer(transfer:HBCISepaTransfer) ->NSData?
-    func getURN() ->String;
+    var sepaFormat:HBCISepaFormat { get };
 }

@@ -70,7 +70,7 @@ public class HBCIBalanceOrder : HBCIOrder {
     override func updateResult(result:HBCIResultMessage) {
         super.updateResult(result);
         
-        if let retSeg = self.resultSegment {
+        if let retSeg = resultSegments.first {
             if let deg = retSeg.elementForPath("booked") as? HBCIDataElementGroup {
                 self.bookedBalance = HBCIAccountBalance(element: deg);
                 if self.bookedBalance == nil {

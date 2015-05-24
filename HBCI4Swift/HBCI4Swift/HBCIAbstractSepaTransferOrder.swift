@@ -34,7 +34,7 @@ public class HBCIAbstractSepaTransferOrder : HBCIOrder {
         if let gen = HBCISepaGeneratorFactory.creditGenerator(self.user) {
             if let data = gen.documentForTransfer(transfer) {
                 if let iban = transfer.account.iban, bic = transfer.account.bic {
-                    var values:Dictionary<String,AnyObject> = ["My.iban":iban, "My.bic":bic, "sepapain":data, "sepadescr":gen.getURN()];
+                    var values:Dictionary<String,AnyObject> = ["My.iban":iban, "My.bic":bic, "sepapain":data, "sepadescr":gen.sepaFormat.urn];
                     if self.segment.setElementValues(values) {
                         // add to dialog
                         msg.addOrder(self);

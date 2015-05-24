@@ -47,6 +47,11 @@ extension NSXMLElement {
         return result;
     }
     
+    func stringValueForPath(path:String) ->String? {
+        let elems = elementsForPath(path);
+        return elems.first?.stringValue;
+    }
+    
     func createPath(path:String) ->NSXMLElement {
         let (name, newPath) = firstComponent(path);
         

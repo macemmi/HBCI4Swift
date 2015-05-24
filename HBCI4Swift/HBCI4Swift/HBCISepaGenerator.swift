@@ -13,13 +13,15 @@ enum SepaOrderType: String {
 }
 
 class HBCISepaGenerator {
-    let urn:String;
     let document:NSXMLDocument;
     let root:NSXMLElement;
     let numberFormatter = NSNumberFormatter();
+    let format:HBCISepaFormat;
     
-    init(urn:String) {
-        self.urn = urn;
+    init(format:HBCISepaFormat) {
+        
+        // set format
+        self.format = format;
         
         // create document
         self.root = NSXMLElement(name: "Document");
@@ -33,6 +35,12 @@ class HBCISepaGenerator {
         
         // init formatters
         initFormatters();
+    }
+    
+    var sepaFormat:HBCISepaFormat {
+        get {
+            return format;
+        }
     }
     
     private func initFormatters() {
@@ -54,14 +62,8 @@ class HBCISepaGenerator {
     }
     
     func setNamespace() {
-        // first remove .xsd substring (if existing) to get location
-        let location = urn.stringByReplacingOccurrencesOfString(".xsd", withString: "", options: NSStringCompareOptions.allZeros, range: nil);
-        
-        var range = Range<String.Index>(start: advance(location.endIndex, -15), end: location.endIndex);
-        let schema = location.substringWithRange(range) + ".xsd";
-        
         var namespace = NSXMLNode(kind: NSXMLNodeKind.NSXMLNamespaceKind);
-        namespace.stringValue = location;
+        namespace.stringValue = format.urn;
         namespace.name = "";
         root.addNamespace(namespace);
         
@@ -72,7 +74,7 @@ class HBCISepaGenerator {
         
         var attr = NSXMLNode(kind: NSXMLNodeKind.NSXMLAttributeKind);
         attr.name = "xsi:schemaLocation"
-        attr.stringValue = location + " " + schema;
+        attr.stringValue = format.schemaLocation;
         root.addAttribute(attr);
     }
     
@@ -87,10 +89,6 @@ class HBCISepaGenerator {
         formatter.dateFormat = "yyyy-MM-dd";
         return formatter.stringFromDate(date);
     }
-    
-    func getURN() ->String {
-        return self.urn;
-    }
-    
 
+    
 }

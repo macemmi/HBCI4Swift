@@ -33,10 +33,35 @@ public class HBCISepaTransfer {
     public var paymentInfoId:String?
     public var date:NSDate?
     
-    public var items = Array<HBCISepaTransfer.Item>();
+    var items = Array<HBCISepaTransfer.Item>();
     
     public init(account:HBCIAccount) {
         self.account = account;
+    }
+    
+    public func addItem(item: HBCISepaTransfer.Item, validate:Bool = true) -> Bool {
+        if validate {
+            // validate item
+            if count(item.remoteIban) == 0 {
+                logError("Remote IBAN not specified");
+                return false;
+            }
+            if count(item.remoteBic) == 0 {
+                logError("Remote BIC not specified");
+                return false;
+            }
+            if count(item.remoteName) == 0 {
+                logError("Remote Name not specified");
+                return false;
+            }
+            if item.value.compare(NSDecimalNumber.zero()) != NSComparisonResult.OrderedDescending {
+                logError("Transfer value must be positive");
+                return false;
+            }            
+        }
+        
+        self.items.append(item);
+        return true;
     }
     
     public func validate() ->Bool {

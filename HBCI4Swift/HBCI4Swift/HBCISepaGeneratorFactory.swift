@@ -11,21 +11,23 @@ import Foundation
 class HBCISepaGeneratorFactory {
     
     class func creditGenerator(user:HBCIUser, orderName:String? = nil) ->HBCISepaGeneratorCredit? {
-        let formats = user.parameters.sepaFormats(orderName);
+        let formats = user.parameters.sepaFormats(HBCISepaFormatType.CreditTransfer, orderName: orderName);
         
-        for (version, urn) in formats {
-            let major = version.substringToIndex(3);
-            if major == "001" {
-                let minor = version.substringFromIndex(4);
-                // switch minor
-                switch minor {
-                case "003.03":
-                    return HBCISepaGenerator_001_003_03(urn: urn);
-                default:
-                    logError("SEPA Credit version \(version) is not supported");
-                    return nil;
+        for format in formats {
+            switch format.variant {
+                case "003":
+                    switch format.version {
+                    case "03": return HBCISepaGenerator_001_003_03(format: format);
+                        
+                    default:
+                        logError("SEPA Credit variant \(format.variant) version \(format.version) is not supported");
+                        return nil;
                 }
+            default:
+                logError("SEPA Credit variant \(format.variant) is not supported");
+                return nil;
             }
+            
         }
         return nil;
     }

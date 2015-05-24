@@ -13,9 +13,9 @@ public class HBCIOrder {
     let user:HBCIUser;
     var success = false;
     var segment:HBCISegment!
-    var resultSegment:HBCISegment?
     var needsTan = false;
     var responses:Array<HBCIOrderResponse>?
+    var resultSegments = Array<HBCISegment>();
     let name:String;
     
     init?(name:String, message:HBCICustomMessage) {
@@ -47,9 +47,7 @@ public class HBCIOrder {
         if let seg = self.segment {
             if let segNum = seg.elementValueForPath("SegHead.seq") as? Int {
                 // now find result with reference to this segment
-                if let rSeg = result.segmentWithReference(segNum, orderName: seg.name) {
-                    self.resultSegment = rSeg;
-                }
+                self.resultSegments = result.segmentsWithReference(segNum, orderName: seg.name);
                 
                 // also update result out of RetSeg
                 if let responses = result.responsesForSegmentWithNumber(segNum) {

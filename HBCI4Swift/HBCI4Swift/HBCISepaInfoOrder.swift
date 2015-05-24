@@ -61,7 +61,7 @@ public class HBCISepaInfoOrder : HBCIOrder {
     override func updateResult(result:HBCIResultMessage) {
         super.updateResult(result);
         
-        if let segment = resultSegment {
+        if let segment = resultSegments.first {
             let infos = segment.elementsForPath("info");
             for deg in infos {
                 let number = deg.elementValueForPath("number") as? String;
