@@ -31,6 +31,8 @@
 		B14184591B0FDACD00F9B6FA /* HBCISepaParser_001_003_03.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14184571B0FDACD00F9B6FA /* HBCISepaParser_001_003_03.swift */; };
 		B141845B1B10871100F9B6FA /* HBCISepaFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = B141845A1B10871100F9B6FA /* HBCISepaFormat.swift */; };
 		B141845C1B10871100F9B6FA /* HBCISepaFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = B141845A1B10871100F9B6FA /* HBCISepaFormat.swift */; };
+		B141845E1B12765000F9B6FA /* HBCISepaCollectiveTransferOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B141845D1B12765000F9B6FA /* HBCISepaCollectiveTransferOrder.swift */; };
+		B141845F1B12765000F9B6FA /* HBCISepaCollectiveTransferOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B141845D1B12765000F9B6FA /* HBCISepaCollectiveTransferOrder.swift */; };
 		B19B35981AF1792A00F20B9A /* HBCI4Swift.h in Headers */ = {isa = PBXBuildFile; fileRef = B19B35971AF1792A00F20B9A /* HBCI4Swift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B19B359E1AF1792B00F20B9A /* HBCI4Swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B19B35921AF1792A00F20B9A /* HBCI4Swift.framework */; };
 		B19B35A51AF1792B00F20B9A /* HBCI4SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35A41AF1792B00F20B9A /* HBCI4SwiftTests.swift */; };
@@ -161,6 +163,7 @@
 		B14184541B0FD9A200F9B6FA /* HBCISepaParserFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaParserFactory.swift; sourceTree = "<group>"; };
 		B14184571B0FDACD00F9B6FA /* HBCISepaParser_001_003_03.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaParser_001_003_03.swift; sourceTree = "<group>"; };
 		B141845A1B10871100F9B6FA /* HBCISepaFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaFormat.swift; sourceTree = "<group>"; };
+		B141845D1B12765000F9B6FA /* HBCISepaCollectiveTransferOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaCollectiveTransferOrder.swift; sourceTree = "<group>"; };
 		B19B35921AF1792A00F20B9A /* HBCI4Swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HBCI4Swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B19B35961AF1792A00F20B9A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B19B35971AF1792A00F20B9A /* HBCI4Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBCI4Swift.h; sourceTree = "<group>"; };
@@ -395,6 +398,7 @@
 				B14184321AF5610000F9B6FA /* HBCISepaInfoOrder.swift */,
 				B14184451B07A0A000F9B6FA /* HBCISepaStandingOrderNewOrder.swift */,
 				B14184481B07E34E00F9B6FA /* HBCISepaStandingOrderListOrder.swift */,
+				B141845D1B12765000F9B6FA /* HBCISepaCollectiveTransferOrder.swift */,
 			);
 			name = Orders;
 			sourceTree = "<group>";
@@ -551,6 +555,7 @@
 				B19B35E21AF28B1500F20B9A /* HBCIAnonymousDialog.swift in Sources */,
 				B19B36451AF28C1800F20B9A /* HBCIUtils.swift in Sources */,
 				B19B36151AF28BCE00F20B9A /* HBCISepaTransferOrder.swift in Sources */,
+				B141845E1B12765000F9B6FA /* HBCISepaCollectiveTransferOrder.swift in Sources */,
 				B19B35CD1AF28AC500F20B9A /* HBCIDataElementGroupDescription.swift in Sources */,
 				B19B36331AF28BF900F20B9A /* HBCISepaTransfer.swift in Sources */,
 				B19B36211AF28BE500F20B9A /* HBCITanProcessInformation.swift in Sources */,
@@ -609,6 +614,7 @@
 				B19B364C1AF28C1800F20B9A /* HBCISigningOption.swift in Sources */,
 				B14184441B07281800F9B6FA /* HBCIStandingOrder.swift in Sources */,
 				B14184561B0FD9A200F9B6FA /* HBCISepaParserFactory.swift in Sources */,
+				B141845F1B12765000F9B6FA /* HBCISepaCollectiveTransferOrder.swift in Sources */,
 				B19B35DA1AF28AC500F20B9A /* HBCIDataElementGroup.swift in Sources */,
 				B19B36101AF28BCE00F20B9A /* HBCIStatementsOrder.swift in Sources */,
 				B19B36181AF28BCE00F20B9A /* HBCITanMediaOrder.swift in Sources */,

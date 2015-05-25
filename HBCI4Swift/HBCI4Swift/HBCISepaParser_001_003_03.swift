@@ -50,6 +50,7 @@ class HBCISepaParser_001_003_03 : HBCISepaParser, HBCISepaParserCredit {
                     if checkTransferData(iban, bic: bic, name: name, value: value, currency: currency) {
                         // create transfer item
                         var item = HBCISepaTransfer.Item(iban: iban!, bic: bic!, name: name!, value: value!, currency: currency!);
+                        item.purpose = element.stringValueForPath("RmtInf.Ustrd");
                         transfer.addItem(item, validate:false);
                     }
                 }
