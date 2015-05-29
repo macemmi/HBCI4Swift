@@ -24,6 +24,11 @@ public class HBCISepaTransferOrder : HBCIAbstractSepaTransferOrder {
             return false;
         }
         
+        if transfer.items.count > 1 {
+            logError("SEPA Transfer: multiple transfers are not allowed");
+            return false;
+        }
+        
         return super.enqueue();
     }
 

@@ -81,7 +81,7 @@ class HBCISepaFormat {
     
     var schemaLocation:String {
         get {
-            return urns[formatString]! + " " + formatString + ".xsd";
+            return urns[formatString]! + " pain." + formatString + ".xsd";
         }
     }
     
