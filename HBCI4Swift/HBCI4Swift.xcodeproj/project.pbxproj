@@ -355,7 +355,7 @@
 				B14184571B0FDACD00F9B6FA /* HBCISepaParser_001_003_03.swift */,
 				B141845A1B10871100F9B6FA /* HBCISepaFormat.swift */,
 			);
-			name = Sepa;
+			path = Sepa;
 			sourceTree = "<group>";
 		};
 		B19B35F31AF28B5200F20B9A /* Structures */ = {
