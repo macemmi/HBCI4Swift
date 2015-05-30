@@ -36,10 +36,10 @@
 		B19B35981AF1792A00F20B9A /* HBCI4Swift.h in Headers */ = {isa = PBXBuildFile; fileRef = B19B35971AF1792A00F20B9A /* HBCI4Swift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B19B359E1AF1792B00F20B9A /* HBCI4Swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B19B35921AF1792A00F20B9A /* HBCI4Swift.framework */; };
 		B19B35A51AF1792B00F20B9A /* HBCI4SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35A41AF1792B00F20B9A /* HBCI4SwiftTests.swift */; };
-		B19B35BF1AF28AC500F20B9A /* hbci300.xml in Resources */ = {isa = PBXBuildFile; fileRef = B19B35AF1AF28AC500F20B9A /* hbci300.xml */; };
-		B19B35C01AF28AC500F20B9A /* hbci300.xml in Resources */ = {isa = PBXBuildFile; fileRef = B19B35AF1AF28AC500F20B9A /* hbci300.xml */; };
-		B19B35C11AF28AC500F20B9A /* hbci220.xml in Resources */ = {isa = PBXBuildFile; fileRef = B19B35B01AF28AC500F20B9A /* hbci220.xml */; };
-		B19B35C21AF28AC500F20B9A /* hbci220.xml in Resources */ = {isa = PBXBuildFile; fileRef = B19B35B01AF28AC500F20B9A /* hbci220.xml */; };
+		B19B35BF1AF28AC500F20B9A /* hbci220.xml in Resources */ = {isa = PBXBuildFile; fileRef = B19B35AF1AF28AC500F20B9A /* hbci220.xml */; };
+		B19B35C01AF28AC500F20B9A /* hbci220.xml in Resources */ = {isa = PBXBuildFile; fileRef = B19B35AF1AF28AC500F20B9A /* hbci220.xml */; };
+		B19B35C11AF28AC500F20B9A /* hbci300.xml in Resources */ = {isa = PBXBuildFile; fileRef = B19B35B01AF28AC500F20B9A /* hbci300.xml */; };
+		B19B35C21AF28AC500F20B9A /* hbci300.xml in Resources */ = {isa = PBXBuildFile; fileRef = B19B35B01AF28AC500F20B9A /* hbci300.xml */; };
 		B19B35C31AF28AC500F20B9A /* CChar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35B11AF28AC500F20B9A /* CChar.swift */; };
 		B19B35C41AF28AC500F20B9A /* CChar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35B11AF28AC500F20B9A /* CChar.swift */; };
 		B19B35C51AF28AC500F20B9A /* HBCISyntax.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35B21AF28AC500F20B9A /* HBCISyntax.swift */; };
@@ -166,12 +166,12 @@
 		B141845D1B12765000F9B6FA /* HBCISepaCollectiveTransferOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaCollectiveTransferOrder.swift; sourceTree = "<group>"; };
 		B19B35921AF1792A00F20B9A /* HBCI4Swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HBCI4Swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B19B35961AF1792A00F20B9A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B19B35971AF1792A00F20B9A /* HBCI4Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBCI4Swift.h; sourceTree = "<group>"; };
+		B19B35971AF1792A00F20B9A /* HBCI4Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HBCI4Swift.h; path = Source/HBCI4Swift.h; sourceTree = "<group>"; };
 		B19B359D1AF1792B00F20B9A /* HBCI4SwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HBCI4SwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B19B35A31AF1792B00F20B9A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B19B35A41AF1792B00F20B9A /* HBCI4SwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCI4SwiftTests.swift; sourceTree = "<group>"; };
-		B19B35AF1AF28AC500F20B9A /* hbci300.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = hbci300.xml; sourceTree = "<group>"; };
-		B19B35B01AF28AC500F20B9A /* hbci220.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = hbci220.xml; sourceTree = "<group>"; };
+		B19B35AF1AF28AC500F20B9A /* hbci220.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = hbci220.xml; sourceTree = "<group>"; };
+		B19B35B01AF28AC500F20B9A /* hbci300.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = hbci300.xml; sourceTree = "<group>"; };
 		B19B35B11AF28AC500F20B9A /* CChar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CChar.swift; sourceTree = "<group>"; };
 		B19B35B21AF28AC500F20B9A /* HBCISyntax.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISyntax.swift; sourceTree = "<group>"; };
 		B19B35B31AF28AC500F20B9A /* HBCISyntaxElementReference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISyntaxElementReference.swift; sourceTree = "<group>"; };
@@ -213,14 +213,14 @@
 		B19B36281AF28BF900F20B9A /* HBCIAccountBalance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIAccountBalance.swift; sourceTree = "<group>"; };
 		B19B36291AF28BF900F20B9A /* HBCISepaTransfer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaTransfer.swift; sourceTree = "<group>"; };
 		B19B362A1AF28BF900F20B9A /* HBCITanMedium.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCITanMedium.swift; sourceTree = "<group>"; };
-		B19B36371AF28C1800F20B9A /* HBCILog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCILog.swift; sourceTree = "<group>"; };
-		B19B36381AF28C1800F20B9A /* HBCIError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIError.swift; sourceTree = "<group>"; };
-		B19B36391AF28C1800F20B9A /* HBCIConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIConnection.swift; sourceTree = "<group>"; };
-		B19B363A1AF28C1800F20B9A /* HBCIUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIUtils.swift; sourceTree = "<group>"; };
-		B19B363B1AF28C1800F20B9A /* HBCIMT94xParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIMT94xParser.swift; sourceTree = "<group>"; };
-		B19B363C1AF28C1800F20B9A /* HBCITanProcess_2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCITanProcess_2.swift; sourceTree = "<group>"; };
-		B19B363D1AF28C1800F20B9A /* HBCISigningOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISigningOption.swift; sourceTree = "<group>"; };
-		B19B363E1AF28C1800F20B9A /* HBCICallback.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCICallback.swift; sourceTree = "<group>"; };
+		B19B36371AF28C1800F20B9A /* HBCILog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCILog.swift; path = Source/HBCILog.swift; sourceTree = "<group>"; };
+		B19B36381AF28C1800F20B9A /* HBCIError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCIError.swift; path = Source/HBCIError.swift; sourceTree = "<group>"; };
+		B19B36391AF28C1800F20B9A /* HBCIConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCIConnection.swift; path = Source/HBCIConnection.swift; sourceTree = "<group>"; };
+		B19B363A1AF28C1800F20B9A /* HBCIUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCIUtils.swift; path = Source/HBCIUtils.swift; sourceTree = "<group>"; };
+		B19B363B1AF28C1800F20B9A /* HBCIMT94xParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCIMT94xParser.swift; path = Source/HBCIMT94xParser.swift; sourceTree = "<group>"; };
+		B19B363C1AF28C1800F20B9A /* HBCITanProcess_2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCITanProcess_2.swift; path = Source/HBCITanProcess_2.swift; sourceTree = "<group>"; };
+		B19B363D1AF28C1800F20B9A /* HBCISigningOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCISigningOption.swift; path = Source/HBCISigningOption.swift; sourceTree = "<group>"; };
+		B19B363E1AF28C1800F20B9A /* HBCICallback.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCICallback.swift; path = Source/HBCICallback.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -242,6 +242,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		019E075E1B19AE4B0078C268 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B19B35AF1AF28AC500F20B9A /* hbci220.xml */,
+				B19B35B01AF28AC500F20B9A /* hbci300.xml */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		B19B35881AF1792A00F20B9A = {
 			isa = PBXGroup;
 			children = (
@@ -263,6 +272,7 @@
 		B19B35941AF1792A00F20B9A /* HBCI4Swift */ = {
 			isa = PBXGroup;
 			children = (
+				019E075E1B19AE4B0078C268 /* Resources */,
 				B19B35F71AF28B8600F20B9A /* Extensions */,
 				B19B35AE1AF28AA900F20B9A /* Syntax */,
 				B19B35F61AF28B7600F20B9A /* Message */,
@@ -313,8 +323,6 @@
 		B19B35AE1AF28AA900F20B9A /* Syntax */ = {
 			isa = PBXGroup;
 			children = (
-				B19B35AF1AF28AC500F20B9A /* hbci300.xml */,
-				B19B35B01AF28AC500F20B9A /* hbci220.xml */,
 				B19B35B11AF28AC500F20B9A /* CChar.swift */,
 				B19B35B21AF28AC500F20B9A /* HBCISyntax.swift */,
 				B19B35B31AF28AC500F20B9A /* HBCISyntaxElementReference.swift */,
@@ -331,6 +339,7 @@
 				B19B35BE1AF28AC500F20B9A /* HBCIMessage.swift */,
 			);
 			name = Syntax;
+			path = Source/Syntax;
 			sourceTree = "<group>";
 		};
 		B19B35DF1AF28AE400F20B9A /* Dialog */ = {
@@ -340,6 +349,7 @@
 				B19B35E11AF28B1500F20B9A /* HBCIDialog.swift */,
 			);
 			name = Dialog;
+			path = Source/Dialog;
 			sourceTree = "<group>";
 		};
 		B19B35E61AF28B3700F20B9A /* Sepa */ = {
@@ -355,7 +365,8 @@
 				B14184571B0FDACD00F9B6FA /* HBCISepaParser_001_003_03.swift */,
 				B141845A1B10871100F9B6FA /* HBCISepaFormat.swift */,
 			);
-			path = Sepa;
+			name = Sepa;
+			path = Source/Sepa;
 			sourceTree = "<group>";
 		};
 		B19B35F31AF28B5200F20B9A /* Structures */ = {
@@ -369,6 +380,7 @@
 				B14184421B07281800F9B6FA /* HBCIStandingOrder.swift */,
 			);
 			name = Structures;
+			path = Source/Structures;
 			sourceTree = "<group>";
 		};
 		B19B35F41AF28B6100F20B9A /* Parameters */ = {
@@ -381,6 +393,7 @@
 				B19B362A1AF28BF900F20B9A /* HBCITanMedium.swift */,
 			);
 			name = Parameters;
+			path = Source/Parameters;
 			sourceTree = "<group>";
 		};
 		B19B35F51AF28B7000F20B9A /* Orders */ = {
@@ -401,6 +414,7 @@
 				B141845D1B12765000F9B6FA /* HBCISepaCollectiveTransferOrder.swift */,
 			);
 			name = Orders;
+			path = Source/Orders;
 			sourceTree = "<group>";
 		};
 		B19B35F61AF28B7600F20B9A /* Message */ = {
@@ -411,6 +425,7 @@
 				B19B36001AF28BB900F20B9A /* HBCIResponse.swift */,
 			);
 			name = Message;
+			path = Source/Message;
 			sourceTree = "<group>";
 		};
 		B19B35F71AF28B8600F20B9A /* Extensions */ = {
@@ -420,6 +435,7 @@
 				B19B35F91AF28BA500F20B9A /* HBCIExtensions.swift */,
 			);
 			name = Extensions;
+			path = Source/Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -512,8 +528,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B19B35C11AF28AC500F20B9A /* hbci220.xml in Resources */,
-				B19B35BF1AF28AC500F20B9A /* hbci300.xml in Resources */,
+				B19B35C11AF28AC500F20B9A /* hbci300.xml in Resources */,
+				B19B35BF1AF28AC500F20B9A /* hbci220.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -521,8 +537,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B19B35C21AF28AC500F20B9A /* hbci220.xml in Resources */,
-				B19B35C01AF28AC500F20B9A /* hbci300.xml in Resources */,
+				B19B35C21AF28AC500F20B9A /* hbci300.xml in Resources */,
+				B19B35C01AF28AC500F20B9A /* hbci220.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
