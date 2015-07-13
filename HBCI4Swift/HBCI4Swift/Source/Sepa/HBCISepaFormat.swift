@@ -85,6 +85,14 @@ class HBCISepaFormat {
         }
     }
     
+    var validationSchemaLocation:String {
+        get {
+            var path = NSBundle.mainBundle().bundlePath;
+            path = path + "/Contents/Frameworks/HBCI4Swift.framework/Resources/pain.";
+            return urns[formatString]! + " " + path + formatString + ".xsd";
+        }
+    }
+    
     var urn:String {
         return urns[formatString]!;
     }

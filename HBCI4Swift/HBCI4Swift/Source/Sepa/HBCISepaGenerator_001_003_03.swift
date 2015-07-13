@@ -74,15 +74,7 @@ class HBCISepaGenerator_001_003_03 : HBCISepaGenerator, HBCISepaGeneratorCredit 
             parent.addChild(elem);
         }
         
-        // verify document
-        var error:NSError?
-        
-        if !document.validateAndReturnError(&error) {
-            if let err = error {
-                logError("SEPA document error: " + err.description);
-            }
-            //return nil;
-        }
+        validate();
         
         println(document.description);
         

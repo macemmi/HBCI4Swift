@@ -138,6 +138,7 @@
 		B19B364C1AF28C1800F20B9A /* HBCISigningOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B363D1AF28C1800F20B9A /* HBCISigningOption.swift */; };
 		B19B364D1AF28C1800F20B9A /* HBCICallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B363E1AF28C1800F20B9A /* HBCICallback.swift */; };
 		B19B364E1AF28C1800F20B9A /* HBCICallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B363E1AF28C1800F20B9A /* HBCICallback.swift */; };
+		B1AE54A81B1A57D1008C7BBE /* pain.001.003.03.xsd in Resources */ = {isa = PBXBuildFile; fileRef = B1AE54A71B1A57D1008C7BBE /* pain.001.003.03.xsd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -221,6 +222,7 @@
 		B19B363C1AF28C1800F20B9A /* HBCITanProcess_2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCITanProcess_2.swift; path = Source/HBCITanProcess_2.swift; sourceTree = "<group>"; };
 		B19B363D1AF28C1800F20B9A /* HBCISigningOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCISigningOption.swift; path = Source/HBCISigningOption.swift; sourceTree = "<group>"; };
 		B19B363E1AF28C1800F20B9A /* HBCICallback.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCICallback.swift; path = Source/HBCICallback.swift; sourceTree = "<group>"; };
+		B1AE54A71B1A57D1008C7BBE /* pain.001.003.03.xsd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = pain.001.003.03.xsd; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -245,6 +247,7 @@
 		019E075E1B19AE4B0078C268 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				B1AE54A71B1A57D1008C7BBE /* pain.001.003.03.xsd */,
 				B19B35AF1AF28AC500F20B9A /* hbci220.xml */,
 				B19B35B01AF28AC500F20B9A /* hbci300.xml */,
 			);
@@ -529,6 +532,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B19B35C11AF28AC500F20B9A /* hbci300.xml in Resources */,
+				B1AE54A81B1A57D1008C7BBE /* pain.001.003.03.xsd in Resources */,
 				B19B35BF1AF28AC500F20B9A /* hbci220.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
