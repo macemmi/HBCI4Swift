@@ -20,6 +20,7 @@ public class HBCIUser {
     public var tanMediumName:String?
     public var pin:String?
     public var parameters = HBCIParameters();
+    public var securityMethod:HBCISecurityMethod?
     
     public init(userId:String, customerId:String, bankCode:String, hbciVersion:String, bankURLString:String) {
         self.userId = userId;

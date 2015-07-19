@@ -57,6 +57,22 @@ public class HBCIMessage: HBCISyntaxElement {
         return data;
     }
     
+    func messageDataForSignature() ->NSData {
+        var data = NSMutableData();
+        var delim = self.descr.delimiter;
+        for idx in 0..<self.children.count {
+            let element = self.children[idx];
+            if element.name == "MsgHead" || element.name == "MsgTail" || element.name == "SigTail" {
+                continue;
+            }
+            element.messageData(data);
+            if idx < self.children.count-1 {
+                data.appendBytes(&delim, length: 1);
+            }
+        }
+        return data;
+    }
+    
     func messageDataForEncryption() ->NSData {
         var data = NSMutableData();
         var delim = self.descr.delimiter;
