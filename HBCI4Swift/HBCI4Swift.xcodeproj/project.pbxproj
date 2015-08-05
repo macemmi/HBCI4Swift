@@ -148,6 +148,7 @@
 		B19B364C1AF28C1800F20B9A /* HBCISigningOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B363D1AF28C1800F20B9A /* HBCISigningOption.swift */; };
 		B19B364D1AF28C1800F20B9A /* HBCICallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B363E1AF28C1800F20B9A /* HBCICallback.swift */; };
 		B19B364E1AF28C1800F20B9A /* HBCICallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B363E1AF28C1800F20B9A /* HBCICallback.swift */; };
+		B1A296D51B62E86B00B1E3AB /* HBCISecurityMethodDDV.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15B81C71B5450B5006B6366 /* HBCISecurityMethodDDV.swift */; };
 		B1AE54A81B1A57D1008C7BBE /* pain.001.003.03.xsd in Resources */ = {isa = PBXBuildFile; fileRef = B1AE54A71B1A57D1008C7BBE /* pain.001.003.03.xsd */; };
 		B1AFEC3F1B5B0244002F1DDF /* reader.h in Headers */ = {isa = PBXBuildFile; fileRef = B1AFEC3E1B5B0244002F1DDF /* reader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B1AFEC401B5B026F002F1DDF /* HBCISmartcard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15B72F81B559CA6008D2E55 /* HBCISmartcard.swift */; };
@@ -945,6 +946,7 @@
 				B19B364A1AF28C1800F20B9A /* HBCITanProcess_2.swift in Sources */,
 				B14184341AF5610000F9B6FA /* HBCISepaInfoOrder.swift in Sources */,
 				B19B36301AF28BF900F20B9A /* HBCIAccount.swift in Sources */,
+				B1A296D51B62E86B00B1E3AB /* HBCISecurityMethodDDV.swift in Sources */,
 				B19B35C81AF28AC500F20B9A /* HBCISyntaxElementReference.swift in Sources */,
 				B19B361E1AF28BE500F20B9A /* HBCIParameters.swift in Sources */,
 				B19B35D41AF28AC500F20B9A /* HBCISegmentVersions.swift in Sources */,

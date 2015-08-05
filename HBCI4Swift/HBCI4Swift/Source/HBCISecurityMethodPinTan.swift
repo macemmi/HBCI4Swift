@@ -9,10 +9,9 @@
 import Foundation
 
 public class HBCISecurityMethodPinTan : HBCISecurityMethod {
-    let user:HBCIUser;
-    
-    public init(user:HBCIUser) {
-        self.user = user;
+
+    public override init() {
+        super.init();
     }
 
     override func signMessage(msg:HBCIMessage) ->Bool {

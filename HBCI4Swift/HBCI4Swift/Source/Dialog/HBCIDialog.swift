@@ -11,7 +11,7 @@ import Foundation
 
 
 public class HBCIDialog {
-    var connection:HBCIConnection?
+    var connection:HBCIConnection!
     var dialogId:String?
     var user:HBCIUser;
     var hbciVersion:String!                 // todo: replace with let once Xcode bug is fixed
@@ -23,13 +23,31 @@ public class HBCIDialog {
     public static var callback:HBCICallback?
     
     public init?(user:HBCIUser, error:NSErrorPointer) {
+        
         self.user = user;
         self.hbciVersion = user.hbciVersion;
+        
+        if user.securityMethod == nil {
+            logError("Security method for user not defined");
+            return nil;
+        }
+
         if let syntax = HBCISyntax.syntaxWithVersion(hbciVersion, error: error) {
             self.syntax = syntax;
-            if let url = NSURL(string:user.bankURL) {
-                self.connection = HBCIConnection(url: url);
-                return;
+            
+            if user.securityMethod is HBCISecurityMethodDDV {
+                if let conn = HBCIConnection(host: user.bankURL) {
+                    self.connection = conn;
+                    return;
+                } else {
+                    // todo: Server not reached
+                    return nil;
+                }
+            } else {
+                if let url = NSURL(string:user.bankURL) {
+                    self.connection = HBCIConnection(url: url);
+                    return;
+                }
             }
         }
         return nil;
@@ -51,7 +69,12 @@ public class HBCIDialog {
     }
     
     func sendMessage(msg:HBCIMessage, error:NSErrorPointer) ->HBCIResultMessage? {
-        if !signMessage(msg) {
+        if !msg.enumerateSegments() {
+            logError(msg.description);
+            return nil;
+        }
+        
+        if !user.securityMethod.signMessage(msg) {
             logError(msg.description);
             return nil;
         }
@@ -66,7 +89,7 @@ public class HBCIDialog {
         
         //println(msg.description)
         
-        if let msg_crypted = encryptMessage(msg) {
+        if let msg_crypted = user.securityMethod.encryptMessage(msg, dialog: self) {
             
             if !msg_crypted.validate() {
                 logError(msg_crypted.description);
@@ -74,17 +97,17 @@ public class HBCIDialog {
             }
             
             let msgData = msg_crypted.messageData();
-            //println(msg_crypted.messageString());
+            println(msg_crypted.messageString());
             
             // send message to bank
-            if let result = self.connection!.sendMessage(msgData, error: error) {
+            if let result = self.connection.sendMessage(msgData, error: error) {
                 let resultMsg_crypted = HBCIResultMessage(syntax: self.syntax);
                 if resultMsg_crypted.parse(result) {
                     if let dialogId = resultMsg_crypted.valueForPath("MsgHead.dialogid") as? String {
                         self.dialogId = dialogId;
                     }
                     self.messageNum++;
-                    return decryptMessage(resultMsg_crypted);
+                    return user.securityMethod.decryptMessage(resultMsg_crypted, dialog: self);
                 } else {
                     logError("Message could not be parsed");
                     logError(NSString(data: result, encoding: NSISOLatin1StringEncoding) as! String);
@@ -97,6 +120,7 @@ public class HBCIDialog {
         return nil;
     }
 
+    /*
     func signMessage(msg:HBCIMessage) ->Bool {
         //let secref:String = NSString(format: "%d", arc4random());
         var version = 0;
@@ -148,6 +172,7 @@ public class HBCIDialog {
         
         return msg.setElementValues(values);
     }
+
     
     func signCryptedMessage(msg:HBCIMessage) ->Bool {
         var version = 0;
@@ -186,6 +211,7 @@ public class HBCIDialog {
         return msg.setElementValues(values);
     }
     
+    
     func encryptMessage(msg:HBCIMessage) ->HBCIMessage? {
         if let lastSegNum = msg.lastSegmentNumber() {
             if let dialogId = self.dialogId {
@@ -217,6 +243,7 @@ public class HBCIDialog {
         }
         return nil;
     }
+
     
     func decryptMessage(rmsg:HBCIResultMessage) ->HBCIResultMessage? {
         if let msgData = rmsg.valueForPath("CryptData.data") as? NSData {
@@ -229,6 +256,7 @@ public class HBCIDialog {
         }
         return nil;
     }
+    */
     
     public func dialogInit(error:NSErrorPointer) ->HBCIResultMessage? {
         if user.sysId == nil {
@@ -236,11 +264,15 @@ public class HBCIDialog {
             return nil;
         }
         
-        let values:Dictionary<String,AnyObject> = ["Idn.KIK.country":"280", "Idn.KIK.blz":user.bankCode, "Idn.customerid":user.customerId,
+        var values:Dictionary<String,AnyObject> = ["Idn.KIK.country":"280", "Idn.KIK.blz":user.bankCode, "Idn.customerid":user.customerId,
             "Idn.sysid":user.sysId!, "Idn.sysStatus":"1", "ProcPrep.BPD":user.parameters.bpdVersion,
             "ProcPrep.UPD":user.parameters.updVersion, "ProcPrep.lang":"0", "ProcPrep.prodName":"PecuniaBanking",
             "ProcPrep.prodVersion":"100"
         ];
+        
+        if user.securityMethod is HBCISecurityMethodDDV {
+            values["Idn.sysStatus"] = "0";
+        }
         
         self.dialogId = "0";
         if let result = sendMessage("DialogInit", values: values, error: error) {
@@ -253,8 +285,11 @@ public class HBCIDialog {
     public func dialogEnd(error:NSErrorPointer) ->HBCIResultMessage? {
         if let dialogId = self.dialogId {
             let values:Dictionary<String,AnyObject> = ["DialogEnd.dialogid":dialogId, "MsgHead.dialogid":dialogId, "MsgHead.msgnum":messageNum, "MsgTail.msgnum":messageNum];
-            return sendMessage("DialogEnd", values: values, error: error);
+            let rmsg = sendMessage("DialogEnd", values: values, error: error);
+            self.connection.close();
+            return rmsg;
         }
+        self.connection.close();
         return nil;
     }
     

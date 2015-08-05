@@ -40,10 +40,11 @@ public class HBCIMessage: HBCISyntaxElement {
     }
     
     func finalize() ->Bool {
+        /*
         if !enumerateSegments() {
             return false;
         }
-        
+        */
         let data = self.messageData();
         let sizeString = NSString(format: "%012d", data.length);
         return setElementValue(sizeString, path: "MsgHead.msgsize");

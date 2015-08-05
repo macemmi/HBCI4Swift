@@ -70,7 +70,7 @@ public class HBCISmartcard {
     //let FEATURE_VERIFY_PIN_DIRECT = 0x06 /**< Verify PIN */
 
     
-    enum ConnectResult {
+    public enum ConnectResult {
         case connected, reconnected, no_card, no_context, not_supported, error
     }
 
@@ -89,7 +89,7 @@ public class HBCISmartcard {
         return true;
     }
     
-    class func readers() ->Array<String>? {
+    public class func readers() ->Array<String>? {
         var numReaders:DWORD = 0;
         var result = Array<String>();
         
@@ -161,7 +161,7 @@ public class HBCISmartcard {
         return NSData(bytes: result.bytes, length: result.length-2);
     }
     
-    func verifyPin() ->Bool {
+    public func verifyPin() ->Bool {
         var offset = 0;
         var pSendBuffer = UnsafeMutablePointer<UInt8>.alloc(Int(MAX_BUFFER_SIZE));
         var pRecBuffer = UnsafeMutablePointer<UInt8>.alloc(Int(MAX_BUFFER_SIZE));
@@ -259,7 +259,7 @@ public class HBCISmartcard {
         return true;
     }
     
-    func isConnected() ->Bool {
+    public func isConnected() ->Bool {
         var state:DWORD = 0;
         var prot:DWORD = 0;
         var length:DWORD = 0;
@@ -287,14 +287,14 @@ public class HBCISmartcard {
     }
     
     // check if reader ist still connected
-    func isReaderConnected() ->Bool {
+    public func isReaderConnected() ->Bool {
         if let readers = HBCISmartcard.readers() {
             return contains(readers, readerName);
         }
         return false;
     }
     
-    func connect(tries:Int) ->ConnectResult {
+    public func connect(tries:Int) ->ConnectResult {
         var prot:DWORD = 0;
         var n = 0;
         var reconnected = false;
@@ -358,7 +358,7 @@ public class HBCISmartcard {
         }
     }
     
-    func disconnect() {
+    public func disconnect() {
         if let hCard = _hCard {
             SCardDisconnect(hCard, DWORD(SCARD_UNPOWER_CARD));
         }

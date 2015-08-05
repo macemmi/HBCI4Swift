@@ -34,12 +34,12 @@ public class HBCISmartcardDDV : HBCISmartcard {
     
     let KEY_TYPE_DF:UInt8 = 0x80;
 
-    override init(readerName:String) {
+    override public init(readerName:String) {
         cardType = CardType.CARDTYPE_UNKNOWN;
         super.init(readerName: readerName);
     }
     
-    override func connect(tries:Int) -> ConnectResult {
+    override public func connect(tries:Int) -> ConnectResult {
         let result = super.connect(tries);
         if result == ConnectResult.connected || result == ConnectResult.reconnected {
             // get card type
@@ -113,7 +113,7 @@ public class HBCISmartcardDDV : HBCISmartcard {
         return false;
     }
     
-    func getBankData(idx:Int) ->HBCICardBankData? {
+    public func getBankData(idx:Int) ->HBCICardBankData? {
         if let result = readRecordWithSFI(idx, sfi: DDV_EF_BANK) {
             var p = UnsafeMutablePointer<UInt8>(result.bytes);
             var name, host, hostAdd, country, userId, bankCode:NSString!

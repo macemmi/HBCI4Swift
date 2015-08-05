@@ -10,9 +10,9 @@ import Foundation
 
 extension NSData {
     func hasNonPrintableChars() ->Bool {
-        var p = UnsafeMutablePointer<CChar>(self.bytes);
+        var p = UnsafeMutablePointer<UInt8>(self.bytes);
         for idx in 0..<self.length {
-            let c = UInt8(p.memory);
+            let c = p.memory;
             if !((c >= 0x20 && c <= 0x7E) || c >= 0xA1 || c == 0x0A || c == 0x0D) {
                 return true;
             }

@@ -15,12 +15,13 @@ public class HBCIUser {
     public let userId:String;
     public let customerId:String;
     
+    var securityMethod:HBCISecurityMethod!
+    
     public var sysId:String?
     public var tanMethod:String?
     public var tanMediumName:String?
     public var pin:String?
     public var parameters = HBCIParameters();
-    public var securityMethod:HBCISecurityMethod?
     
     public init(userId:String, customerId:String, bankCode:String, hbciVersion:String, bankURLString:String) {
         self.userId = userId;
@@ -28,6 +29,15 @@ public class HBCIUser {
         self.bankCode = bankCode;
         self.hbciVersion = hbciVersion;
         self.bankURL = bankURLString;
+    }
+    
+    public func setSecurityMethod(method:HBCISecurityMethod) {
+        self.securityMethod = method;
+        method.user = self;
+        
+        if method is HBCISecurityMethodDDV {
+            self.sysId = "0";
+        }
     }
     
     public func setParameterData(data:NSData, error:NSErrorPointer) ->Bool {
