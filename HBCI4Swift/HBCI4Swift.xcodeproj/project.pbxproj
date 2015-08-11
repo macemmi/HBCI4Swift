@@ -43,6 +43,8 @@
 		B15B72FF1B559CA6008D2E55 /* HBCISmartcardDDV.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15B72FA1B559CA6008D2E55 /* HBCISmartcardDDV.swift */; };
 		B15B73001B559CA6008D2E55 /* HBCISmartcardDDV.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15B72FA1B559CA6008D2E55 /* HBCISmartcardDDV.swift */; };
 		B15B81C81B5450B5006B6366 /* HBCISecurityMethodDDV.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15B81C71B5450B5006B6366 /* HBCISecurityMethodDDV.swift */; };
+		B16A223F1B7A811D005E84FC /* RIPEMD160.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16A223E1B7A811D005E84FC /* RIPEMD160.swift */; };
+		B16A22401B7A811D005E84FC /* RIPEMD160.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16A223E1B7A811D005E84FC /* RIPEMD160.swift */; };
 		B19B35981AF1792A00F20B9A /* HBCI4Swift.h in Headers */ = {isa = PBXBuildFile; fileRef = B19B35971AF1792A00F20B9A /* HBCI4Swift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B19B359E1AF1792B00F20B9A /* HBCI4Swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B19B35921AF1792A00F20B9A /* HBCI4Swift.framework */; };
 		B19B35A51AF1792B00F20B9A /* HBCI4SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35A41AF1792B00F20B9A /* HBCI4SwiftTests.swift */; };
@@ -152,15 +154,6 @@
 		B1AE54A81B1A57D1008C7BBE /* pain.001.003.03.xsd in Resources */ = {isa = PBXBuildFile; fileRef = B1AE54A71B1A57D1008C7BBE /* pain.001.003.03.xsd */; };
 		B1AFEC3F1B5B0244002F1DDF /* reader.h in Headers */ = {isa = PBXBuildFile; fileRef = B1AFEC3E1B5B0244002F1DDF /* reader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B1AFEC401B5B026F002F1DDF /* HBCISmartcard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15B72F81B559CA6008D2E55 /* HBCISmartcard.swift */; };
-		B1AFEC7A1B5C246C002F1DDF /* RIPEMD.h in Headers */ = {isa = PBXBuildFile; fileRef = B1AFEC791B5C246C002F1DDF /* RIPEMD.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B1AFEC921B5C25AF002F1DDF /* NSData+HexString.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AFEC8E1B5C25AF002F1DDF /* NSData+HexString.swift */; };
-		B1AFEC931B5C25AF002F1DDF /* RIPEMD.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AFEC8F1B5C25AF002F1DDF /* RIPEMD.swift */; };
-		B1AFEC941B5C25AF002F1DDF /* RIPEMD+Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AFEC901B5C25AF002F1DDF /* RIPEMD+Block.swift */; };
-		B1AFEC951B5C25AF002F1DDF /* UInt32+CircularShift.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AFEC911B5C25AF002F1DDF /* UInt32+CircularShift.swift */; };
-		B1AFEC9E1B5C2805002F1DDF /* NSData-Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AFEC9A1B5C2805002F1DDF /* NSData-Tests.swift */; };
-		B1AFEC9F1B5C2805002F1DDF /* RIPEMD-Block-Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AFEC9B1B5C2805002F1DDF /* RIPEMD-Block-Tests.swift */; };
-		B1AFECA01B5C2805002F1DDF /* RIPEMD-Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AFEC9C1B5C2805002F1DDF /* RIPEMD-Tests.swift */; };
-		B1AFECA11B5C2805002F1DDF /* UInt32+CircularShift-Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AFEC9D1B5C2805002F1DDF /* UInt32+CircularShift-Tests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -177,20 +170,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = B1AFEC481B5B9E7D002F1DDF;
 			remoteInfo = CommonCrypto;
-		};
-		B1AFEC811B5C246C002F1DDF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = B19B35891AF1792A00F20B9A /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = B1AFEC741B5C246C002F1DDF;
-			remoteInfo = RIPEMD;
-		};
-		B1AFEC961B5C25EE002F1DDF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = B19B35891AF1792A00F20B9A /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = B1AFEC741B5C246C002F1DDF;
-			remoteInfo = RIPEMD;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -214,6 +193,7 @@
 		B15B72F91B559CA6008D2E55 /* HBCISmartcardData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCISmartcardData.swift; path = Source/Chipcard/HBCISmartcardData.swift; sourceTree = "<group>"; };
 		B15B72FA1B559CA6008D2E55 /* HBCISmartcardDDV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCISmartcardDDV.swift; path = Source/Chipcard/HBCISmartcardDDV.swift; sourceTree = "<group>"; };
 		B15B81C71B5450B5006B6366 /* HBCISecurityMethodDDV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCISecurityMethodDDV.swift; path = Source/HBCISecurityMethodDDV.swift; sourceTree = "<group>"; };
+		B16A223E1B7A811D005E84FC /* RIPEMD160.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RIPEMD160.swift; path = Source/RIPEMD160.swift; sourceTree = "<group>"; };
 		B19B35921AF1792A00F20B9A /* HBCI4Swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HBCI4Swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B19B35961AF1792A00F20B9A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B19B35971AF1792A00F20B9A /* HBCI4Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HBCI4Swift.h; path = Source/HBCI4Swift.h; sourceTree = "<group>"; };
@@ -276,19 +256,6 @@
 		B1AFEC491B5B9E7D002F1DDF /* CommonCrypto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CommonCrypto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1AFEC4C1B5B9E7E002F1DDF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B1AFEC621B5B9F12002F1DDF /* CommonCrypto.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = CommonCrypto.xcconfig; sourceTree = "<group>"; };
-		B1AFEC751B5C246C002F1DDF /* RIPEMD.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RIPEMD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B1AFEC781B5C246C002F1DDF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B1AFEC791B5C246C002F1DDF /* RIPEMD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RIPEMD.h; sourceTree = "<group>"; };
-		B1AFEC7F1B5C246C002F1DDF /* RIPEMDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RIPEMDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		B1AFEC851B5C246C002F1DDF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B1AFEC8E1B5C25AF002F1DDF /* NSData+HexString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSData+HexString.swift"; sourceTree = "<group>"; };
-		B1AFEC8F1B5C25AF002F1DDF /* RIPEMD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RIPEMD.swift; sourceTree = "<group>"; };
-		B1AFEC901B5C25AF002F1DDF /* RIPEMD+Block.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RIPEMD+Block.swift"; sourceTree = "<group>"; };
-		B1AFEC911B5C25AF002F1DDF /* UInt32+CircularShift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UInt32+CircularShift.swift"; sourceTree = "<group>"; };
-		B1AFEC9A1B5C2805002F1DDF /* NSData-Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSData-Tests.swift"; sourceTree = "<group>"; };
-		B1AFEC9B1B5C2805002F1DDF /* RIPEMD-Block-Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RIPEMD-Block-Tests.swift"; sourceTree = "<group>"; };
-		B1AFEC9C1B5C2805002F1DDF /* RIPEMD-Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RIPEMD-Tests.swift"; sourceTree = "<group>"; };
-		B1AFEC9D1B5C2805002F1DDF /* UInt32+CircularShift-Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UInt32+CircularShift-Tests.swift"; sourceTree = "<group>"; };
 		B1AFECA21B5C28D7002F1DDF /* iphoneos.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = iphoneos.modulemap; sourceTree = "<group>"; };
 		B1AFECA31B5C28D7002F1DDF /* iphonesimulator.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = iphonesimulator.modulemap; sourceTree = "<group>"; };
 		B1AFECA41B5C28D7002F1DDF /* macosx.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = macosx.modulemap; sourceTree = "<group>"; };
@@ -312,20 +279,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		B1AFEC451B5B9E7D002F1DDF /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B1AFEC711B5C246C002F1DDF /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B1AFEC7C1B5C246C002F1DDF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -361,8 +314,6 @@
 				B19B35941AF1792A00F20B9A /* HBCI4Swift */,
 				B19B35A11AF1792B00F20B9A /* HBCI4SwiftTests */,
 				B1AFEC4A1B5B9E7E002F1DDF /* CommonCrypto */,
-				B1AFEC761B5C246C002F1DDF /* RIPEMD */,
-				B1AFEC831B5C246C002F1DDF /* RIPEMDTests */,
 				B19B35931AF1792A00F20B9A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -373,8 +324,6 @@
 				B19B35921AF1792A00F20B9A /* HBCI4Swift.framework */,
 				B19B359D1AF1792B00F20B9A /* HBCI4SwiftTests.xctest */,
 				B1AFEC491B5B9E7D002F1DDF /* CommonCrypto.framework */,
-				B1AFEC751B5C246C002F1DDF /* RIPEMD.framework */,
-				B1AFEC7F1B5C246C002F1DDF /* RIPEMDTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -403,6 +352,7 @@
 				B19B363C1AF28C1800F20B9A /* HBCITanProcess_2.swift */,
 				B19B363D1AF28C1800F20B9A /* HBCISigningOption.swift */,
 				B19B363E1AF28C1800F20B9A /* HBCICallback.swift */,
+				B16A223E1B7A811D005E84FC /* RIPEMD160.swift */,
 				B1AFEC3E1B5B0244002F1DDF /* reader.h */,
 				B19B35971AF1792A00F20B9A /* HBCI4Swift.h */,
 				B19B35951AF1792A00F20B9A /* Supporting Files */,
@@ -574,47 +524,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		B1AFEC761B5C246C002F1DDF /* RIPEMD */ = {
-			isa = PBXGroup;
-			children = (
-				B1AFEC8E1B5C25AF002F1DDF /* NSData+HexString.swift */,
-				B1AFEC8F1B5C25AF002F1DDF /* RIPEMD.swift */,
-				B1AFEC901B5C25AF002F1DDF /* RIPEMD+Block.swift */,
-				B1AFEC911B5C25AF002F1DDF /* UInt32+CircularShift.swift */,
-				B1AFEC791B5C246C002F1DDF /* RIPEMD.h */,
-				B1AFEC771B5C246C002F1DDF /* Supporting Files */,
-			);
-			path = RIPEMD;
-			sourceTree = "<group>";
-		};
-		B1AFEC771B5C246C002F1DDF /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				B1AFEC781B5C246C002F1DDF /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		B1AFEC831B5C246C002F1DDF /* RIPEMDTests */ = {
-			isa = PBXGroup;
-			children = (
-				B1AFEC9A1B5C2805002F1DDF /* NSData-Tests.swift */,
-				B1AFEC9B1B5C2805002F1DDF /* RIPEMD-Block-Tests.swift */,
-				B1AFEC9C1B5C2805002F1DDF /* RIPEMD-Tests.swift */,
-				B1AFEC9D1B5C2805002F1DDF /* UInt32+CircularShift-Tests.swift */,
-				B1AFEC841B5C246C002F1DDF /* Supporting Files */,
-			);
-			path = RIPEMDTests;
-			sourceTree = "<group>";
-		};
-		B1AFEC841B5C246C002F1DDF /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				B1AFEC851B5C246C002F1DDF /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -634,14 +543,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B1AFEC721B5C246C002F1DDF /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B1AFEC7A1B5C246C002F1DDF /* RIPEMD.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -657,7 +558,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				B1AFEC971B5C25EE002F1DDF /* PBXTargetDependency */,
 				B1AFEC6B1B5B9FBD002F1DDF /* PBXTargetDependency */,
 			);
 			name = HBCI4Swift;
@@ -701,42 +601,6 @@
 			productReference = B1AFEC491B5B9E7D002F1DDF /* CommonCrypto.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		B1AFEC741B5C246C002F1DDF /* RIPEMD */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = B1AFEC881B5C246C002F1DDF /* Build configuration list for PBXNativeTarget "RIPEMD" */;
-			buildPhases = (
-				B1AFEC701B5C246C002F1DDF /* Sources */,
-				B1AFEC711B5C246C002F1DDF /* Frameworks */,
-				B1AFEC721B5C246C002F1DDF /* Headers */,
-				B1AFEC731B5C246C002F1DDF /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = RIPEMD;
-			productName = RIPEMD;
-			productReference = B1AFEC751B5C246C002F1DDF /* RIPEMD.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		B1AFEC7E1B5C246C002F1DDF /* RIPEMDTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = B1AFEC8B1B5C246C002F1DDF /* Build configuration list for PBXNativeTarget "RIPEMDTests" */;
-			buildPhases = (
-				B1AFEC7B1B5C246C002F1DDF /* Sources */,
-				B1AFEC7C1B5C246C002F1DDF /* Frameworks */,
-				B1AFEC7D1B5C246C002F1DDF /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				B1AFEC821B5C246C002F1DDF /* PBXTargetDependency */,
-			);
-			name = RIPEMDTests;
-			productName = RIPEMDTests;
-			productReference = B1AFEC7F1B5C246C002F1DDF /* RIPEMDTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -753,12 +617,6 @@
 						CreatedOnToolsVersion = 6.3;
 					};
 					B1AFEC481B5B9E7D002F1DDF = {
-						CreatedOnToolsVersion = 6.3.2;
-					};
-					B1AFEC741B5C246C002F1DDF = {
-						CreatedOnToolsVersion = 6.3.2;
-					};
-					B1AFEC7E1B5C246C002F1DDF = {
 						CreatedOnToolsVersion = 6.3.2;
 					};
 				};
@@ -778,8 +636,6 @@
 				B19B35911AF1792A00F20B9A /* HBCI4Swift */,
 				B19B359C1AF1792B00F20B9A /* HBCI4SwiftTests */,
 				B1AFEC481B5B9E7D002F1DDF /* CommonCrypto */,
-				B1AFEC741B5C246C002F1DDF /* RIPEMD */,
-				B1AFEC7E1B5C246C002F1DDF /* RIPEMDTests */,
 			);
 		};
 /* End PBXProject section */
@@ -805,20 +661,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		B1AFEC471B5B9E7D002F1DDF /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B1AFEC731B5C246C002F1DDF /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B1AFEC7D1B5C246C002F1DDF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -858,6 +700,7 @@
 				B141845E1B12765000F9B6FA /* HBCISepaCollectiveTransferOrder.swift in Sources */,
 				B19B35CD1AF28AC500F20B9A /* HBCIDataElementGroupDescription.swift in Sources */,
 				B19B36331AF28BF900F20B9A /* HBCISepaTransfer.swift in Sources */,
+				B16A223F1B7A811D005E84FC /* RIPEMD160.swift in Sources */,
 				B19B36211AF28BE500F20B9A /* HBCITanProcessInformation.swift in Sources */,
 				B19B36351AF28BF900F20B9A /* HBCITanMedium.swift in Sources */,
 				B14184371B0634B300F9B6FA /* HBCISepaDatedTransferOrder.swift in Sources */,
@@ -917,6 +760,7 @@
 				B14184471B07A0A000F9B6FA /* HBCISepaStandingOrderNewOrder.swift in Sources */,
 				B15B73001B559CA6008D2E55 /* HBCISmartcardDDV.swift in Sources */,
 				B19B35E31AF28B1500F20B9A /* HBCIAnonymousDialog.swift in Sources */,
+				B16A22401B7A811D005E84FC /* RIPEMD160.swift in Sources */,
 				B19B364C1AF28C1800F20B9A /* HBCISigningOption.swift in Sources */,
 				B14184441B07281800F9B6FA /* HBCIStandingOrder.swift in Sources */,
 				B14184561B0FD9A200F9B6FA /* HBCISepaParserFactory.swift in Sources */,
@@ -986,28 +830,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B1AFEC701B5C246C002F1DDF /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B1AFEC951B5C25AF002F1DDF /* UInt32+CircularShift.swift in Sources */,
-				B1AFEC931B5C25AF002F1DDF /* RIPEMD.swift in Sources */,
-				B1AFEC941B5C25AF002F1DDF /* RIPEMD+Block.swift in Sources */,
-				B1AFEC921B5C25AF002F1DDF /* NSData+HexString.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B1AFEC7B1B5C246C002F1DDF /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B1AFECA11B5C2805002F1DDF /* UInt32+CircularShift-Tests.swift in Sources */,
-				B1AFEC9F1B5C2805002F1DDF /* RIPEMD-Block-Tests.swift in Sources */,
-				B1AFECA01B5C2805002F1DDF /* RIPEMD-Tests.swift in Sources */,
-				B1AFEC9E1B5C2805002F1DDF /* NSData-Tests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1020,16 +842,6 @@
 			isa = PBXTargetDependency;
 			target = B1AFEC481B5B9E7D002F1DDF /* CommonCrypto */;
 			targetProxy = B1AFEC6A1B5B9FBD002F1DDF /* PBXContainerItemProxy */;
-		};
-		B1AFEC821B5C246C002F1DDF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = B1AFEC741B5C246C002F1DDF /* RIPEMD */;
-			targetProxy = B1AFEC811B5C246C002F1DDF /* PBXContainerItemProxy */;
-		};
-		B1AFEC971B5C25EE002F1DDF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = B1AFEC741B5C246C002F1DDF /* RIPEMD */;
-			targetProxy = B1AFEC961B5C25EE002F1DDF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1258,76 +1070,6 @@
 			};
 			name = Release;
 		};
-		B1AFEC891B5C246C002F1DDF /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_VERSION = A;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = RIPEMD/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		B1AFEC8A1B5C246C002F1DDF /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = RIPEMD/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
-		B1AFEC8C1B5C246C002F1DDF /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = RIPEMDTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		B1AFEC8D1B5C246C002F1DDF /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = RIPEMDTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1363,24 +1105,6 @@
 			buildConfigurations = (
 				B1AFEC5D1B5B9E7E002F1DDF /* Debug */,
 				B1AFEC5E1B5B9E7E002F1DDF /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		B1AFEC881B5C246C002F1DDF /* Build configuration list for PBXNativeTarget "RIPEMD" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				B1AFEC891B5C246C002F1DDF /* Debug */,
-				B1AFEC8A1B5C246C002F1DDF /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		B1AFEC8B1B5C246C002F1DDF /* Build configuration list for PBXNativeTarget "RIPEMDTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				B1AFEC8C1B5C246C002F1DDF /* Debug */,
-				B1AFEC8D1B5C246C002F1DDF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

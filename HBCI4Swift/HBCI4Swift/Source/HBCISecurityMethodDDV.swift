@@ -98,7 +98,7 @@ public class HBCISecurityMethodDDV : HBCISecurityMethod {
         
         // calculate message hash
         let msgData = msg.messageDataForSignature();
-        let hash:NSData = RIPEMD.digest(msgData);
+        let hash:NSData = RIPEMD160(data: msgData).digest();
         
         // sign hash
         let signedHash = card.sign(hash);
