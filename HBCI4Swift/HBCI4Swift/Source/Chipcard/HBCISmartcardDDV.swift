@@ -76,6 +76,9 @@ public class HBCISmartcardDDV : HBCISmartcard {
         ];
         
         var i = 0;
+        
+        // do  not log errors
+        noErrorLog = true;
         for i = 0; i<3; i++ {
             if !selectRoot() {
                 continue;
@@ -85,6 +88,7 @@ public class HBCISmartcardDDV : HBCISmartcard {
                 break;
             }
         }
+        noErrorLog = false;
         
         switch(i) {
         case 0: return CardType.CARDTYPE_DDV0;
@@ -99,7 +103,7 @@ public class HBCISmartcardDDV : HBCISmartcard {
         if let res = result {
             cardID = res;
             
-            var cardid = UnsafeMutablePointer<UInt8>.alloc(16);
+            var cardid = [UInt8](count:16, repeatedValue:0);
             var p = UnsafePointer<UInt8>(res.bytes);
             for var i = 0; i<8; i++ {
                 var x = p[i+1] >> 4;
@@ -107,7 +111,6 @@ public class HBCISmartcardDDV : HBCISmartcard {
                 cardid[(i<<1)+1] = ((p[i+1]) & 0x0F) + 0x30;
             }
             cardNumber = NSString(bytes: cardid, length: 16, encoding: NSISOLatin1StringEncoding);
-            cardid.destroy();
             return true;
         }
         return false;
@@ -144,7 +147,7 @@ public class HBCISmartcardDDV : HBCISmartcard {
             }
             
             p = UnsafeMutablePointer<UInt8>(result.bytes).advancedBy(20);
-            var blz = UnsafeMutablePointer<UInt8>.alloc(8);
+            var blz = [UInt8](count:8, repeatedValue:0);
             for var i = 0; i < 4; i++ {
                 var nibble:UInt8 = 0;
                 nibble=(p[i]>>4)&0x0F;
@@ -159,7 +162,6 @@ public class HBCISmartcardDDV : HBCISmartcard {
                 }
                 blz[(i<<1)+1]=nibble+0x30;
             }
-            blz.destroy();
             bankCode = NSString(bytes: blz, length: 8, encoding: NSISOLatin1StringEncoding);
             if bankCode == nil {
                 return nil;
@@ -201,6 +203,7 @@ public class HBCISmartcardDDV : HBCISmartcard {
             }
         } else {
             // not supported
+            logError("HBCISmartcard: get key data is not supported for this card type");
         }
         
         return keys;

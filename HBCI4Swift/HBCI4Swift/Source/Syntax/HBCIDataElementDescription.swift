@@ -109,11 +109,10 @@ class HBCIDataElementDescription: HBCISyntaxElementDescription {
         // check if first character is a delimiter
         var sidx = 0, tidx = 0;
         var escaped: Bool = false;
-        var target = UnsafeMutablePointer<CChar>.alloc(length+1)
-        var t = target;
+        var target = [CChar](count:length+1, repeatedValue:0);
         var p = UnsafeMutablePointer<CChar>(bytes);
         while sidx < length {
-            let c = p.memory;
+            let c = bytes[sidx];
             if (c == HBCIChar_plus || c == HBCIChar_dpoint || c == HBCIChar_quote) && !escaped {
                 // end detected
                 break;
@@ -125,22 +124,16 @@ class HBCIDataElementDescription: HBCISyntaxElementDescription {
             
             if escaped {
                 // advance source but not target pointer
-                p = p.advancedBy(1);
                 sidx++;
             } else {
-                t.memory = p.memory;
+                target[tidx++] = bytes[sidx++];
                 escaped = false;
-                sidx++; tidx++;
-                t = t.advancedBy(1);
-                p = p.advancedBy(1);
             }
         }
         
-        t.memory = 0;
+        target[tidx] = 0;
         if sidx > 0 && tidx > 0 {
             if let sValue = String(CString: target, encoding: NSISOLatin1StringEncoding) {
-                target.destroy();
-                target.dealloc(length+1);
                 
                 if let type = self.dataType {
                     switch type {
@@ -188,14 +181,9 @@ class HBCIDataElementDescription: HBCISyntaxElementDescription {
                 }
             } else {
                 logError("Parse error: data cannot be converted to String");
-                target.destroy();
-                target.dealloc(length+1);
                 return nil;
             }
-        } else {
-            target.destroy();
-            target.dealloc(length+1);
-        }
+        } 
         
         de.length = (sidx<=length) ? sidx:length;
         return de;

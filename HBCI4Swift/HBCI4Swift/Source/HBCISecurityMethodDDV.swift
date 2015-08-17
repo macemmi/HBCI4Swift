@@ -144,19 +144,16 @@ public class HBCISecurityMethodDDV : HBCISecurityMethod {
         var key = NSMutableData(data: plain);
         key.appendBytes(plain.bytes, length: 8);
         
-        let decrypted = UnsafeMutablePointer<UInt8>.alloc(encData.length);
+        var decrypted = [UInt8](count:encData.length, repeatedValue:0);
         var plainSize = 0;
         
-        let rv = CCCrypt(UInt32(kCCDecrypt), UInt32(kCCAlgorithm3DES), UInt32(0), key.bytes, 24, nil, encData.bytes, encData.length, decrypted, encData.length, &plainSize);
+        let rv = CCCrypt(UInt32(kCCDecrypt), UInt32(kCCAlgorithm3DES), UInt32(0), key.bytes, 24, nil, encData.bytes, encData.length, &decrypted, encData.length, &plainSize);
         if Int(rv) != kCCSuccess {
             logError("Decryption failed. Status: \(rv)");
-            decrypted.destroy();
             return;
         }
         
         let msgData = NSData(bytes: decrypted, length: plainSize);
-        decrypted.destroy();
-        decrypted.dealloc(encData.length);
     }
 
     
@@ -174,13 +171,10 @@ public class HBCISecurityMethodDDV : HBCISecurityMethod {
                     key.appendBytes(plain.bytes, length: 8);
                     
                     //iv
-                    let iv = UnsafeMutablePointer<UInt8>.alloc(8);
-                    for var i=0; i<8; i++ {
-                        iv[i] = 0;
-                    }
+                    let iv = [UInt8](count:8, repeatedValue:0);
                     
                     let bufSize = msgBody.length+8;
-                    let encrypted = UnsafeMutablePointer<UInt8>.alloc(bufSize);
+                    var encrypted = [UInt8](count:bufSize, repeatedValue:0);
                     var encSize = 0;
                     
                     // pad message data
@@ -190,16 +184,13 @@ public class HBCISecurityMethodDDV : HBCISecurityMethod {
                     paddedData.appendBytes(iv, length: padlen-1);
                     paddedData.appendBytes(&padLen_pad, length: 1);
                     
-                    let rv = CCCrypt(UInt32(kCCEncrypt), UInt32(kCCAlgorithm3DES), UInt32(0), key.bytes, kCCKeySize3DES, iv, paddedData.bytes, paddedData.length, encrypted, bufSize, &encSize);
+                    let rv = CCCrypt(UInt32(kCCEncrypt), UInt32(kCCAlgorithm3DES), UInt32(0), key.bytes, kCCKeySize3DES, iv, paddedData.bytes, paddedData.length, &encrypted, bufSize, &encSize);
                     if Int(rv) != kCCSuccess {
                         logError("Encryption failed. Status: \(rv)");
-                        encrypted.destroy();
                         return nil;
                     }
                     
                     cryptedData = NSData(bytes: encrypted, length: encSize);
-                    encrypted.destroy();
-                    encrypted.dealloc(bufSize);
                     
                     self.decryptTest(plain, encData: cryptedData);
                     
@@ -241,18 +232,16 @@ public class HBCISecurityMethodDDV : HBCISecurityMethod {
                     var key = NSMutableData(data: plain);
                     key.appendBytes(plain.bytes, length: 8);
                     
-                    let decrypted = UnsafeMutablePointer<UInt8>.alloc(cryptedData.length+8);
+                    var decrypted = [UInt8](count:cryptedData.length+8, repeatedValue:0);
                     var plainSize = 0;
                   
-                    let rv = CCCrypt(UInt32(kCCDecrypt), UInt32(kCCAlgorithm3DES), UInt32(0), key.bytes, 24, nil, cryptedData.bytes, cryptedData.length, decrypted, cryptedData.length+8, &plainSize);
+                    let rv = CCCrypt(UInt32(kCCDecrypt), UInt32(kCCAlgorithm3DES), UInt32(0), key.bytes, 24, nil, cryptedData.bytes, cryptedData.length, &decrypted, cryptedData.length+8, &plainSize);
                     if Int(rv) != kCCSuccess {
                         logError("Decryption failed. Status: \(rv)");
-                        decrypted.destroy();
                         return nil;
                     }
                     
                     let msgData = NSData(bytes: decrypted, length: plainSize);
-                    decrypted.destroy();
                     
                     var result = HBCIResultMessage(syntax: dialog.syntax);
                     if !result.parse(msgData) {

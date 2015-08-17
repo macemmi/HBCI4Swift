@@ -90,32 +90,23 @@ public class HBCIParameters {
         var segmentData = Array<NSData>();
         var segments = Array<HBCISegment>();
         var binaries = Array<NSData>();
-        var segContent = UnsafeMutablePointer<CChar>.alloc(data.length);
-        var i = 0, j = 0, segSize = 0;
+        var segContent = [CChar](count:data.length, repeatedValue:0);
+        var i = 0, segSize = 0;
         
         var p = UnsafeMutablePointer<CChar>(data.bytes);
-        var q = segContent;
         
         while i < data.length {
-            q.memory = p.memory;
+            //q.memory = p.memory;
+            segContent[segSize++] = p.memory;
             if p.memory == "'" && !isEscaped(p) {
                 // now we have a segment in segContent
-                let data = NSData(bytes: segContent, length: segSize+1);
+                let data = NSData(bytes: segContent, length: segSize);
                 segmentData.append(data);
-                q = segContent;
-                p = p.advancedBy(1);
                 segSize = 0;
-                i++;
-            } else {
-                i++;
-                segSize++;
-                p = p.advancedBy(1);
-                q = q.advancedBy(1);
             }
+            i++;
+            p = p.advancedBy(1);
         }
-        
-        segContent.destroy();
-        segContent.dealloc(data.length);
         
         // now we have all segment strings and we can start to parse each segment
         for segData in segmentData {

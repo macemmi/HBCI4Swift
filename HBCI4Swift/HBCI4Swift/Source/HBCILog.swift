@@ -9,7 +9,6 @@
 import Foundation
 
 
-
 func logError(message:String, file:String = __FILE__, function:String = __FUNCTION__, line:Int = __LINE__) {
     if let log = _log {
         log.logError(message, file: file, function: function, line: line);
@@ -19,6 +18,13 @@ func logError(message:String, file:String = __FILE__, function:String = __FUNCTI
 func logInfo(message:String, file:String = __FILE__, function:String = __FUNCTION__, line:Int = __LINE__) {
     if let log = _log {
         log.logError(message, file: file, function: function, line: line);
+    }
+}
+
+func logDebug(message:String, file:String = __FILE__, function:String = __FUNCTION__, line:Int = __LINE__, values:Int...) {
+    let m = String(format: message, arguments: values);
+    if let log = _log {
+        log.logError(m, file: file, function: function, line: line);
     }
 }
 

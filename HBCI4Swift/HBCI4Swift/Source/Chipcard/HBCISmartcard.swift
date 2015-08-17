@@ -11,35 +11,6 @@ import PCSC.winscard
 import PCSC.wintypes
 import PCSC.pcsclite
 
-/*
-struct PCSC_TLV_STRUCTURE {
-    var tag:UInt8, length:UInt8, value:UInt32
-}
-
-struct PIN_VERIFY_STRUCTURE {
-    var bTimerOut:UInt8;	/**< timeout is seconds (00 means use default timeout) */
-    var bTimerOut2:UInt8; /**< timeout in seconds after first key stroke */
-    var bmFormatString:UInt8; /**< formatting options */
-    var bmPINBlockString:UInt8; /**< bits 7-4 bit size of PIN length in APDU,
-    * bits 3-0 PIN block size in bytes after
-    * justification and formatting */
-    var bmPINLengthFormat:UInt8; /**< bits 7-5 RFU,
-    * bit 4 set if system units are bytes, clear if
-    * system units are bits,
-    * bits 3-0 PIN length position in system units */
-    var wPINMaxExtraDigit:UInt16; /**< 0xXXYY where XX is minimum PIN size in digits,
-    and YY is maximum PIN size in digits */
-    var bEntryValidationCondition:UInt8; /**< Conditions under which PIN entry should
-    * be considered complete */
-    var bNumberMessage:UInt8; /**< Number of messages to display for PIN verification */
-    var wLangId:UInt16; /**< Language for messages */
-    var bMsgIndex:UInt8; /**< Message index (should be 00) */
-    var bTeoPrologue = (UInt8(0), UInt8(0), UInt8(0)); /**< T=1 block prologue field to use (fill with 00) */
-    var ulDataLength:UInt32; /**< length of Data to be sent to the ICC */
-    var abData:UInt8; /**< Data to send to the ICC */
-}
-*/
-
 public class HBCISmartcard {
     let readerName:String;
     var version:UInt8 = 0;
@@ -48,6 +19,7 @@ public class HBCISmartcard {
     var _ioctl_pinprops:DWORD?
     var _ioctl_readerdirect:DWORD?
     var connected:Bool;
+    var noErrorLog = false;
     
     static var _hContext:SCARDCONTEXT?
     
@@ -80,7 +52,7 @@ public class HBCISmartcard {
             var context:SCARDCONTEXT = 0;
             var rv = SCardEstablishContext(UInt32(SCARD_SCOPE_SYSTEM), nil, nil, &context);
             if rv != SCARD_S_SUCCESS {
-                logError("HBCIChipcard: could not establish connection to chipcard driver");
+                logError(String(format:"HBCISmartcard: could not establish connection to chipcard driver (%X)", rv));
                 return false;
             } else {
                 _hContext = context;
@@ -90,7 +62,7 @@ public class HBCISmartcard {
     }
     
     public class func readers() ->Array<String>? {
-        var numReaders:DWORD = 0;
+        var readerInfoLen:DWORD = 0;
         var result = Array<String>();
         
         if _hContext == nil && !establishReaderContext() {
@@ -98,23 +70,22 @@ public class HBCISmartcard {
         }
         
         if let context = _hContext {
-            var rv = SCardListReaders(context, nil, nil, &numReaders);
+            var rv = SCardListReaders(context, nil, nil, &readerInfoLen);
             if rv != SCARD_S_SUCCESS {
-                logError("HBCIChipcard: could not list available readers");
+                logError(String(format:"HBCISmartcard: could not list available readers (%X)", rv));
                 return nil;
             }
             
-            var pReaders = UnsafeMutablePointer<Int8>.alloc(Int(numReaders));
-            rv = SCardListReaders(context, nil, pReaders, &numReaders);
+            var readerInfo = [Int8](count:Int(readerInfoLen), repeatedValue:0);
+            rv = SCardListReaders(context, nil, &readerInfo, &readerInfoLen);
             
-            var p = pReaders;
+            var p = UnsafeMutablePointer<Int8>(readerInfo);
             while p.memory != 0 {
                 if let s = NSString(CString: p, encoding: NSISOLatin1StringEncoding) {
                     result.append(s as String);
                 }
                 p = p.advancedBy(Int(strlen(p))+1);
             }
-            pReaders.destroy();
         }
         return result;
     }
@@ -161,60 +132,57 @@ public class HBCISmartcard {
         return NSData(bytes: result.bytes, length: result.length-2);
     }
     
+    func toPointer<T>(x: UnsafeMutablePointer<T>) -> UnsafeMutablePointer<UInt8> {
+        return UnsafeMutablePointer<UInt8>(x);
+    }
+    
     public func verifyPin() ->Bool {
-        var offset = 0;
-        var pSendBuffer = UnsafeMutablePointer<UInt8>.alloc(Int(MAX_BUFFER_SIZE));
-        var pRecBuffer = UnsafeMutablePointer<UInt8>.alloc(Int(MAX_BUFFER_SIZE));
-        var pin_verify = UnsafeMutablePointer<PIN_VERIFY_STRUCTURE>(pSendBuffer);
+        var sendBuffer = [UInt8](count:Int(MAX_BUFFER_SIZE), repeatedValue:0);
+        var recBuffer = [UInt8](count:Int(MAX_BUFFER_SIZE), repeatedValue:0);
+        var pin_verify = PIN_VERIFY_STRUCTURE();
         
-        var command:[UInt8] = [ 0x00, 0x20, 0x00, 0x81, 0x08, 0x25, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff ];
+        var command:[UInt8] = [ APDU_CLA_STD, APDU_INS_VERIFY, 0x00, 0x81, 0x08, 0x25, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff ];
         
-        pin_verify.memory.bTimerOut = 15;
-        pin_verify.memory.bTimerOut2 = 5;
-        pin_verify.memory.bmFormatString = 0x89;
-        pin_verify.memory.bmPINBlockString = 0x07;
-        pin_verify.memory.bmPINLengthFormat = 0x10;
-        pin_verify.memory.wPINMaxExtraDigit = 0x0408;
-        pin_verify.memory.bEntryValidationCondition = 0x02;
-        pin_verify.memory.bNumberMessage = 0x01;
-        pin_verify.memory.wLangId = 0x0904;
-        pin_verify.memory.bMsgIndex = 0x00;
-        pin_verify.memory.bTeoPrologue.0 = 0x00;
-        pin_verify.memory.bTeoPrologue.1 = 0x00;
-        pin_verify.memory.bTeoPrologue.2 = 0x00;
-        pin_verify.memory.ulDataLength = 13;
+        pin_verify.bTimerOut = 15;
+        pin_verify.bTimerOut2 = 5;
+        pin_verify.bmFormatString = 0x89;
+        pin_verify.bmPINBlockString = 0x07;
+        pin_verify.bmPINLengthFormat = 0x10;
+        pin_verify.wPINMaxExtraDigit = 0x0408;
+        pin_verify.bEntryValidationCondition = 0x02;
+        pin_verify.bNumberMessage = 0x01;
+        pin_verify.wLangId = 0x0904;
+        pin_verify.bMsgIndex = 0x00;
+        pin_verify.bTeoPrologue.0 = 0x00;
+        pin_verify.bTeoPrologue.1 = 0x00;
+        pin_verify.bTeoPrologue.2 = 0x00;
+        pin_verify.ulDataLength = 13;
         
-        // copy command
-        var p = withUnsafePointer(&pin_verify.memory.abData, { (ptr) -> UnsafeMutablePointer<UInt8> in return unsafeBitCast(ptr, UnsafeMutablePointer<UInt8>.self)});
+        var p = toPointer(&pin_verify);
+        var vLen = sizeof(PIN_VERIFY_STRUCTURE) - 1;
         
-        p[offset++] = APDU_CLA_STD;
-        p[offset++] = APDU_INS_VERIFY;
-        p[offset++] = 0x00;
-        p[offset++] = 0x81;
-        p[offset++] = 0x08;
-        p[offset++] = 0x25;
-        p[offset++] = 0xff;
-        p[offset++] = 0xff;
-        p[offset++] = 0xff;
-        p[offset++] = 0xff;
-        p[offset++] = 0xff;
-        p[offset++] = 0xff;
-        p[offset++] = 0xff;
-
-        var length = DWORD(sizeof(PIN_VERIFY_STRUCTURE) + offset - 1);
+        for i in 0..<vLen {
+            sendBuffer[i] = p[i];
+        }
+        
+        for i in 0..<command.count {
+            sendBuffer[vLen+i] = command[i];
+        }
+        
+        var length = DWORD(vLen + command.count);
+        var rLength:DWORD = 0;
         
         if let hCard = _hCard, ioctl_verify = _ioctl_verify {
-            var rv = SCardControl132(hCard, ioctl_verify, pSendBuffer, length, pRecBuffer, DWORD(MAX_BUFFER_SIZE), &length);
+            var rv = SCardControl132(hCard, ioctl_verify, &sendBuffer, length, &recBuffer, DWORD(MAX_BUFFER_SIZE), &rLength);
             if rv == SCARD_S_SUCCESS {
-                if pRecBuffer[0] == 0x90 && pRecBuffer[1] == 0x00 {
-                    pRecBuffer.destroy();
-                    pSendBuffer.destroy();
+                if recBuffer[0] == 0x90 && recBuffer[1] == 0x00 {
                     return true;
                 }
+            } else {
+                logError(String(format:"HBCISmartcard: verify failed (%X)", rv));
+                logCommand(NSData(bytes: sendBuffer, length: Int(length)), result: NSData(bytes: recBuffer, length: Int(rLength)));
             }
         }
-        pRecBuffer.destroy();
-        pSendBuffer.destroy();
         return false;
     }
     
@@ -222,17 +190,17 @@ public class HBCISmartcard {
         var length:DWORD = 0;
         
         if let hCard = _hCard {
-            var pRecBuffer = UnsafeMutablePointer<UInt8>.alloc(Int(MAX_BUFFER_SIZE));
+            var recBuffer = [UInt8](count:Int(MAX_BUFFER_SIZE), repeatedValue:0);
+            var pRecBuffer = UnsafeMutablePointer<UInt8>(recBuffer);
             var rv = SCardControl132(hCard, CM_IOCTL_GET_FEATURE_REQUEST, nil, 0, pRecBuffer, DWORD(MAX_BUFFER_SIZE), &length);
             if rv != SCARD_S_SUCCESS {
                 // log
-                pRecBuffer.destroy();
+                logError(String(format:"HBCISmartcard: feature request failed (%X)", rv));
                 return false;
             }
             
             if (Int(length) % sizeof(PCSC_TLV_STRUCTURE)) != 0 {
                 // log
-                pRecBuffer.destroy();
                 return false;
             }
             
@@ -248,11 +216,10 @@ public class HBCISmartcard {
                 }
                 p = p.advancedBy(1);
             }
-            pRecBuffer.destroy();
 
             if _ioctl_verify == nil {
                 // log
-                logError("HBCIChipcard: IOCTL for verify could not be retrieved");
+                logError("HBCISmartcard: IOCTL for verify could not be retrieved");
                 return false;
             }
         }
@@ -265,17 +232,14 @@ public class HBCISmartcard {
         var length:DWORD = 0;
         var attrLen = DWORD(MAX_ATR_SIZE);
         
-        
         // get card status
         if let hCard = _hCard {
-            var pAttr = UnsafeMutablePointer<UInt8>.alloc(Int(attrLen));
+            var attributes = [UInt8](count:Int(attrLen), repeatedValue:0);
             
-            var rv = SCardStatus(hCard, nil, &length, &state, &prot, pAttr, &attrLen);
-            
-            // pAttr not needed (yet)
-            pAttr.destroy();
+            let rv = SCardStatus(hCard, nil, &length, &state, &prot, &attributes, &attrLen);
             
             if rv != SCARD_S_SUCCESS {
+                logError(String(format:"HBCISmartcard: chipcard status could not be retrieved (%X)", rv));
                 return false;
             }
             if (state & DWORD(SCARD_ABSENT)) != 0 {
@@ -323,13 +287,11 @@ public class HBCISmartcard {
                 if convertToUInt32(rv) == SCARD_E_NO_SMARTCARD {
                     if n < tries-1 {
                         // wait 500ms
-                        var a = UnsafeMutablePointer<timespec>.alloc(1);
-                        var b = UnsafeMutablePointer<timespec>.alloc(1);
-                        a.memory.tv_sec = 0;
-                        a.memory.tv_nsec = 500000000;
-                        nanosleep(a, b);
-                        a.destroy();
-                        b.destroy();
+                        var a = timespec();
+                        var b = timespec();
+                        a.tv_sec = 0;
+                        a.tv_nsec = 500000000;
+                        nanosleep(&a, &b);
                     }
                     n++;
                 } else {
@@ -350,8 +312,7 @@ public class HBCISmartcard {
                     return ConnectResult.no_card;
                 }
             }
-            //logError("HBCISmartcard: connection error: %x", rv);
-            NSLog("HBCISmartcard: connection error: 0x%X", rv);
+            logError(String(format: "HBCISmartcard: connection error (%X)", rv));
             return ConnectResult.error;
         } else {
             return ConnectResult.no_context;
@@ -364,20 +325,40 @@ public class HBCISmartcard {
         }
     }
     
+    func logCommand(command:NSData, result: NSData?) {
+        var cm = "APDU command: ";
+        var p = UnsafeMutablePointer<UInt8>(command.bytes);
+        for i in 0..<command.length {
+            cm += String(format: "%.02X ", p[i]);
+        }
+        logError(cm);
+        cm = "APDU command result: ";
+        if let res = result {
+            p = UnsafeMutablePointer<UInt8>(res.bytes);
+            for i in 0..<res.length {
+                cm += String(format: "%.02X ", p[i]);
+            }
+        } else {
+            cm += "none";
+        }
+        logError(cm);
+    }
+    
     func sendAPDU(command:NSData) ->NSData? {
         var length = DWORD(MAX_BUFFER_SIZE);
         var result:NSData?
         
         if let hCard = _hCard {
-            var pioRecvPci = UnsafeMutablePointer<SCARD_IO_REQUEST>.alloc(1);
-            var pRecBuffer = UnsafeMutablePointer<UInt8>.alloc(Int(MAX_BUFFER_SIZE));
+            var pioReceive = SCARD_IO_REQUEST();
+            var recBuffer = [UInt8](count:Int(MAX_BUFFER_SIZE), repeatedValue:0);
             
-            var rv = SCardTransmit(hCard, &g_rgSCardT1Pci, UnsafePointer<UInt8>(command.bytes), DWORD(command.length), pioRecvPci, pRecBuffer, &length);
+            var rv = SCardTransmit(hCard, &g_rgSCardT1Pci, UnsafePointer<UInt8>(command.bytes), DWORD(command.length), &pioReceive, &recBuffer, &length);
             if rv == SCARD_S_SUCCESS {
-                result = NSData(bytes: pRecBuffer, length: Int(length));
+                result = NSData(bytes: recBuffer, length: Int(length));
             }
-            pioRecvPci.destroy();
-            pRecBuffer.destroy();
+            if !checkResult(result) && !noErrorLog {
+                logCommand(command, result: result);
+            }
         }
         return result;
     }

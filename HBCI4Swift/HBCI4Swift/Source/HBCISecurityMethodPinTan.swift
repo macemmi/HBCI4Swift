@@ -69,9 +69,8 @@ public class HBCISecurityMethodPinTan : HBCISecurityMethod {
     func signCryptedMessage(msg:HBCIMessage) ->Bool {
         var version = 0;
         
-        let encKey = calloc(8, 1);
+        let encKey = [UInt8](count:8, repeatedValue:0);
         let encKeyData = NSData(bytes: encKey, length: 8);
-        free(encKey);
         
         if user.sysId == nil {
             logError("Signing failed: missing sysId");

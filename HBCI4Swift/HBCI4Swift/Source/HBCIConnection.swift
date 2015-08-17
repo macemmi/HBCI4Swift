@@ -103,29 +103,6 @@ class HBCIConnection {
                 outputStream.open();
             }
             
-            /*
-            if let fout = NSOutputStream(toFileAtPath: "/Users/emmi/PecuniaMessage.bin", append: false) {
-                fout.open();
-                let w2 = fout.write(UnsafePointer<UInt8>(msg.bytes), maxLength: msg.length);
-                if w2 == -1 {
-                    println(fout.streamError?.description);
-                }
-                fout.close();
-            }
-            
-            if let fin = NSInputStream(fileAtPath: "/Users/emmi/TestMessage.bin") {
-                fin.open();
-                var data = NSMutableData();
-
-                var buffer = UnsafeMutablePointer<UInt8>.alloc(4000);
-                while fin.hasBytesAvailable {
-                    let bytes = fin.read(buffer, maxLength: 4000);
-                    data.appendBytes(buffer, length: bytes);
-                }
-                let written = outputStream.write(UnsafePointer<UInt8>(data.bytes), maxLength: data.length);
-            }
-            */
-            
             let written = outputStream.write(UnsafePointer<UInt8>(msg.bytes), maxLength: msg.length);
             
             var tries = 0;
@@ -151,8 +128,6 @@ class HBCIConnection {
             }
             buffer.destroy();
             
-            //let decoded = NSData(base64EncodedData: data, options: NSDataBase64DecodingOptions.IgnoreUnknownCharacters);
-
             return data;
         }
         return nil;

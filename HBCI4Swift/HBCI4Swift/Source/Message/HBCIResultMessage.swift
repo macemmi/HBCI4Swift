@@ -78,10 +78,9 @@ public class HBCIResultMessage {
     func parse(msgData:NSData) ->Bool {
         // first extract binary data
         let content = UnsafePointer<CChar>(msgData.bytes);
-        let target = UnsafeMutablePointer<CChar>.alloc(msgData.length);
+        var target = [CChar](count:msgData.length, repeatedValue:0);
         var i = 0, j = 0;
         var p = UnsafeMutablePointer<CChar>(content);
-        var q = target;
         
         while i < msgData.length {
             if p.memory == "@" && i > 0 {
@@ -97,10 +96,8 @@ public class HBCIResultMessage {
                     if let cstr = tag.cStringUsingEncoding(NSISOLatin1StringEncoding) {
                         // copy tag to buffer
                         for c in cstr {
-                            q.memory = c;
                             if c != 0 {
-                                j++;
-                                q = q.advancedBy(1);
+                                target[j++] = c;
                             }
                         }
                         i += tag_size+bin_size;
@@ -108,55 +105,41 @@ public class HBCIResultMessage {
                     } else {
                         // issue during conversion
                         logError("tag \(tag) cannot be converted to Latin1");
-                        target.destroy();
-                        target.dealloc(msgData.length);
                         return false;
                     }
                     continue;
                 }
             }
             
-            q.memory = p.memory;
-            i++; j++;
+            target[j++] = p.memory;
+            i++;
             p = p.advancedBy(1);
-            q = q.advancedBy(1);
         }
         
         // now we have data that does not contain binary data any longer
         // next step: split into sequence of segments
         let messageSize = j;
-        var segContent = UnsafeMutablePointer<CChar>.alloc(messageSize);
-        i = 0; j = 0; var segSize = 0;
+        var segContent = [CChar](count:messageSize, repeatedValue:0);
+        i = 0;
+        var segSize = 0;
         
-        p = target;
-        q = segContent;
+        p = UnsafeMutablePointer<CChar>(target);
         while i < messageSize {
-            q.memory = p.memory;
+            segContent[segSize++] = p.memory
             if p.memory == "'" && !isEscaped(p) {
                 // now we have a segment in segContent
-                let data = NSData(bytes: segContent, length: segSize+1);
+                let data = NSData(bytes: segContent, length: segSize);
                 self.segmentData.append(data);
                 
                 // we convert to String as well for debugging
                 if let s = NSString(data: data, encoding: NSISOLatin1StringEncoding) {
                     self.segmentStrings.append(s);
                 }
-                q = segContent;
-                p = p.advancedBy(1);
                 segSize = 0;
-                i++;
-            } else {
-                i++;
-                segSize++;
-                p = p.advancedBy(1);
-                q = q.advancedBy(1);
             }
+            i++;
+            p = p.advancedBy(1);
         }
-        
-        target.destroy();
-        target.dealloc(msgData.length);
-        segContent.destroy();
-        segContent.dealloc(messageSize);
         
         // now we have all segment strings and we can start to parse each segment
         for segData in self.segmentData {
