@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import RIPEMD
 import CommonCrypto
 
 public class HBCISecurityMethodDDV : HBCISecurityMethod {
