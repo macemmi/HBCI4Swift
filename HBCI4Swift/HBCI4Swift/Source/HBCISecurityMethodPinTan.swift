@@ -136,7 +136,7 @@ public class HBCISecurityMethodPinTan : HBCISecurityMethod {
     
     override func decryptMessage(rmsg:HBCIResultMessage, dialog:HBCIDialog) ->HBCIResultMessage? {
         if let msgData = rmsg.valueForPath("CryptData.data") as? NSData {
-            var result = HBCIResultMessage(syntax: dialog.syntax);
+            let result = HBCIResultMessage(syntax: dialog.syntax);
             if !result.parse(msgData) {
                 logError("Result Message could not be parsed");
                 logError(NSString(data: msgData, encoding: NSISOLatin1StringEncoding) as! String);

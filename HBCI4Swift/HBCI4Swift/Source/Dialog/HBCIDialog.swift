@@ -22,7 +22,7 @@ public class HBCIDialog {
     // the callback handler
     public static var callback:HBCICallback?
     
-    public init?(user:HBCIUser, error:NSErrorPointer) {
+    public init?(user:HBCIUser) throws {
         
         self.user = user;
         self.hbciVersion = user.hbciVersion;
@@ -32,28 +32,22 @@ public class HBCIDialog {
             return nil;
         }
 
-        if let syntax = HBCISyntax.syntaxWithVersion(hbciVersion, error: error) {
-            self.syntax = syntax;
-            
-            if user.securityMethod is HBCISecurityMethodDDV {
-                if let conn = HBCIConnection(host: user.bankURL) {
-                    self.connection = conn;
-                    return;
-                } else {
-                    // todo: Server not reached
-                    return nil;
-                }
+        self.syntax = try HBCISyntax.syntaxWithVersion(hbciVersion)
+        
+        if user.securityMethod is HBCISecurityMethodDDV {
+            self.connection = try HBCIConnection(host: user.bankURL);
+            return;
+        } else {
+            if let url = NSURL(string:user.bankURL) {
+                self.connection = HBCIConnection(url: url);
+                return;
             } else {
-                if let url = NSURL(string:user.bankURL) {
-                    self.connection = HBCIConnection(url: url);
-                    return;
-                }
+                throw createError(HBCIErrorCode.URLError, message: "Could not create URL from \(user.bankURL)");
             }
         }
-        return nil;
     }
     
-    func sendMessage(message:String, values:Dictionary<String,AnyObject>, error:NSErrorPointer) ->HBCIResultMessage? {
+    func sendMessage(message:String, values:Dictionary<String,AnyObject>) throws ->HBCIResultMessage? {
         if let md = self.syntax.msgs[message] {
             if let msg = md.compose() as? HBCIMessage {
                 for (path, value) in values {
@@ -61,14 +55,13 @@ public class HBCIDialog {
                         return nil;
                     }
                 }
-                
-                return sendMessage(msg, error: error);
+                return try sendMessage(msg);
             }
         }
         return nil;
     }
     
-    func sendMessage(msg:HBCIMessage, error:NSErrorPointer) ->HBCIResultMessage? {
+    func sendMessage(msg:HBCIMessage) throws ->HBCIResultMessage? {
         if !msg.enumerateSegments() {
             logError(msg.description);
             return nil;
@@ -97,24 +90,30 @@ public class HBCIDialog {
             }
             
             let msgData = msg_crypted.messageData();
-            println(msg_crypted.messageString());
+            print(msg_crypted.messageString());
             
             // send message to bank
-            if let result = self.connection.sendMessage(msgData, error: error) {
+            do {
+                let result = try self.connection.sendMessage(msgData);
+                
                 let resultMsg_crypted = HBCIResultMessage(syntax: self.syntax);
                 if resultMsg_crypted.parse(result) {
                     if let dialogId = resultMsg_crypted.valueForPath("MsgHead.dialogid") as? String {
                         self.dialogId = dialogId;
                     }
                     self.messageNum++;
-                    return user.securityMethod.decryptMessage(resultMsg_crypted, dialog: self);
+                    if let value = user.securityMethod.decryptMessage(resultMsg_crypted, dialog: self) {
+                        return value
+                    }
+                    return nil;
                 } else {
                     logError("Message could not be parsed");
                     logError(NSString(data: result, encoding: NSISOLatin1StringEncoding) as! String);
                     return nil;
                 }
-            } else {
+            } catch {
                 logError("Message sent: " + msg.messageString());
+                throw error;
             }
         }
         return nil;
@@ -258,7 +257,7 @@ public class HBCIDialog {
     }
     */
     
-    public func dialogInit(error:NSErrorPointer) ->HBCIResultMessage? {
+    public func dialogInit() throws ->HBCIResultMessage? {
         if user.sysId == nil {
             logError("Dialog Init failed: missing sysId");
             return nil;
@@ -275,25 +274,36 @@ public class HBCIDialog {
         }
         
         self.dialogId = "0";
-        if let result = sendMessage("DialogInit", values: values, error: error) {
+        
+        if let result = try sendMessage("DialogInit", values: values) {
             result.updateParameterForUser(self.user);
             return result;
         }
         return nil;
     }
     
-    public func dialogEnd(error:NSErrorPointer) ->HBCIResultMessage? {
+    public func dialogEnd() throws ->HBCIResultMessage {
+        var error: NSError! = NSError(domain: "Migrator", code: 0, userInfo: nil)
         if let dialogId = self.dialogId {
             let values:Dictionary<String,AnyObject> = ["DialogEnd.dialogid":dialogId, "MsgHead.dialogid":dialogId, "MsgHead.msgnum":messageNum, "MsgTail.msgnum":messageNum];
-            let rmsg = sendMessage("DialogEnd", values: values, error: error);
+            let rmsg: HBCIResultMessage?
+            do {
+                rmsg = try sendMessage("DialogEnd", values: values)
+            } catch let error1 as NSError {
+                error = error1
+                rmsg = nil
+            };
             self.connection.close();
-            return rmsg;
+            if let value = rmsg {
+                return value
+            }
+            throw error;
         }
         self.connection.close();
-        return nil;
+        throw error;
     }
     
-    public func syncInit(error:NSErrorPointer) ->HBCIResultMessage? {
+    public func syncInit() throws ->HBCIResultMessage? {
         user.tanMethod = "999";
         user.sysId = "0";
         
@@ -304,7 +314,8 @@ public class HBCIDialog {
         ];
         
         self.dialogId = "0";
-        if let result = sendMessage("Synchronize", values: values, error: error) {
+        
+        if let result = try sendMessage("Synchronize", values: values) {
             result.updateParameterForUser(self.user);
             
             for seg in result.segments {
@@ -340,7 +351,7 @@ public class HBCIDialog {
                 return nil;
             }
             // now sort the versions - we take the latest supported version
-            sort(&supportedVersions, >);
+            supportedVersions.sortInPlace(>);
             
             if let sd = segVersions.segmentWithVersion(supportedVersions.first!) {
                 if let segment = sd.compose() as? HBCISegment {
@@ -357,7 +368,7 @@ public class HBCIDialog {
     
     func customMessageForSegment(segName:String) ->HBCIMessage? {
         if let md = self.syntax.msgs["CustomMessage"] {
-            if var msg = md.compose() as? HBCIMessage {
+            if let msg = md.compose() as? HBCIMessage {
                 if let segVersions = self.syntax.segs[segName] {
                     // now find the right segment version
                     // check which segment versions are supported by the bank
@@ -377,7 +388,7 @@ public class HBCIDialog {
                         return nil;
                     }
                     // now sort the versions - we take the latest supported version
-                    sort(&supportedVersions, >);
+                    supportedVersions.sortInPlace(>);
                     
                     if let sd = segVersions.segmentWithVersion(supportedVersions.first!) {
                         if let segment = sd.compose() {
@@ -394,8 +405,8 @@ public class HBCIDialog {
         return nil;
     }
 
-    func sendCustomMessage(message:HBCICustomMessage, error:NSErrorPointer) ->Bool {
-        if let result = sendMessage(message, error: error) {
+    func sendCustomMessage(message:HBCICustomMessage) throws ->Bool {
+        if let _ = try sendMessage(message) {
             return true;
         }
         return false;

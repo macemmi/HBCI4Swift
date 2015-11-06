@@ -31,12 +31,12 @@ class HBCISegmentVersions {
             return nil;
         }
         
-        let all_vers = element.elementsForName("SEGVersion") as! [NSXMLElement];
+        let all_vers = element.elementsForName("SEGVersion") ;
         for segv in all_vers {
             if let versionString = segv.valueForAttribute("id") {
-                if let version = versionString.toInt() {
+                if let version = Int(versionString) {
                     // HBCISegmentDescription
-                    if var segment = HBCISegmentDescription(syntax: syntax, element: segv, code: code, version: version) {
+                    if let segment = HBCISegmentDescription(syntax: syntax, element: segv, code: code, version: version) {
                         segment.type = identifier;
                         segment.syntaxElement = segv;
                         segment.values["SegHead.version"] = version;
@@ -62,7 +62,7 @@ class HBCISegmentVersions {
         // get and sort version codes
         self.versionNumbers = Array(versions.keys);
         if self.versionNumbers.count > 0 {
-            self.versionNumbers.sort({$0 < $1})
+            self.versionNumbers.sortInPlace({$0 < $1})
         } else {
             // error
             logError("Syntax file error: segment \(element) has no versions");
@@ -70,7 +70,7 @@ class HBCISegmentVersions {
         }
 
         // values
-        let all_values = element.elementsForName("value") as! [NSXMLElement];
+        let all_values = element.elementsForName("value") ;
         for elem in all_values {
             if let path = elem.valueForAttribute("path") {
                 if let value = elem.stringValue {
@@ -93,7 +93,7 @@ class HBCISegmentVersions {
     }
     
     func isVersionSupported(version:Int) ->Bool {
-        return find(versionNumbers, version) != nil;
+        return versionNumbers.indexOf(version) != nil;
     }
     
     func segmentWithVersion(version:Int) -> HBCISegmentDescription? {

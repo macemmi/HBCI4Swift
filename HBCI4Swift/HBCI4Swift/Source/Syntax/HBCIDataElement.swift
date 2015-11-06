@@ -91,7 +91,7 @@ class HBCIDataElement: HBCISyntaxElement {
                 } else {
                     // check if value is a numeric string
                     if let s = self.value as? String {
-                        if let n = s.toInt() {
+                        if Int(s) !=  nil {
                             return s;
                         }
                     }
@@ -128,7 +128,7 @@ class HBCIDataElement: HBCISyntaxElement {
                 case HBCIDataElementType.Numeric:
                     if let value = self.value as? Int {
                         for s in valids {
-                            if let n = s.toInt() {
+                            if let n = Int(s) {
                                 if value == n {
                                     return true;
                                 }

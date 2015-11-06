@@ -12,7 +12,7 @@ func isEscaped(pointer:UnsafePointer<CChar>) ->Bool {
     var count = 0;
     var p = UnsafeMutablePointer<CChar>(pointer);
     p = p.advancedBy(-1);
-    while p.memory == "?" {
+    while p.memory == HBCIChar.qmark.rawValue {
         p = p.advancedBy(-1);
         count++;
     }
@@ -20,7 +20,7 @@ func isEscaped(pointer:UnsafePointer<CChar>) ->Bool {
 }
 
 func isDelimiter(pointer:UnsafePointer<CChar>) ->Bool {
-    if pointer.memory == "+" || pointer.memory == ":" || pointer.memory == "'" {
+    if pointer.memory == HBCIChar.plus.rawValue || pointer.memory == HBCIChar.dpoint.rawValue || pointer.memory == HBCIChar.quote.rawValue {
         if !isEscaped(pointer) {
             return true;
         }
@@ -38,8 +38,8 @@ func checkForDataTag(pointer:UnsafePointer<CChar>) ->(dataLength:Int, tagLength:
     // now search for ending @
     var p = pointer.advancedBy(1);
     var i = 0;
-    while p.memory != "@" {
-        if p.memory < "0" || p.memory > "9" {
+    while p.memory != HBCIChar.amper.rawValue {
+        if p.memory < 0x30 || p.memory > 0x39 {
             // no number
             return (0,0);
         }
@@ -83,7 +83,7 @@ public class HBCIResultMessage {
         var p = UnsafeMutablePointer<CChar>(content);
         
         while i < msgData.length {
-            if p.memory == "@" && i > 0 {
+            if p.memory == HBCIChar.amper.rawValue && i > 0 {
                 // first check if we have binary data
                 let (bin_size, tag_size) = checkForDataTag(p);
                 if bin_size > 0 {
@@ -126,7 +126,7 @@ public class HBCIResultMessage {
         p = UnsafeMutablePointer<CChar>(target);
         while i < messageSize {
             segContent[segSize++] = p.memory
-            if p.memory == "'" && !isEscaped(p) {
+            if p.memory == HBCIChar.quote.rawValue && !isEscaped(p) {
                 // now we have a segment in segContent
                 let data = NSData(bytes: segContent, length: segSize);
                 self.segmentData.append(data);
@@ -163,7 +163,7 @@ public class HBCIResultMessage {
     func valueForPath(path:String) ->AnyObject? {
         var name:String?
         var newPath:String?
-        if let range = path.rangeOfString(".", options: NSStringCompareOptions.allZeros, range: nil, locale: nil) {
+        if let range = path.rangeOfString(".", options: NSStringCompareOptions(), range: nil, locale: nil) {
             name = path.substringToIndex(range.startIndex);
             newPath = path.substringFromIndex(range.startIndex.successor());
         } else {
@@ -187,7 +187,7 @@ public class HBCIResultMessage {
         var result = Array<AnyObject>();
         var name:String?
         var newPath:String?
-        if let range = path.rangeOfString(".", options: NSStringCompareOptions.allZeros, range: nil, locale: nil) {
+        if let range = path.rangeOfString(".", options: NSStringCompareOptions(), range: nil, locale: nil) {
             name = path.substringToIndex(range.startIndex);
             newPath = path.substringFromIndex(range.startIndex.successor());
         } else {
@@ -207,10 +207,10 @@ public class HBCIResultMessage {
     }
     
     func extractBPData() ->NSData? {
-        var bpData = NSMutableData();
+        let bpData = NSMutableData();
         
         for data in segmentData {
-            println(NSString(data: data, encoding: NSISOLatin1StringEncoding));
+            print(NSString(data: data, encoding: NSISOLatin1StringEncoding));
             if let code = NSString(bytes: data.bytes, length: 5, encoding: NSISOLatin1StringEncoding) {
                 if code == "HIUPA" || code == "HIUPD" || code == "HIBPA" ||
                     (code.hasPrefix("HI") && code.hasSuffix("S")) {
@@ -271,7 +271,7 @@ public class HBCIResultMessage {
     func segmentWithReference(number:Int, orderName:String) ->HBCISegment? {
         for segment in self.segments {
             if segment.name == orderName + "Res" {
-                if let num = segment.elementValueForPath("SegHead.ref") as? Int {
+                if let _ = segment.elementValueForPath("SegHead.ref") as? Int {
                     return segment;
                 }
             }
@@ -283,7 +283,7 @@ public class HBCIResultMessage {
         var segs = Array<HBCISegment>();
         for segment in self.segments {
             if segment.name == orderName + "Res" {
-                if let num = segment.elementValueForPath("SegHead.ref") as? Int {
+                if let _ = segment.elementValueForPath("SegHead.ref") as? Int {
                     segs.append(segment);
                 }
             }
@@ -294,12 +294,12 @@ public class HBCIResultMessage {
     func responsesForSegmentWithNumber(number:Int) ->Array<HBCIOrderResponse>? {
         for segment in self.segments {
             if segment.name == "RetSeg" {
-                if let num = segment.elementValueForPath("SegHead.ref") as? Int {
+                if let _ = segment.elementValueForPath("SegHead.ref") as? Int {
                     var responses = Array<HBCIOrderResponse>();
                     
                     let values = segment.elementsForPath("RetVal");
                     for retVal in values {
-                        var response = HBCIOrderResponse();
+                        let response = HBCIOrderResponse();
                         response.code = retVal.elementValueForPath("code") as? String;
                         response.text = retVal.elementValueForPath("text") as? String;
                         response.reference = retVal.elementValueForPath("ref") as? String;
@@ -321,7 +321,7 @@ public class HBCIResultMessage {
                 
                 let values = segment.elementsForPath("RetVal");
                 for retVal in values {
-                    var response = HBCIMessageResponse();
+                    let response = HBCIMessageResponse();
                     response.code = retVal.elementValueForPath("code") as? String;
                     response.text = retVal.elementValueForPath("text") as? String;
                     responses.append(response);
@@ -335,7 +335,7 @@ public class HBCIResultMessage {
     func isOk() ->Bool {
         if let responses = responsesForMessage() {
             for response in responses {
-                if let code = response.code?.toInt() {
+                if let x = response.code, code = Int(x) {
                     if code >= 9000 {
                         return false;
                     }

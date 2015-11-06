@@ -26,7 +26,7 @@ public class HBCISyntaxElement {
     
     func descriptionWithLevel(level: Int) ->String {
         var s:String = "";
-        for i in 0..<level {
+        for _ in 0..<level {
             s += "\t";
         }
         s += elementDescription();
@@ -68,7 +68,7 @@ public class HBCISyntaxElement {
                     return elem.setElementValue(value, path: newPath!);
                 } else {
                     if elem.type == ElementType.DataElement {
-                        if var de = elem as? HBCIDataElement {
+                        if let de = elem as? HBCIDataElement {
                             de.value = value;
                             return true;
                         }
@@ -99,7 +99,7 @@ public class HBCISyntaxElement {
         for elem in self.children {
             if elem.name == name {
                 if elem.type == ElementType.DataElement {
-                    if var de = elem as? HBCIDataElement {
+                    if let de = elem as? HBCIDataElement {
                         return de.value;
                     }
                 } else {
@@ -123,7 +123,7 @@ public class HBCISyntaxElement {
         for elem in self.children {
             if elem.name == name {
                 if elem.type == ElementType.DataElement {
-                    if var de = elem as? HBCIDataElement {
+                    if let de = elem as? HBCIDataElement {
                         return de.value;
                     }
                 } else {
@@ -157,7 +157,7 @@ public class HBCISyntaxElement {
         for elem in self.children {
             if elem.name == name {
                 if elem.type == ElementType.DataElement {
-                    if var de = elem as? HBCIDataElement {
+                    if let de = elem as? HBCIDataElement {
                         if let value:AnyObject = de.value {
                             result.append(value);
                         }
@@ -239,8 +239,8 @@ public class HBCISyntaxElement {
         
         // now remove unneccesary delimiters from the end
         var size = data.length;
-        var content = data.bytes;
-        for idx in 0..<self.children.count {
+        let content = data.bytes;
+        for _ in 0..<self.children.count {
             let p = UnsafePointer<CChar>(content.advancedBy(size-1));
             if p.memory == delim {
                 size--;
@@ -261,10 +261,10 @@ public class HBCISyntaxElement {
         for idx in 0..<self.children.count {
             let element = self.children[idx];
             let elemStr = element.messageString();
-            if count(elemStr) == 0 {
+            if elemStr.characters.count == 0 {
                 empties += delimStr;
             } else {
-                if count(empties) > 0 {
+                if empties.characters.count > 0 {
                     result += empties;
                     empties = "";
                 }
@@ -278,14 +278,14 @@ public class HBCISyntaxElement {
     func validate() ->Bool {
         var idx = 0, childCount = 0, elemIdx = 0;
         var success = true;
-        var stop = false;
+        //var stop = false;
         
         while idx < self.descr.children.count {
             let ref = self.descr.children[idx];
             let childElem = self.children[elemIdx];
             
             if self.name == "KeyReq" {
-                stop = true;
+                //stop = true;
             }
             
             if ref.elemDescr === childElem.descr {
@@ -339,7 +339,7 @@ public class HBCISyntaxElement {
             let childElem = children[idx];
             if childElem.name == name {
                 // now we have the right child element
-                if var child = reference!.elemDescr.compose() {
+                if let child = reference!.elemDescr.compose() {
                     child.name = reference!.name;
                     self.children.append(child);
                     return child;

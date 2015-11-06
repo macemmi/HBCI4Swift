@@ -47,9 +47,11 @@ public class HBCIConsoleLog: HBCILog {
     public init() {}
     
     public func logError(message: String, file:String, function:String, line:Int) {
-        println(file.lastPathComponent+", "+function+" \(line): "+message);
+        let url = NSURL(fileURLWithPath: file);
+        print(url.lastPathComponent!+", "+function+" \(line): "+message);
     }
     public func logInfo(message: String, file:String, function:String, line:Int) {
-        println("Info: "+file.lastPathComponent+", "+function+" \(line): "+message);
+        let url = NSURL(fileURLWithPath: file);
+        print("Info: "+url.lastPathComponent!+", "+function+" \(line): "+message);
     }
 }

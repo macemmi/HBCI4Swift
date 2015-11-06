@@ -12,14 +12,14 @@ enum ElementType {
     case None, Message, Segment, DataElementGroup, DataElement
 }
 
-class HBCISyntaxElementDescription: Printable, DebugPrintable {
+class HBCISyntaxElementDescription: CustomStringConvertible, CustomDebugStringConvertible {
     let syntax: HBCISyntax;
     var syntaxElement: NSXMLElement;
     var children = Array<HBCISyntaxElementReference>();
     var values = Dictionary<String, AnyObject>();
     var valids = Dictionary<String, Array<String>>();
     var identifier, name, type: String?;
-    var delimiter: CChar = "?";
+    var delimiter = HBCIChar.qmark.rawValue;
     var elementType: ElementType = .None;
     var stringValue: String?;
     
@@ -31,9 +31,9 @@ class HBCISyntaxElementDescription: Printable, DebugPrintable {
         self.name = element.valueForAttribute("name");
         self.type = element.valueForAttribute("type");
         
-        if element.children != nil {
-            for node in element.children as! [NSXMLNode] {
-                if node.kind == NSXMLNodeKind.NSXMLElementKind {
+        if let children = element.children {
+            for node in children {
+                if node.kind == NSXMLNodeKind.ElementKind {
                     let childElem = node as! NSXMLElement;
                     
                     if childElem.name == "DEG" || childElem.name == "SEG" || childElem.name == "DE" {
@@ -125,8 +125,8 @@ class HBCISyntaxElementDescription: Printable, DebugPrintable {
         
         if let path = elem.valueForAttribute("path") {
             if let children = elem.children {
-                for node in children as! [NSXMLNode] {
-                    if node.kind == NSXMLNodeKind.NSXMLElementKind {
+                for node in children {
+                    if node.kind == NSXMLNodeKind.ElementKind {
                         let element = node as! NSXMLElement;
                         if element.name == "validvalue" && element.stringValue != nil {
                             values.append(element.stringValue!);
@@ -147,9 +147,9 @@ class HBCISyntaxElementDescription: Printable, DebugPrintable {
     }
     
     func compose() ->HBCISyntaxElement? {
-        if var element = self.getElement() {
+        if let element = self.getElement() {
             for ref in self.children {
-                if var child = ref.elemDescr.compose() {
+                if let child = ref.elemDescr.compose() {
                     child.name = ref.name;
                     element.children.append(child);
                 } else {

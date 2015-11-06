@@ -21,7 +21,7 @@ class HBCISegment: HBCISyntaxElement {
 
     
     override func elementDescription() -> String {
-        var name = self.name ?? "none";
+        let name = self.name ?? "none";
         return "SEG name: \(name)\n";
     }
     

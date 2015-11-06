@@ -13,10 +13,10 @@ class HBCIMessageDescription: HBCISyntaxElementDescription {
     
     override init?(syntax: HBCISyntax, element: NSXMLElement) {
         super.init(syntax: syntax, element: element);
-        self.delimiter = "'";
+        self.delimiter = HBCIChar.quote.rawValue;
         self.elementType = ElementType.Message;
         
-        let defs = element.elementsForName("default") as! [NSXMLElement];
+        let defs = element.elementsForName("default") ;
         for def in defs {
             if let path = def.valueForAttribute("path") {
                 if let s = def.stringValue {
@@ -27,7 +27,7 @@ class HBCIMessageDescription: HBCISyntaxElementDescription {
     }
     
     override func compose() -> HBCISyntaxElement? {
-        if var element = super.compose() {
+        if let element = super.compose() {
             for (path, value) in self.defaults {
                 element.setElementValue(value, path: path);
             }

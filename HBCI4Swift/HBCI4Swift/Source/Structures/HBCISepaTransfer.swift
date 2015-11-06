@@ -42,15 +42,15 @@ public class HBCISepaTransfer {
     public func addItem(item: HBCISepaTransfer.Item, validate:Bool = true) -> Bool {
         if validate {
             // validate item
-            if count(item.remoteIban) == 0 {
+            if item.remoteIban.characters.count == 0 {
                 logError("Remote IBAN not specified");
                 return false;
             }
-            if count(item.remoteBic) == 0 {
+            if item.remoteBic.characters.count == 0 {
                 logError("Remote BIC not specified");
                 return false;
             }
-            if count(item.remoteName) == 0 {
+            if item.remoteName.characters.count == 0 {
                 logError("Remote Name not specified");
                 return false;
             }

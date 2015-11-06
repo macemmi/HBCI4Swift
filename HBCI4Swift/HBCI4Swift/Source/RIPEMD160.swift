@@ -59,11 +59,11 @@ class RIPEMD160 {
     }
     
     func pad(data:NSData) ->NSData {
-        var paddedData = NSMutableData(data: data);
+        let paddedData = NSMutableData(data: data);
         var paddingData = [UInt8](count: 72, repeatedValue: 0);
         paddingData[0] = 0x80;
         
-        var zeros = (64 - ((data.length+9) % 64)) % 64;
+        let zeros = (64 - ((data.length+9) % 64)) % 64;
         var n = data.length * 8;
         paddedData.appendBytes(paddingData, length: zeros+1);
         paddedData.appendBytes(&n, length: 8);
@@ -127,7 +127,7 @@ class RIPEMD160 {
     }
     
     func digest() ->NSData {
-        var blocks = paddedData.length / 64;
+        let blocks = paddedData.length / 64;
         var x = UnsafeMutablePointer<UInt32>(paddedData.bytes);
         
         for var i = 0; i<blocks; i++ {

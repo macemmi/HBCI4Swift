@@ -34,7 +34,7 @@ public class HBCIMessage: HBCISyntaxElement {
     }
     
     override func elementDescription() -> String {
-        var name =
+        let name =
         self.name ?? "none";
         return "MSG name: \(name)\n";
     }
@@ -51,7 +51,7 @@ public class HBCIMessage: HBCISyntaxElement {
     }
     
     func messageData() ->NSData {
-        var data = NSMutableData();
+        let data = NSMutableData();
         self.messageData(data);
         var c = self.descr.delimiter;
         data.appendBytes(&c, length: 1);
@@ -59,7 +59,7 @@ public class HBCIMessage: HBCISyntaxElement {
     }
     
     func messageDataForSignature() ->NSData {
-        var data = NSMutableData();
+        let data = NSMutableData();
         var delim = self.descr.delimiter;
         for idx in 0..<self.children.count {
             let element = self.children[idx];
@@ -75,7 +75,7 @@ public class HBCIMessage: HBCISyntaxElement {
     }
     
     func messageDataForEncryption() ->NSData {
-        var data = NSMutableData();
+        let data = NSMutableData();
         var delim = self.descr.delimiter;
         for idx in 0..<self.children.count {
             let element = self.children[idx];

@@ -26,14 +26,12 @@ extension CChar : ExtendedGraphemeClusterLiteralConvertible {
 }
 */
 
-extension CChar : UnicodeScalarLiteralConvertible
+extension CChar
 {
     
-    public typealias UnicodeScalarLiteralType = String
-    
-    public init(unicodeScalarLiteral value: UnicodeScalarLiteralType) {
-        let num = value.unicodeScalars[value.unicodeScalars.startIndex]
-        self = CChar(num.value)
+    init(s:String) {
+        let num = s.unicodeScalars[s.unicodeScalars.startIndex];
+        self = CChar(num.value);
     }
     
     public var descr: String {

@@ -138,9 +138,10 @@ public class HBCISecurityMethodDDV : HBCISecurityMethod {
         return msg.setElementValues(values);
     }
     
+    /*
     func decryptTest(plain:NSData, encData:NSData) {
         // decrypt message
-        var key = NSMutableData(data: plain);
+        let key = NSMutableData(data: plain);
         key.appendBytes(plain.bytes, length: 8);
         
         var decrypted = [UInt8](count:encData.length, repeatedValue:0);
@@ -154,7 +155,7 @@ public class HBCISecurityMethodDDV : HBCISecurityMethod {
         
         let msgData = NSData(bytes: decrypted, length: plainSize);
     }
-
+    */
     
     override func encryptMessage(msg:HBCIMessage, dialog:HBCIDialog) ->HBCIMessage? {
 
@@ -166,7 +167,7 @@ public class HBCISecurityMethodDDV : HBCISecurityMethod {
                 // encrypt message body
                 if let (plain, enc) = card.getEncryptionKeys(3) {
                     // build 3DES key
-                    var key = NSMutableData(data: plain);
+                    let key = NSMutableData(data: plain);
                     key.appendBytes(plain.bytes, length: 8);
                     
                     //iv
@@ -191,7 +192,7 @@ public class HBCISecurityMethodDDV : HBCISecurityMethod {
                     
                     cryptedData = NSData(bytes: encrypted, length: encSize);
                     
-                    self.decryptTest(plain, encData: cryptedData);
+                    //self.decryptTest(plain, encData: cryptedData);
                     
                     let values = ["MsgHead.dialogid":dialogId, "MsgHead.msgnum":"\(dialog.messageNum)", "CryptData.data":cryptedData,
                         "CryptData.SegHead.seq":"999", "MsgHead.SegHead.seq":"1", "MsgTail.msgnum":"\(dialog.messageNum)",
@@ -228,7 +229,7 @@ public class HBCISecurityMethodDDV : HBCISecurityMethod {
             if let enc = rmsg.valueForPath("CryptHead.CryptAlg.enckey") as? NSData {
                 if let plain = card.decryptKey(3, encrypted: enc) {
                     // decrypt message
-                    var key = NSMutableData(data: plain);
+                    let key = NSMutableData(data: plain);
                     key.appendBytes(plain.bytes, length: 8);
                     
                     var decrypted = [UInt8](count:cryptedData.length+8, repeatedValue:0);
@@ -242,7 +243,7 @@ public class HBCISecurityMethodDDV : HBCISecurityMethod {
                     
                     let msgData = NSData(bytes: decrypted, length: plainSize);
                     
-                    var result = HBCIResultMessage(syntax: dialog.syntax);
+                    let result = HBCIResultMessage(syntax: dialog.syntax);
                     if !result.parse(msgData) {
                         logError("Result Message could not be parsed");
                         logError(NSString(data: msgData, encoding: NSISOLatin1StringEncoding) as! String);

@@ -17,6 +17,11 @@ var msgNum = 0;
 var testData = Array<NSData>();
 
 class HBCIConnection {
+    
+    enum Error: ErrorType {
+        case ConnectionError, Timeout, TestDataError;
+    }
+    
     let url:NSURL?
     let host:String?
     
@@ -28,7 +33,7 @@ class HBCIConnection {
         self.url = url;
     }
     
-    init?(host:String) {
+    init(host:String) throws {
         self.url = nil;
         self.host = host;
         
@@ -41,17 +46,17 @@ class HBCIConnection {
             self.inputStream = inpStr;
             self.outputStream = outStr;
         } else {
-            logError("Unable to open connection to server "+host);
-            return nil;
+            logError("Unable to open connection to server \(host)");
+            throw Error.ConnectionError;
         }
     }
     
-    func sendMessage(msg:NSData, error:NSErrorPointer) ->NSData? {
+    func sendMessage(msg:NSData) throws ->NSData {
 
         if let url = self.url {
-            let encData = msg.base64EncodedDataWithOptions(NSDataBase64EncodingOptions.allZeros);
+            let encData = msg.base64EncodedDataWithOptions(NSDataBase64EncodingOptions());
             
-            var request = NSMutableURLRequest(URL: url);
+            let request = NSMutableURLRequest(URL: url);
             request.HTTPMethod = "POST";
             request.HTTPBody = encData;
             request.timeoutInterval = 240;
@@ -64,37 +69,45 @@ class HBCIConnection {
                     return testData[msgNum++];
                 } else {
                     logError("HBCIConnection: no test data found for index \(msgNum)");
-                    return nil;
+                    throw Error.TestDataError;
                 }
             }
             
-            if let result = NSURLConnection.sendSynchronousRequest(request, returningResponse: &response, error: error) {
+            do {
+                let result = try NSURLConnection.sendSynchronousRequest(request, returningResponse: &response);
+
                 // check status code
                 if let httpResponse = response as? NSHTTPURLResponse {
                     if httpResponse.statusCode != 200 {
                         logError(httpResponse.description);
                         logError(NSString(data: result, encoding: NSISOLatin1StringEncoding) as! String)
-                        return nil;
+                        throw Error.ConnectionError;
                     }
                 } else {
                     logError("No HTTP response");
-                    return nil;
+                    throw Error.ConnectionError;
                 }
                 
                 
                 let decoded = NSData(base64EncodedData: result, options: NSDataBase64DecodingOptions.IgnoreUnknownCharacters);
-                
+
                 if testMode == .write && decoded != nil {
                     testData.append(decoded!);
                 }
                 
-                return decoded;
+                if let value = decoded {
+                    return value
+                }
+            
+            } catch let err as NSError {
+                logError(err.localizedDescription);
+                throw Error.ConnectionError;
             }
-            // todo: evaluate NSURLResponse?
-            return nil;
+            
+            throw Error.ConnectionError;
         }
         
-        if let host = self.host {
+        if self.host != nil {
             
             if inputStream.streamStatus != NSStreamStatus.Open {
                 inputStream.open();
@@ -103,7 +116,7 @@ class HBCIConnection {
                 outputStream.open();
             }
             
-            let written = outputStream.write(UnsafePointer<UInt8>(msg.bytes), maxLength: msg.length);
+            outputStream.write(UnsafePointer<UInt8>(msg.bytes), maxLength: msg.length);
             
             var tries = 0;
             // wait for server to respond
@@ -117,11 +130,11 @@ class HBCIConnection {
             if tries == 30 {
                 logError("Timeout");
                 inputStream.close();
-                return nil;
+                throw Error.Timeout;
             }
             
-            var data = NSMutableData();
-            var buffer = UnsafeMutablePointer<UInt8>.alloc(4000);
+            let data = NSMutableData();
+            let buffer = UnsafeMutablePointer<UInt8>.alloc(4000);
             while inputStream.hasBytesAvailable {
                 let bytes = inputStream.read(buffer, maxLength: 4000);
                 data.appendBytes(buffer, length: bytes);
@@ -130,7 +143,8 @@ class HBCIConnection {
             
             return data;
         }
-        return nil;
+        
+        throw Error.ConnectionError;
     }
     
     func close() {
@@ -161,15 +175,16 @@ class HBCIConnection {
     class func loadTestData(name:String) ->Bool {
         let fman = NSFileManager();
         var fileNames = Array<String>();
-        var error:NSError?
-        if let files = fman.contentsOfDirectoryAtPath("./../../../test", error: &error) {
+
+        do {
+            let files = try fman.contentsOfDirectoryAtPath("./../../../test")
             for file in files {
                 if file.hasPrefix(name) {
-                    fileNames.append(file as! String);
+                    fileNames.append(file );
                 }
             }
             // sort filenames
-            fileNames.sort(<);
+            fileNames.sortInPlace(<);
             
             // load files
             for name in fileNames {
@@ -177,7 +192,7 @@ class HBCIConnection {
                     testData.append(data);
                 }
             }
-        } else {
+        } catch {
             return false;
         }
         testMode = .read;

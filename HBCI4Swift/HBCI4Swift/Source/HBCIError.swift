@@ -8,12 +8,12 @@
 
 import Foundation
 
-public enum HBCIErrorCodes:Int {
-    case URLError = 1, SyntaxFileError
+public enum HBCIErrorCode:Int {
+    case URLError = 1, SyntaxFileError, ParseError, MessageError, ConnectionError, ConnectionTestError
 }
 
 
-func createError(code: Int, message:String?, arguments:[String]?) ->NSError {
+func createError(code: HBCIErrorCode, message:String?, arguments:[String]? = nil) ->NSError {
     var userInfo:Dictionary<String, AnyObject> = [:];
     if let msg = message {
         userInfo[NSLocalizedDescriptionKey] = msg;
@@ -23,5 +23,5 @@ func createError(code: Int, message:String?, arguments:[String]?) ->NSError {
         userInfo["arguments"] = arguments!;
     }
     
-    return NSError(domain: "de.pecuniabanking.HBCI4Swift", code: code, userInfo: userInfo);
+    return NSError(domain: "de.pecuniabanking.HBCI4Swift", code: code.rawValue, userInfo: userInfo);
 }

@@ -152,8 +152,11 @@
 		B19B364E1AF28C1800F20B9A /* HBCICallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B363E1AF28C1800F20B9A /* HBCICallback.swift */; };
 		B1A296D51B62E86B00B1E3AB /* HBCISecurityMethodDDV.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15B81C71B5450B5006B6366 /* HBCISecurityMethodDDV.swift */; };
 		B1AE54A81B1A57D1008C7BBE /* pain.001.003.03.xsd in Resources */ = {isa = PBXBuildFile; fileRef = B1AE54A71B1A57D1008C7BBE /* pain.001.003.03.xsd */; };
+		B1AF10021BC45ADB00365496 /* PCSC.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B1AF10011BC45ADB00365496 /* PCSC.xcconfig */; };
 		B1AFEC3F1B5B0244002F1DDF /* reader.h in Headers */ = {isa = PBXBuildFile; fileRef = B1AFEC3E1B5B0244002F1DDF /* reader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B1AFEC401B5B026F002F1DDF /* HBCISmartcard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15B72F81B559CA6008D2E55 /* HBCISmartcard.swift */; };
+		B1EE97651BEBFF44009A3BCA /* PCSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1EE97621BEBFDAA009A3BCA /* PCSC.framework */; };
+		B1EE97661BEBFF51009A3BCA /* PCSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1EE97621BEBFDAA009A3BCA /* PCSC.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -163,6 +166,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = B19B35911AF1792A00F20B9A;
 			remoteInfo = HBCI4Swift;
+		};
+		B1AF10031BC45B3C00365496 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B19B35891AF1792A00F20B9A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B1AF0FF71BC45A6D00365496;
+			remoteInfo = PCSCard;
 		};
 		B1AFEC6A1B5B9FBD002F1DDF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -252,6 +262,10 @@
 		B19B363D1AF28C1800F20B9A /* HBCISigningOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCISigningOption.swift; path = Source/HBCISigningOption.swift; sourceTree = "<group>"; };
 		B19B363E1AF28C1800F20B9A /* HBCICallback.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCICallback.swift; path = Source/HBCICallback.swift; sourceTree = "<group>"; };
 		B1AE54A71B1A57D1008C7BBE /* pain.001.003.03.xsd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = pain.001.003.03.xsd; sourceTree = "<group>"; };
+		B1AF0FF81BC45A6D00365496 /* PCSCard.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PCSCard.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B1AF0FFC1BC45A6D00365496 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B1AF10001BC45ADB00365496 /* pcsc.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = pcsc.modulemap; sourceTree = "<group>"; };
+		B1AF10011BC45ADB00365496 /* PCSC.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = PCSC.xcconfig; sourceTree = "<group>"; };
 		B1AFEC3E1B5B0244002F1DDF /* reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = reader.h; path = Source/reader.h; sourceTree = "<group>"; };
 		B1AFEC491B5B9E7D002F1DDF /* CommonCrypto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CommonCrypto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1AFEC4C1B5B9E7E002F1DDF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -260,6 +274,7 @@
 		B1AFECA31B5C28D7002F1DDF /* iphonesimulator.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = iphonesimulator.modulemap; sourceTree = "<group>"; };
 		B1AFECA41B5C28D7002F1DDF /* macosx.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = macosx.modulemap; sourceTree = "<group>"; };
 		B1AFECA81B5C313C002F1DDF /* HBCI4SwiftTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HBCI4SwiftTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		B1EE97621BEBFDAA009A3BCA /* PCSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PCSC.framework; path = System/Library/Frameworks/PCSC.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -267,6 +282,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B1EE97651BEBFF44009A3BCA /* PCSC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -274,7 +290,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B1EE97661BEBFF51009A3BCA /* PCSC.framework in Frameworks */,
 				B19B359E1AF1792B00F20B9A /* HBCI4Swift.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B1AF0FF41BC45A6D00365496 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -311,9 +335,12 @@
 		B19B35881AF1792A00F20B9A = {
 			isa = PBXGroup;
 			children = (
+				B1EE97621BEBFDAA009A3BCA /* PCSC.framework */,
 				B19B35941AF1792A00F20B9A /* HBCI4Swift */,
 				B19B35A11AF1792B00F20B9A /* HBCI4SwiftTests */,
+				B1AFEC4B1B5B9E7E002F1DDF /* Supporting Files */,
 				B1AFEC4A1B5B9E7E002F1DDF /* CommonCrypto */,
+				B1AF0FF91BC45A6D00365496 /* PCSCard */,
 				B19B35931AF1792A00F20B9A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -324,6 +351,7 @@
 				B19B35921AF1792A00F20B9A /* HBCI4Swift.framework */,
 				B19B359D1AF1792B00F20B9A /* HBCI4SwiftTests.xctest */,
 				B1AFEC491B5B9E7D002F1DDF /* CommonCrypto.framework */,
+				B1AF0FF81BC45A6D00365496 /* PCSCard.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -504,6 +532,16 @@
 			path = Source/Extensions;
 			sourceTree = "<group>";
 		};
+		B1AF0FF91BC45A6D00365496 /* PCSCard */ = {
+			isa = PBXGroup;
+			children = (
+				B1AF10001BC45ADB00365496 /* pcsc.modulemap */,
+				B1AF10011BC45ADB00365496 /* PCSC.xcconfig */,
+				B1AF0FFC1BC45A6D00365496 /* Info.plist */,
+			);
+			path = PCSCard;
+			sourceTree = "<group>";
+		};
 		B1AFEC4A1B5B9E7E002F1DDF /* CommonCrypto */ = {
 			isa = PBXGroup;
 			children = (
@@ -511,7 +549,6 @@
 				B1AFECA21B5C28D7002F1DDF /* iphoneos.modulemap */,
 				B1AFECA31B5C28D7002F1DDF /* iphonesimulator.modulemap */,
 				B1AFECA41B5C28D7002F1DDF /* macosx.modulemap */,
-				B1AFEC4B1B5B9E7E002F1DDF /* Supporting Files */,
 			);
 			path = CommonCrypto;
 			sourceTree = "<group>";
@@ -522,6 +559,7 @@
 				B1AFEC4C1B5B9E7E002F1DDF /* Info.plist */,
 			);
 			name = "Supporting Files";
+			path = CommonCrypto;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -533,6 +571,13 @@
 			files = (
 				B19B35981AF1792A00F20B9A /* HBCI4Swift.h in Headers */,
 				B1AFEC3F1B5B0244002F1DDF /* reader.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B1AF0FF51BC45A6D00365496 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -558,6 +603,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				B1AF10041BC45B3C00365496 /* PBXTargetDependency */,
 				B1AFEC6B1B5B9FBD002F1DDF /* PBXTargetDependency */,
 			);
 			name = HBCI4Swift;
@@ -583,6 +629,24 @@
 			productReference = B19B359D1AF1792B00F20B9A /* HBCI4SwiftTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		B1AF0FF71BC45A6D00365496 /* PCSCard */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B1AF0FFD1BC45A6D00365496 /* Build configuration list for PBXNativeTarget "PCSCard" */;
+			buildPhases = (
+				B1AF0FF31BC45A6D00365496 /* Sources */,
+				B1AF0FF41BC45A6D00365496 /* Frameworks */,
+				B1AF0FF51BC45A6D00365496 /* Headers */,
+				B1AF0FF61BC45A6D00365496 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PCSCard;
+			productName = PCSCard;
+			productReference = B1AF0FF81BC45A6D00365496 /* PCSCard.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		B1AFEC481B5B9E7D002F1DDF /* CommonCrypto */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B1AFEC5C1B5B9E7E002F1DDF /* Build configuration list for PBXNativeTarget "CommonCrypto" */;
@@ -607,6 +671,8 @@
 		B19B35891AF1792A00F20B9A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftMigration = 0700;
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = "Frank Emminghaus";
 				TargetAttributes = {
@@ -615,6 +681,9 @@
 					};
 					B19B359C1AF1792B00F20B9A = {
 						CreatedOnToolsVersion = 6.3;
+					};
+					B1AF0FF71BC45A6D00365496 = {
+						CreatedOnToolsVersion = 7.0.1;
 					};
 					B1AFEC481B5B9E7D002F1DDF = {
 						CreatedOnToolsVersion = 6.3.2;
@@ -636,6 +705,7 @@
 				B19B35911AF1792A00F20B9A /* HBCI4Swift */,
 				B19B359C1AF1792B00F20B9A /* HBCI4SwiftTests */,
 				B1AFEC481B5B9E7D002F1DDF /* CommonCrypto */,
+				B1AF0FF71BC45A6D00365496 /* PCSCard */,
 			);
 		};
 /* End PBXProject section */
@@ -657,6 +727,14 @@
 			files = (
 				B19B35C21AF28AC500F20B9A /* hbci300.xml in Resources */,
 				B19B35C01AF28AC500F20B9A /* hbci220.xml in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B1AF0FF61BC45A6D00365496 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B1AF10021BC45ADB00365496 /* PCSC.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -823,6 +901,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B1AF0FF31BC45A6D00365496 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B1AFEC441B5B9E7D002F1DDF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -837,6 +922,11 @@
 			isa = PBXTargetDependency;
 			target = B19B35911AF1792A00F20B9A /* HBCI4Swift */;
 			targetProxy = B19B359F1AF1792B00F20B9A /* PBXContainerItemProxy */;
+		};
+		B1AF10041BC45B3C00365496 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B1AF0FF71BC45A6D00365496 /* PCSCard */;
+			targetProxy = B1AF10031BC45B3C00365496 /* PBXContainerItemProxy */;
 		};
 		B1AFEC6B1B5B9FBD002F1DDF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1032,6 +1122,45 @@
 			};
 			name = Release;
 		};
+		B1AF0FFE1BC45A6D00365496 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B1AF10011BC45ADB00365496 /* PCSC.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = PCSCard/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = de.pecuniabanking.PCSCard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		B1AF0FFF1BC45A6D00365496 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B1AF10011BC45ADB00365496 /* PCSC.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = PCSCard/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = de.pecuniabanking.PCSCard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 		B1AFEC5D1B5B9E7E002F1DDF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B1AFEC621B5B9F12002F1DDF /* CommonCrypto.xcconfig */;
@@ -1098,6 +1227,15 @@
 			buildConfigurations = (
 				B19B35AC1AF1792B00F20B9A /* Debug */,
 				B19B35AD1AF1792B00F20B9A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B1AF0FFD1BC45A6D00365496 /* Build configuration list for PBXNativeTarget "PCSCard" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B1AF0FFE1BC45A6D00365496 /* Debug */,
+				B1AF0FFF1BC45A6D00365496 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

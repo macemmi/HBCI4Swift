@@ -40,13 +40,8 @@ public class HBCIUser {
         }
     }
     
-    public func setParameterData(data:NSData, error:NSErrorPointer) ->Bool {
-        if let syntax = HBCISyntax.syntaxWithVersion(hbciVersion, error: error) {
-            if let params = HBCIParameters(data: data, syntax: syntax) {
-                self.parameters = params;
-                return true;
-            }
-        }
-        return false;
+    public func setParameterData(data:NSData) throws {
+        let syntax = try HBCISyntax.syntaxWithVersion(hbciVersion);
+        self.parameters = try HBCIParameters(data: data, syntax: syntax);
     }
 }

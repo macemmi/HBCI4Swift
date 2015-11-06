@@ -59,7 +59,7 @@ class HBCISepaGenerator_001_003_03 : HBCISepaGenerator, HBCISepaGeneratorCredit 
             if let amountValue = numberToString(item.value) {
                 elem.setStringValueForPath(amountValue, path: "Amt.InstdAmt");
                 
-                let attr = NSXMLNode(kind: NSXMLNodeKind.NSXMLAttributeKind);
+                let attr = NSXMLNode(kind: NSXMLNodeKind.AttributeKind);
                 attr.name = "Ccy";
                 attr.stringValue = item.currency;
                 let amElem = elem.createPath("Amt.InstdAmt");
@@ -76,7 +76,7 @@ class HBCISepaGenerator_001_003_03 : HBCISepaGenerator, HBCISepaGeneratorCredit 
         
         validate();
         
-        println(document.description);
+        print(document.description);
         
         
         // create data from xml document

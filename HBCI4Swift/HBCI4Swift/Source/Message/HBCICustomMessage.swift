@@ -26,7 +26,7 @@ public class HBCICustomMessage : HBCIMessage {
     
     public class func newInstance(dialog:HBCIDialog) ->HBCICustomMessage? {
         if let md = dialog.syntax.msgs["CustomMessage"] {
-            if var msg = md.compose() as? HBCIMessage {
+            if let msg = md.compose() as? HBCIMessage {
                 if let dialogId = dialog.dialogId {
                     msg.setElementValue(dialogId, path: "MsgHead.dialogid");
                     msg.setElementValue(dialog.messageNum, path: "MsgHead.msgnum");
@@ -69,7 +69,7 @@ public class HBCICustomMessage : HBCIMessage {
                 return nil;
             }
             // now sort the versions - we take the latest supported version
-            sort(&supportedVersions, >);
+            supportedVersions.sortInPlace(>);
             
             if let sd = segVersions.segmentWithVersion(supportedVersions.first!) {
                 if let segment = sd.compose() as? HBCISegment {
@@ -83,7 +83,7 @@ public class HBCICustomMessage : HBCIMessage {
         return nil;
     }
     
-    public func send(error:NSErrorPointer) ->Bool {
+    public func send() throws ->Bool {
         // check
         if orders.count == 0 {
             logError("Custom message contains no orders");
@@ -109,35 +109,38 @@ public class HBCICustomMessage : HBCIMessage {
             }
             // if order needs TAN transfer to TAN message processor
             let process = HBCITanProcess_2(dialog: self.dialog);
-            return process.processOrder(orders.last!, error: error);
+            return try process.processOrder(orders.last!)
 
         }
         
-        return sendNoTan(error);
+        return try sendNoTan();
     }
 
-    func sendNoTan(error:NSErrorPointer) ->Bool {
-        if let result = self.dialog.sendMessage(self, error: error) {
-            self.result = result;
-            for order in orders {
-                order.updateResult(result);
-            }
-            
-            if let responses = result.responsesForMessage() {
-                self.success = true;
-                for response in responses {
-                    if response.code != nil && response.text != nil {
-                        logInfo("Message from Bank: \(response.code!): "+response.text!);
-                        if response.code!.toInt() >= 9000 {
-                            self.success = false;
+    func sendNoTan() throws ->Bool {
+        do {
+            if let result = try self.dialog.sendMessage(self) {
+                self.result = result;
+                for order in orders {
+                    order.updateResult(result);
+                }
+                
+                if let responses = result.responsesForMessage() {
+                    self.success = true;
+                    for response in responses {
+                        if response.code != nil && response.text != nil {
+                            logInfo("Message from Bank: \(response.code!): "+response.text!);
+                            if Int(response.code!) >= 9000 {
+                                self.success = false;
+                            }
                         }
                     }
                 }
+                
+                if self.success {
+                    return true;
+                }
             }
-            
-            if self.success {
-                return true;
-            }
+        } catch {
         }
         return false;
     }

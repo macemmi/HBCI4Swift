@@ -58,7 +58,7 @@ public class HBCIParameters {
             }
             if seg.name == "PinTanInformation" || seg.name == "PinTanInformation_old" {
                 // update PIN/TAN information - take highest version
-                var infos = HBCIPinTanInformation(segment: seg);
+                let infos = HBCIPinTanInformation(segment: seg);
                 if infos.version != nil {
                     if self.pinTanInfos != nil {
                         if self.pinTanInfos!.version! > infos.version! {
@@ -70,7 +70,7 @@ public class HBCIParameters {
             }
             if seg.name == "TANPar" {
                 // update TAN Process information - take highest version supported by us
-                var infos = HBCITanProcessInformation(segment: seg);
+                let infos = HBCITanProcessInformation(segment: seg);
                 if self.tanProcessInfos != nil {
                     if self.tanProcessInfos!.version! > infos.version! {
                         continue;
@@ -86,10 +86,10 @@ public class HBCIParameters {
         }
     }
     
-    convenience init?(data:NSData, syntax:HBCISyntax) {
+    convenience init(data:NSData, syntax:HBCISyntax) throws {
         var segmentData = Array<NSData>();
         var segments = Array<HBCISegment>();
-        var binaries = Array<NSData>();
+        let binaries = Array<NSData>();
         var segContent = [CChar](count:data.length, repeatedValue:0);
         var i = 0, segSize = 0;
         
@@ -98,7 +98,7 @@ public class HBCIParameters {
         while i < data.length {
             //q.memory = p.memory;
             segContent[segSize++] = p.memory;
-            if p.memory == "'" && !isEscaped(p) {
+            if p.memory == HBCIChar.quote.rawValue && !isEscaped(p) {
                 // now we have a segment in segContent
                 let data = NSData(bytes: segContent, length: segSize);
                 segmentData.append(data);
@@ -113,12 +113,10 @@ public class HBCIParameters {
             let (segment, parseError) = syntax.parseSegment(segData, binaries: binaries);
             if parseError {
                 if let segmentString = NSString(data: segData, encoding: NSISOLatin1StringEncoding) {
-                    logError("Parse error: segment \(segmentString) could not be parsed");
+                    throw createError(HBCIErrorCode.ParseError , message: "Parse error: segment \(segmentString) could not be parsed", arguments: nil);
                 } else {
-                    logError("Parse error: segment (no conversion possible) could not be parsed");
+                    throw createError(HBCIErrorCode.ParseError, message: "Parse error: segment (no conversion possible) could not be parsed", arguments: nil);
                 }
-                self.init();
-                return nil;
             } else {
                 if let seg = segment {
                     // only add segments that are supported by HBCI syntax
@@ -298,7 +296,7 @@ public class HBCIParameters {
             }
         }
         // sort array by version
-        result.sort({$1 < $0})
+        result.sortInPlace({$1 < $0})
         return result;
     }
     

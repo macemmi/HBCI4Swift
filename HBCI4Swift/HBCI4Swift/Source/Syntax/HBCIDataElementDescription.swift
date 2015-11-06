@@ -36,7 +36,7 @@ class HBCIDataElementDescription: HBCISyntaxElementDescription {
     
     override init?(syntax: HBCISyntax, element: NSXMLElement) {
         super.init(syntax: syntax, element: element)
-        self.delimiter = "+"
+        self.delimiter = HBCIChar.plus.rawValue;
         self.elementType = .DataElement
         
         if let type = self.type {
@@ -103,14 +103,13 @@ class HBCIDataElementDescription: HBCISyntaxElementDescription {
     }
     
     override func parse(bytes: UnsafePointer<CChar>, length: Int, binaries:Array<NSData>) ->HBCISyntaxElement? {
-        var de = HBCIDataElement(description: self);
+        let de = HBCIDataElement(description: self);
         de.name = self.name ?? "";
         
         // check if first character is a delimiter
         var sidx = 0, tidx = 0;
         var escaped: Bool = false;
         var target = [CChar](count:length+1, repeatedValue:0);
-        var p = UnsafeMutablePointer<CChar>(bytes);
         while sidx < length {
             let c = bytes[sidx];
             if (c == HBCIChar_plus || c == HBCIChar_dpoint || c == HBCIChar_quote) && !escaped {
@@ -163,9 +162,9 @@ class HBCIDataElementDescription: HBCISyntaxElementDescription {
                         }
                     case .Binary:
                         if sValue.hasPrefix("@") && sValue.hasSuffix("@") {
-                            let range = Range<String.Index>(start: advance(sValue.startIndex, 1), end: advance(sValue.endIndex, -1));
+                            let range = Range<String.Index>(start: sValue.startIndex.advancedBy(1), end: sValue.endIndex.advancedBy(-1));
                             let idxString = sValue.substringWithRange(range);
-                            if let idx = idxString.toInt() {
+                            if let idx = Int(idxString) {
                                 de.value = binaries[idx];
                             }
                         } else {
@@ -173,7 +172,7 @@ class HBCIDataElementDescription: HBCISyntaxElementDescription {
                             return nil;
                         }
                     case .Numeric:
-                        de.value = sValue.toInt();
+                        de.value = Int(sValue);
                         
                         
                     default: de.value = sValue;

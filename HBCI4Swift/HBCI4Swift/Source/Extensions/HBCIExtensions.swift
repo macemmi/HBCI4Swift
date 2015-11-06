@@ -11,7 +11,7 @@ import Foundation
 extension NSData {
     func hasNonPrintableChars() ->Bool {
         var p = UnsafeMutablePointer<UInt8>(self.bytes);
-        for idx in 0..<self.length {
+        for _ in 0..<self.length {
             let c = p.memory;
             if !((c >= 0x20 && c <= 0x7E) || c >= 0xA1 || c == 0x0A || c == 0x0D) {
                 return true;
@@ -29,9 +29,9 @@ extension NSXMLElement {
         
         let (name, newPath) = firstComponent(path);
         
-        if let nodes = self.children as? [NSXMLNode] {
+        if let nodes = self.children {
             for node in nodes {
-                if node.kind == NSXMLNodeKind.NSXMLElementKind {
+                if node.kind == NSXMLNodeKind.ElementKind {
                     if let child = node as? NSXMLElement {
                         if child.name == name {
                             if newPath == nil {
@@ -55,9 +55,9 @@ extension NSXMLElement {
     func createPath(path:String) ->NSXMLElement {
         let (name, newPath) = firstComponent(path);
         
-        if let nodes = self.children as? [NSXMLNode] {
+        if let nodes = self.children {
             for node in nodes {
-                if node.kind == NSXMLNodeKind.NSXMLElementKind {
+                if node.kind == NSXMLNodeKind.ElementKind {
                     if let child = node as? NSXMLElement {
                         if child.name == name {
                             if newPath == nil {
@@ -88,15 +88,15 @@ extension NSXMLElement {
 
 extension String {
     func substringToIndex(index:Int) ->String {
-        return self.substringToIndex(advance(startIndex, index));
+        return self.substringToIndex(startIndex.advancedBy(index));
     }
     
     func substringFromIndex(index:Int) ->String {
-        return self.substringFromIndex(advance(startIndex, index));
+        return self.substringFromIndex(startIndex.advancedBy(index));
     }
     
     func substringWithRange(range:NSRange) ->String {
-        return self.substringWithRange(Range(start: advance(startIndex, range.location), end: advance(startIndex, range.location+range.length)));
+        return self.substringWithRange(Range(start: startIndex.advancedBy(range.location), end: startIndex.advancedBy(range.location+range.length)));
         
     }
     
@@ -104,8 +104,8 @@ extension String {
         if let chars = self.cStringUsingEncoding(NSISOLatin1StringEncoding) {
             var res = Array<CChar>();
             for x in chars {
-                if x == "+" || x == ":" || x == "'" || x == "?" {
-                    res.append("?");
+                if x == HBCIChar.plus.rawValue || x == HBCIChar.dpoint.rawValue || x == HBCIChar.quote.rawValue || x == HBCIChar.qmark.rawValue {
+                    res.append(HBCIChar.qmark.rawValue);
                 }
                 res.append(x);
             }

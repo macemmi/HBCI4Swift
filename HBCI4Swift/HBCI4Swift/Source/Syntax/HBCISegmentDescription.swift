@@ -16,7 +16,7 @@ class HBCISegmentDescription: HBCISyntaxElementDescription {
         self.code = code;
         self.version = version;
         super.init(syntax: syntax, element: element);
-        self.delimiter = "+";
+        self.delimiter = HBCIChar.plus.rawValue;
         self.elementType = ElementType.Segment;
     }
     
@@ -31,12 +31,12 @@ class HBCISegmentDescription: HBCISyntaxElementDescription {
     }
 
     override func parse(bytes: UnsafePointer<CChar>, length: Int, binaries:Array<NSData>)->HBCISyntaxElement? {
-        var seg = HBCISegment(description: self);
+        let seg = HBCISegment(description: self);
         var ref:HBCISyntaxElementReference;
         var refIdx = 0;
         var num = 0;
         var count = 0;
-        var delimiter:CChar = "+";
+        var delimiter = HBCIChar.plus.rawValue;
         
         var p: UnsafeMutablePointer<CChar> = UnsafeMutablePointer<CChar>(bytes);
         var resLength = length;
@@ -45,7 +45,7 @@ class HBCISegmentDescription: HBCISyntaxElementDescription {
             ref = self.children[refIdx];
             
             //  check if optional tail is cut
-            if delimiter == "'" {
+            if delimiter == HBCIChar.quote.rawValue {
                 if num >= ref.minnum {
                     refIdx++;
                     continue; // check next
@@ -56,7 +56,7 @@ class HBCISegmentDescription: HBCISyntaxElementDescription {
                 }
             }
             
-            if p.memory == "+" && refIdx > 0 {
+            if p.memory == HBCIChar.plus.rawValue && refIdx > 0 {
                 // empty element - check if element was optional
                 if ref.minnum < num {
                     // error: minimal occurence

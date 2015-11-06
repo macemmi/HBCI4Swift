@@ -55,7 +55,7 @@ public class HBCIOrder {
                     self.responses = responses;
                     for response in responses {
                         if response.code != nil && response.text != nil {
-                            if response.code!.toInt() >= 9000 {
+                            if Int(response.code!) >= 9000 {
                                 logError("Message from Bank: \(response.code!): "+response.text!);
                                 self.success = false;
                             } else {

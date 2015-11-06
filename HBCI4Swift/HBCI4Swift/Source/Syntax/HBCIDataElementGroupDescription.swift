@@ -12,7 +12,7 @@ import Foundation
 class HBCIDataElementGroupDescription: HBCISyntaxElementDescription {
     override init?(syntax: HBCISyntax, element: NSXMLElement) {
         super.init(syntax: syntax, element: element)
-        self.delimiter = ":"
+        self.delimiter = CChar(":")!;
         self.elementType = .DataElementGroup
     }
     
@@ -27,12 +27,12 @@ class HBCIDataElementGroupDescription: HBCISyntaxElementDescription {
     }
     
     func parseDEG(bytes: UnsafePointer<CChar>, length: Int, binaries:Array<NSData>, optional:Bool)->HBCISyntaxElement? {
-        var deg = HBCIDataElementGroup(description: self);
+        let deg = HBCIDataElementGroup(description: self);
         var ref:HBCISyntaxElementReference;
         var refIdx = 0;
         var num = 0;
         var count = 0;
-        var delimiter:CChar = ":";
+        var delimiter = CChar(":");
         
         var p: UnsafeMutablePointer<CChar> = UnsafeMutablePointer<CChar>(bytes);
         var resLength = length;
@@ -41,7 +41,7 @@ class HBCIDataElementGroupDescription: HBCISyntaxElementDescription {
             ref = self.children[refIdx];
             
             //  check if optional tail is cut
-            if delimiter == "+" || delimiter == "'" {
+            if delimiter == HBCIChar.plus.rawValue || delimiter == HBCIChar.quote.rawValue {
                 if num >= ref.minnum {
                     refIdx++;
                     continue; // check next

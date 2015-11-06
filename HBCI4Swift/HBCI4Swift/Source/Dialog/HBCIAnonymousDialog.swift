@@ -15,16 +15,13 @@ class HBCIAnonymousDialog {
     var syntax:HBCISyntax!                  // todo: replace with let once Xcode bug is fixed
     var messageNum = 1;
     
-    init?(hbciVersion:String, error:NSErrorPointer) {
+    init(hbciVersion:String) throws {
         self.hbciVersion = hbciVersion;
-        if let syntax = HBCISyntax.syntaxWithVersion(hbciVersion, error: error) {
-            self.syntax = syntax;
-        } else {
-            return nil;
-        }
+        let syntax = try HBCISyntax.syntaxWithVersion(hbciVersion)
+        self.syntax = syntax
     }
 
-    func sendMessage(message:String, values:Dictionary<String,AnyObject>, error:NSErrorPointer) ->HBCIResultMessage? {
+    func sendMessage(message:String, values:Dictionary<String,AnyObject>) throws ->HBCIResultMessage? {
         if let md = self.syntax.msgs[message] {
             if let msg = md.compose() as? HBCIMessage {
                 for (path, value) in values {
@@ -41,28 +38,27 @@ class HBCIAnonymousDialog {
                 //println(msg.description);
                 let msgData = msg.messageData();
                 //println(msg.messageString());
-                
+
                 // send message to bank
-                if let result = self.connection!.sendMessage(msgData, error: error) {
-                    let resultMsg = HBCIResultMessage(syntax: self.syntax);
-                    if !resultMsg.parse(result) {
-                        return nil;
-                    } else {
-                        return resultMsg;
-                    }
+                let result = try self.connection!.sendMessage(msgData);
+                let resultMsg = HBCIResultMessage(syntax: self.syntax);
+                if !resultMsg.parse(result) {
+                    return nil;
+                } else {
+                    return resultMsg;
                 }
             }
         }
         return nil;
     }
 
-    func anonymousDialogForURL(url:NSURL, bankCode:String, error:NSErrorPointer) ->HBCIResultMessage? {
+    func anonymousDialogForURL(url:NSURL, bankCode:String) throws ->HBCIResultMessage? {
         self.connection = HBCIConnection(url: url);
         
         let values:Dictionary<String,AnyObject> = ["ProcPrep.BPD":"0", "ProcPrep.UPD":"0", "ProcPrep.lang":"0", "ProcPrep.prodName":"Pecunia",
             "ProcPrep.prodVersion":"1.0", "Idn.KIK.country":"280", "Idn.KIK.blz":bankCode ];
         
-        if let resultMsg = sendMessage("DialogInitAnon", values: values, error: error) {
+        if let resultMsg = try sendMessage("DialogInitAnon", values: values) {
             // get dialog id
             if let dialogId = resultMsg.valueForPath("MsgHead.dialogid") as? String {
                 self.dialogId = dialogId;
@@ -71,10 +67,12 @@ class HBCIAnonymousDialog {
                 let values = ["MsgHead.dialogid":dialogId, "DialogEnd.dialogid":dialogId,
                     "MsgHead.msgnum":"2", "MsgTail.msgnum":"2" ];
                 
-                // don't care if end dialog message fails or not
-                sendMessage("DialogEndAnon", values: values, error: error);
+                do {
+                    // don't care if end dialog message fails or not
+                    try sendMessage("DialogEndAnon", values: values)
+                } catch { };
             }
-            return resultMsg;
+            return resultMsg;            
         }
         return nil;
     }

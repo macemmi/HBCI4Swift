@@ -47,7 +47,6 @@ class HBCISepaFormat {
     let version:String!
     
     init?(urn:String) {
-        var error:NSError?
         let pattern = "[0-9]{3}.[0-9]{3}.[0-9]{2}";
         
         if let match = urn.rangeOfString(pattern, options: NSStringCompareOptions.RegularExpressionSearch, range: nil, locale: nil) {

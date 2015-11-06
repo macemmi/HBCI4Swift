@@ -1,0 +1,8 @@
+//
+//  PCSC.xcconfig
+//  HBCI4Swift
+//
+//  Created by Frank Emminghaus on 06.10.15.
+//  Copyright © 2015 Frank Emminghaus. All rights reserved.
+//
+MODULEMAP_FILE[sdk=macosx*]          = $(SRCROOT)/PCSCard/pcsc.modulemap

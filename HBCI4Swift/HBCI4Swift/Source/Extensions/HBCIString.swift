@@ -14,7 +14,7 @@ func firstComponent(path:String) ->(component:String, residual:String?) {
     // path or final element?
     var name:String?
     var newPath:String?
-    if let range = path.rangeOfString(".", options: NSStringCompareOptions.allZeros, range: nil, locale: nil) {
+    if let range = path.rangeOfString(".", options: NSStringCompareOptions(), range: nil, locale: nil) {
         name = path.substringToIndex(range.startIndex);
         newPath = path.substringFromIndex(range.startIndex.successor());
     } else {

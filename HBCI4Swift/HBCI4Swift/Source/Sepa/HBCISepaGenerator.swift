@@ -63,33 +63,32 @@ class HBCISepaGenerator {
     }
     
     func setNamespace() {
-        var namespace = NSXMLNode(kind: NSXMLNodeKind.NSXMLNamespaceKind);
+        var namespace = NSXMLNode(kind: NSXMLNodeKind.NamespaceKind);
         namespace.stringValue = format.urn;
         namespace.name = "";
         root.addNamespace(namespace);
         
-        namespace = NSXMLNode(kind: NSXMLNodeKind.NSXMLNamespaceKind);
+        namespace = NSXMLNode(kind: NSXMLNodeKind.NamespaceKind);
         namespace.stringValue = "http://www.w3.org/2001/XMLSchema-instance";
         namespace.name = "xsi";
         root.addNamespace(namespace);
         
-        schemaLocationAttrNode = NSXMLNode(kind: NSXMLNodeKind.NSXMLAttributeKind);
+        schemaLocationAttrNode = NSXMLNode(kind: NSXMLNodeKind.AttributeKind);
         schemaLocationAttrNode.name = "xsi:schemaLocation"
         schemaLocationAttrNode.stringValue = format.schemaLocation;
         root.addAttribute(schemaLocationAttrNode);
     }
     
     func validate() ->Bool {
-        var error:NSError?
         
         // set local schema validation path
-        var oldLocation = schemaLocationAttrNode.stringValue;
+        let oldLocation = schemaLocationAttrNode.stringValue;
         schemaLocationAttrNode.stringValue = self.format.validationSchemaLocation;
         
-        if !document.validateAndReturnError(&error) {
-            if let err = error {
-                logError("SEPA document error: " + err.description);
-            }
+        do {
+            try document.validate();
+        } catch let error as NSError {
+            logError("SEPA document error: " + error.description);
             schemaLocationAttrNode.stringValue = oldLocation;
             return false;
         }

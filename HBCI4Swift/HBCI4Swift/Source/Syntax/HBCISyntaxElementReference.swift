@@ -19,13 +19,13 @@ class HBCISyntaxElementReference {
 
         var num = element.valueForAttribute("minnum")
         if num != nil {
-            self.minnum = num!.toInt() ?? 1
+            self.minnum = Int(num!) ?? 1
         } else {
             self.minnum = 1;
         }
         num = element.valueForAttribute("maxnum")
         if num != nil {
-            self.maxnum = num!.toInt() ?? 1
+            self.maxnum = Int(num!) ?? 1
         } else {
             self.maxnum = 1;
         }

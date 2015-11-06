@@ -30,7 +30,7 @@ public class HBCISepaStandingOrderListOrder : HBCIOrder {
 
         if let gen = HBCISepaGeneratorFactory.creditGenerator(self.user) {
             if let iban = account.iban, bic = account.bic {
-                var values:Dictionary<String,AnyObject> = ["My.iban":iban, "My.bic":bic, "sepadescr":gen.sepaFormat.urn];
+                let values:Dictionary<String,AnyObject> = ["My.iban":iban, "My.bic":bic, "sepadescr":gen.sepaFormat.urn];
                 if self.segment.setElementValues(values) {
                     // add to dialog
                     msg.addOrder(self);
@@ -65,7 +65,7 @@ public class HBCISepaStandingOrderListOrder : HBCIOrder {
                             day = segment.elementValueForPath("details.execday") as? Int,
                             cycle = segment.elementValueForPath("details.turnus") as? Int,
                             cycleUnit = HBCIStandingOrderCycleUnit(rawValue: unit) {
-                                var stord = HBCIStandingOrder(transfer: transfer, startDate: startDate, cycle: cycle, day: day, cycleUnit: cycleUnit);
+                                let stord = HBCIStandingOrder(transfer: transfer, startDate: startDate, cycle: cycle, day: day, cycleUnit: cycleUnit);
                                 stord.lastDate = lastDate;
                                 stord.orderId = segment.elementValueForPath("orderId") as? String;
                                 standingOrders.append(stord);
