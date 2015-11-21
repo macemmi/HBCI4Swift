@@ -90,7 +90,7 @@ public class HBCIDialog {
             }
             
             let msgData = msg_crypted.messageData();
-            print(msg_crypted.messageString());
+            //print(msg_crypted.messageString());
             
             // send message to bank
             do {
@@ -103,8 +103,17 @@ public class HBCIDialog {
                     }
                     self.messageNum++;
                     if let value = user.securityMethod.decryptMessage(resultMsg_crypted, dialog: self) {
-                        return value
+                        if value.checkResponses() {
+                            return value
+                        } else {
+                            logError("Error message from bank");
+                            logError(NSString(data: result, encoding: NSISOLatin1StringEncoding) as! String);
+                            logError("Message sent: " + msg.messageString());
+                            return value;
+                        }
                     }
+                    logError("Message could not be decrypted");
+                    logError(NSString(data: result, encoding: NSISOLatin1StringEncoding) as! String);
                     return nil;
                 } else {
                     logError("Message could not be parsed");
@@ -113,7 +122,6 @@ public class HBCIDialog {
                 }
             } catch {
                 logError("Message sent: " + msg.messageString());
-                throw error;
             }
         }
         return nil;
@@ -276,31 +284,35 @@ public class HBCIDialog {
         self.dialogId = "0";
         
         if let result = try sendMessage("DialogInit", values: values) {
-            result.updateParameterForUser(self.user);
-            return result;
+            
+            let responses = result.responsesForMessage();
+            var success = true;
+            for response in responses {
+                logInfo("Message from Bank: "+response.description);
+                if Int(response.code) >= 9000 {
+                    success = false;
+                }
+            }
+            if success {
+                result.updateParameterForUser(self.user);
+                return result;
+            }
         }
         return nil;
     }
     
-    public func dialogEnd() throws ->HBCIResultMessage {
-        var error: NSError! = NSError(domain: "Migrator", code: 0, userInfo: nil)
+    public func dialogEnd() ->HBCIResultMessage? {
         if let dialogId = self.dialogId {
             let values:Dictionary<String,AnyObject> = ["DialogEnd.dialogid":dialogId, "MsgHead.dialogid":dialogId, "MsgHead.msgnum":messageNum, "MsgTail.msgnum":messageNum];
-            let rmsg: HBCIResultMessage?
             do {
-                rmsg = try sendMessage("DialogEnd", values: values)
-            } catch let error1 as NSError {
-                error = error1
-                rmsg = nil
-            };
-            self.connection.close();
-            if let value = rmsg {
-                return value
-            }
-            throw error;
+                if let result = try sendMessage("DialogEnd", values: values) {
+                    self.connection.close();
+                    return result;
+                }
+            } catch { };
         }
         self.connection.close();
-        throw error;
+        return nil;
     }
     
     public func syncInit() throws ->HBCIResultMessage? {

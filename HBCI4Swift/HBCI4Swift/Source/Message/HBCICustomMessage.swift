@@ -120,28 +120,24 @@ public class HBCICustomMessage : HBCIMessage {
         do {
             if let result = try self.dialog.sendMessage(self) {
                 self.result = result;
-                for order in orders {
-                    order.updateResult(result);
-                }
                 
-                if let responses = result.responsesForMessage() {
-                    self.success = true;
-                    for response in responses {
-                        if response.code != nil && response.text != nil {
-                            logInfo("Message from Bank: \(response.code!): "+response.text!);
-                            if Int(response.code!) >= 9000 {
-                                self.success = false;
-                            }
-                        }
+                let responses = result.responsesForMessage();
+                self.success = true;
+                for response in responses {
+                    logInfo("Message from Bank: "+response.description);
+                    if Int(response.code) >= 9000 {
+                        self.success = false;
                     }
                 }
                 
                 if self.success {
+                    for order in orders {
+                        order.updateResult(result);
+                    }
                     return true;
                 }
             }
-        } catch {
-        }
+        } catch { }
         return false;
     }
     

@@ -50,17 +50,16 @@ public class HBCIOrder {
                 self.resultSegments = result.segmentsWithReference(segNum, orderName: seg.name);
                 
                 // also update result out of RetSeg
-                if let responses = result.responsesForSegmentWithNumber(segNum) {
+                let responses = result.responsesForSegmentWithNumber(segNum);
+                if responses.count > 0 {
                     self.success = true;
                     self.responses = responses;
                     for response in responses {
-                        if response.code != nil && response.text != nil {
-                            if Int(response.code!) >= 9000 {
-                                logError("Message from Bank: \(response.code!): "+response.text!);
-                                self.success = false;
-                            } else {
-                                logInfo("Message from Bank: \(response.code!): "+response.text!);
-                            }
+                        if Int(response.code) >= 9000 {
+                            logError("Message from Bank: "+response.description);
+                            self.success = false;
+                        } else {
+                            logError("Message from Bank: "+response.description);
                         }
                     }
                 }

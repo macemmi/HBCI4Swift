@@ -136,7 +136,9 @@ public class HBCIParameters {
                 let procs = segment.elementsForPath("ParTAN.TANProcessParams");
                 for proc in procs {
                     if let method = HBCITanMethod(element: proc, version:segment.version) {
-                        result.append(method);
+                        if self.supportedTanMethods.contains(method.identifier) {
+                            result.append(method);
+                        }
                     }
                 }
             }

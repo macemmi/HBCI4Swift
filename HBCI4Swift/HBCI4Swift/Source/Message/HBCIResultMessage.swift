@@ -64,6 +64,8 @@ public class HBCIResultMessage {
     var segmentData = Array<NSData>();
     var segmentStrings = Array<NSString>();
     var segments = Array<HBCISegment>();
+    var messageResponses = Array<HBCIMessageResponse>();
+    var segmentResponses = Array<HBCIOrderResponse>();
     
     init(syntax:HBCISyntax) {
         self.syntax = syntax;
@@ -210,7 +212,7 @@ public class HBCIResultMessage {
         let bpData = NSMutableData();
         
         for data in segmentData {
-            print(NSString(data: data, encoding: NSISOLatin1StringEncoding));
+            //print(NSString(data: data, encoding: NSISOLatin1StringEncoding));
             if let code = NSString(bytes: data.bytes, length: 5, encoding: NSISOLatin1StringEncoding) {
                 if code == "HIUPA" || code == "HIUPD" || code == "HIBPA" ||
                     (code.hasPrefix("HI") && code.hasSuffix("S")) {
@@ -291,62 +293,81 @@ public class HBCIResultMessage {
         return segs;
     }
     
-    func responsesForSegmentWithNumber(number:Int) ->Array<HBCIOrderResponse>? {
-        for segment in self.segments {
-            if segment.name == "RetSeg" {
-                if let _ = segment.elementValueForPath("SegHead.ref") as? Int {
-                    var responses = Array<HBCIOrderResponse>();
+    func responsesForSegmentWithNumber(number:Int) ->Array<HBCIOrderResponse> {
+        var responses = Array<HBCIOrderResponse>();
+        for response in responsesForSegments() {
+            if response.reference == number {
+                responses.append(response);
+            }
+        }
+        return responses;
+    }
+    
+    func responsesForSegments() ->Array<HBCIOrderResponse> {
+        if self.segmentResponses.count == 0 {
+            for segment in self.segments {
+                if segment.name == "RetSeg" {
+                    // only segments with references
+                    if segment.elementValueForPath("SegHead.ref") as? Int  != nil {
+                        let values = segment.elementsForPath("RetVal");
+                        for retVal in values {
+                            if let response = HBCIOrderResponse(element: retVal) {
+                                self.segmentResponses.append(response);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return self.segmentResponses;
+    }
+    
+    func checkResponses() ->Bool {
+        var success = true;
+        for response in responsesForMessage() {
+            if Int(response.code) >= 9000 {
+                logError("Message from bank: "+response.description);
+                success = false;
+            }
+        }
+        for response in responsesForSegments() {
+            if Int(response.code) >= 9000 || (!success && Int(response.code) >= 3000) {
+                logError("Message from bank: "+response.description);
+                success = false;
+            }
+        }
+        return success;
+    }
+    
+    func responsesForMessage() ->Array<HBCIMessageResponse> {
+        if self.messageResponses.count == 0 {
+            for segment in self.segments {
+                if segment.name == "RetGlob" {
                     
                     let values = segment.elementsForPath("RetVal");
                     for retVal in values {
-                        let response = HBCIOrderResponse();
-                        response.code = retVal.elementValueForPath("code") as? String;
-                        response.text = retVal.elementValueForPath("text") as? String;
-                        response.reference = retVal.elementValueForPath("ref") as? String;
-                        //todo: parameters
-                        
-                        responses.append(response);
+                        if let response = HBCIMessageResponse(element: retVal) {
+                            self.messageResponses.append(response);
+                        }
                     }
-                    return responses;
                 }
             }
         }
-        return nil;
+        return self.messageResponses;
     }
     
-    func responsesForMessage() ->Array<HBCIMessageResponse>? {
-        for segment in self.segments {
-            if segment.name == "RetGlob" {
-                var responses = Array<HBCIMessageResponse>();
-                
-                let values = segment.elementsForPath("RetVal");
-                for retVal in values {
-                    let response = HBCIMessageResponse();
-                    response.code = retVal.elementValueForPath("code") as? String;
-                    response.text = retVal.elementValueForPath("text") as? String;
-                    responses.append(response);
-                }
-                return responses;
-            }
-        }
-        return nil;
-    }
-    
-    func isOk() ->Bool {
-        if let responses = responsesForMessage() {
-            for response in responses {
-                if let x = response.code, code = Int(x) {
-                    if code >= 9000 {
-                        return false;
-                    }
-                } else {
+    public func isOk() ->Bool {
+        let responses = responsesForMessage();
+        for response in responses {
+            if let code = Int(response.code) {
+                if code >= 9000 {
                     return false;
                 }
+            } else {
+                return false;
             }
-            return true;
-        } else {
-            return false;
         }
+        return true;
     }
     
     func segmentsForOrder(orderName:String) ->Array<HBCISegment> {

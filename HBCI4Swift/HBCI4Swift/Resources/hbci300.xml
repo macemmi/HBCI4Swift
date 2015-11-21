@@ -372,10 +372,10 @@
             <DE name="process" type="Code" maxsize="1"/>
             <DE name="id" type="ID"/>
             <DE name="name" type="AN" maxsize="30"/>
-            <DE name="maxlentan2step" type="Num" maxsize="2"/>
+            <DE name="maxlentan" type="Num" maxsize="2"/>
             <DE name="tanformat" type="Code" maxsize="1"/>
             <DE name="inputinfo" type="AN" maxsize="30"/>
-            <DE name="maxleninput2step" type="Num" maxsize="3"/>
+            <DE name="maxleninput" type="Num" maxsize="3"/>
             <DE name="noftanlists" type="Num" maxsize="1" minnum="0"/>
             <DE name="canmultitan" type="JN"/>
             <DE name="cantandelay" type="JN"/>
@@ -395,10 +395,10 @@
             <DE name="process" type="Code" maxsize="1"/>
             <DE name="id" type="ID"/>
             <DE name="name" type="AN" maxsize="30"/>
-            <DE name="maxlentan2step" type="Num" maxsize="2"/>
+            <DE name="maxlentan" type="Num" maxsize="2"/>
             <DE name="tanformat" type="Code" maxsize="1"/>
             <DE name="inputinfo" type="AN" maxsize="30"/>
-            <DE name="maxleninput2step" type="Num" maxsize="3"/>
+            <DE name="maxleninput" type="Num" maxsize="3"/>
             <DE name="noftanlists" type="Num" maxsize="1" minnum="0"/>
             <DE name="canmultitan" type="JN"/>
             <DE name="cantandelay" type="Code" maxsize="1"/>
@@ -422,10 +422,10 @@
             <DE name="process" type="Code" maxsize="1"/>
             <DE name="id" type="ID"/>
             <DE name="name" type="AN" maxsize="30"/>
-            <DE name="maxlentan2step" type="Num" maxsize="2"/>
+            <DE name="maxlentan" type="Num" maxsize="2"/>
             <DE name="tanformat" type="Code" maxsize="1"/>
             <DE name="inputinfo" type="AN" maxsize="30"/>
-            <DE name="maxleninput2step" type="Num" maxsize="3"/>
+            <DE name="maxleninput" type="Num" maxsize="3"/>
             <DE name="noftanlists" type="Num" maxsize="1" minnum="0"/>
             <DE name="canmultitan" type="JN"/>
             <DE name="cantandelay" type="Code" maxsize="1"/>
@@ -454,10 +454,10 @@
 	       <DE name="zkamethod_name" type="AN" maxsize="32" minnum="0" />
 	       <DE name="zkamethod_version" type="AN" maxsize="10" minnum="0" />
             <DE name="name" type="AN" maxsize="30"/>
-            <DE name="maxlentan2step" type="Num" maxsize="2"/>
+            <DE name="maxlentan" type="Num" maxsize="2"/>
             <DE name="tanformat" type="Code" maxsize="1"/>
             <DE name="inputinfo" type="AN" maxsize="30"/>
-            <DE name="maxleninput2step" type="Num" maxsize="3"/>
+            <DE name="maxleninput" type="Num" maxsize="3"/>
             <DE name="noftanlists" type="Num" maxsize="1" minnum="0"/>
             <DE name="canmultitan" type="JN"/>
             <DE name="cantandelay" type="Code" maxsize="1"/>
