@@ -9,8 +9,11 @@
 import Foundation
 
 import PCSCard.winscard
-import PCSCard.wintypes
+//import PCSCard.wintypes
 import PCSCard.pcsclite
+
+typealias DWORD = UInt32
+
 
 public class HBCISmartcard {
     let readerName:String;

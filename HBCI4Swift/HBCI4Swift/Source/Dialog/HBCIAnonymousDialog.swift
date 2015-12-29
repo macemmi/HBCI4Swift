@@ -8,14 +8,14 @@
 
 import Foundation
 
-class HBCIAnonymousDialog {
+public class HBCIAnonymousDialog {
     var connection:HBCIConnection?
     var dialogId:String?;
     let hbciVersion:String!
     var syntax:HBCISyntax!                  // todo: replace with let once Xcode bug is fixed
     var messageNum = 1;
     
-    init(hbciVersion:String) throws {
+    public init(hbciVersion:String) throws {
         self.hbciVersion = hbciVersion;
         let syntax = try HBCISyntax.syntaxWithVersion(hbciVersion)
         self.syntax = syntax
@@ -29,6 +29,11 @@ class HBCIAnonymousDialog {
                         return nil;
                     }
                 }
+                
+                if !msg.enumerateSegments() {
+                    return nil;
+                }
+
                 if !msg.finalize() {
                     return nil;
                 }
@@ -52,7 +57,7 @@ class HBCIAnonymousDialog {
         return nil;
     }
 
-    func anonymousDialogForURL(url:NSURL, bankCode:String) throws ->HBCIResultMessage? {
+    public func dialogWithURL(url:NSURL, bankCode:String) throws ->HBCIResultMessage? {
         self.connection = HBCIConnection(url: url);
         
         let values:Dictionary<String,AnyObject> = ["ProcPrep.BPD":"0", "ProcPrep.UPD":"0", "ProcPrep.lang":"0", "ProcPrep.prodName":"Pecunia",

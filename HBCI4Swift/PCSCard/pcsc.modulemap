@@ -19,8 +19,4 @@ module PCSCard [system] {
         export *
     }
     
-    explicit module wintypes {
-        header "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/PCSC.framework/Headers/wintypes.h"
-        export *
-    }
 }

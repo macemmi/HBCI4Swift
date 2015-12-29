@@ -370,6 +370,10 @@ public class HBCIResultMessage {
         return true;
     }
     
+    public func hbciParameters() -> HBCIParameters {
+        return HBCIParameters(segments: self.segments, syntax: self.syntax);
+    }
+    
     func segmentsForOrder(orderName:String) ->Array<HBCISegment> {
         var result = Array<HBCISegment>();
         for segment in self.segments {

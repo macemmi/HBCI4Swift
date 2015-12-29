@@ -10,9 +10,9 @@ import Foundation
 
 public class HBCIParameters {
     public var bpdVersion = 0, updVersion = 0;
+    public var pinTanInfos:HBCIPinTanInformation?
     var bpData:NSData?
     var bpSegments = Array<HBCISegment>();
-    var pinTanInfos:HBCIPinTanInformation?
     var tanProcessInfos:HBCITanProcessInformation?
     var supportedTanMethods = Array<String>();
     var syntax:HBCISyntax!

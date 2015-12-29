@@ -9,15 +9,15 @@
 import Foundation
 
 // information in HIPINS segment
-class HBCIPinTanInformation {
-    var pinlen_min:Int?
-    var pinlen_max:Int?
-    var tanlen_max:Int?
-    var text_userId:String?
-    var text_customerId:String?
-    var version:Int?
+public class HBCIPinTanInformation {
+    public var pinlen_min:Int?
+    public var pinlen_max:Int?
+    public var tanlen_max:Int?
+    public var text_userId:String?
+    public var text_customerId:String?
+    public var version:Int?
     
-    var supportedSegs = Dictionary<String, Bool>();
+    public var supportedSegs = Dictionary<String, Bool>();
 
     
     init(segment: HBCISegment) {

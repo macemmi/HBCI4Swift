@@ -45,6 +45,7 @@
 		B15B81C81B5450B5006B6366 /* HBCISecurityMethodDDV.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15B81C71B5450B5006B6366 /* HBCISecurityMethodDDV.swift */; };
 		B16A223F1B7A811D005E84FC /* RIPEMD160.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16A223E1B7A811D005E84FC /* RIPEMD160.swift */; };
 		B16A22401B7A811D005E84FC /* RIPEMD160.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16A223E1B7A811D005E84FC /* RIPEMD160.swift */; };
+		B178C6101C31F1050082E25F /* PCSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B178C60E1C31F0A20082E25F /* PCSC.framework */; };
 		B19B35981AF1792A00F20B9A /* HBCI4Swift.h in Headers */ = {isa = PBXBuildFile; fileRef = B19B35971AF1792A00F20B9A /* HBCI4Swift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B19B359E1AF1792B00F20B9A /* HBCI4Swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B19B35921AF1792A00F20B9A /* HBCI4Swift.framework */; };
 		B19B35A51AF1792B00F20B9A /* HBCI4SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35A41AF1792B00F20B9A /* HBCI4SwiftTests.swift */; };
@@ -154,8 +155,6 @@
 		B1AE54A81B1A57D1008C7BBE /* pain.001.003.03.xsd in Resources */ = {isa = PBXBuildFile; fileRef = B1AE54A71B1A57D1008C7BBE /* pain.001.003.03.xsd */; };
 		B1AFEC3F1B5B0244002F1DDF /* reader.h in Headers */ = {isa = PBXBuildFile; fileRef = B1AFEC3E1B5B0244002F1DDF /* reader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B1AFEC401B5B026F002F1DDF /* HBCISmartcard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15B72F81B559CA6008D2E55 /* HBCISmartcard.swift */; };
-		B1EE97651BEBFF44009A3BCA /* PCSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1EE97621BEBFDAA009A3BCA /* PCSC.framework */; };
-		B1EE97661BEBFF51009A3BCA /* PCSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1EE97621BEBFDAA009A3BCA /* PCSC.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -203,6 +202,7 @@
 		B15B72FA1B559CA6008D2E55 /* HBCISmartcardDDV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCISmartcardDDV.swift; path = Source/Chipcard/HBCISmartcardDDV.swift; sourceTree = "<group>"; };
 		B15B81C71B5450B5006B6366 /* HBCISecurityMethodDDV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCISecurityMethodDDV.swift; path = Source/HBCISecurityMethodDDV.swift; sourceTree = "<group>"; };
 		B16A223E1B7A811D005E84FC /* RIPEMD160.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RIPEMD160.swift; path = Source/RIPEMD160.swift; sourceTree = "<group>"; };
+		B178C60E1C31F0A20082E25F /* PCSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PCSC.framework; path = System/Library/Frameworks/PCSC.framework; sourceTree = SDKROOT; };
 		B19B35921AF1792A00F20B9A /* HBCI4Swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HBCI4Swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B19B35961AF1792A00F20B9A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B19B35971AF1792A00F20B9A /* HBCI4Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HBCI4Swift.h; path = Source/HBCI4Swift.h; sourceTree = "<group>"; };
@@ -273,7 +273,6 @@
 		B1AFECA31B5C28D7002F1DDF /* iphonesimulator.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = iphonesimulator.modulemap; sourceTree = "<group>"; };
 		B1AFECA41B5C28D7002F1DDF /* macosx.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = macosx.modulemap; sourceTree = "<group>"; };
 		B1AFECA81B5C313C002F1DDF /* HBCI4SwiftTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HBCI4SwiftTests-Bridging-Header.h"; sourceTree = "<group>"; };
-		B1EE97621BEBFDAA009A3BCA /* PCSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PCSC.framework; path = System/Library/Frameworks/PCSC.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -281,7 +280,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B1EE97651BEBFF44009A3BCA /* PCSC.framework in Frameworks */,
+				B178C6101C31F1050082E25F /* PCSC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,7 +288,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B1EE97661BEBFF51009A3BCA /* PCSC.framework in Frameworks */,
 				B19B359E1AF1792B00F20B9A /* HBCI4Swift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -334,7 +332,7 @@
 		B19B35881AF1792A00F20B9A = {
 			isa = PBXGroup;
 			children = (
-				B1EE97621BEBFDAA009A3BCA /* PCSC.framework */,
+				B178C60E1C31F0A20082E25F /* PCSC.framework */,
 				B19B35941AF1792A00F20B9A /* HBCI4Swift */,
 				B19B35A11AF1792B00F20B9A /* HBCI4SwiftTests */,
 				B1AFEC4B1B5B9E7E002F1DDF /* Supporting Files */,
@@ -1216,7 +1214,7 @@
 				B19B35A71AF1792B00F20B9A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		B19B35A81AF1792B00F20B9A /* Build configuration list for PBXNativeTarget "HBCI4Swift" */ = {
 			isa = XCConfigurationList;
@@ -1225,7 +1223,7 @@
 				B19B35AA1AF1792B00F20B9A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		B19B35AB1AF1792B00F20B9A /* Build configuration list for PBXNativeTarget "HBCI4SwiftTests" */ = {
 			isa = XCConfigurationList;
@@ -1234,7 +1232,7 @@
 				B19B35AD1AF1792B00F20B9A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		B1AF0FFD1BC45A6D00365496 /* Build configuration list for PBXNativeTarget "PCSCard" */ = {
 			isa = XCConfigurationList;
@@ -1243,7 +1241,7 @@
 				B1AF0FFF1BC45A6D00365496 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		B1AFEC5C1B5B9E7E002F1DDF /* Build configuration list for PBXNativeTarget "CommonCrypto" */ = {
 			isa = XCConfigurationList;
@@ -1252,7 +1250,7 @@
 				B1AFEC5E1B5B9E7E002F1DDF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};
