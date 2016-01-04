@@ -110,17 +110,19 @@ public class HBCIParameters {
         
         // now we have all segment strings and we can start to parse each segment
         for segData in segmentData {
-            let (segment, parseError) = syntax.parseSegment(segData, binaries: binaries);
-            if parseError {
-                if let segmentString = NSString(data: segData, encoding: NSISOLatin1StringEncoding) {
-                    throw createError(HBCIErrorCode.ParseError , message: "Parse error: segment \(segmentString) could not be parsed", arguments: nil);
-                } else {
-                    throw createError(HBCIErrorCode.ParseError, message: "Parse error: segment (no conversion possible) could not be parsed", arguments: nil);
-                }
-            } else {
-                if let seg = segment {
+            do {
+                if let segment = try syntax.parseSegment(segData, binaries: binaries) {
                     // only add segments that are supported by HBCI syntax
-                    segments.append(seg);
+                    segments.append(segment);
+                }
+            }
+            catch is HBCIError {
+                if let segmentString = NSString(data: segData, encoding: NSISOLatin1StringEncoding) {
+                    logError("Parse error: segment \(segmentString) could not be parsed");
+                    throw HBCIError.ParseError;
+                } else {
+                    logError("Parse error: segment (no conversion possible) could not be parsed");
+                    throw HBCIError.ParseError;
                 }
             }
         }
@@ -131,15 +133,10 @@ public class HBCIParameters {
     public func getTanMethods() ->Array<HBCITanMethod> {
         var result = Array<HBCITanMethod>();
         
-        for segment in bpSegments {
-            if segment.name == "TANPar" {
-                let procs = segment.elementsForPath("ParTAN.TANProcessParams");
-                for proc in procs {
-                    if let method = HBCITanMethod(element: proc, version:segment.version) {
-                        if self.supportedTanMethods.contains(method.identifier) {
-                            result.append(method);
-                        }
-                    }
+        if let tpi = self.tanProcessInfos {
+            for method in tpi.tanMethods {
+                if self.supportedTanMethods.contains(method.secfunc) {
+                    result.append(method);
                 }
             }
         }

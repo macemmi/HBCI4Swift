@@ -10,8 +10,8 @@ import Foundation
 
 
 class HBCIDataElementGroupDescription: HBCISyntaxElementDescription {
-    override init?(syntax: HBCISyntax, element: NSXMLElement) {
-        super.init(syntax: syntax, element: element)
+    override init(syntax: HBCISyntax, element: NSXMLElement) throws {
+        try super.init(syntax: syntax, element: element)
         self.delimiter = HBCIChar.dpoint.rawValue;
         self.elementType = .DataElementGroup
     }

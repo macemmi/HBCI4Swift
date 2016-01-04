@@ -9,36 +9,29 @@
 import Foundation
 
 public struct HBCITanMedium {
-    var category:String
-    var status:String
-    var cardNumber:String?
-    var cardSeqNumber:String?
-    var cardType:Int?
-    var validFrom:NSDate?
-    var validTo:NSDate?
-    var tanListNumber:String?
-    var name:String?
-    var mobileNumber:String?
-    var mobileNumberSecure:String?
-    var freeTans:Int?
-    var lastUse:NSDate?
-    var activatedOn:NSDate?
+    public let
+    category:String!,
+    status:String!
+    
+    public var
+    cardNumber:String?,
+    cardSeqNumber:String?,
+    cardType:Int?,
+    validFrom:NSDate?,
+    validTo:NSDate?,
+    tanListNumber:String?,
+    name:String?,
+    mobileNumber:String?,
+    mobileNumberSecure:String?,
+    freeTans:Int?,
+    lastUse:NSDate?,
+    activatedOn:NSDate?
     
     
     init?(element: HBCISyntaxElement, version:Int) {
-        if let cat = element.elementValueForPath("mediacategory") as? String {
-            self.category = cat;
-        } else {
-            self.category = ""
-            self.status = "";
-            return nil;
-        }
-        if let status = element.elementValueForPath("status") as? String {
-            self.status = status;
-        } else {
-            self.status = "";
-            return nil;
-        }
+        self.category = element.elementValueForPath("mediacategory") as? String;
+        self.status = element.elementValueForPath("status") as? String;
+                
         self.cardNumber = element.elementValueForPath("cardnumber") as? String;
         self.cardSeqNumber = element.elementValueForPath("cardseqnumber") as? String;
         self.tanListNumber = element.elementValueForPath("tanlistnumber") as? String;
@@ -59,6 +52,13 @@ public struct HBCITanMedium {
         
         if version > 3 {
             self.mobileNumber = element.elementValueForPath("mobilenumber") as? String;
+        }
+        
+        if self.category == nil || self.status == nil {
+            logError("TanMedium \(self.name ?? unknown): not all mandatory fields are provided for version \(version)");
+            logError(element.description);
+            return nil;
+
         }
     }
     

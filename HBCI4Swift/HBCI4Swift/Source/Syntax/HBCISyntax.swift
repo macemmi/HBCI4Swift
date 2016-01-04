@@ -51,101 +51,89 @@ class HBCISyntax {
             xmlDoc = try NSXMLDocument(contentsOfURL: furl, options: Int(NSXMLDocumentTidyXML));
         }
         if xmlDoc == nil {
-            throw createError(HBCIErrorCode.SyntaxFileError, message: "HBCI syntax file not found at path \(path)", arguments: nil);
+            logError("HBCI syntax file not found at path \(path)");
+            throw HBCIError.SyntaxFileError;
         } else {
             document = xmlDoc!;
         }
         
-        if(!buildDegs()) {
-            throw createError(HBCIErrorCode.SyntaxFileError, message: "Error in HBCI syntax file. See log for more information", arguments: nil);
-        }
-        if(!buildSegs()) {
-            throw createError(HBCIErrorCode.SyntaxFileError, message: "Error in HBCI syntax file. See log for more information", arguments: nil);
-        }
-        if(!buildMsgs()) {
-            throw createError(HBCIErrorCode.SyntaxFileError, message: "Error in HBCI syntax file. See log for more information", arguments: nil);
-        }
+        try buildDegs();
+        try buildSegs();
+        try buildMsgs();
     }
     
-    func buildDegs() ->Bool {
+    func buildDegs() throws {
         if let root = document.rootElement() {
             if let degs = root.elementsForName("DEGs").first {
                 for deg in degs.elementsForName("DEGdef") {
-                    if let identifier = deg.valueForAttribute("id"), elem = HBCIDataElementGroupDescription(syntax: self, element: deg) {
-                        elem.syntaxElement = deg
-                        self.degs[identifier] = elem
+                    if let identifier = deg.valueForAttribute("id") {
+                        let elem = try HBCIDataElementGroupDescription(syntax: self, element: deg);
+                        elem.syntaxElement = deg;
+                        self.degs[identifier] = elem;
                     } else {
                         // syntax error
                         logError("Syntax file error: invalid DEGdef element found");
-                        return false;
+                        throw HBCIError.SyntaxFileError;
                     }
                 }
-                return true;
+                return;
             } else {
                 // error
                 logError("Syntax file error: DEGs element not found");
-                return false;
+                throw HBCIError.SyntaxFileError;
             }
         } else {
             // error
             logError("Synax file error: root element not found");
-            return false;
+            throw HBCIError.SyntaxFileError;
         }
     }
     
-    func buildSegs() ->Bool {
+    func buildSegs() throws {
         if let root = document.rootElement() {
             if let segs = root.elementsForName("SEGs").first {
                 for seg in segs.elementsForName("SEGdef") {
-                    if let segv = HBCISegmentVersions(syntax: self, element: seg) {
-                        self.segs[segv.identifier] = segv;
-                        self.codes[segv.code] = segv;
-                    } else {
-                        // syntax error
-                        logError("Syntax file error: invalid SEGdef element found");
-                        return false;
-                    }
+                    let segv = try HBCISegmentVersions(syntax: self, element: seg);
+                    self.segs[segv.identifier] = segv;
+                    self.codes[segv.code] = segv;
                 }
-                return true;
+                return;
             } else {
                 // error
                 logError("Syntax file error: SEGs element not found");
-                return false;
+                throw HBCIError.SyntaxFileError;
             }
         } else {
             // error
             logError("Synax file error: root element not found");
-            return false;
+            throw HBCIError.SyntaxFileError;
         }
     }
     
-    func buildMsgs() ->Bool {
+    func buildMsgs() throws {
         if let root = document.rootElement() {
             if let msgs = root.elementsForName("MSGs").first {
                 for msg in msgs.elementsForName("MSGdef") {
-                    if let identifier = msg.valueForAttribute("id"), elem = HBCIMessageDescription(syntax: self, element: msg) {
+                    if let identifier = msg.valueForAttribute("id") {
+                        let elem = try HBCIMessageDescription(syntax: self, element: msg);
                         elem.syntaxElement = msg;
                         self.msgs[identifier] = elem;
-                    } else {
-                        // syntax error
-                        logError("Syntax file error: invalid MSGdef element found");
-                        return false;
                     }
                 }
-                return true;
+                return;
             } else {
                 // error
                 logError("Syntax file error: MSGs element not found");
-                return false;
+                throw HBCIError.SyntaxFileError;
             }
         } else {
             // error
             logError("Synax file error: root element not found");
-            return false;
+            throw HBCIError.SyntaxFileError;
         }
     }
     
-    func parseSegment(segData:NSData, binaries:Array<NSData>) ->(segment:HBCISegment?, parseError:Bool) {
+    func parseSegment(segData:NSData, binaries:Array<NSData>) throws ->HBCISegment? {
         if let headerDescr = self.degs["SegHead"] {
             if let headerData = headerDescr.parse(UnsafePointer<CChar>(segData.bytes), length: segData.length, binaries: binaries) {
                 if let code = headerData.elementValueForPath("code") as? String {
@@ -153,21 +141,21 @@ class HBCISyntax {
                         if let segVersion = self.codes[code] {
                             if let segDescr = segVersion.segmentWithVersion(version) {
                                 if let seg = segDescr.parse(segData, binaries: binaries) {
-                                    return (seg, false);
+                                    return seg;
                                 } else {
-                                    return (nil, true);
+                                    throw HBCIError.ParseError;
                                 }
                             }
                         }
-                        return (nil, false);  // code and/or version are not supported, just continue
+                        return nil;  // code and/or version are not supported, just continue
                     }
                 }
             }
             logError("Parse error: segment code or segment version could not be determined");
-            return (nil, true);
+            throw HBCIError.ParseError;
         } else {
             logError("Syntax file error: segment SegHead is missing");
-            return (nil, true);
+            throw HBCIError.SyntaxFileError;
         }
     }
     

@@ -54,12 +54,12 @@ public class HBCISecurityMethodPinTan : HBCISecurityMethod {
         if version > 3 {
             values["SigHead.SecProfile.method"] = "PIN";
             values["SigHead.SecProfile.version"] = "2";
+
+            if values["SigHead.secfunc"] == "999" {
+                values["SigHead.SecProfile.version"] = "1";
+            }
         }
-        
-        if values["SigHead.secfunc"] == "999" {
-            values["SigHead.SecProfile.version"] = "1";
-        }
-        
+                
         // check if there is a TAN and if so, use it
         if let custMsg = msg as? HBCICustomMessage {
             if let tan = custMsg.tan {

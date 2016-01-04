@@ -145,20 +145,20 @@ public class HBCIResultMessage {
         
         // now we have all segment strings and we can start to parse each segment
         for segData in self.segmentData {
-            let (segment, parseError) = self.syntax.parseSegment(segData, binaries: self.binaries);
-            if parseError {
+            do {
+                if let segment = try self.syntax.parseSegment(segData, binaries: self.binaries) {
+                    self.segments.append(segment);
+                }
+            }
+            catch {
                 if let segmentString = NSString(data: segData, encoding: NSISOLatin1StringEncoding) {
                     logError("Parse error: segment \(segmentString) could not be parsed");
                 } else {
                     logError("Parse error: segment (no conversion possible) could not be parsed");
                 }
-            } else {
-                if let seg = segment {
-                    self.segments.append(seg);
-                }
+                return false;
             }
         }
-        
         return true;
     }
     
@@ -242,6 +242,7 @@ public class HBCIResultMessage {
                 if let version = valueForPath("BPA.version") as? Int {
                     if version > user.parameters.bpdVersion {
                         user.parameters.bpdVersion = version;
+                        user.bankName = seg.elementValueForPath("kiname") as? String;
                         updateParameters = true;
                     }
                 }

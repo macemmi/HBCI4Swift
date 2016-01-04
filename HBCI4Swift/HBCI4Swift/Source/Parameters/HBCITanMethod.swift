@@ -17,6 +17,7 @@ public enum TanProcess:String {
 public class HBCITanMethod {
     public let
     identifier:String!,
+    secfunc:String!,
     inputInfo:String!,
     name:String!,
     format:String!,
@@ -31,7 +32,8 @@ public class HBCITanMethod {
     
     
     init?(element:HBCISyntaxElement, version:Int) {
-        self.identifier = element.elementValueForPath("secfunc") as? String;
+        self.secfunc = element.elementValueForPath("secfunc") as? String;
+        self.identifier = element.elementValueForPath("id") as? String;
         self.inputInfo = element.elementValueForPath("inputinfo") as? String;
         self.name = element.elementValueForPath("name") as? String;
         self.format = element.elementValueForPath("tanformat") as? String;
@@ -48,7 +50,7 @@ public class HBCITanMethod {
         }
         
         
-        if self.identifier == nil || self.inputInfo == nil || self.name == nil || self.format == nil || self.maxTanLength == nil || self.process == nil {
+        if self.identifier == nil || self.secfunc == nil || self.inputInfo == nil || self.name == nil || self.format == nil || self.maxTanLength == nil || self.process == nil {
                 logError("TanMethod \(self.identifier ?? unknown): not all mandatory fields are provided for version \(version)");
                 logError(element.description);
                 return nil;

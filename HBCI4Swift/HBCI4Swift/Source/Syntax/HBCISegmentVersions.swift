@@ -16,19 +16,19 @@ class HBCISegmentVersions {
     var versionNumbers = Array<Int>();
     
     
-    init?(syntax: HBCISyntax, element: NSXMLElement) {
+    init(syntax: HBCISyntax, element: NSXMLElement) throws {
         self.syntaxElement = element;
         self.identifier = element.valueForAttribute("id");
         if self.identifier == nil {
             // error
             logError("Syntax file error: attribute ID is missing for element \(element)");
-            return nil;
+            throw HBCIError.SyntaxFileError;
         }
         self.code = element.valueForAttribute("code");
         if self.code == nil {
             // error
             logError("Syntax file error: attribute CODE is missing for element \(element)");
-            return nil;
+            throw HBCIError.SyntaxFileError;
         }
         
         let all_vers = element.elementsForName("SEGVersion") ;
@@ -36,27 +36,24 @@ class HBCISegmentVersions {
             if let versionString = segv.valueForAttribute("id") {
                 if let version = Int(versionString) {
                     // HBCISegmentDescription
-                    if let segment = HBCISegmentDescription(syntax: syntax, element: segv, code: code, version: version) {
-                        segment.type = identifier;
-                        segment.syntaxElement = segv;
-                        segment.values["SegHead.version"] = version;
-                        segment.values["SegHead.code"] = code;
-                        
-                        versions[version] = segment;
-                        
-                        // next version
-                        continue;
-                    }
+                    let segment = try HBCISegmentDescription(syntax: syntax, element: segv, code: code, version: version);
+                    segment.type = identifier;
+                    segment.syntaxElement = segv;
+                    segment.values["SegHead.version"] = version;
+                    segment.values["SegHead.code"] = code;
+                    
+                    versions[version] = segment;
+                    
+                    // next version
+                    continue;
                 } else {
                     logError("Syntax file error: ID \(versionString) cannot be converted to a number");
-                    return nil;
+                    throw HBCIError.SyntaxFileError;
                 }
             } else {
                 logError("Syntax file error: attribute ID is missing for element \(segv)");
-                return nil;
+                throw HBCIError.SyntaxFileError;
             }
-            // error occured
-            return nil;
         }
 
         // get and sort version codes
@@ -66,7 +63,7 @@ class HBCISegmentVersions {
         } else {
             // error
             logError("Syntax file error: segment \(element) has no versions");
-            return nil;
+            throw HBCIError.SyntaxFileError;
         }
 
         // values
@@ -84,7 +81,7 @@ class HBCISegmentVersions {
             }
             // error occured
             logError("Syntax file error: value element \(elem) could not be parsed");
-            return nil;
+            throw HBCIError.SyntaxFileError;
         }
     }
     

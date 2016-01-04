@@ -12,10 +12,10 @@ class HBCISegmentDescription: HBCISyntaxElementDescription {
     let code:String;
     let version:Int;
     
-    init?(syntax:HBCISyntax, element:NSXMLElement, code:String, version:Int) {
+    init(syntax:HBCISyntax, element:NSXMLElement, code:String, version:Int) throws {
         self.code = code;
         self.version = version;
-        super.init(syntax: syntax, element: element);
+        try super.init(syntax: syntax, element: element);
         self.delimiter = HBCIChar.plus.rawValue;
         self.elementType = ElementType.Segment;
     }

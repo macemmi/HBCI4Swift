@@ -8,6 +8,17 @@
 
 import Foundation
 
+public enum HBCIError : ErrorType {
+    case BadURL(String)
+    case Connection(String)
+    case ServerTimeout(String)
+    case MissingData(String)
+    case SyntaxFileError
+    case ParseError
+    
+}
+
+
 public enum HBCIErrorCode:Int {
     case URLError = 1, SyntaxFileError, ParseError, MessageError, ConnectionError, ConnectionTestError
 }

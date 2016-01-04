@@ -92,6 +92,7 @@ public class HBCISyntaxElement {
         return true;
     }
     
+    /*
     func elementValueForPath(comps:Array<String>) ->AnyObject? {
         let name = comps[0];
         var newComps = comps;
@@ -116,6 +117,7 @@ public class HBCISyntaxElement {
         logError("Child element \(name) in \(self.name) not found");
         return nil;
     }
+    */
     
     func elementValueForPath(path:String) ->AnyObject? {
         let (name, newPath) = firstComponent(path);

@@ -34,19 +34,19 @@ class HBCIDataElementDescription: HBCISyntaxElementDescription {
     let minsize = 0, maxsize = 0;
     var dataType: HBCIDataElementType!
     
-    override init?(syntax: HBCISyntax, element: NSXMLElement) {
-        super.init(syntax: syntax, element: element)
+    override init(syntax: HBCISyntax, element: NSXMLElement) throws {
+        try super.init(syntax: syntax, element: element)
         self.delimiter = HBCIChar.plus.rawValue;
         self.elementType = .DataElement
         
         if let type = self.type {
             if(!setDataType(type)) {
                 logError("Syntax file error: unknown data type \(self.type!)");
-                return nil;
+                throw HBCIError.SyntaxFileError;
             }
         } else {
             logError("Syntax file error: Data Element has no type");
-            return nil;
+            throw HBCIError.SyntaxFileError;
         }
         
         initFormatters()

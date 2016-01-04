@@ -22,27 +22,28 @@ public class HBCIDialog {
     // the callback handler
     public static var callback:HBCICallback?
     
-    public init?(user:HBCIUser) throws {
+    public init(user:HBCIUser) throws {
         
         self.user = user;
         self.hbciVersion = user.hbciVersion;
         
         if user.securityMethod == nil {
             logError("Security method for user not defined");
-            return nil;
+            throw HBCIError.MissingData("SecurityMethod");
         }
 
-        self.syntax = try HBCISyntax.syntaxWithVersion(hbciVersion)
+        self.syntax = try HBCISyntax.syntaxWithVersion(hbciVersion);
         
         if user.securityMethod is HBCISecurityMethodDDV {
-            self.connection = try HBCIConnection(host: user.bankURL);
+            self.connection = try HBCIDDVConnection(host: user.bankURL);
             return;
         } else {
             if let url = NSURL(string:user.bankURL) {
-                self.connection = HBCIConnection(url: url);
+                self.connection = HBCIPinTanConnection(url: url);
                 return;
             } else {
-                throw createError(HBCIErrorCode.URLError, message: "Could not create URL from \(user.bankURL)");
+                logError("Could not create URL from \(user.bankURL)");
+                throw HBCIError.BadURL(user.bankURL);
             }
         }
     }

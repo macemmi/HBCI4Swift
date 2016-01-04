@@ -23,7 +23,7 @@ class HBCISyntaxElementDescription: CustomStringConvertible, CustomDebugStringCo
     var elementType: ElementType = .None;
     var stringValue: String?;
     
-    init?(syntax:HBCISyntax, element:NSXMLElement) {
+    init(syntax:HBCISyntax, element:NSXMLElement) throws {
         self.syntax = syntax;
         self.syntaxElement = element;
         
@@ -40,7 +40,7 @@ class HBCISyntaxElementDescription: CustomStringConvertible, CustomDebugStringCo
                         var child: HBCISyntaxElementDescription?
                         
                         if childElem.name == "DE" {
-                            child = HBCIDataElementDescription(syntax: self.syntax, element: childElem);
+                            child = try HBCIDataElementDescription(syntax: self.syntax, element: childElem);
                         } else {
                             // structured element
                             if let type = childElem.valueForAttribute("type") {
@@ -54,18 +54,16 @@ class HBCISyntaxElementDescription: CustomStringConvertible, CustomDebugStringCo
                                         child = versions.latestVersion();
                                     }
                                 }
+                                
+                                if child == nil {
+                                    // no reference found
+                                    logError("Type \(type) not found in syntax");
+                                    throw HBCIError.SyntaxFileError;
+                                }
                             }
                         }
-                        if child == nil {
-                            // error
-                            return nil;
-                        }
-                        if let ref = HBCISyntaxElementReference(element: childElem, description: child!) {
-                            self.children.append(ref);
-                        } else {
-                            // error
-                            return nil;
-                        }
+                        let ref = try HBCISyntaxElementReference(element: childElem, description: child!);
+                        self.children.append(ref);
                     } else if childElem.name == "valids" {
                         // handle valids
                         parseValidsForElement(childElem);
@@ -79,7 +77,7 @@ class HBCISyntaxElementDescription: CustomStringConvertible, CustomDebugStringCo
                     } else {
                         // invalid
                         logError("Syntax file error: invalid child element \(childElem)");
-                        return nil;
+                        throw HBCIError.SyntaxFileError;
                     }
                 }
             }

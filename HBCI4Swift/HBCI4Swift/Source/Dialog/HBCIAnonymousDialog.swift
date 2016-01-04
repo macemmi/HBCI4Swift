@@ -58,7 +58,7 @@ public class HBCIAnonymousDialog {
     }
 
     public func dialogWithURL(url:NSURL, bankCode:String) throws ->HBCIResultMessage? {
-        self.connection = HBCIConnection(url: url);
+        self.connection = HBCIPinTanConnection(url: url);
         
         let values:Dictionary<String,AnyObject> = ["ProcPrep.BPD":"0", "ProcPrep.UPD":"0", "ProcPrep.lang":"0", "ProcPrep.prodName":"Pecunia",
             "ProcPrep.prodVersion":"1.0", "Idn.KIK.country":"280", "Idn.KIK.blz":bankCode ];

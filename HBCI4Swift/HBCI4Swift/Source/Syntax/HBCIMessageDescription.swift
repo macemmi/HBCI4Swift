@@ -11,8 +11,8 @@ import Foundation
 class HBCIMessageDescription: HBCISyntaxElementDescription {
     var defaults:Dictionary<String, AnyObject> = [:];
     
-    override init?(syntax: HBCISyntax, element: NSXMLElement) {
-        super.init(syntax: syntax, element: element);
+    override init(syntax: HBCISyntax, element: NSXMLElement) throws {
+        try super.init(syntax: syntax, element: element);
         self.delimiter = HBCIChar.quote.rawValue;
         self.elementType = ElementType.Message;
         
