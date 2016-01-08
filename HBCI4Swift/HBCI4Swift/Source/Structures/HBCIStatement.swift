@@ -61,7 +61,7 @@ public class HBCIStatement {
     public var valutaBalance:HBCIAccountBalance?
     public var futureValutaBalance:HBCIAccountBalance?
     
-    public var statementItems = Array<HBCIStatementItem>();
+    public var items = Array<HBCIStatementItem>();
     
     init() {}
 }

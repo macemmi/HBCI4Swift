@@ -440,7 +440,7 @@ class HBCIMT94xParser {
                     }
                     tag = tags[idx++];
                 }
-                statement.statementItems.append(item);
+                statement.items.append(item);
             }
             
             // end balance

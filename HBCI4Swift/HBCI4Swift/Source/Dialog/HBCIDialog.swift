@@ -285,16 +285,7 @@ public class HBCIDialog {
         self.dialogId = "0";
         
         if let result = try sendMessage("DialogInit", values: values) {
-            
-            let responses = result.responsesForMessage();
-            var success = true;
-            for response in responses {
-                logInfo("Message from Bank: "+response.description);
-                if Int(response.code) >= 9000 {
-                    success = false;
-                }
-            }
-            if success {
+            if result.isOk() {
                 result.updateParameterForUser(self.user);
                 return result;
             }
@@ -329,17 +320,19 @@ public class HBCIDialog {
         self.dialogId = "0";
         
         if let result = try sendMessage("Synchronize", values: values) {
-            result.updateParameterForUser(self.user);
-            
-            for seg in result.segments {
-                if seg.name == "SyncRes" {
-                    user.sysId = seg.elementValueForPath("sysid") as? String;
-                    if user.sysId == nil {
-                        logError("SysID could not be found");
+            if result.isOk() {
+                result.updateParameterForUser(self.user);
+                
+                for seg in result.segments {
+                    if seg.name == "SyncRes" {
+                        user.sysId = seg.elementValueForPath("sysid") as? String;
+                        if user.sysId == nil {
+                            logError("SysID could not be found");
+                        }
                     }
                 }
+                return result;
             }
-            return result;
         }
         return nil;
     }

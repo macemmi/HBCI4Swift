@@ -12,7 +12,7 @@ public class HBCICustomMessage : HBCIMessage {
     let dialog:HBCIDialog;
     var success = false;
     var tan:String?
-    var orders = Array<HBCIOrder>();
+    public var orders = Array<HBCIOrder>();
     var result:HBCIResultMessage?
     
     init(msg:HBCIMessage, dialog:HBCIDialog) {

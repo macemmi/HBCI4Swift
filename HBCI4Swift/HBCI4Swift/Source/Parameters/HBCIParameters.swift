@@ -312,6 +312,16 @@ public class HBCIParameters {
         return result;
     }
     
+    public var description:String {
+        get {
+            var result = "";
+            for segment in bpSegments {
+                result += segment.description;
+                result += "\n";
+            }
+            return result;
+        }
+    }
     
 
 }
