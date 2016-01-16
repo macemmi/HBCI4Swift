@@ -26,7 +26,7 @@ public class HBCISepaInfoOrder : HBCIOrder {
             // check if order is supported
             if !user.parameters.isOrderSupportedForAccount(self, number: account.number, subNumber: account.subNumber) {
                 logError(self.name + " is not supported for account " + account.number);
-                return false;
+                continue;
             }
             
             if idx == 0 {
@@ -35,7 +35,7 @@ public class HBCISepaInfoOrder : HBCIOrder {
                     values["KTV.subnumber"] = account.subNumber!
                 }
                 if !segment.setElementValues(values) {
-                    logError("Balance Order values could not be set");
+                    logError("Sepa Info Order values could not be set");
                     return false;
                 }
             } else {
@@ -45,7 +45,7 @@ public class HBCISepaInfoOrder : HBCIOrder {
                         values["subnumber"] = account.subNumber!
                     }
                     if !element.setElementValues(values) {
-                        logError("Balance Order values could not be set");
+                        logError("Sepa Info Order values could not be set");
                         return false;
                     }
                 }

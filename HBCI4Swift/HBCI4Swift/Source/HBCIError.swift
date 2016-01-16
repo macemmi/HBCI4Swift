@@ -13,6 +13,7 @@ public enum HBCIError : ErrorType {
     case Connection(String)
     case ServerTimeout(String)
     case MissingData(String)
+    case InvalidHBCIVersion(String)
     case SyntaxFileError
     case ParseError
     

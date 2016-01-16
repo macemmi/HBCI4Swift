@@ -45,13 +45,21 @@ class HBCISyntax {
     init(path: String) throws {
         var xmlDoc: NSXMLDocument?
         let furl = NSURL.fileURLWithPath(path);
-        xmlDoc = try NSXMLDocument(contentsOfURL: furl, options:Int(NSXMLNodePreserveWhitespace|NSXMLNodePreserveCDATA));
-        
-        if xmlDoc == nil {
-            xmlDoc = try NSXMLDocument(contentsOfURL: furl, options: Int(NSXMLDocumentTidyXML));
+        do {
+            xmlDoc = try NSXMLDocument(contentsOfURL: furl, options:Int(NSXMLNodePreserveWhitespace|NSXMLNodePreserveCDATA));
+            
+            if xmlDoc == nil {
+                xmlDoc = try NSXMLDocument(contentsOfURL: furl, options: Int(NSXMLDocumentTidyXML));
+            }
         }
+        catch let err as NSError {
+            logError("HBCI Syntax file error: \(err.localizedDescription)");
+            logError("HBCI syntax file issue at path \(path)");
+            throw HBCIError.SyntaxFileError;
+        }
+
         if xmlDoc == nil {
-            logError("HBCI syntax file not found at path \(path)");
+            logError("HBCI syntax file not found (xmlDoc=nil) at path \(path)");
             throw HBCIError.SyntaxFileError;
         } else {
             document = xmlDoc!;
@@ -199,6 +207,10 @@ class HBCISyntax {
     }
     
     class func syntaxWithVersion(version:String) throws ->HBCISyntax {
+        if !["220", "300"].contains(version) {
+            throw HBCIError.InvalidHBCIVersion(version);
+        }
+        
         if let syntax = syntaxVersions[version] {
             return syntax;
         } else {

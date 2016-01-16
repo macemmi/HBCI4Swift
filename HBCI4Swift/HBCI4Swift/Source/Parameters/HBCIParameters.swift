@@ -60,7 +60,7 @@ public class HBCIParameters {
                 // update PIN/TAN information - take highest version
                 let infos = HBCIPinTanInformation(segment: seg);
                 if infos.version != nil {
-                    if self.pinTanInfos != nil {
+                    if self.pinTanInfos != nil  && self.pinTanInfos!.version != nil {
                         if self.pinTanInfos!.version! > infos.version! {
                             continue;
                         }
