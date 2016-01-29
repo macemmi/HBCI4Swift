@@ -74,10 +74,10 @@ class HBCISepaGenerator_001_003_03 : HBCISepaGenerator, HBCISepaGeneratorCredit 
             parent.addChild(elem);
         }
         
-        validate();
-        
-        print(document.description);
-        
+        if !validate() {
+            logError(document.description);
+            return nil;
+        }
         
         // create data from xml document
         return document.XMLData;

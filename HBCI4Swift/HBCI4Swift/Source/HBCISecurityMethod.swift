@@ -8,12 +8,13 @@
 
 import Foundation
 
-public enum HBCISecurityMethodCode :Int {
-    case PinTan = 0, DDV;
+public enum HBCISecurityMethodCode {
+    case Undefined, PinTan, DDV;
 }
 
 public class HBCISecurityMethod {
     weak var user:HBCIUser!
+    public var code = HBCISecurityMethodCode.Undefined;
     
     func signMessage(msg:HBCIMessage) ->Bool {
         return false;

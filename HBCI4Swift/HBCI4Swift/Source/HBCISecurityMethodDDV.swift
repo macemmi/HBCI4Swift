@@ -20,6 +20,7 @@ public class HBCISecurityMethodDDV : HBCISecurityMethod {
     public init(card:HBCISmartcardDDV) {
         self.card = card;
         super.init();
+        self.code = .DDV;
     }
     
     override func signMessage(msg:HBCIMessage) ->Bool {

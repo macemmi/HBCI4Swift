@@ -12,6 +12,7 @@ public class HBCISecurityMethodPinTan : HBCISecurityMethod {
 
     public override init() {
         super.init();
+        self.code = .PinTan;
     }
 
     override func signMessage(msg:HBCIMessage) ->Bool {

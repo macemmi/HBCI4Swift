@@ -18,7 +18,7 @@ class HBCITanOrder : HBCIOrder {
     
     // results
     var challenge:String?
-    var challenge_hdd_uc:NSData?
+    var challenge_hhd_uc:NSData?
     
     // todo(?)
     
@@ -66,7 +66,7 @@ class HBCITanOrder : HBCIOrder {
             self.orderRef = seg.elementValueForPath("orderref") as? String;
             
             if seg.version > 3 {
-                self.challenge_hdd_uc = seg.elementValueForPath("challenge_hdd_uc") as? NSData;
+                self.challenge_hhd_uc = seg.elementValueForPath("challenge_hhd_uc") as? NSData;
             }
         }
     }

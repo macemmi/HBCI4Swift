@@ -59,7 +59,7 @@ class HBCITanProcess_2 {
                 }
                 
                 // now we need the TAN -> callback
-                let tan = HBCIDialog.callback!.getTan(dialog.user.userId, challenge: tanOrder.challenge, challenge_hdd_uc: tanOrder.challenge_hdd_uc);
+                let tan = try HBCIDialog.callback!.getTan(dialog.user, challenge: tanOrder.challenge, challenge_hdd_uc: tanOrder.challenge_hhd_uc);
                     
                 if let tanMsg = HBCICustomMessage.newInstance(dialog) {
                     if let tanOrder2 = HBCITanOrder(message: tanMsg) {

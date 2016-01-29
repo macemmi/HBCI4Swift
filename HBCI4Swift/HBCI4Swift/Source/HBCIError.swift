@@ -16,6 +16,7 @@ public enum HBCIError : ErrorType {
     case InvalidHBCIVersion(String)
     case SyntaxFileError
     case ParseError
+    case UserAbort
     
 }
 

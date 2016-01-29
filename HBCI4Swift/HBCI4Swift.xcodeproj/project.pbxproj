@@ -46,6 +46,7 @@
 		B16A223F1B7A811D005E84FC /* RIPEMD160.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16A223E1B7A811D005E84FC /* RIPEMD160.swift */; };
 		B16A22401B7A811D005E84FC /* RIPEMD160.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16A223E1B7A811D005E84FC /* RIPEMD160.swift */; };
 		B178C6101C31F1050082E25F /* PCSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B178C60E1C31F0A20082E25F /* PCSC.framework */; };
+		B197CB4A1C53EC8000D3945B /* HBCIFlickerCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B197CB491C53EC8000D3945B /* HBCIFlickerCode.swift */; };
 		B19B35981AF1792A00F20B9A /* HBCI4Swift.h in Headers */ = {isa = PBXBuildFile; fileRef = B19B35971AF1792A00F20B9A /* HBCI4Swift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B19B359E1AF1792B00F20B9A /* HBCI4Swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B19B35921AF1792A00F20B9A /* HBCI4Swift.framework */; };
 		B19B35A51AF1792B00F20B9A /* HBCI4SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B35A41AF1792B00F20B9A /* HBCI4SwiftTests.swift */; };
@@ -203,6 +204,7 @@
 		B15B81C71B5450B5006B6366 /* HBCISecurityMethodDDV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCISecurityMethodDDV.swift; path = Source/HBCISecurityMethodDDV.swift; sourceTree = "<group>"; };
 		B16A223E1B7A811D005E84FC /* RIPEMD160.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RIPEMD160.swift; path = Source/RIPEMD160.swift; sourceTree = "<group>"; };
 		B178C60E1C31F0A20082E25F /* PCSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PCSC.framework; path = System/Library/Frameworks/PCSC.framework; sourceTree = SDKROOT; };
+		B197CB491C53EC8000D3945B /* HBCIFlickerCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCIFlickerCode.swift; path = Source/Security/HBCIFlickerCode.swift; sourceTree = "<group>"; };
 		B19B35921AF1792A00F20B9A /* HBCI4Swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HBCI4Swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B19B35961AF1792A00F20B9A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B19B35971AF1792A00F20B9A /* HBCI4Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HBCI4Swift.h; path = Source/HBCI4Swift.h; sourceTree = "<group>"; };
@@ -329,6 +331,14 @@
 			name = Chipcard;
 			sourceTree = "<group>";
 		};
+		B197CB481C53EC2600D3945B /* Security */ = {
+			isa = PBXGroup;
+			children = (
+				B197CB491C53EC8000D3945B /* HBCIFlickerCode.swift */,
+			);
+			name = Security;
+			sourceTree = "<group>";
+		};
 		B19B35881AF1792A00F20B9A = {
 			isa = PBXGroup;
 			children = (
@@ -356,6 +366,7 @@
 		B19B35941AF1792A00F20B9A /* HBCI4Swift */ = {
 			isa = PBXGroup;
 			children = (
+				B197CB481C53EC2600D3945B /* Security */,
 				B15B72F71B559C83008D2E55 /* Chipcard */,
 				019E075E1B19AE4B0078C268 /* Resources */,
 				B19B35F71AF28B8600F20B9A /* Extensions */,
@@ -817,6 +828,7 @@
 				B19B362F1AF28BF900F20B9A /* HBCIAccount.swift in Sources */,
 				B19B361F1AF28BE500F20B9A /* HBCIPinTanInformation.swift in Sources */,
 				B19B36011AF28BB900F20B9A /* HBCIResultMessage.swift in Sources */,
+				B197CB4A1C53EC8000D3945B /* HBCIFlickerCode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

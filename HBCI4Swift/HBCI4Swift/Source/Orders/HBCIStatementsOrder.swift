@@ -68,7 +68,12 @@ public class HBCIStatementsOrder: HBCIOrder {
             if let booked = seg.elementValueForPath("booked") as? NSData {
                 if let mt94x = NSString(data: booked, encoding: NSISOLatin1StringEncoding) {
                     let parser = HBCIMT94xParser(mt94xString: mt94x);
-                    self.statements = parser.parse();
+                    do {
+                        self.statements = try parser.parse();
+                    }
+                    catch {
+                        // ignore errors here so that we can continue with next account
+                    }
                 }
             }
         }

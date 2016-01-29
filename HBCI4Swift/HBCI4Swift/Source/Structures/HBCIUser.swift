@@ -15,7 +15,7 @@ public class HBCIUser {
     public let userId:String;
     public let customerId:String;
     
-    var securityMethod:HBCISecurityMethod!
+    internal var _securityMethod:HBCISecurityMethod!
     
     public var sysId:String?
     public var tanMethod:String?
@@ -38,6 +38,20 @@ public class HBCIUser {
         
         if method is HBCISecurityMethodDDV {
             self.sysId = "0";
+        }
+    }
+    
+    public var securityMethod:HBCISecurityMethod! {
+        get {
+            return self._securityMethod;
+        }
+        set(method) {
+            self._securityMethod = method;
+            method.user = self;
+            
+            if method is HBCISecurityMethodDDV {
+                self.sysId = "0";
+            }
         }
     }
     
