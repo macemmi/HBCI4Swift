@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum HHDVersion {
+public enum HHDVersion {
     case HHD13, HHD14;
 }
 
@@ -16,7 +16,7 @@ enum HHDEncoding {
     case ASC, BCD;
 }
 
-class HBCIFlickerCode {
+public class HBCIFlickerCode {
     internal static let lc_len_hhd14 = 3;
     internal static let lc_len_hhd13 = 2;
     internal static let bit_encoding = 6;
@@ -64,7 +64,7 @@ class HBCIFlickerCode {
         init(owner:HBCIFlickerCode) {
             self.owner = owner;
         }
-
+        
         /**
          * Parst das DE am Beginn des uebergebenen Strings.
          * @param s der String, dessen Anfang das DE enthaelt.
@@ -73,8 +73,12 @@ class HBCIFlickerCode {
         func parse(s:String) throws ->String {
             
             // nothing to parse
-            if s.lengthOfBytesUsingEncoding(NSISOLatin1StringEncoding) == 0 {
+            if s.characters.count == 0 {
                 return s;
+            }
+            
+            if s.characters.count < 2 {
+                throw HBCIError.ParseError;
             }
             
             // determine LDE (decimal)
@@ -88,11 +92,16 @@ class HBCIFlickerCode {
             
             self.length = lde & 0x3F; // length is Bits 0-5
             
+            // check bounds
+            if index.distanceTo(s.endIndex) < length {
+                throw HBCIError.ParseError;
+            }
+            
             // get element data
             self.data = s.substringWithRange(Range(start: index, end: index.advancedBy(length)));
             
             // return reststring
-            return s.substringFromIndex(index);
+            return s.substringFromIndex(index.advancedBy(length));
         }
         
         func getEncoding() throws -> HHDEncoding {
@@ -160,7 +169,7 @@ class HBCIFlickerCode {
             
             let enc = try getEncoding();
             
-            var len = try renderData().lengthOfBytesUsingEncoding(NSASCIIStringEncoding) / 2;
+            var len = try renderData().characters.count / 2;
             
             // A) BCD -> Muss nichts weiter codiert werden.
             if enc == .BCD {
@@ -199,6 +208,10 @@ class HBCIFlickerCode {
          */
         override func parse(s: String) throws -> String {
             // 1. LDE ermitteln (hex)
+            if s.characters.count < 2 {
+                throw HBCIError.ParseError;
+            }
+            
             var index = s.startIndex.advancedBy(2);
             let lenString = s.substringToIndex(index);
             if let len = Int(lenString, radix: 16) {
@@ -217,17 +230,20 @@ class HBCIFlickerCode {
             owner.version = .HHD13;
             
             // 3. Control-Byte ermitteln, falls vorhanden
-            if (lde & bit_controlbyte) != 0 {
+            if (lde & (1<<bit_controlbyte)) != 0 {
                 owner.version = .HHD14;
                 
                 // Es darf maximal 9 Controlbytes geben
                 for var i = 0; i < 10; i++ {
+                    if index.distanceTo(s.endIndex) < 2 {
+                        throw HBCIError.ParseError;
+                    }
                     // 2 Zeichen, Hex
                     let byteString = s.substringWithRange(Range(start: index, end: index.advancedBy(2)));
                     index = index.advancedBy(2);
                     if let byte = Int(byteString, radix: 16) {
                         controlBytes.append(UInt8(byte));
-                        if (byte & bit_controlbyte) == 0 {
+                        if (byte & (1<<bit_controlbyte)) == 0 {
                             break;
                         }
                     } else {
@@ -237,6 +253,9 @@ class HBCIFlickerCode {
             }
             
             // 4. Startcode ermitteln
+            if index.distanceTo(s.endIndex) < length {
+                throw HBCIError.ParseError;
+            }
             self.data = s.substringWithRange(Range(start: index, end: index.advancedBy(length)));
             return s.substringFromIndex(index.advancedBy(length));
         }
@@ -292,7 +311,13 @@ class HBCIFlickerCode {
             try parse(code, version: .HHD14);
         }
         catch {
-            try parse(code, version: .HHD13);
+            do {
+                try parse(code, version: .HHD13);
+            }
+            catch {
+                logError("Could not parse flicker string " + code);
+                throw HBCIError.ParseError;
+            }
         }
     }
     
@@ -303,7 +328,7 @@ class HBCIFlickerCode {
      * @param code
      * @return
      */
-    func clean(code:String) ->String {
+    func clean(code:String) throws ->String {
         var cleaned = code.stringByReplacingOccurrencesOfString(" ", withString: ""); // Alle Leerzeichen entfernen
         cleaned = cleaned.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()); // Whitespaces entfernen
         
@@ -317,6 +342,9 @@ class HBCIFlickerCode {
             // Dann alles abschneiden bis zum Beginn von "CHLGUC"
             // Wir haben eigentlich nicht nur "CHLGUC" sondern "CHLGUC0026"
             // Wobei die 4 Zahlen sicher variieren koennen. Wir schneiden einfach alles ab.
+            if r1.startIndex.distanceTo(cleaned.endIndex) < 10 {
+                throw HBCIError.ParseError;
+            }
             cleaned = cleaned.substringWithRange(Range(start: r1.startIndex.advancedBy(10), end: r2.startIndex));
 
             // Jetzt vorn noch ne "0" dran haengen, damit LC wieder 3-stellig ist - wie bei HHD 1.4
@@ -328,7 +356,7 @@ class HBCIFlickerCode {
     func parse(code:String, version:HHDVersion) throws {
         reset();
         
-        var cd = clean(code);
+        var cd = try clean(code);
         
         // 1. LC ermitteln. Banales ASCII
         let len = version == .HHD14 ? HBCIFlickerCode.lc_len_hhd14 : HBCIFlickerCode.lc_len_hhd13;
@@ -348,7 +376,7 @@ class HBCIFlickerCode {
         cd = try de2.parse(cd);
         cd = try de3.parse(cd);
         
-        if cd.lengthOfBytesUsingEncoding(NSASCIIStringEncoding) > 0 {
+        if cd.characters.count > 0 {
             rest = cd;
         }
     }
@@ -401,7 +429,7 @@ class HBCIFlickerCode {
             s += try de.renderData();
         }
         
-        var len = s.lengthOfBytesUsingEncoding(NSASCIIStringEncoding);
+        var len = s.characters.count;
         len += 2; // include check sums
         len /= 2; // number of bytes - each byte consists of 2 chars
         let lc = toHex(UInt8(len));
@@ -477,7 +505,7 @@ class HBCIFlickerCode {
         // 130 - 129 = 1
         // 1 -> ist die Luhn-Checksumme.
         luhn = sum - luhn;
-        return toHex(UInt8(luhn));
+        return String(format: "%X", luhn);
     }
     
     func createXORChecksum(s:String) throws ->String {
@@ -511,5 +539,29 @@ func toHex(s:String) ->String {
 
 func toHex(byte:UInt8) ->String {
     return String(format: "%0.2X", byte);
+}
+
+func ==(a:HBCIFlickerCode.Element, b:HBCIFlickerCode.Element) ->Bool {
+    if !(a.data == b.data) { return false; }
+    if a.lde != b.lde { return false; }
+    if let enc1 = a.encoding {
+        if let enc2 = b.encoding {
+            return enc1 == enc2;
+        }
+    } else {
+        return b.encoding == nil;
+    }
+    return false;
+}
+
+public func ==(a:HBCIFlickerCode, b:HBCIFlickerCode) ->Bool {
+    if a.lc != b.lc { return false; }
+    if !(a.startCode == b.startCode) { return false; }
+    if !(a.de1 == b.de1) { return false; }
+    if !(a.de2 == b.de2) { return false; }
+    if !(a.de3 == b.de3) { return false; }
+    let r1 = a.rest ?? "";
+    let r2 = b.rest ?? "";
+    return r1 == r2;
 }
 
