@@ -14,6 +14,42 @@ class HBCITanProcess_2 {
     init(dialog:HBCIDialog) {
         self.dialog = dialog;
     }
+
+    // parse flicker code out of hhduc (preferred) or challenge (if hhduc is not available)
+    func parseFlickerCode(challenge:String?, hhduc:NSData?) ->String? {
+
+        // hhduc has priority. available from HITAN4
+        if let hhduc = hhduc {
+            if let s = String(data: hhduc, encoding: NSASCIIStringEncoding) {
+                let trimmed = s.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet());
+                if trimmed.characters.count > 0 {
+                    do {
+                        let code = try HBCIFlickerCode(code: trimmed);
+                        return try code.render();
+                    }
+                    catch {
+                        logError("Unable to parse flicker code \(trimmed)");
+                        return nil;
+                    }
+                }                
+            }
+        }
+        
+        // check if challenge contains something to parse
+        if let challenge = challenge {
+            let trimmed = challenge.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet());
+            if trimmed.characters.count > 0 {
+                do {
+                    let code = try HBCIFlickerCode(code: trimmed);
+                    return try code.render();
+                }
+                catch {
+                    return nil;
+                }
+            }
+        }
+        return nil;
+    }
     
     func processOrder(order:HBCIOrder) throws ->Bool {
         // create message with order and HKTAN
@@ -24,6 +60,9 @@ class HBCITanProcess_2 {
             
             if let tanOrder = HBCITanOrder(message: msg) {
                 tanOrder.process = "4";
+                
+                var zkaName:String?
+                var flicker:String?
                 
                 // do we need tan medium information?
                 let parameters = dialog.user.parameters;
@@ -36,6 +75,8 @@ class HBCITanProcess_2 {
                             if needMedia == "2" && numMedia > 0 {
                                 tanOrder.tanMediumName = dialog.user.tanMediumName;
                             }
+                            
+                            zkaName = tanMethod.zkaMethodName;
                         }
                     }
                 }
@@ -59,7 +100,18 @@ class HBCITanProcess_2 {
                 }
                 
                 // now we need the TAN -> callback
-                let tan = try HBCIDialog.callback!.getTan(dialog.user, challenge: tanOrder.challenge, challenge_hdd_uc: tanOrder.challenge_hhd_uc);
+                if let zkaName = zkaName {
+                    if zkaName.substringToIndex(3) == "HHD" {
+                        if tanOrder.challenge_hhd_uc == nil {
+                            logWarning("ZKA method name is \(zkaName) but no HHD challenge - we nevertheless go on");
+                            flicker = parseFlickerCode(tanOrder.challenge, hhduc: nil);
+                        }
+                    }
+                }
+                if let hhduc = tanOrder.challenge_hhd_uc {
+                    flicker = parseFlickerCode(tanOrder.challenge, hhduc: hhduc);
+                }
+                let tan = try HBCIDialog.callback!.getTan(dialog.user, challenge: tanOrder.challenge, challenge_hdd_uc: flicker);
                     
                 if let tanMsg = HBCICustomMessage.newInstance(dialog) {
                     if let tanOrder2 = HBCITanOrder(message: tanMsg) {

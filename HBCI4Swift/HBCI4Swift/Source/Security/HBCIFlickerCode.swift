@@ -33,30 +33,16 @@ public class HBCIFlickerCode {
     var rest:String?
     
     class Element {
-        /**
-         * Die tatsaechliche Laenge des DE.
-         * Bereinigt um ggf. vorhandene Control-Bits.
-         */
+        // true length of element
         var length = 0;
         
-        /**
-         * Die Laengen-Angabe des DE im Roh-Format.
-         * Sie kann noch Control-Bits enthalten, sollte daher
-         * also NICHT fuer Laengenberechnungen verwendet werden.
-         * In dem Fall stattdessen <code>length</code> verwenden.
-         */
+        // encoded length (first 5 bits) + control-bits
         var lde = 0;
         
-        /**
-         * Das Encoding der Nutzdaten.
-         * Per Definition ist im Challenge HHDuc dieses Bit noch NICHT gesetzt.
-         * Das Encoding passiert erst beim Rendering.
-         */
+        // data encoding
         var encoding:HHDEncoding?
         
-        /**
-         * Die eigentlichen Nutzdaten des DE.
-         */
+        // element data
         var data:String?
         
         let owner:HBCIFlickerCode;
@@ -65,11 +51,7 @@ public class HBCIFlickerCode {
             self.owner = owner;
         }
         
-        /**
-         * Parst das DE am Beginn des uebergebenen Strings.
-         * @param s der String, dessen Anfang das DE enthaelt.
-         * @return der Reststring.
-         */
+        // try to parse element
         func parse(s:String) throws ->String {
             
             // nothing to parse
@@ -113,12 +95,8 @@ public class HBCIFlickerCode {
                 return enc;
             }
             
-            // Siehe tan_hhd_uc_v14.pdf, letzter Absatz in B.2.3
-            // Bei SEPA-Auftraegen koennen auch Buchstaben in BIC/IBAN vorkommen.
-            // In dem Fall muss auch ASC-codiert werden. Also machen wir BCD nur
-            // noch dann, wenn ausschliesslich Zahlen drin stehen.
-            // Das macht subsembly auch so
-            // http://www.onlinebanking-forum.de/phpBB2/viewtopic.php?p=75602#75602
+            // in SEPA orders there can also be characters (BIC/IBAN). In this case we need to encode in ASCII. So we BCD only
+            // in case there are numbers only
             let regex = try NSRegularExpression(pattern: "[0-9]{1,}", options: NSRegularExpressionOptions.CaseInsensitive);
             let matches = regex.matchesInString(data, options: NSMatchingOptions(), range: NSMakeRange(0, length));
             for match in matches {
@@ -129,11 +107,6 @@ public class HBCIFlickerCode {
             return .ASC;
         }
         
-        /**
-         * Rendert die Nutzdaten fuer die Uebertragung via Flickercode.
-         * @return die codierten Nutzdaten.
-         * Wenn das DE keine Nutzdaten enthaelt, wird "" zurueck gegeben.
-         */
         func renderData() throws ->String {
             guard let data = self.data else {
                 return "";
@@ -150,19 +123,7 @@ public class HBCIFlickerCode {
             return data;
         }
         
-        /**
-         * Rendert die Laengenangabe fuer die Uebertragung via Flickercode.
-         * @return die codierten Nutzdaten.
-         * Wenn das DE keine Nutzdaten enthaelt, wird "" zurueck gegeben.
-         */
         func renderLength() throws ->String {
-            // Keine Daten enthalten. Dann muessen wir auch nichts weiter
-            // beruecksichtigen.
-            // Laut Belegungsrichtlinien TANve1.4  mit Erratum 1-3 final version vom 2010-11-12.pdf
-            // duerfen im "ChallengeHHDuc" eigentlich keine leeren DEs enthalten
-            // sein. Daher geben wir in dem Fall "" zurueck und nicht "00" wie in
-            // tan_hhd_uc_v14.pdf angegeben. Denn mit "00" wollte es mein TAN-Generator nicht
-            // lesen. Kann aber auch sein, dass der einfach nicht HHD 1.4 tauglich ist
             if self.data == nil {
                 return "";
             }
@@ -171,19 +132,18 @@ public class HBCIFlickerCode {
             
             var len = try renderData().characters.count / 2;
             
-            // A) BCD -> Muss nichts weiter codiert werden.
+            // a) BCD -> nothing further to encode
             if enc == .BCD {
                 return String(format: "%0.2X", len);
             }
             
-            // B) ASC -> Encoding-Bit reincodieren
-            // HHD 1.4 -> in das Bit-Feld codieren
+            // b) ASC -> set encoding-bit (HHD 1.4)
             if owner.version == .HHD14 {
                 len = len + (1 << bit_encoding);
                 return String(format: "%0.2X", len);
             }
 
-            // HHD 1.3 -> nur ne 1 im linken Halbbyte schicken
+            // HHD 1.3 -> set 1 in left nibble
             return "1" + String(format: "%0.1X", len);
         }
         
@@ -201,13 +161,8 @@ public class HBCIFlickerCode {
     class StartCode : Element {
         var controlBytes = Array<UInt8>();
         
-        /**
-         * Parst das DE am Beginn des uebergebenen Strings.
-         * @param s der String, dessen Anfang das DE enthaelt.
-         * @return der Reststring.
-         */
         override func parse(s: String) throws -> String {
-            // 1. LDE ermitteln (hex)
+            // get LDE (hex)
             if s.characters.count < 2 {
                 throw HBCIError.ParseError;
             }
@@ -220,25 +175,24 @@ public class HBCIFlickerCode {
                 throw HBCIError.ParseError;
             }
             
-            // 2. tatsaechliche Laenge ermitteln
+            // get real length
             self.length = lde & 0x3F;
             
-            // Encoding gibts hier noch nicht.
-            // Das passiert erst beim Rendern
+            // encoding will be calculated during rendering
             
-            // Wenn kein Control-Byte vorhanden ist, muss es HHD 1.3 sein
+            // if there is no control byte it must be HHD 1.3
             owner.version = .HHD13;
             
-            // 3. Control-Byte ermitteln, falls vorhanden
+            // get control byte if available
             if (lde & (1<<bit_controlbyte)) != 0 {
                 owner.version = .HHD14;
                 
-                // Es darf maximal 9 Controlbytes geben
+                // there can be 9 control bytes at most
                 for var i = 0; i < 10; i++ {
                     if index.distanceTo(s.endIndex) < 2 {
                         throw HBCIError.ParseError;
                     }
-                    // 2 Zeichen, Hex
+                    // 2 characters, Hex
                     let byteString = s.substringWithRange(Range(start: index, end: index.advancedBy(2)));
                     index = index.advancedBy(2);
                     if let byte = Int(byteString, radix: 16) {
@@ -252,7 +206,7 @@ public class HBCIFlickerCode {
                 }
             }
             
-            // 4. Startcode ermitteln
+            // get start code
             if index.distanceTo(s.endIndex) < length {
                 throw HBCIError.ParseError;
             }
@@ -263,17 +217,17 @@ public class HBCIFlickerCode {
         override func renderLength() throws -> String {
             let s = try super.renderLength();
             
-            // HHD 1.3 -> gibt keine Controlbytes
+            // HHD 1.3 -> there are no control bytes
             if owner.version == .HHD13 {
                 return s;
             }
             
-            // HHD 1.4 -> aber keine Controlbytes vorhanden
+            // HHD 1.4 -> but no control bytes
             if controlBytes.count == 0 {
                 return s;
             }
             
-            // Controlbytes reincodieren
+            // encode control bytes
             if var len = Int(s, radix: 16) {
                 if controlBytes.count > 0 {
                     len = len + (1 << bit_controlbyte);
@@ -303,7 +257,7 @@ public class HBCIFlickerCode {
         de3 = Element(owner: self);
     }
     
-    convenience init(code:String) throws {
+    public convenience init(code:String) throws {
         self.init();
 
         // we first try with HHD 1.4
@@ -321,33 +275,25 @@ public class HBCIFlickerCode {
         }
     }
     
-    /**
-     * Entfernt das CHLGUC0026....CHLGTEXT aus dem Code, falls vorhanden.
-     * Das sind HHD 1.3-Codes, die nicht im "Challenge HHDuc" uebertragen
-     * wurden sondern direkt im Challenge-Freitext,
-     * @param code
-     * @return
-     */
+    // remove CHLGUC0026....CHLGTEXT from the code, if present. These are HHD 1.3 codes that are encoded into the challenge
     func clean(code:String) throws ->String {
         var cleaned = code.stringByReplacingOccurrencesOfString(" ", withString: ""); // Alle Leerzeichen entfernen
         cleaned = cleaned.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()); // Whitespaces entfernen
         
-        // Jetzt checken, ob die beiden Tokens enthalten sind
+        // check if challenge contains codes
         if let r1 = cleaned.rangeOfString("CHLGUC"), r2 = cleaned.rangeOfString("CHLGTEXT") {
             if r1.startIndex >= r2.startIndex {
                 return cleaned;
             }
             
-            // Erstmal den 2. Token abschneiden
-            // Dann alles abschneiden bis zum Beginn von "CHLGUC"
-            // Wir haben eigentlich nicht nur "CHLGUC" sondern "CHLGUC0026"
-            // Wobei die 4 Zahlen sicher variieren koennen. Wir schneiden einfach alles ab.
+            // first cut second token
+            // then cut everything up to "CHLGUC"
             if r1.startIndex.distanceTo(cleaned.endIndex) < 10 {
                 throw HBCIError.ParseError;
             }
             cleaned = cleaned.substringWithRange(Range(start: r1.startIndex.advancedBy(10), end: r2.startIndex));
 
-            // Jetzt vorn noch ne "0" dran haengen, damit LC wieder 3-stellig ist - wie bei HHD 1.4
+            // append "0" to make LC 3 digits, just like for HHD 1.4
             return "0" + cleaned;
         }
         return cleaned;
@@ -358,7 +304,7 @@ public class HBCIFlickerCode {
         
         var cd = try clean(code);
         
-        // 1. LC ermitteln. Banales ASCII
+        // get LC - plain ASCII
         let len = version == .HHD14 ? HBCIFlickerCode.lc_len_hhd14 : HBCIFlickerCode.lc_len_hhd13;
         if let lc = Int(cd.substringToIndex(len)) {
             self.lc = lc;
@@ -368,7 +314,7 @@ public class HBCIFlickerCode {
         
         cd = cd.substringFromIndex(len);
         
-        // 2. Startcode/Control-Bytes
+        // get start code / control bytes
         cd = try startCode.parse(cd);
         
         // 3. LDE/DE 1-3
@@ -381,7 +327,7 @@ public class HBCIFlickerCode {
         }
     }
     
-    func render() throws ->String {
+    public func render() throws ->String {
         // 1. get payload
         let s = try createPayload();
         
@@ -404,11 +350,6 @@ public class HBCIFlickerCode {
         self.rest = nil;
     }
     
-    /**
-     * Generiert den Payload neu.
-     * Das ist der komplette Code, jedoch ohne Pruefziffern am Ende.
-     * @return der neu generierte Payload.
-     */
     func createPayload() throws ->String {
         
         // 1. length start code
@@ -442,13 +383,8 @@ public class HBCIFlickerCode {
         return h+l;
     }
     
-    /**
-     * Berechnet die Luhn-Pruefziffer neu.
-     * @return die Pruefziffer im Hex-Format.
-     */
     func createLuhnChecksum() throws ->String {
-        ////////////////////////////////////////////////////////////////////////////
-        // Schritt 1: Payload ermitteln
+        // Step 1: get payload
 
         var s = "";
         
@@ -471,11 +407,7 @@ public class HBCIFlickerCode {
             s += try de3.renderData();
         }
         
-        //
-        ////////////////////////////////////////////////////////////////////////////
-        
-        ////////////////////////////////////////////////////////////////////////////
-        // Schritt 2: Pruefziffer berechnen
+        // step 2: calculate checksum
         var luhn = 0;
         for (index, char) in s.characters.enumerate() {
             if let x = Int(String(char), radix: 16) {
@@ -486,24 +418,15 @@ public class HBCIFlickerCode {
             }
         }
         
-        // Ermittelt, wieviel zu "luhnsum" addiert werden muss, um auf die
-        // naechste Zahl zu kommen, die durch 10 teilbar ist
-        // Beispiel:
-        // luhnsum = 129 modulo 10 -> 9
-        // 10 - 9 = 1
-        // also 129 + 1 = 130
+        // calculates how much we have to add to luhn to come to the next multiple of 10
         let mod = luhn % 10;
         if mod == 0 {
-            return "0"; // Siehe "Schritt 3" in tan_hhd_uc_v14.pdf, Seite 17
+            return "0";
         }
         
         let rest = 10 - mod;
         let sum = luhn + rest;
         
-        // Von dieser Summe ziehen wir die berechnete Summe ab
-        // Beispiel:
-        // 130 - 129 = 1
-        // 1 -> ist die Luhn-Checksumme.
         luhn = sum - luhn;
         return String(format: "%X", luhn);
     }
@@ -523,12 +446,6 @@ public class HBCIFlickerCode {
     
 }
 
-/**
- * Wandelt alle Zeichen des String gemaess des jeweiligen ASCII-Wertes in HEX-Codierung um.
- * Beispiel: Das Zeichen "0" hat den ASCII-Wert "30" in Hexadezimal-Schreibweise.
- * @param s der umzuwandelnde String.
- * @return der codierte String.
- */
 func toHex(s:String) ->String {
     var res = "";
     for scalar in s.unicodeScalars {
