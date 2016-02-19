@@ -8,6 +8,13 @@
 
 import Foundation
 
+public struct HBCISepaCollectiveTransferPar {
+    public var maxNum:Int;
+    public var needsTotal:Bool;
+    public var singleTransferAllowed:Bool;
+}
+
+
 public class HBCISepaCollectiveTransferOrder : HBCIAbstractSepaTransferOrder {
     
     public init?(message: HBCICustomMessage, transfer:HBCISepaTransfer) {
@@ -23,8 +30,19 @@ public class HBCISepaCollectiveTransferOrder : HBCIAbstractSepaTransferOrder {
             logError("SEPA Transfer: date is not allowed");
             return false;
         }
-        
         return super.enqueue();
+    }
+
+    public class func getParameters(user:HBCIUser) ->HBCISepaCollectiveTransferPar? {
+        if let seg = user.parameters.parametersForJob("SepaCollectiveTransfer") {
+            if let elem = seg.elementForPath("ParSepaCollectiveTransfer") {
+                let maxNum = elem.elementValueForPath("maxnum") as! Int;
+                let needsTotal = elem.elementValueForPath("maxnum") as! Bool;
+                let sta = elem.elementValueForPath("cansingletransfer") as! Bool;
+                return HBCISepaCollectiveTransferPar(maxNum: maxNum, needsTotal: needsTotal, singleTransferAllowed: sta);
+            }
+        }
+        return nil;
     }
 
 

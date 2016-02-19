@@ -8,6 +8,11 @@
 
 import Foundation
 
+public struct HBCISepaDatedTransferPar {
+    public var minPreDays:Int
+    public var maxPreDays:Int
+}
+
 public class HBCISepaDatedTransferOrder : HBCIAbstractSepaTransferOrder {
 
     public init?(message: HBCICustomMessage, transfer:HBCISepaTransfer) {
@@ -23,8 +28,18 @@ public class HBCISepaDatedTransferOrder : HBCIAbstractSepaTransferOrder {
             logError("SEPA Dated Transfer: date is missing");
             return false;
         }
-        
         return super.enqueue();
+    }
+    
+    public class func getParameters(user:HBCIUser) ->HBCISepaDatedTransferPar? {
+        if let seg = user.parameters.parametersForJob("SepaDatedTransfer") {
+            if let elem = seg.elementForPath("ParSepaDatedTransfer") {
+                let minPreDays = elem.elementValueForPath("minpretime") as! Int;
+                let maxPreDays = elem.elementValueForPath("maxpretime") as! Int;
+                return HBCISepaDatedTransferPar(minPreDays: minPreDays, maxPreDays: maxPreDays);
+            }
+        }
+        return nil;
     }
     
 }

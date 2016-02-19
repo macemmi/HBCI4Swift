@@ -279,6 +279,16 @@ public class HBCIParameters {
         return orderNames;
     }
     
+    func parametersForJob(jobName:String) ->HBCISegment? {
+        let parSegName = jobName + "Par";
+        for seg in bpSegments {
+            if seg.name == parSegName {
+                return seg;
+            }
+        }
+        return nil;
+    }
+    
     func sepaFormats(type:HBCISepaFormatType, orderName:String?) ->[HBCISepaFormat] {
         var result:[HBCISepaFormat] = [];
         for seg in bpSegments {

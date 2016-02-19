@@ -8,6 +8,12 @@
 
 import Foundation
 
+public struct HBCISepaInternalTransferPar {
+    public var purposeCodes:String?
+    public var supportedFormats:Array<String>?
+}
+
+
 public class HBCISepaInternalTransferOrder : HBCIAbstractSepaTransferOrder {
     
     public init?(message: HBCICustomMessage, transfer:HBCISepaTransfer) {
@@ -26,4 +32,17 @@ public class HBCISepaInternalTransferOrder : HBCIAbstractSepaTransferOrder {
         
         return super.enqueue();
     }
+    
+    public class func getParameters(user:HBCIUser) ->HBCISepaInternalTransferPar? {
+        if let seg = user.parameters.parametersForJob("SepaInternalTransfer") {
+            if let elem = seg.elementForPath("ParSepaInternalTransfer") {
+                var result = HBCISepaInternalTransferPar();
+                result.purposeCodes = elem.elementValueForPath("PurposeCodes") as? String;
+                result.supportedFormats = elem.elementValuesForPath("suppformats") as? Array<String>;
+                return result;
+            }
+        }
+        return nil;
+    }
+
 }

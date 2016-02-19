@@ -8,6 +8,16 @@
 
 import Foundation
 
+public struct HBCISepaStandingOrderNewPar {
+    var maxUsage:Int;
+    var minPreDays:Int;
+    var maxPreDays:Int;
+    var cycleMonths:String;
+    var daysPerMonth:String;
+    var cycleWeeks:String?
+    var daysPerWeek:String?
+}
+
 public class HBCISepaStandingOrderNewOrder : HBCIOrder {
     var standingOrder:HBCIStandingOrder;
     
@@ -68,6 +78,21 @@ public class HBCISepaStandingOrderNewOrder : HBCIOrder {
         }
     }
 
+    public class func getParameters(user:HBCIUser) ->HBCISepaStandingOrderNewPar? {
+        if let seg = user.parameters.parametersForJob("SepaStandingOrderNew") {
+            if let elem = seg.elementForPath("ParSepaStandingOrderNew") {
+                let maxUsage = elem.elementValueForPath("maxusage") as! Int;
+                let minPreDays = elem.elementValueForPath("minpretime") as! Int;
+                let maxPreDays = elem.elementValueForPath("maxpretime") as! Int;
+                let cm = elem.elementValueForPath("turnusmonths") as! String;
+                let dpm = elem.elementValueForPath("dayspermonth") as! String;
+                let cw = elem.elementValueForPath("turnusweeks") as? String;
+                let dpw = elem.elementValueForPath("daysperweek") as? String;
+                return HBCISepaStandingOrderNewPar(maxUsage: maxUsage, minPreDays: minPreDays, maxPreDays: maxPreDays, cycleMonths: cm, daysPerMonth: dpm, cycleWeeks: cw, daysPerWeek: dpw);
+            }
+        }
+        return nil;
+    }
 
     
 }
