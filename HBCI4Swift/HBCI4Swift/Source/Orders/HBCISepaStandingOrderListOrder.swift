@@ -9,8 +9,8 @@
 import Foundation
 
 public class HBCISepaStandingOrderListOrder : HBCIOrder {
-    var account:HBCIAccount;
-    var standingOrders = [HBCIStandingOrder]();
+    public let account:HBCIAccount;
+    public var standingOrders = [HBCIStandingOrder]();
     
     public init?(message: HBCICustomMessage, account:HBCIAccount) {
         self.account = account;

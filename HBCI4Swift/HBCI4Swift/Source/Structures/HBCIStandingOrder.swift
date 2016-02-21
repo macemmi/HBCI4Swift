@@ -15,14 +15,14 @@ public enum HBCIStandingOrderCycleUnit : String {
 public class HBCIStandingOrder : HBCISepaTransfer {
     public var startDate: NSDate;
     public var lastDate: NSDate?
-    public var cyle: Int;
+    public var cycle: Int;
     public var executionDay: Int;
     public var cycleUnit: HBCIStandingOrderCycleUnit;
     public var orderId:String?
     
     public init(account: HBCIAccount, startDate: NSDate, cycle: Int, day: Int, cycleUnit:HBCIStandingOrderCycleUnit = .monthly) {
         self.startDate = startDate;
-        self.cyle = cycle;
+        self.cycle = cycle;
         self.executionDay = day;
         self.cycleUnit = cycleUnit;
         super.init(account: account);        

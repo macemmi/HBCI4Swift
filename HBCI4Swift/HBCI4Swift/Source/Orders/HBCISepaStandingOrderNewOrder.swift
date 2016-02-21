@@ -9,13 +9,13 @@
 import Foundation
 
 public struct HBCISepaStandingOrderNewPar {
-    var maxUsage:Int;
-    var minPreDays:Int;
-    var maxPreDays:Int;
-    var cycleMonths:String;
-    var daysPerMonth:String;
-    var cycleWeeks:String?
-    var daysPerWeek:String?
+    public var maxUsage:Int;
+    public var minPreDays:Int;
+    public var maxPreDays:Int;
+    public var cycleMonths:String;
+    public var daysPerMonth:String;
+    public var cycleWeeks:String?
+    public var daysPerWeek:String?
 }
 
 public class HBCISepaStandingOrderNewOrder : HBCIOrder {
@@ -45,7 +45,7 @@ public class HBCISepaStandingOrderNewOrder : HBCIOrder {
             if let data = gen.documentForTransfer(standingOrder) {
                 if let iban = standingOrder.account.iban, bic = standingOrder.account.bic {
                     var values:Dictionary<String,AnyObject> = ["My.iban":iban, "My.bic":bic, "sepapain":data, "sepadescr":gen.sepaFormat.urn, "details.firstdate":standingOrder.startDate,
-                        "details.timeunit":standingOrder.cycleUnit == HBCIStandingOrderCycleUnit.monthly ? "M":"W", "details.turnus":standingOrder.cyle,
+                        "details.timeunit":standingOrder.cycleUnit == HBCIStandingOrderCycleUnit.monthly ? "M":"W", "details.turnus":standingOrder.cycle,
                         "details.execday":standingOrder.executionDay];
                     if let lastDate = standingOrder.lastDate {
                         values["details.lastdate"] = lastDate;

@@ -33,7 +33,7 @@ public class HBCISepaTransfer {
     public var paymentInfoId:String?
     public var date:NSDate?
     
-    var items = Array<HBCISepaTransfer.Item>();
+    public var items = Array<HBCISepaTransfer.Item>();
     
     public init(account:HBCIAccount) {
         self.account = account;
