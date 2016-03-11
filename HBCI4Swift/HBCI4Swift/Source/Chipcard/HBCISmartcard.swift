@@ -16,7 +16,7 @@ typealias DWORD = UInt32
 
 
 public class HBCISmartcard {
-    let readerName:String;
+    public let readerName:String;
     var version:UInt8 = 0;
     var _hCard:SCARDHANDLE?
     var _ioctl_verify:DWORD?
@@ -45,7 +45,6 @@ public class HBCISmartcard {
     
     //let FEATURE_VERIFY_PIN_DIRECT = 0x06 /**< Verify PIN */
 
-    
     public enum ConnectResult {
         case connected, reconnected, no_card, no_context, not_supported, error
     }

@@ -109,6 +109,22 @@ class HBCIMT94xParser {
         }
         return fields;
     }
+
+    
+    func checkSpecialDate(dateString:NSString) ->NSDate? {
+        // special check for February - here banks often send 30. February
+        if dateString.substringWithRange(NSMakeRange(2, 2)) == "02" {
+            let day = dateString.substringWithRange(NSMakeRange(4, 2));
+            if day == "30" || day == "31" {
+                // take first of March and subract 1 day to come to the right day
+                let march = dateString.substringToIndex(2).stringByAppendingString("0301");
+                if let date = HBCIUtils.dateFormatter().dateFromString(march), calendar = NSCalendar(identifier: NSCalendarIdentifierGregorian) {
+                    return calendar.dateByAddingUnit(NSCalendarUnit.Day, value: -1, toDate: date, options: NSCalendarOptions.WrapComponents);
+                }
+            }
+        }
+        return nil;
+    }
     
     func parseTag61ForItem(item:HBCIStatementItem, tagValue:NSString) throws {
         var location = 0;
@@ -116,8 +132,11 @@ class HBCIMT94xParser {
         let valutaDateString = tagValue.substringWithRange(NSRange(location: 0, length: 6));
         item.valutaDate = HBCIUtils.dateFormatter().dateFromString(valutaDateString);
         if item.valutaDate == nil {
-            logError("MT94xParse error: could not determine date from "+valutaDateString);
-            throw HBCIError.ParseError;
+            item.valutaDate = checkSpecialDate(valutaDateString);
+            if item.valutaDate == nil {
+                logError("MT94xParse error: could not determine valuta date from "+valutaDateString);
+                throw HBCIError.ParseError;
+            }
         }
         
         // check if posting date is provided
@@ -157,6 +176,13 @@ class HBCIMT94xParser {
                     postingDateString = valutaDateString.substringToIndex(2)+postingDateString;
                 }
                 item.date = HBCIUtils.dateFormatter().dateFromString(postingDateString as String);
+                if item.date == nil {
+                    item.date = checkSpecialDate(postingDateString);
+                    if item.date == nil {
+                        logError("MT94xParse error: could not determine posting date from "+postingDateString);
+                        throw HBCIError.ParseError;
+                    }
+                }
                 location = 10;
             } else {
                 location = 6;
@@ -483,7 +509,7 @@ class HBCIMT94xParser {
     
     func parse() throws ->Array<HBCIStatement> {
         var statements = Array<HBCIStatement>();
-        let rawStatements = self.mt94xString.componentsSeparatedByString(":20:") ;
+        let rawStatements = self.mt94xString.componentsSeparatedByString(":20:START") ;
         for raw in rawStatements {
             if raw.characters.count > 2 {
                 var trimmed = raw.stringByReplacingOccurrencesOfString("@@", withString: "") as NSString;

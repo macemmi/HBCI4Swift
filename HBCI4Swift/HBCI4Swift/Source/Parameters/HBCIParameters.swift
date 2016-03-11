@@ -228,8 +228,8 @@ public class HBCIParameters {
         return false;
     }
     
-    public func supportedOrdersForAccount(number:String, subNumber:String? = nil) ->Array<String> {
-        var orderNames = Array<String>();
+    public func supportedOrderCodesForAccount(number:String, subNumber:String? = nil) ->Array<String> {
+        var orderCodes = Array<String>();
         var found = false;
         
         for seg in bpSegments {
@@ -263,10 +263,7 @@ public class HBCIParameters {
                             }
                         }
                         
-                        // transfer code to order names
-                        if let segv = syntax.codes[code] {
-                            orderNames.append(segv.identifier);
-                        }
+                        orderCodes.append(code);
                     }
                 }
                 break;
@@ -275,6 +272,20 @@ public class HBCIParameters {
         
         if !found {
             logError("No account information record for account \(number) found");
+        }
+        return orderCodes;
+
+    }
+    
+    public func supportedOrdersForAccount(number:String, subNumber:String? = nil) ->Array<String> {
+        var orderNames = Array<String>();
+        
+        let codes = supportedOrderCodesForAccount(number, subNumber: subNumber);
+        for code in codes {
+            // transfer code to order names
+            if let segv = syntax.codes[code] {
+                orderNames.append(segv.identifier);
+            }
         }
         return orderNames;
     }

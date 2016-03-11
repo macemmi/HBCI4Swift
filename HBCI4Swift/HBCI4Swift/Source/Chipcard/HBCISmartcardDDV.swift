@@ -14,7 +14,7 @@ public class HBCISmartcardDDV : HBCISmartcard {
     var cardID:NSData?
     var cardNumber:NSString?
     
-    enum CardType {
+    public enum CardType {
         case CARDTYPE_UNKNOWN, CARDTYPE_DDV0, CARDTYPE_DDV1, CARDTYPE_RSA
     }
 
@@ -68,7 +68,7 @@ public class HBCISmartcardDDV : HBCISmartcard {
         return nil;
     }
     
-    func getCardType() ->CardType {
+    public func getCardType() ->CardType {
         let files:[[UInt8]] = [
             [ 0xd2,0x76,0x00,0x00,0x25,0x48,0x42,0x01,0x00 ],
             [ 0xd2,0x76,0x00,0x00,0x25,0x48,0x42,0x02,0x00 ],
@@ -98,7 +98,7 @@ public class HBCISmartcardDDV : HBCISmartcard {
         }
     }
     
-    func getCardID() ->Bool {
+    public func getCardID() ->Bool {
         let result = readRecordWithSFI(1, sfi: DDV_EF_ID);
         if let res = result {
             cardID = res;
