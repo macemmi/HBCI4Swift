@@ -115,6 +115,46 @@ public class HBCISmartcardDDV : HBCISmartcard {
         return false;
     }
     
+    public func writeBankData(idx:Int, data:HBCICardBankData) ->Bool {
+        let raw = UnsafeMutablePointer<UInt8>.alloc(88);
+        for var i=0; i<88; i++ {
+            raw[i] = 0x20;
+        }
+        
+        if let name = data.name.dataUsingEncoding(NSISOLatin1StringEncoding) {
+            memcpy(raw, name.bytes, name.length>20 ? 20:name.length);
+        }
+        if let host = data.host.dataUsingEncoding(NSISOLatin1StringEncoding) {
+            memcpy(raw.advancedBy(25), host.bytes, host.length>28 ? 28:host.length);
+        }
+        if let hostAdd = data.hostAdd.dataUsingEncoding(NSISOLatin1StringEncoding) {
+            memcpy(raw.advancedBy(53), hostAdd.bytes, hostAdd.length>2 ? 2:hostAdd.length);
+        }
+        if let country = data.country.dataUsingEncoding(NSISOLatin1StringEncoding) {
+            memcpy(raw.advancedBy(55), country.bytes, country.length>3 ? 3:country.length);
+        }
+        if let userId = data.userId.dataUsingEncoding(NSISOLatin1StringEncoding) {
+            memcpy(raw.advancedBy(58), userId.bytes, userId.length>30 ? 30:userId.length);
+        }
+        if let bankCode = data.bankCode.dataUsingEncoding(NSISOLatin1StringEncoding) {
+            let p = UnsafeMutablePointer<UInt8>(bankCode.bytes);
+            for var i=0; i<4; i++ {
+                var c1 = p[i<<1] - 0x30;
+                let c2 = p[i<<1 + 1] - 0x30;
+                
+                if c1 == 2 && c2 == 0 {
+                    c1 ^= 0x0F;
+                }
+                raw[20+i] = (c1<<4) | c2;
+            }
+        }
+        raw[24] = data.commtype;
+        let recordData = NSData(bytes: raw, length: 88);
+        let success = writeRecordWithSFI(idx, sfi: DDV_EF_BANK, data: recordData);
+        raw.destroy(88);
+        return success;
+    }
+    
     public func getBankData(idx:Int) ->HBCICardBankData? {
         if let result = readRecordWithSFI(idx, sfi: DDV_EF_BANK) {
             var p = UnsafeMutablePointer<UInt8>(result.bytes);
@@ -166,7 +206,9 @@ public class HBCISmartcardDDV : HBCISmartcard {
                 return nil;
             }
             
-            return HBCICardBankData(name: trim(name), bankCode: trim(bankCode), country: trim(country), host: trim(host), hostAdd: trim(hostAdd), userId: trim(userId));
+            let ct = UnsafeMutablePointer<UInt8>(result.bytes)[24];
+            
+            return HBCICardBankData(name: trim(name), bankCode: trim(bankCode), country: trim(country), host: trim(host), hostAdd: trim(hostAdd), userId: trim(userId), commtype: ct);
         }
         return nil;
     }

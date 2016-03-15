@@ -442,8 +442,8 @@ class HBCIMT94xParser {
         
         // statement items
         if idx >= tags.count {
-            logError(missingTagsString);
-            throw HBCIError.ParseError;
+            // in some cases banks send wrong MT94x data. If there are no statements the ending balance can be missing
+            return statement;
         }
         tag = tags[idx++];
         while tag.tag == "61" {
