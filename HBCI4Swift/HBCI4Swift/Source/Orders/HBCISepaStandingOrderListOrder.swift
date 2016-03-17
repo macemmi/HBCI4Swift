@@ -11,6 +11,7 @@ import Foundation
 public class HBCISepaStandingOrderListOrder : HBCIOrder {
     public let account:HBCIAccount;
     public var standingOrders = [HBCIStandingOrder]();
+    public var offset:String?
     
     public init?(message: HBCICustomMessage, account:HBCIAccount) {
         self.account = account;
@@ -30,7 +31,10 @@ public class HBCISepaStandingOrderListOrder : HBCIOrder {
 
         if let gen = HBCISepaGeneratorFactory.creditGenerator(self.user) {
             if let iban = account.iban, bic = account.bic {
-                let values:Dictionary<String,AnyObject> = ["My.iban":iban, "My.bic":bic, "sepadescr":gen.sepaFormat.urn];
+                var values:Dictionary<String,AnyObject> = ["My.iban":iban, "My.bic":bic, "sepadescr":gen.sepaFormat.urn];
+                if let ofs = offset {
+                    values["offset"] = ofs;
+                }
                 if self.segment.setElementValues(values) {
                     // add to dialog
                     msg.addOrder(self);
@@ -52,6 +56,14 @@ public class HBCISepaStandingOrderListOrder : HBCIOrder {
     
     override func updateResult(result:HBCIResultMessage) {
         super.updateResult(result);
+        
+        // check whether result is incomplete
+        self.offset = nil;
+        for response in result.segmentResponses {
+            if response.code == "3040" && response.parameters.count > 0 {
+                self.offset = response.parameters[0];
+            }
+        }
         
         for segment in resultSegments {
             if let urn = segment.elementValueForPath("sepadescr") as? String, pain = segment.elementValueForPath("sepapain") as? NSData {

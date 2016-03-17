@@ -11,6 +11,9 @@ import Foundation
 public class HBCIStatementsOrder: HBCIOrder {
     public let account:HBCIAccount;
     public var statements:Array<HBCIStatement>?
+    public var dateFrom:NSDate?
+    public var dateTo:NSDate?
+    public var offset:String?
 
     public init?(message: HBCICustomMessage, account:HBCIAccount) {
         self.account = account;
@@ -49,6 +52,15 @@ public class HBCIStatementsOrder: HBCIOrder {
             if account.subNumber != nil {
                 values["KTV.subnumber"] = account.subNumber!
             }
+            if let date = dateFrom {
+                values["startdate"] = date;
+            }
+            if let date = dateTo {
+                values["enddate"] = date;
+            }
+            if let ofs = offset {
+                values["offset"] = ofs;
+            }
             if !segment.setElementValues(values) {
                 logError("Statements Order values could not be set");
                 return false;
@@ -62,6 +74,14 @@ public class HBCIStatementsOrder: HBCIOrder {
     
     override func updateResult(result: HBCIResultMessage) {
         super.updateResult(result);
+        
+        // check whether result is incomplete
+        self.offset = nil;
+        for response in result.segmentResponses {
+            if response.code == "3040" && response.parameters.count > 0 {
+                self.offset = response.parameters[0];
+            }
+        }
         
         // now parse statements
         if let seg = resultSegments.first {
