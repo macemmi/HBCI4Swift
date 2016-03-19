@@ -13,7 +13,10 @@ public class HBCIStatementsOrder: HBCIOrder {
     public var statements:Array<HBCIStatement>?
     public var dateFrom:NSDate?
     public var dateTo:NSDate?
-    public var offset:String?
+    
+    var offset:String?
+    var mt94xString:NSString?
+    var isPartial = false;
 
     public init?(message: HBCICustomMessage, account:HBCIAccount) {
         self.account = account;
@@ -30,6 +33,8 @@ public class HBCIStatementsOrder: HBCIOrder {
             return false;
         }
         
+        var values = Dictionary<String,AnyObject>();
+        
         // check if SEPA version is supported (only globally for bank -
         // later we check if account supports this as well
         if segment.version >= 7 {
@@ -39,37 +44,54 @@ public class HBCIStatementsOrder: HBCIOrder {
                 return false;
             }
             
-            let values:Dictionary<String,AnyObject> = ["KTV.bic":account.bic!, "KTV.iban":account.iban!, "allaccounts":false];
-            if !segment.setElementValues(values) {
-                logError("Statements order values could not be set");
-                return false;
-            }
-            
-            // add to message
-            msg.addOrder(self);
+            values = ["KTV.bic":account.bic!, "KTV.iban":account.iban!, "allaccounts":false];
         } else {
-            var values:Dictionary<String,AnyObject> = ["KTV.number":account.number, "KTV.KIK.country":"280", "KTV.KIK.blz":account.bankCode, "allaccounts":false];
+            values = ["KTV.number":account.number, "KTV.KIK.country":"280", "KTV.KIK.blz":account.bankCode, "allaccounts":false];
             if account.subNumber != nil {
                 values["KTV.subnumber"] = account.subNumber!
             }
-            if let date = dateFrom {
-                values["startdate"] = date;
-            }
-            if let date = dateTo {
-                values["enddate"] = date;
-            }
-            if let ofs = offset {
-                values["offset"] = ofs;
-            }
-            if !segment.setElementValues(values) {
-                logError("Statements Order values could not be set");
-                return false;
-            }
-            
-            // add to message
-            msg.addOrder(self);
         }
+        
+        if let date = dateFrom {
+            values["startdate"] = date;
+        }
+        if let date = dateTo {
+            values["enddate"] = date;
+        }
+        if let ofs = offset {
+            values["offset"] = ofs;
+        }
+        if !segment.setElementValues(values) {
+            logError("Statements Order values could not be set");
+            return false;
+        }
+        
+        // add to message
+        msg.addOrder(self);
+        
         return true;
+    }
+    
+    func getOutstandingPart(offset:String) ->NSString? {
+        do {
+            if let msg = HBCICustomMessage.newInstance(msg.dialog) {
+                if let order = HBCIStatementsOrder(message: msg, account: self.account) {
+                    order.dateFrom = self.dateFrom;
+                    order.dateTo = self.dateTo;
+                    order.offset = offset;
+                    order.isPartial = true;
+                    order.enqueue();
+                    
+                    try msg.send();
+                    
+                    return order.mt94xString;
+                }
+            }
+        }
+        catch {
+            // we don't do anything in case of errors
+        }
+        return nil;
     }
     
     override func updateResult(result: HBCIResultMessage) {
@@ -86,13 +108,28 @@ public class HBCIStatementsOrder: HBCIOrder {
         // now parse statements
         if let seg = resultSegments.first {
             if let booked = seg.elementValueForPath("booked") as? NSData {
-                if let mt94x = NSString(data: booked, encoding: NSISOLatin1StringEncoding) {
-                    let parser = HBCIMT94xParser(mt94xString: mt94x);
-                    do {
-                        self.statements = try parser.parse();
+                if var mt94x = NSString(data: booked, encoding: NSISOLatin1StringEncoding) {
+                    
+                    // check whether result is incomplete
+                    for response in result.segmentResponses {
+                        if response.code == "3040" && response.parameters.count > 0 {
+                            if let part2 = getOutstandingPart(response.parameters[0]) {
+                                mt94x = mt94x.stringByAppendingFormat(part2);
+                            }
+                        }
                     }
-                    catch {
-                        // ignore errors here so that we can continue with next account
+                    
+                    // check if we are a part or the original order
+                    if isPartial {
+                        self.mt94xString = mt94x;
+                    } else {
+                        let parser = HBCIMT94xParser(mt94xString: mt94x);
+                        do {
+                            self.statements = try parser.parse();
+                        }
+                        catch {
+                            // ignore errors here so that we can continue with next account
+                        }
                     }
                 }
             }
