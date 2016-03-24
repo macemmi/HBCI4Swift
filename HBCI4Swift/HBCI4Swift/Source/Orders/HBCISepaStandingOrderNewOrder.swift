@@ -81,11 +81,31 @@ public class HBCISepaStandingOrderNewOrder : HBCIOrder {
     public class func getParameters(user:HBCIUser) ->HBCISepaStandingOrderNewPar? {
         if let seg = user.parameters.parametersForJob("SepaStandingOrderNew") {
             if let elem = seg.elementForPath("ParSepaStandingOrderNew") {
-                let maxUsage = elem.elementValueForPath("maxusage") as! Int;
-                let minPreDays = elem.elementValueForPath("minpretime") as! Int;
-                let maxPreDays = elem.elementValueForPath("maxpretime") as! Int;
-                let cm = elem.elementValueForPath("turnusmonths") as! String;
-                let dpm = elem.elementValueForPath("dayspermonth") as! String;
+                guard let maxUsage = elem.elementValueForPath("maxusage") as? Int else {
+                    logError("SepaStandingOrderNewParameter: mandatory parameter maxusage missing");
+                    logError(seg.description);
+                    return nil;
+                }
+                guard let minPreDays = elem.elementValueForPath("minpretime") as? Int else {
+                    logError("SepaStandingOrderNewParameter: mandatory parameter minpretime missing");
+                    logError(seg.description);
+                    return nil;
+                }
+                guard let maxPreDays = elem.elementValueForPath("maxpretime") as? Int else {
+                    logError("SepaStandingOrderNewParameter: mandatory parameter maxpretime missing");
+                    logError(seg.description);
+                    return nil;
+                }
+                guard let cm = elem.elementValueForPath("turnusmonths") as? String else {
+                    logError("SepaStandingOrderNewParameter: mandatory parameter turnusmonths missing");
+                    logError(seg.description);
+                    return nil;
+                }
+                guard let dpm = elem.elementValueForPath("dayspermonth") as? String else {
+                    logError("SepaStandingOrderNewParameter: mandatory parameter dayspermonth missing");
+                    logError(seg.description);
+                    return nil;
+                }
                 let cw = elem.elementValueForPath("turnusweeks") as? String;
                 let dpw = elem.elementValueForPath("daysperweek") as? String;
                 return HBCISepaStandingOrderNewPar(maxUsage: maxUsage, minPreDays: minPreDays, maxPreDays: maxPreDays, cycleMonths: cm, daysPerMonth: dpm, cycleWeeks: cw, daysPerWeek: dpw);

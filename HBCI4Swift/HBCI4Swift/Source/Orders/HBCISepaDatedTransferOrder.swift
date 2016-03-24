@@ -34,8 +34,16 @@ public class HBCISepaDatedTransferOrder : HBCIAbstractSepaTransferOrder {
     public class func getParameters(user:HBCIUser) ->HBCISepaDatedTransferPar? {
         if let seg = user.parameters.parametersForJob("SepaDatedTransfer") {
             if let elem = seg.elementForPath("ParSepaDatedTransfer") {
-                let minPreDays = elem.elementValueForPath("minpretime") as! Int;
-                let maxPreDays = elem.elementValueForPath("maxpretime") as! Int;
+                guard let minPreDays = elem.elementValueForPath("minpretime") as? Int else {
+                    logError("SepaDatedTransferParameters: mandatory parameter minpretime missing");
+                    logError(seg.description);
+                    return nil;
+                }
+                guard let maxPreDays = elem.elementValueForPath("maxpretime") as? Int else {
+                    logError("SepaDatedTransferParameters: mandatory parameter maxpretime missing");
+                    logError(seg.description);
+                    return nil;
+                }
                 return HBCISepaDatedTransferPar(minPreDays: minPreDays, maxPreDays: maxPreDays);
             }
         }

@@ -823,6 +823,18 @@
             <DEG type="BTG" name="newvalue" minnum="0"/>
         </DEGdef>
         
+        <DEGdef id="TimeRange">
+            <DE name="startdate" type="Date"/>
+            <DE name="enddate" type="Date"/>
+        </DEGdef>
+        
+        <DEGdef id="ParAccountStatement">
+            <DE name="canindex" type="JN"/>
+            <DE name="needreceipt" type="JN"/>
+            <DE name="canmaxentries" type="JN"/>
+            <DE name="format" type="Code" maxsize="1" maxnum="9"/>
+        </DEGdef>
+        
         <DEGdef id="ParSepaStandingOrderNew">
             <DE name="maxusage" type="Num" maxsize="2"/>
             <DE name="minpretime" type="Num" maxsize="4"/>
@@ -1516,6 +1528,107 @@
                 <DE name="sigid2" type="Num" maxsize="16" minnum="0"/>
             </SEGVersion>
         </SEGdef>
+        
+        <!-- ================== Account Statements  ========================= -->        
+        <SEGdef id="AccountStatement" code="HKEKA">
+            <SEGVersion id="3">
+                <DEG type="SegHead" name="SegHead"/>
+                <DEG type="KTV2" name="KTV"/>
+                <DE name="format" type="Code" maxsize="1" minnum="0"/>
+                <DE name="idx" type="Num" maxsize="5" minnum="0"/>
+                <DE name="year" type="Num" maxsize="4" minnum="0"/>
+                <DE name="maxentries" type="Num" maxsize="4" minnum="0"/>
+                <DE name="offset" type="AN" maxsize="35" minnum="0"/>
+            </SEGVersion>
+            <SEGVersion id="4">
+                <DEG type="SegHead" name="SegHead"/>
+                <DEG type="KTVInt" name="KTV"/>
+                <DE name="format" type="Code" maxsize="1" minnum="0"/>
+                <DE name="idx" type="Num" maxsize="5" minnum="0"/>
+                <DE name="year" type="Num" maxsize="4" minnum="0"/>
+                <DE name="maxentries" type="Num" maxsize="4" minnum="0"/>
+                <DE name="offset" type="AN" maxsize="35" minnum="0"/>
+            </SEGVersion>
+            <SEGVersion id="5">
+                <DEG type="SegHead" name="SegHead"/>
+                <DEG type="KTVInt" name="KTV"/>
+                <DE name="format" type="Code" maxsize="1" minnum="0"/>
+                <DE name="idx" type="Num" maxsize="5" minnum="0"/>
+                <DE name="year" type="Num" maxsize="4" minnum="0"/>
+                <DE name="maxentries" type="Num" maxsize="4" minnum="0"/>
+                <DE name="offset" type="AN" maxsize="35" minnum="0"/>
+            </SEGVersion>
+        </SEGdef>
+        
+        <SEGdef id="AccountStatementRes" code="HIEKA">
+            <SEGVersion id="3">
+                <DEG type="SegHead" name="SegHead"/>
+                <DE name="format" type="Code" maxsize="1"/>
+                <DEG type="TimeRange"/>
+                <DE name="booked" type="Bin" maxsize="0"/>
+                <DE name="closingInfo" type="AN" maxsize="65536" minnum="0"/>
+                <DE name="conditionInfo" type="AN" maxsize="65536" minnum="0"/>
+                <DE name="ads" type="AN" maxsize="65536" minnum="0"/>
+                <DE name="iban" type="AN" maxsize="34" minnum="0"/>
+                <DE name="bic" type="AN" maxsize="11" minnum="0"/>
+                <DE name="name" type="AN" maxsize="35" minnum="0"/>
+                <DE name="name2" type="AN" maxsize="35" minnum="0"/>
+                <DE name="name3" type="AN" maxsize="35" minnum="0"/>
+                <DE name="receipt" type="Bin" maxsize="0" minnum="0"/>
+            </SEGVersion>
+            <SEGVersion id="4">
+                <DEG type="SegHead" name="SegHead"/>
+                <DE name="format" type="Code" maxsize="1"/>
+                <DEG type="TimeRange"/>
+                <DE name="booked" type="Bin" maxsize="0"/>
+                <DE name="closingInfo" type="AN" maxsize="65536" minnum="0"/>
+                <DE name="conditionInfo" type="AN" maxsize="65536" minnum="0"/>
+                <DE name="ads" type="AN" maxsize="65536" minnum="0"/>
+                <DE name="iban" type="AN" maxsize="34" minnum="0"/>
+                <DE name="bic" type="AN" maxsize="11" minnum="0"/>
+                <DE name="name" type="AN" maxsize="35" minnum="0"/>
+                <DE name="name2" type="AN" maxsize="35" minnum="0"/>
+                <DE name="name3" type="AN" maxsize="35" minnum="0"/>
+                <DE name="receipt" type="Bin" maxsize="0" minnum="0"/>
+            </SEGVersion>
+            <SEGVersion id="5">
+                <DEG type="SegHead" name="SegHead"/>
+                <DE name="format" type="Code" maxsize="1"/>
+                <DEG type="TimeRange"/>
+                <DE name="createdOn" type="Date" minnum="0"/>
+                <DE name="year" type="Num" maxsize="4" minnum="0"/>
+                <DE name="idx" type="Num" maxsize="5" minnum="0"/>
+                <DE name="booked" type="Bin" maxsize="0"/>
+                <DE name="closingInfo" type="AN" maxsize="65536" minnum="0"/>
+                <DE name="conditionInfo" type="AN" maxsize="65536" minnum="0"/>
+                <DE name="ads" type="AN" maxsize="65536" minnum="0"/>
+                <DE name="iban" type="AN" maxsize="34" minnum="0"/>
+                <DE name="bic" type="AN" maxsize="11" minnum="0"/>
+                <DE name="name" type="AN" maxsize="35" minnum="0"/>
+                <DE name="name2" type="AN" maxsize="35" minnum="0"/>
+                <DE name="name3" type="AN" maxsize="35" minnum="0"/>
+                <DE name="receipt" type="Bin" maxsize="0" minnum="0"/>
+            </SEGVersion>
+        </SEGdef>
+        
+        <SEGdef id="AccountStatementPar" code="HIEKAS">
+            <SEGVersion id="3">
+                &GVP2;
+                <DEG type="ParAccountStatement"/>
+                &SecClassValids;
+            </SEGVersion>
+            <SEGVersion id="4">
+                &GVP2;
+                <DEG type="ParAccountStatement"/>
+                &SecClassValids;
+            </SEGVersion>
+            <SEGVersion id="5">
+                &GVP2;
+                <DEG type="ParAccountStatement"/>
+                &SecClassValids;
+            </SEGVersion>
+        </SEGdef>
+        
         
         <!-- ================== SEPA Transfer  ========================= -->        
 

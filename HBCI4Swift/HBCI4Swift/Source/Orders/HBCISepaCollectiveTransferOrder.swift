@@ -36,9 +36,21 @@ public class HBCISepaCollectiveTransferOrder : HBCIAbstractSepaTransferOrder {
     public class func getParameters(user:HBCIUser) ->HBCISepaCollectiveTransferPar? {
         if let seg = user.parameters.parametersForJob("SepaCollectiveTransfer") {
             if let elem = seg.elementForPath("ParSepaCollectiveTransfer") {
-                let maxNum = elem.elementValueForPath("maxnum") as! Int;
-                let needsTotal = elem.elementValueForPath("maxnum") as! Bool;
-                let sta = elem.elementValueForPath("cansingletransfer") as! Bool;
+                guard let maxNum = elem.elementValueForPath("maxnum") as? Int else {
+                    logError("SepaCollectiveTransferParameters: mandatory parameter maxnum missing");
+                    logError(seg.description);
+                    return nil;
+                }
+                guard let needsTotal = elem.elementValueForPath("needtotal") as? Bool else {
+                    logError("SepaCollectiveTransferParameters: mandatory parameter needtotal missing");
+                    logError(seg.description);
+                    return nil;
+                }
+                guard let sta = elem.elementValueForPath("cansingletransfer") as? Bool else {
+                    logError("SepaCollectiveTransferParameters: mandatory parameter cansingletransfer missing");
+                    logError(seg.description);
+                    return nil;
+                }
                 return HBCISepaCollectiveTransferPar(maxNum: maxNum, needsTotal: needsTotal, singleTransferAllowed: sta);
             }
         }
