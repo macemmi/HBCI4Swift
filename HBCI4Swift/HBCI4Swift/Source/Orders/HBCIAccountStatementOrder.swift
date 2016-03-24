@@ -51,9 +51,9 @@ public class HBCIAccountStatementOrder: HBCIOrder {
                 return false;
             }
             
-            values = ["KTV.bic":account.bic!, "KTV.iban":account.iban!, "allaccounts":false];
+            values = ["KTV.bic":account.bic!, "KTV.iban":account.iban!];
         } else {
-            values = ["KTV.number":account.number, "KTV.KIK.country":"280", "KTV.KIK.blz":account.bankCode, "allaccounts":false];
+            values = ["KTV.number":account.number, "KTV.KIK.country":"280", "KTV.KIK.blz":account.bankCode];
             if account.subNumber != nil {
                 values["KTV.subnumber"] = account.subNumber!
             }
@@ -103,7 +103,7 @@ public class HBCIAccountStatementOrder: HBCIOrder {
                     logError(seg.description);
                     return nil;
                 }
-                guard let supportsLimit = elem.elementValueForPath("supportsLimit") as? Bool else {
+                guard let supportsLimit = elem.elementValueForPath("canmaxentries") as? Bool else {
                     logError("AccountStatementParameters: mandatory parameter supportsLimit missing");
                     logError(seg.description);
                     return nil;

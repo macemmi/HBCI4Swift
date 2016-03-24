@@ -42,7 +42,7 @@ public class HBCIAccountStatement {
     init?(segment:HBCISegment) {
         self.format = convertAccountStatementFormat(segment.elementValueForPath("format") as? String);
         self.startDate = segment.elementValueForPath("TimeRange.startdate") as? NSDate;
-        self.endDate = segment.elementValueForPath("TimeRange.endDate") as? NSDate;
+        self.endDate = segment.elementValueForPath("TimeRange.enddate") as? NSDate;
         self.booked = segment.elementValueForPath("booked") as? NSData;
         
         if self.format == nil || self.startDate == nil || self.endDate == nil || self.booked == nil {
