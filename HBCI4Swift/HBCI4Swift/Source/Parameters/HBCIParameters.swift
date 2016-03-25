@@ -8,6 +8,8 @@
 
 import Foundation
 
+public typealias HBCISegmentCode = String;
+
 public class HBCIParameters {
     public var bpdVersion = 0, updVersion = 0;
     public var pinTanInfos:HBCIPinTanInformation?
@@ -155,16 +157,64 @@ public class HBCIParameters {
         return versions;
     }
     
-    public func isOrderSupported(order:HBCIOrder) ->Bool {
-        
+    func supportedSegmentVersion(name:String) ->HBCISegmentDescription? {
+        if let segVersions = syntax.segs[name] {
+            // now find the right segment version
+            // check which segment versions are supported by the bank
+            var supportedVersions = Array<Int>();
+            for seg in bpSegments {
+                if seg.name == name+"Par" {
+                    // check if this version is also supported by us
+                    if segVersions.isVersionSupported(seg.version) {
+                        supportedVersions.append(seg.version);
+                    }
+                }
+            }
+            
+            if supportedVersions.count == 0 {
+                // this process is not supported by the bank
+                logError("Process \(name) is not supported");
+                return nil;
+            }
+            // now sort the versions - we take the latest supported version
+            supportedVersions.sortInPlace(>);
+            
+            return segVersions.segmentWithVersion(supportedVersions.first!);
+        }
+        logError("Segment \(name) is not supported by HBCI4Swift");
+        return nil;
+    }
+    
+    public func isSegmentCodeSupported(segmentCode:String, accountNumber:String? = nil, accountSubNumber:String? = nil) ->Bool {
         for seg in bpSegments {
             if seg.name == "KInfo" {
-                // we don't look for accounts just check if the order is supported in general (e.g. to get TAN media)
+                // if account is defined, we check that the account matches
+                if let number = accountNumber {
+                    if let accountNumber = seg.elementValueForPath("KTV.number") as? String {
+                        if accountNumber != number {
+                            continue;
+                        }
+                    } else {
+                        continue;
+                    }
+                    if let subNumber = accountSubNumber {
+                        if let subnumber = seg.elementValueForPath("KTV.subnumber") as? String {
+                            if subNumber != subnumber {
+                                continue;
+                            }
+                        } else {
+                            continue;
+                        }
+                    }
+                }
+                
+                // now we have the right account, or -
+                // if no account is specified we don't look for accounts just check if the order is supported in general (e.g. to get TAN media)
                 let allowed = seg.elementsForPath("AllowedGV");
                 for deg in allowed {
                     if let code = deg.elementValueForPath("code") as? String {
                         
-                        if code != order.segment.code {
+                        if code != segmentCode {
                             continue;
                         }
                         
@@ -183,50 +233,29 @@ public class HBCIParameters {
         return false;
     }
     
-    public func isOrderSupportedForAccount(order:HBCIOrder, number:String, subNumber:String? = nil) ->Bool {
-        
-        for seg in bpSegments {
-            if seg.name == "KInfo" {
-                if let accountNumber = seg.elementValueForPath("KTV.number") as? String {
-                    if accountNumber != number {
-                        continue;
-                    }
-                } else {
-                    continue;
-                }
-                if subNumber != nil {
-                    if let subnumber = seg.elementValueForPath("KTV.subnumber") as? String {
-                        if subNumber != subnumber {
-                            continue;
-                        }
-                    } else {
-                        continue;
-                    }
-                }
-                
-                // now we have the right segment for the requested account
-                let allowed = seg.elementsForPath("AllowedGV");
-                for deg in allowed {
-                    if let code = deg.elementValueForPath("code") as? String {
-                        
-                        if code != order.segment.code {
-                            continue;
-                        }
-                        
-                        // now check if job is supported in pinTanInfos
-                        if let ptInfos = self.pinTanInfos {
-                            if ptInfos.supportedSegs[code] == nil {
-                                // this is not supported via PIN/TAN
-                                return false;
-                            }
-                        }
-                        return true;
-                    }
-                }
-            }
+    public func isOrderSupported(segmentName:String) ->Bool {
+        guard let sd = supportedSegmentVersion(segmentName) else {
+            return false;
         }
-        return false;
+        
+        return isSegmentCodeSupported(sd.code);
     }
+    
+    public func isOrderSupported(order:HBCIOrder) ->Bool {
+        return isSegmentCodeSupported(order.segment.code);
+    }
+    
+    public func isOrderSupportedForAccount(order:HBCIOrder, number:String, subNumber:String? = nil) ->Bool {
+        return isSegmentCodeSupported(order.segment.code, accountNumber: number, accountSubNumber: subNumber);
+    }
+    
+    public func isOrderSupportedForAccount(segmentName:String, number:String, subNumber:String? = nil) ->Bool {
+        guard let sd = supportedSegmentVersion(segmentName) else {
+            return false;
+        }
+        return isSegmentCodeSupported(sd.code, accountNumber: number, accountSubNumber: subNumber);
+    }
+    
     
     public func supportedOrderCodesForAccount(number:String, subNumber:String? = nil) ->Array<String> {
         var orderCodes = Array<String>();
