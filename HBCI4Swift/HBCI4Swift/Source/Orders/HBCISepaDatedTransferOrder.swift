@@ -9,8 +9,8 @@
 import Foundation
 
 public struct HBCISepaDatedTransferPar {
-    public var minPreDays:Int
-    public var maxPreDays:Int
+    public var minPreDays:Int;
+    public var maxPreDays:Int;
 }
 
 public class HBCISepaDatedTransferOrder : HBCIAbstractSepaTransferOrder {
@@ -32,22 +32,20 @@ public class HBCISepaDatedTransferOrder : HBCIAbstractSepaTransferOrder {
     }
     
     public class func getParameters(user:HBCIUser) ->HBCISepaDatedTransferPar? {
-        if let seg = user.parameters.parametersForJob("SepaDatedTransfer") {
-            if let elem = seg.elementForPath("ParSepaDatedTransfer") {
-                guard let minPreDays = elem.elementValueForPath("minpretime") as? Int else {
-                    logError("SepaDatedTransferParameters: mandatory parameter minpretime missing");
-                    logError(seg.description);
-                    return nil;
-                }
-                guard let maxPreDays = elem.elementValueForPath("maxpretime") as? Int else {
-                    logError("SepaDatedTransferParameters: mandatory parameter maxpretime missing");
-                    logError(seg.description);
-                    return nil;
-                }
-                return HBCISepaDatedTransferPar(minPreDays: minPreDays, maxPreDays: maxPreDays);
-            }
+        guard let (elem, seg) = self.getParameterElement(user, orderName: "SepaDatedTransfer") else {
+            return nil;
         }
-        return nil;
+        guard let minPreDays = elem.elementValueForPath("minpretime") as? Int else {
+            logError("SepaDatedTransferParameters: mandatory parameter minpretime missing");
+            logError(seg.description);
+            return nil;
+        }
+        guard let maxPreDays = elem.elementValueForPath("maxpretime") as? Int else {
+            logError("SepaDatedTransferParameters: mandatory parameter maxpretime missing");
+            logError(seg.description);
+            return nil;
+        }
+        return HBCISepaDatedTransferPar(minPreDays: minPreDays, maxPreDays: maxPreDays);
     }
     
 }

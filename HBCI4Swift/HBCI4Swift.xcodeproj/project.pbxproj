@@ -50,6 +50,8 @@
 		B174E89B1CA1E3E0004FD3F0 /* HBCIAccountStatementOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B174E89A1CA1E3E0004FD3F0 /* HBCIAccountStatementOrder.swift */; };
 		B174E89D1CA32336004FD3F0 /* HBCIAccountStatement.swift in Sources */ = {isa = PBXBuildFile; fileRef = B174E89C1CA32336004FD3F0 /* HBCIAccountStatement.swift */; };
 		B174E89E1CA32336004FD3F0 /* HBCIAccountStatement.swift in Sources */ = {isa = PBXBuildFile; fileRef = B174E89C1CA32336004FD3F0 /* HBCIAccountStatement.swift */; };
+		B174E8A41CA88D1F004FD3F0 /* HBCISepaStandingOrderDeleteOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B174E8A31CA88D1F004FD3F0 /* HBCISepaStandingOrderDeleteOrder.swift */; };
+		B174E8A51CA88D1F004FD3F0 /* HBCISepaStandingOrderDeleteOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B174E8A31CA88D1F004FD3F0 /* HBCISepaStandingOrderDeleteOrder.swift */; };
 		B178C6101C31F1050082E25F /* PCSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B178C60E1C31F0A20082E25F /* PCSC.framework */; };
 		B197CB4A1C53EC8000D3945B /* HBCIFlickerCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B197CB491C53EC8000D3945B /* HBCIFlickerCode.swift */; };
 		B197CB4D1C5C169900D3945B /* PCSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B178C60E1C31F0A20082E25F /* PCSC.framework */; };
@@ -213,6 +215,7 @@
 		B16A223E1B7A811D005E84FC /* RIPEMD160.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RIPEMD160.swift; path = Source/RIPEMD160.swift; sourceTree = "<group>"; };
 		B174E89A1CA1E3E0004FD3F0 /* HBCIAccountStatementOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIAccountStatementOrder.swift; sourceTree = "<group>"; };
 		B174E89C1CA32336004FD3F0 /* HBCIAccountStatement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIAccountStatement.swift; sourceTree = "<group>"; };
+		B174E8A31CA88D1F004FD3F0 /* HBCISepaStandingOrderDeleteOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaStandingOrderDeleteOrder.swift; sourceTree = "<group>"; };
 		B178C60E1C31F0A20082E25F /* PCSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PCSC.framework; path = System/Library/Frameworks/PCSC.framework; sourceTree = SDKROOT; };
 		B197CB491C53EC8000D3945B /* HBCIFlickerCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCIFlickerCode.swift; path = Source/Security/HBCIFlickerCode.swift; sourceTree = "<group>"; };
 		B19B35921AF1792A00F20B9A /* HBCI4Swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HBCI4Swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -529,6 +532,7 @@
 				B14184481B07E34E00F9B6FA /* HBCISepaStandingOrderListOrder.swift */,
 				B141845D1B12765000F9B6FA /* HBCISepaCollectiveTransferOrder.swift */,
 				B174E89A1CA1E3E0004FD3F0 /* HBCIAccountStatementOrder.swift */,
+				B174E8A31CA88D1F004FD3F0 /* HBCISepaStandingOrderDeleteOrder.swift */,
 			);
 			name = Orders;
 			path = Source/Orders;
@@ -817,6 +821,7 @@
 				B19B35C51AF28AC500F20B9A /* HBCISyntax.swift in Sources */,
 				B15B81C81B5450B5006B6366 /* HBCISecurityMethodDDV.swift in Sources */,
 				B15B72FB1B559CA6008D2E55 /* HBCISmartcard.swift in Sources */,
+				B174E8A41CA88D1F004FD3F0 /* HBCISepaStandingOrderDeleteOrder.swift in Sources */,
 				B14184551B0FD9A200F9B6FA /* HBCISepaParserFactory.swift in Sources */,
 				B19B36491AF28C1800F20B9A /* HBCITanProcess_2.swift in Sources */,
 				B14184491B07E34E00F9B6FA /* HBCISepaStandingOrderListOrder.swift in Sources */,
@@ -908,6 +913,7 @@
 				B14184381B0634B300F9B6FA /* HBCISepaDatedTransferOrder.swift in Sources */,
 				B19B36401AF28C1800F20B9A /* HBCILog.swift in Sources */,
 				B19B36121AF28BCE00F20B9A /* HBCIBalanceOrder.swift in Sources */,
+				B174E8A51CA88D1F004FD3F0 /* HBCISepaStandingOrderDeleteOrder.swift in Sources */,
 				0165FAA31C5CC76C0076AC81 /* HBCIFlickerTest.swift in Sources */,
 				B19B36061AF28BB900F20B9A /* HBCIResponse.swift in Sources */,
 				B15B72FE1B559CA6008D2E55 /* HBCISmartcardData.swift in Sources */,

@@ -91,36 +91,33 @@ public class HBCIAccountStatementOrder: HBCIOrder {
     }
     
     public class func getParameters(user:HBCIUser) ->HBCIAccountStatementOrderPar? {
-        if let seg = user.parameters.parametersForJob("AccountStatement") {
-            if let elem = seg.elementForPath("ParAccountStatement") {
-                guard let supportsNumber = elem.elementValueForPath("canindex") as? Bool else {
-                    logError("AccountStatementParameters: mandatory parameter canindex missing");
-                    logError(seg.description);
-                    return nil;
+        guard let (elem, seg) = self.getParameterElement(user, orderName: "AccountStatement") else {
+            return nil;
+        }
+        guard let supportsNumber = elem.elementValueForPath("canindex") as? Bool else {
+            logError("AccountStatementParameters: mandatory parameter canindex missing");
+            logError(seg.description);
+            return nil;
+        }
+        guard let needsReceipt = elem.elementValueForPath("needreceipt") as? Bool else {
+            logError("AccountStatementParameters: mandatory parameter needreceipt missing");
+            logError(seg.description);
+            return nil;
+        }
+        guard let supportsLimit = elem.elementValueForPath("canmaxentries") as? Bool else {
+            logError("AccountStatementParameters: mandatory parameter supportsLimit missing");
+            logError(seg.description);
+            return nil;
+        }
+        var formats = Array<HBCIAccountStatementFormat>();
+        if let fm = elem.elementValuesForPath("format") as? [String] {
+            for formatString in fm {
+                if let format = convertAccountStatementFormat(formatString) {
+                    formats.append(format);
                 }
-                guard let needsReceipt = elem.elementValueForPath("needreceipt") as? Bool else {
-                    logError("AccountStatementParameters: mandatory parameter needreceipt missing");
-                    logError(seg.description);
-                    return nil;
-                }
-                guard let supportsLimit = elem.elementValueForPath("canmaxentries") as? Bool else {
-                    logError("AccountStatementParameters: mandatory parameter supportsLimit missing");
-                    logError(seg.description);
-                    return nil;
-                }
-                var formats = Array<HBCIAccountStatementFormat>();
-                if let fm = elem.elementValuesForPath("format") as? [String] {
-                    for formatString in fm {
-                        if let format = convertAccountStatementFormat(formatString) {
-                            formats.append(format);
-                        }
-                    }
-                }
-                return HBCIAccountStatementOrderPar(supportsNumber: supportsNumber, needsReceipt: needsReceipt, supportsLimit: supportsLimit, formats: formats);
-                
             }
         }
-        return nil;
+        return HBCIAccountStatementOrderPar(supportsNumber: supportsNumber, needsReceipt: needsReceipt, supportsLimit: supportsLimit, formats: formats);
     }
 
 

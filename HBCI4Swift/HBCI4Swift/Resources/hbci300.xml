@@ -844,6 +844,13 @@
             <DE name="turnusweeks" type="Dig" maxsize="104" minnum="0"/>
             <DE name="daysperweek" type="Dig" maxsize="7" minnum="0"/>
         </DEGdef>
+        
+        <DEGdef id="ParSepaStandingOrderDelete">
+            <DE name="minpretime" type="Num" maxsize="4"/>
+            <DE name="maxpretime" type="Num" maxsize="4"/>
+            <DE name="cantermdel" type="JN"/>
+            <DE name="orderdata_required" type="JN"/>
+        </DEGdef>
 
         <DEGdef id="ParSepaCollectiveTransfer">
             <DE name="maxnum" type="Num" maxsize="7" />
@@ -1882,8 +1889,28 @@
                 &SecClassValids;
             </SEGVersion>
         </SEGdef>
-                
+        
+        <SEGdef id="SepaStandingOrderDelete" code="HKCDL">
+            <SEGVersion id="1">
+                <DEG type="SegHead" name="SegHead"/>
+                <DEG type="KTVInt" name="My"/>
+                <DE name="sepadescr" type="AN" maxsize="256" minnum="0"/>
+                <DE name="sepapain" type="Bin" maxsize="0" minnum="0"/>
+                <DE name="date" type="Date" minnum="0"/>
+                <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
+                <DEG type="StandingOrderDetails" name="details"/>                
+            </SEGVersion>
+        </SEGdef>
+        
+        <SEGdef id="SepaStandingOrderDeletePar" code="HICDLS">
+            <SEGVersion id="1">
+                &GVP2;
+                <DEG type="ParSepaStandingOrderDelete"/>            
+                &SecClassValids;
+            </SEGVersion>
+        </SEGdef>
 
+        
     </SEGs>
     
     <MSGs>

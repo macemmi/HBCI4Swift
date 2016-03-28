@@ -71,4 +71,16 @@ public class HBCIOrder {
         }
     }
     
+    class func getParameterElement(user:HBCIUser, orderName:String) ->(element:HBCISyntaxElement, segment:HBCISegment)? {
+        guard let seg = user.parameters.parametersForJob(orderName) else {
+            logError("User parameter: parameters for order \(orderName) not found");
+            return nil;
+        }
+        guard let elem = seg.elementForPath("Par"+orderName) else {
+            logError(seg.description);
+            return nil;
+        }
+        return (elem, seg);
+    }
+    
 }

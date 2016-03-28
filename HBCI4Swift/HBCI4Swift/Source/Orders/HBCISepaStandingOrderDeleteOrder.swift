@@ -1,35 +1,37 @@
 //
-//  HBCISepaStandingOrderNewOrder.swift
+//  HBCISepaStandingOrderDeleteOrder.swift
 //  HBCI4Swift
 //
-//  Created by Frank Emminghaus on 16.05.15.
-//  Copyright (c) 2015 Frank Emminghaus. All rights reserved.
+//  Created by Frank Emminghaus on 27.03.16.
+//  Copyright © 2016 Frank Emminghaus. All rights reserved.
 //
 
 import Foundation
 
-public struct HBCISepaStandingOrderNewPar {
-    public var maxUsage:Int;
+public struct HBCISepaStandingOrderDeletePar {
     public var minPreDays:Int;
     public var maxPreDays:Int;
-    public var cycleMonths:String;
-    public var daysPerMonth:String;
-    public var cycleWeeks:String?
-    public var daysPerWeek:String?
+    public var supportsTerminated:Bool;
+    public var requiresOrderData:Bool;
 }
 
-public class HBCISepaStandingOrderNewOrder : HBCIOrder {
+public class HBCISepaStandingOrderDeleteOrder : HBCIOrder {
     var standingOrder:HBCIStandingOrder;
+    var orderId:String?
     
-    public init?(message: HBCICustomMessage, order:HBCIStandingOrder) {
+    
+    public init?(message: HBCICustomMessage, order:HBCIStandingOrder, orderId:String?) {
+        self.orderId = orderId;
         self.standingOrder = order;
-        super.init(name: "SepaStandingOrderNew", message: message);
+        super.init(name: "SepaStandingOrderDelete", message: message);
         if self.segment == nil {
             return nil;
         }
     }
     
     public func enqueue() ->Bool {
+        
+        // todo: validation only needed if transfer data is mandatory
         if !standingOrder.validate() {
             return false;
         }
@@ -69,48 +71,33 @@ public class HBCISepaStandingOrderNewOrder : HBCIOrder {
         }
         return false;
     }
-    
-    override func updateResult(result:HBCIResultMessage) {
-        super.updateResult(result);
-        
-        for segment in resultSegments {
-            standingOrder.orderId = segment.elementValueForPath("orderId") as? String;
-        }
-    }
 
-    public class func getParameters(user:HBCIUser) ->HBCISepaStandingOrderNewPar? {
-        guard let (elem, seg) = self.getParameterElement(user, orderName: "SepaStandingOrderNew") else {
-            return nil;
-        }
-        guard let maxUsage = elem.elementValueForPath("maxusage") as? Int else {
-            logError("SepaStandingOrderNewParameter: mandatory parameter maxusage missing");
-            logError(seg.description);
+    public class func getParameters(user:HBCIUser) ->HBCISepaStandingOrderDeletePar? {
+        guard let (elem, seg) = self.getParameterElement(user, orderName: "SepaStandingOrderDelete") else {
             return nil;
         }
         guard let minPreDays = elem.elementValueForPath("minpretime") as? Int else {
-            logError("SepaStandingOrderNewParameter: mandatory parameter minpretime missing");
+            logError("SepaStandingOrderDeleteParameter: mandatory parameter minpretime missing");
             logError(seg.description);
             return nil;
         }
         guard let maxPreDays = elem.elementValueForPath("maxpretime") as? Int else {
-            logError("SepaStandingOrderNewParameter: mandatory parameter maxpretime missing");
+            logError("SepaStandingOrderDeleteParameter: mandatory parameter maxpretime missing");
             logError(seg.description);
             return nil;
         }
-        guard let cm = elem.elementValueForPath("turnusmonths") as? String else {
-            logError("SepaStandingOrderNewParameter: mandatory parameter turnusmonths missing");
+        guard let supportsTerminated = elem.elementValueForPath("cantermdel") as? Bool else {
+            logError("SepaStandingOrderDeleteParameter: mandatory parameter cantermdel missing");
             logError(seg.description);
             return nil;
         }
-        guard let dpm = elem.elementValueForPath("dayspermonth") as? String else {
-            logError("SepaStandingOrderNewParameter: mandatory parameter dayspermonth missing");
+        guard let requiresOrderData = elem.elementValueForPath("orderdata_required") as? Bool else {
+            logError("SepaStandingOrderDeleteParameter: mandatory parameter orderdata_required missing");
             logError(seg.description);
             return nil;
+            
         }
-        let cw = elem.elementValueForPath("turnusweeks") as? String;
-        let dpw = elem.elementValueForPath("daysperweek") as? String;
-        return HBCISepaStandingOrderNewPar(maxUsage: maxUsage, minPreDays: minPreDays, maxPreDays: maxPreDays, cycleMonths: cm, daysPerMonth: dpm, cycleWeeks: cw, daysPerWeek: dpw);
+        return HBCISepaStandingOrderDeletePar(minPreDays: minPreDays, maxPreDays: maxPreDays, supportsTerminated: supportsTerminated, requiresOrderData: requiresOrderData);
     }
-
     
 }

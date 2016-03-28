@@ -40,7 +40,7 @@ public class HBCIAbstractSepaTransferOrder : HBCIOrder {
                         msg.addOrder(self);
                         return true;
                     } else {
-                        logError("Could not set values for SepaTransfer");
+                        logError("Could not set values for Sepa Transfer");
                     }
                 } else {
                     if transfer.account.iban == nil {
