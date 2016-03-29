@@ -52,6 +52,9 @@ public class HBCISepaStandingOrderDeleteOrder : HBCIOrder {
                     if let lastDate = standingOrder.lastDate {
                         values["details.lastdate"] = lastDate;
                     }
+                    if let id = self.orderId {
+                        values["orderid"] = id;
+                    }
                     if self.segment.setElementValues(values) {
                         // add to dialog
                         msg.addOrder(self);

@@ -173,7 +173,6 @@ public class HBCIParameters {
             
             if supportedVersions.count == 0 {
                 // this process is not supported by the bank
-                logError("Process \(name) is not supported");
                 return nil;
             }
             // now sort the versions - we take the latest supported version

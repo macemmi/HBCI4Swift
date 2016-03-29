@@ -79,7 +79,7 @@ public class HBCISepaStandingOrderListOrder : HBCIOrder {
                             cycleUnit = HBCIStandingOrderCycleUnit(rawValue: unit) {
                                 let stord = HBCIStandingOrder(transfer: transfer, startDate: startDate, cycle: cycle, day: day, cycleUnit: cycleUnit);
                                 stord.lastDate = lastDate;
-                                stord.orderId = segment.elementValueForPath("orderId") as? String;
+                                stord.orderId = segment.elementValueForPath("orderid") as? String;
                                 standingOrders.append(stord);
                         } else {
                             logError("StandingOrder: could not parse data from segment: " + segment.description);

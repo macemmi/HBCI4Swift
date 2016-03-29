@@ -124,10 +124,13 @@ class HBCITanProcess_2 {
                         // now send TAN
                         tanMsg.tan = tan;
                         do {
-                            try tanMsg.sendNoTan()
-                            // now we need to extract the return segment for the original order
-                            order.updateResult(tanMsg.result!);
-                            return true;
+                            if try tanMsg.sendNoTan() {
+                                // now we need to extract the return segment for the original order
+                                order.updateResult(tanMsg.result!);
+                                return true;
+                            } else {
+                                return false;
+                            }
                         } catch {
                             // order could not be sent
                             logError("Error sending second TAN step message");
