@@ -15,7 +15,7 @@ public struct HBCISepaStandingOrderDeletePar {
     public var requiresOrderData:Bool;
 }
 
-public class HBCISepaStandingOrderDeleteOrder : HBCIOrder {
+public class HBCISepaStandingOrderDeleteOrder: HBCIOrder {
     var standingOrder:HBCIStandingOrder;
     var orderId:String?
     

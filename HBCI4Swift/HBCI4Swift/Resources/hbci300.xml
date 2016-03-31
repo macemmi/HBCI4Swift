@@ -851,6 +851,25 @@
             <DE name="cantermdel" type="JN"/>
             <DE name="orderdata_required" type="JN"/>
         </DEGdef>
+        
+        <DEGdef id="ParSepaStandingOrderEdit">
+            <DE name="numtermchanges" type="Num" maxsize="1"/>
+            <DE name="minpretime" type="Num" maxsize="4"/>
+            <DE name="maxpretime" type="Num" maxsize="4"/>
+            <DE name="recktoeditable" type="JN"/>
+            <DE name="recnameeditable" type="JN"/>
+            <DE name="valueeditable" type="JN"/>
+            <DE name="usageeditable" type="JN"/>
+            <DE name="firstexeceditable" type="JN"/>
+            <DE name="timeuniteditable" type="JN"/>
+            <DE name="turnuseditable" type="JN"/>
+            <DE name="execdayeditable" type="JN"/>
+            <DE name="lastexeceditable" type="JN"/>
+            <DE name="turnusmonths" type="Dig" maxsize="24"/>
+            <DE name="dayspermonth" type="Dig" maxsize="64"/>
+            <DE name="turnusweeks" type="Dig" maxsize="104" minnum="0"/>
+            <DE name="daysperweek" type="Dig" maxsize="7" minnum="0"/>
+        </DEGdef>
 
         <DEGdef id="ParSepaCollectiveTransfer">
             <DE name="maxnum" type="Num" maxsize="7" />
@@ -1910,6 +1929,33 @@
             </SEGVersion>
         </SEGdef>
 
+        <SEGdef id="SepaStandingOrderEdit" code="HKCDN">
+            <SEGVersion id="1">
+                <DEG type="SegHead" name="SegHead"/>
+                <DEG type="KTVInt" name="My"/>
+                <DE name="sepadescr" type="AN" maxsize="256"/>
+                <DE name="sepapain" type="Bin" maxsize="0"/>
+                <DE name="date" type="Date" minnum="0"/>
+                <DE name="orderid" type="AN" maxsize="99" minnum="0"/>
+                <DEG type="StandingOrderDetails" name="details"/>                
+            </SEGVersion>
+        </SEGdef>
+      
+        <SEGdef id="SepaStandingOrderEditRes" code="HICDN">
+            <SEGVersion id="1">
+                <DEG type="SegHead" name="SegHead"/>
+                <DE name="orderid" type="AN" maxsize="99"/>
+                <DE name="orderid_old" type="AN" maxsize="99" minnum="0"/>
+            </SEGVersion>
+        </SEGdef>
+  
+        <SEGdef id="SepaStandingOrderEditPar" code="HICDNS">
+            <SEGVersion id="1">
+                &GVP2;
+                <DEG type="ParSepaStandingOrderEdit"/>            
+                &SecClassValids;
+            </SEGVersion>
+        </SEGdef>
         
     </SEGs>
     

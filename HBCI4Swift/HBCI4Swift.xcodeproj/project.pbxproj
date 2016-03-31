@@ -52,6 +52,10 @@
 		B174E89E1CA32336004FD3F0 /* HBCIAccountStatement.swift in Sources */ = {isa = PBXBuildFile; fileRef = B174E89C1CA32336004FD3F0 /* HBCIAccountStatement.swift */; };
 		B174E8A41CA88D1F004FD3F0 /* HBCISepaStandingOrderDeleteOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B174E8A31CA88D1F004FD3F0 /* HBCISepaStandingOrderDeleteOrder.swift */; };
 		B174E8A51CA88D1F004FD3F0 /* HBCISepaStandingOrderDeleteOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B174E8A31CA88D1F004FD3F0 /* HBCISepaStandingOrderDeleteOrder.swift */; };
+		B174E8A81CAB0E34004FD3F0 /* HBCIStandingOrderEditOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B174E8A71CAB0E34004FD3F0 /* HBCIStandingOrderEditOrder.swift */; };
+		B174E8A91CAB0E34004FD3F0 /* HBCIStandingOrderEditOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B174E8A71CAB0E34004FD3F0 /* HBCIStandingOrderEditOrder.swift */; };
+		B174E8AB1CAB0FE8004FD3F0 /* HBCIAbstractStandingOrderOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B174E8AA1CAB0FE8004FD3F0 /* HBCIAbstractStandingOrderOrder.swift */; };
+		B174E8AC1CAB0FE8004FD3F0 /* HBCIAbstractStandingOrderOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B174E8AA1CAB0FE8004FD3F0 /* HBCIAbstractStandingOrderOrder.swift */; };
 		B178C6101C31F1050082E25F /* PCSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B178C60E1C31F0A20082E25F /* PCSC.framework */; };
 		B197CB4A1C53EC8000D3945B /* HBCIFlickerCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B197CB491C53EC8000D3945B /* HBCIFlickerCode.swift */; };
 		B197CB4D1C5C169900D3945B /* PCSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B178C60E1C31F0A20082E25F /* PCSC.framework */; };
@@ -216,6 +220,8 @@
 		B174E89A1CA1E3E0004FD3F0 /* HBCIAccountStatementOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIAccountStatementOrder.swift; sourceTree = "<group>"; };
 		B174E89C1CA32336004FD3F0 /* HBCIAccountStatement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIAccountStatement.swift; sourceTree = "<group>"; };
 		B174E8A31CA88D1F004FD3F0 /* HBCISepaStandingOrderDeleteOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaStandingOrderDeleteOrder.swift; sourceTree = "<group>"; };
+		B174E8A71CAB0E34004FD3F0 /* HBCIStandingOrderEditOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIStandingOrderEditOrder.swift; sourceTree = "<group>"; };
+		B174E8AA1CAB0FE8004FD3F0 /* HBCIAbstractStandingOrderOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIAbstractStandingOrderOrder.swift; sourceTree = "<group>"; };
 		B178C60E1C31F0A20082E25F /* PCSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PCSC.framework; path = System/Library/Frameworks/PCSC.framework; sourceTree = SDKROOT; };
 		B197CB491C53EC8000D3945B /* HBCIFlickerCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCIFlickerCode.swift; path = Source/Security/HBCIFlickerCode.swift; sourceTree = "<group>"; };
 		B19B35921AF1792A00F20B9A /* HBCI4Swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HBCI4Swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -528,11 +534,13 @@
 				B14184361B0634B300F9B6FA /* HBCISepaDatedTransferOrder.swift */,
 				B19B360C1AF28BCE00F20B9A /* HBCITanMediaOrder.swift */,
 				B14184321AF5610000F9B6FA /* HBCISepaInfoOrder.swift */,
+				B174E8AA1CAB0FE8004FD3F0 /* HBCIAbstractStandingOrderOrder.swift */,
 				B14184451B07A0A000F9B6FA /* HBCISepaStandingOrderNewOrder.swift */,
 				B14184481B07E34E00F9B6FA /* HBCISepaStandingOrderListOrder.swift */,
+				B174E8A71CAB0E34004FD3F0 /* HBCIStandingOrderEditOrder.swift */,
+				B174E8A31CA88D1F004FD3F0 /* HBCISepaStandingOrderDeleteOrder.swift */,
 				B141845D1B12765000F9B6FA /* HBCISepaCollectiveTransferOrder.swift */,
 				B174E89A1CA1E3E0004FD3F0 /* HBCIAccountStatementOrder.swift */,
-				B174E8A31CA88D1F004FD3F0 /* HBCISepaStandingOrderDeleteOrder.swift */,
 			);
 			name = Orders;
 			path = Source/Orders;
@@ -800,6 +808,7 @@
 				B19B35EF1AF28B4900F20B9A /* HBCISepaGeneratorCredit.swift in Sources */,
 				B14184431B07281800F9B6FA /* HBCIStandingOrder.swift in Sources */,
 				B19B35E21AF28B1500F20B9A /* HBCIAnonymousDialog.swift in Sources */,
+				B174E8AB1CAB0FE8004FD3F0 /* HBCIAbstractStandingOrderOrder.swift in Sources */,
 				B19B36451AF28C1800F20B9A /* HBCIUtils.swift in Sources */,
 				B174E89B1CA1E3E0004FD3F0 /* HBCIAccountStatementOrder.swift in Sources */,
 				B19B36151AF28BCE00F20B9A /* HBCISepaTransferOrder.swift in Sources */,
@@ -844,6 +853,7 @@
 				B19B35DB1AF28AC500F20B9A /* HBCISegment.swift in Sources */,
 				B19B35DD1AF28AC500F20B9A /* HBCIMessage.swift in Sources */,
 				B19B36171AF28BCE00F20B9A /* HBCITanMediaOrder.swift in Sources */,
+				B174E8A81CAB0E34004FD3F0 /* HBCIStandingOrderEditOrder.swift in Sources */,
 				B155FA221B598CFC00C122E1 /* HBCISecurityMethodPinTan.swift in Sources */,
 				B19B360F1AF28BCE00F20B9A /* HBCIStatementsOrder.swift in Sources */,
 				B14184581B0FDACD00F9B6FA /* HBCISepaParser_001_003_03.swift in Sources */,
@@ -859,6 +869,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B19B36201AF28BE500F20B9A /* HBCIPinTanInformation.swift in Sources */,
+				B174E8AC1CAB0FE8004FD3F0 /* HBCIAbstractStandingOrderOrder.swift in Sources */,
 				B19B35CC1AF28AC500F20B9A /* HBCIDataElementDescription.swift in Sources */,
 				B19B35A51AF1792B00F20B9A /* HBCI4SwiftTests.swift in Sources */,
 				B19B362E1AF28BF900F20B9A /* HBCIStatement.swift in Sources */,
@@ -875,6 +886,7 @@
 				B141845F1B12765000F9B6FA /* HBCISepaCollectiveTransferOrder.swift in Sources */,
 				B19B35DA1AF28AC500F20B9A /* HBCIDataElementGroup.swift in Sources */,
 				B19B36101AF28BCE00F20B9A /* HBCIStatementsOrder.swift in Sources */,
+				B174E8A91CAB0E34004FD3F0 /* HBCIStandingOrderEditOrder.swift in Sources */,
 				B19B36181AF28BCE00F20B9A /* HBCITanMediaOrder.swift in Sources */,
 				B19B35F01AF28B4900F20B9A /* HBCISepaGeneratorCredit.swift in Sources */,
 				B19B36361AF28BF900F20B9A /* HBCITanMedium.swift in Sources */,

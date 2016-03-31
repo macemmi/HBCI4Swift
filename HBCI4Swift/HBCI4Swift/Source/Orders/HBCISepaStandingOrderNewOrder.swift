@@ -74,7 +74,7 @@ public class HBCISepaStandingOrderNewOrder : HBCIOrder {
         super.updateResult(result);
         
         for segment in resultSegments {
-            standingOrder.orderId = segment.elementValueForPath("orderId") as? String;
+            standingOrder.orderId = segment.elementValueForPath("orderid") as? String;
         }
     }
 
