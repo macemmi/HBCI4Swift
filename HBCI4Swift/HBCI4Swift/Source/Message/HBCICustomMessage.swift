@@ -40,7 +40,7 @@ public class HBCICustomMessage : HBCIMessage {
         return nil;
     }
     
-    func addOrder(order:HBCIOrder) {
+    public func addOrder(order:HBCIOrder) {
         if let segment = order.segment {
             orders.append(order);
             self.children.insert(segment, atIndex: 2);

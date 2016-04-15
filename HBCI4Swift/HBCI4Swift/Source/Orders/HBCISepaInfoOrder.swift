@@ -58,7 +58,7 @@ public class HBCISepaInfoOrder : HBCIOrder {
         return true;
     }
     
-    override func updateResult(result:HBCIResultMessage) {
+    override public func updateResult(result:HBCIResultMessage) {
         super.updateResult(result);
         
         if let segment = resultSegments.first {

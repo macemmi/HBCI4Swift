@@ -94,7 +94,7 @@ public class HBCIStatementsOrder: HBCIOrder {
         return nil;
     }
     
-    override func updateResult(result: HBCIResultMessage) {
+    override public func updateResult(result: HBCIResultMessage) {
         super.updateResult(result);
         
         // check whether result is incomplete

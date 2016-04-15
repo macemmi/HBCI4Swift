@@ -70,7 +70,7 @@ public class HBCISepaStandingOrderNewOrder : HBCIOrder {
         return false;
     }
     
-    override func updateResult(result:HBCIResultMessage) {
+    override public func updateResult(result:HBCIResultMessage) {
         super.updateResult(result);
         
         for segment in resultSegments {

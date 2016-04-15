@@ -8,9 +8,9 @@
 
 import Foundation
 
-class HBCIMessageResponse {
-    let code:String;
-    let text:String;
+public class HBCIMessageResponse {
+    public let code:String;
+    public let text:String;
     
     init?(element:HBCISyntaxElement) {
         guard let code = element.elementValueForPath("code") as? String else {
@@ -34,9 +34,9 @@ class HBCIMessageResponse {
     }
 }
 
-class HBCIOrderResponse : HBCIMessageResponse {
-    var reference:Int?
-    var parameters = Array<String>();
+public class HBCIOrderResponse : HBCIMessageResponse {
+    public var reference:Int?
+    public var parameters = Array<String>();
     
     override init?(element: HBCISyntaxElement) {
         super.init(element: element);

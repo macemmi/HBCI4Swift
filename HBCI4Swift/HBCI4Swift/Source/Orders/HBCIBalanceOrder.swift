@@ -67,7 +67,7 @@ public class HBCIBalanceOrder : HBCIOrder {
         return true;
     }
     
-    override func updateResult(result:HBCIResultMessage) {
+    override public func updateResult(result:HBCIResultMessage) {
         super.updateResult(result);
         
         if let retSeg = resultSegments.first {

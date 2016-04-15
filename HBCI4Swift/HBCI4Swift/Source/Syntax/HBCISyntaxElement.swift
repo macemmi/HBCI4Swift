@@ -59,7 +59,7 @@ public class HBCISyntaxElement {
         return true;
     }
     
-    func setElementValue(value:AnyObject, path:String) ->Bool {
+    public func setElementValue(value:AnyObject, path:String) ->Bool {
         let (name, newPath) = firstComponent(path);
         
         for elem in self.children {
@@ -83,7 +83,7 @@ public class HBCISyntaxElement {
         return false;
     }
     
-    func setElementValues(values:Dictionary<String,AnyObject>) ->Bool {
+    public func setElementValues(values:Dictionary<String,AnyObject>) ->Bool {
         for (path, value) in values {
             if !setElementValue(value, path: path) {
                 return false;
@@ -119,7 +119,7 @@ public class HBCISyntaxElement {
     }
     */
     
-    func elementValueForPath(path:String) ->AnyObject? {
+    public func elementValueForPath(path:String) ->AnyObject? {
         let (name, newPath) = firstComponent(path);
         
         for elem in self.children {
@@ -152,7 +152,7 @@ public class HBCISyntaxElement {
         return nil;
     }
     
-    func elementValuesForPath(path:String) ->Array<AnyObject> {
+    public func elementValuesForPath(path:String) ->Array<AnyObject> {
         var result = Array<AnyObject>();
         let (name, newPath) = firstComponent(path);
 
@@ -178,7 +178,7 @@ public class HBCISyntaxElement {
         return result;
     }
     
-    func elementForPath(path:String) ->HBCISyntaxElement? {
+    public func elementForPath(path:String) ->HBCISyntaxElement? {
         let (name, newPath) = firstComponent(path);
         
         for elem in self.children {
@@ -193,7 +193,7 @@ public class HBCISyntaxElement {
         return nil;
     }
     
-    func elementsForPath(path:String) ->Array<HBCISyntaxElement> {
+    public func elementsForPath(path:String) ->Array<HBCISyntaxElement> {
         var result = Array<HBCISyntaxElement>();
         let (name, newPath) = firstComponent(path);
         
@@ -210,7 +210,7 @@ public class HBCISyntaxElement {
     }
 
     
-    func checkValidsForPath(path:String, valids:Array<String>) ->Bool {
+    public func checkValidsForPath(path:String, valids:Array<String>) ->Bool {
         let (name, newPath) = firstComponent(path);
         
         for elem in self.children {
@@ -229,7 +229,7 @@ public class HBCISyntaxElement {
         return true;
     }
     
-    func messageData(data:NSMutableData) {
+    public func messageData(data:NSMutableData) {
         var delim = self.descr.delimiter;
         for idx in 0..<self.children.count {
             let element = self.children[idx];
@@ -255,7 +255,7 @@ public class HBCISyntaxElement {
         }
     }
     
-    func messageString() ->String {
+    public func messageString() ->String {
         let delim = self.descr.delimiter;
         let delimStr = String(Character(UnicodeScalar(Int(delim))));
         var empties = "";

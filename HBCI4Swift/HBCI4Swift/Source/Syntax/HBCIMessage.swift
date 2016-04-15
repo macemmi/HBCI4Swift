@@ -90,7 +90,7 @@ public class HBCIMessage: HBCISyntaxElement {
         return data;
     }
     
-    override func messageString() -> String {
+    override public func messageString() -> String {
         return super.messageString()+"'";
     }
 

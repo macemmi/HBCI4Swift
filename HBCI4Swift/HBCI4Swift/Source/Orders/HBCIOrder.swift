@@ -9,16 +9,16 @@
 import Foundation
 
 public class HBCIOrder {
-    let msg: HBCICustomMessage;
-    let user:HBCIUser;
-    var success = false;
-    var segment:HBCISegment!
-    var needsTan = false;
-    var responses:Array<HBCIOrderResponse>?
-    var resultSegments = Array<HBCISegment>();
-    let name:String;
+    public let user:HBCIUser;
+    public var success = false;
+    public var needsTan = false;
+    public var responses:Array<HBCIOrderResponse>?
+    public let name:String;
+    public let msg: HBCICustomMessage;
+    public var segment:HBCISegment!
+    public var resultSegments = Array<HBCISegment>();
     
-    init?(name:String, message:HBCICustomMessage) {
+    public init?(name:String, message:HBCICustomMessage) {
         self.name = name;
         self.msg = message;
         self.user = msg.dialog.user;
@@ -42,7 +42,7 @@ public class HBCIOrder {
         }
     }
     
-    func updateResult(result:HBCIResultMessage) {
+    public func updateResult(result:HBCIResultMessage) {
         // first get segment number
         if let seg = self.segment {
             if let segNum = seg.elementValueForPath("SegHead.seq") as? Int {
@@ -59,7 +59,7 @@ public class HBCIOrder {
                             logError("Message from Bank: "+response.description);
                             self.success = false;
                         } else {
-                            logError("Message from Bank: "+response.description);
+                            logInfo("Message from Bank: "+response.description);
                         }
                     }
                 }
@@ -71,7 +71,7 @@ public class HBCIOrder {
         }
     }
     
-    class func getParameterElement(user:HBCIUser, orderName:String) ->(element:HBCISyntaxElement, segment:HBCISegment)? {
+    public class func getParameterElement(user:HBCIUser, orderName:String) ->(element:HBCISyntaxElement, segment:HBCISegment)? {
         guard let seg = user.parameters.parametersForJob(orderName) else {
             logError("User parameter: parameters for order \(orderName) not found");
             return nil;

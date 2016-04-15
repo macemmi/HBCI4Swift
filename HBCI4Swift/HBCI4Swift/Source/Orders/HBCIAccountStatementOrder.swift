@@ -80,7 +80,7 @@ public class HBCIAccountStatementOrder: HBCIOrder {
         return true;
     }
 
-    override func updateResult(result:HBCIResultMessage) {
+    override public func updateResult(result:HBCIResultMessage) {
         super.updateResult(result);
         
         for seg in resultSegments {

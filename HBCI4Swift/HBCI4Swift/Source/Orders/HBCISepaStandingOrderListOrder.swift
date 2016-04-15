@@ -54,7 +54,7 @@ public class HBCISepaStandingOrderListOrder : HBCIOrder {
         return true;
     }
     
-    override func updateResult(result:HBCIResultMessage) {
+    override public func updateResult(result:HBCIResultMessage) {
         super.updateResult(result);
         
         // check whether result is incomplete
