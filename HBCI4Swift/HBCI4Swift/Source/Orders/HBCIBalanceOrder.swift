@@ -16,7 +16,7 @@ public class HBCIBalanceOrder : HBCIOrder {
     
     public init?(message: HBCICustomMessage, account:HBCIAccount) {
         self.account = account;
-        super.init(name: "Balance", message: message);
+        super.init(name: "AccountBalance", message: message);
         if self.segment == nil {
             return nil;
         }

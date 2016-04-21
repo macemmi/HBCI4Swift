@@ -621,13 +621,14 @@
         </DEGdef>
 
         
-        <DEGdef id="DG_Balance">  <!-- 3.0 -->
-            <DE name="CreditDebit" type="Code" maxsize="1"/>
-            <DEG type="BTG"/>
+        <DEGdef id="Balance">  <!-- 3.0 -->
+            <DE name="debitcredit" type="Code" maxsize="1"/>
+            <DE name="value" type="Wrt"/>
+            <DE name="curr" type="Cur"/>
             <DE name="date" type="Date"/>
             <DE name="time" type="Time" minnum="0"/>
 
-            <valids path="CreditDebit">
+            <valids path="debitcredit">
                 <validvalue>C</validvalue>
                 <validvalue>D</validvalue>
             </valids>
@@ -1376,7 +1377,7 @@
             </SEGVersion>
         </SEGdef>
         
-        <SEGdef id="Balance" code="HKSAL">
+        <SEGdef id="AccountBalance" code="HKSAL">
             <SEGVersion id="5">
                 <DEG type="SegHead" name="SegHead"/>
                 <DEG type="KTV2" name="KTV"/>
@@ -1400,14 +1401,14 @@
             </SEGVersion>
         </SEGdef>
         
-        <SEGdef id="BalanceRes" code="HISAL">
+        <SEGdef id="AccountBalanceRes" code="HISAL">
             <SEGVersion id="5">
                 <DEG type="SegHead" name="SegHead"/>
                 <DEG type="KTV2" name="KTV"/>
                 <DE name="kontobez" type="AN" maxsize="30"/>
                 <DE name="curr" type="Cur"/>
-                <DEG type="DG_Balance" name="booked"/>
-                <DEG type="DG_Balance" name="pending" minnum="0"/>
+                <DEG type="Balance" name="booked"/>
+                <DEG type="Balance" name="pending" minnum="0"/>
                 <DEG type="BTG" name="kredit" minnum="0"/>
                 <DEG type="BTG" name="available" minnum="0"/>
                 <DEG type="BTG" name="used" minnum="0"/>
@@ -1420,8 +1421,8 @@
                 <DEG type="KTV2" name="KTV"/>
                 <DE name="accountdescription" type="AN" maxsize="30"/>
                 <DE name="curr" type="Cur"/>
-                <DEG type="DG_Balance" name="booked"/>
-                <DEG type="DG_Balance" name="pending" minnum="0"/>
+                <DEG type="Balance" name="booked"/>
+                <DEG type="Balance" name="pending" minnum="0"/>
                 <DEG type="BTG" name="credit" minnum="0"/>
                 <DEG type="BTG" name="available" minnum="0"/>
                 <DEG type="BTG" name="used" minnum="0"/>
@@ -1434,8 +1435,8 @@
                 <DEG type="KTVInt" name="KTV"/>
                 <DE name="accountdescription" type="AN" maxsize="30"/>
                 <DE name="curr" type="Cur"/>
-                <DEG type="DG_Balance" name="booked"/>
-                <DEG type="DG_Balance" name="pending" minnum="0"/>
+                <DEG type="Balance" name="booked"/>
+                <DEG type="Balance" name="pending" minnum="0"/>
                 <DEG type="BTG" name="kredit" minnum="0"/>
                 <DEG type="BTG" name="available" minnum="0"/>
                 <DEG type="BTG" name="used" minnum="0"/>
@@ -1445,7 +1446,7 @@
             </SEGVersion>
         </SEGdef>
         
-        <SEGdef id="BalancePar" code="HISALS">
+        <SEGdef id="AccountBalancePar" code="HISALS">
             <SEGVersion id="5">
                 &GVP;
                 &SecClassValids;                

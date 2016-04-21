@@ -46,7 +46,7 @@ public class HBCIStatementItem {
     public var isCancellation:Bool?
     public var isSEPA:Bool?
     
-    init() {}
+    public init() {}
 }
 
 public class HBCIStatement {
@@ -63,5 +63,5 @@ public class HBCIStatement {
     
     public var items = Array<HBCIStatementItem>();
     
-    init() {}
+    public init() {}
 }

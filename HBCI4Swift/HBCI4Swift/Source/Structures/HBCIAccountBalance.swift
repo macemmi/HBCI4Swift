@@ -13,20 +13,17 @@ public struct HBCIAccountBalance {
     public let postingDate:NSDate;
     public let currency:String;
     
-    init(value:NSDecimalNumber, date:NSDate, currency:String) {
+    public init(value:NSDecimalNumber, date:NSDate, currency:String) {
         self.value = value;
         self.postingDate = date;
         self.currency = currency;
     }
     
-    init?(element: HBCISyntaxElement) {
-        if let cd = element.elementValueForPath("CreditDebit") as? String,
-            value = element.elementValueForPath("BTG.value") as? NSDecimalNumber,
-            curr = element.elementValueForPath("BTG.curr") as? String,
-            date = element.elementValueForPath("date") as? NSDate {
-                self.value = cd == "C" ? value:NSDecimalNumber.zero().decimalNumberBySubtracting(value);
-                self.currency = curr;
-                self.postingDate = date;
+    public init?(element: HBCISyntaxElement) {
+        if let value = HBCIValue(element: element), date = element.elementValueForPath("date") as? NSDate {
+            self.value = value.value;
+            self.currency = value.currency;
+            self.postingDate = date;
         } else {
             logError("Balance could not be extracted");
             logError(element.description);
