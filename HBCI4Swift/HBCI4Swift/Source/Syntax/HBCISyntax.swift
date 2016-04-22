@@ -206,6 +206,22 @@ class HBCISyntax {
         return nil;
     }
     
+    func addExtension(extSyntax:HBCISyntax) {
+        for key in extSyntax.degs.keys {
+            if !degs.keys.contains(key) {
+                degs[key] = extSyntax.degs[key];
+            }
+        }
+        for key in extSyntax.segs.keys {
+            if !segs.keys.contains(key) {
+                if let segv = extSyntax.segs[key] {
+                    segs[key] = segv;
+                    codes[segv.code] = segv;
+                }
+            }
+        }
+    }
+    
     class func syntaxWithVersion(version:String) throws ->HBCISyntax {
         if !["220", "300"].contains(version) {
             throw HBCIError.InvalidHBCIVersion(version);
@@ -217,7 +233,12 @@ class HBCISyntax {
             // load syntax
             var path = NSBundle.mainBundle().bundlePath;
             path = path + "/Contents/Frameworks/HBCI4Swift.framework/Resources/hbci\(version).xml";
-            let syntax = try HBCISyntax(path: path)
+            let syntax = try HBCISyntax(path: path);
+            
+            if let extSyntax = HBCISyntaxExtension.instance.extensions[version] {
+                syntax.addExtension(extSyntax);
+            }
+            
             syntaxVersions[version] = syntax;
             return syntax;
         }
