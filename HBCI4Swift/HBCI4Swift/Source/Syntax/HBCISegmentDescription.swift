@@ -47,7 +47,7 @@ class HBCISegmentDescription: HBCISyntaxElementDescription {
             //  check if optional tail is cut
             if delimiter == HBCIChar.quote.rawValue {
                 if num >= ref.minnum {
-                    refIdx++;
+                    refIdx += 1;
                     continue; // check next
                 } else {
                     // error: non-optional element but end of SEG
@@ -64,7 +64,7 @@ class HBCISegmentDescription: HBCISyntaxElementDescription {
                     return nil;
                 } else {
                     num = 0;
-                    refIdx++;
+                    refIdx += 1;
                     
                     p = p.advancedBy(1); // consume delimiter
                     count += 1;
@@ -88,14 +88,14 @@ class HBCISegmentDescription: HBCISyntaxElementDescription {
                             return nil;
                         } else {
                             num = 0;
-                            refIdx++;
+                            refIdx += 1;
                         }
                     } else {
-                        num++;
+                        num += 1;
                         if num == ref.maxnum {
                             // new object
                             num = 0;
-                            refIdx++;
+                            refIdx += 1;
                         }
                     }
                     

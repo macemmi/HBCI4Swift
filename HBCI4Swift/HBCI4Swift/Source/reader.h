@@ -125,7 +125,7 @@
 /* structures used (but not defined) in PC/SC Part 10:
  * "IFDs with Secure Pin Entry Capabilities" */
 
-#include <inttypes.h>
+//include <inttypes.h>
 
 /* Set structure elements aligment on bytes
  * http://gcc.gnu.org/onlinedocs/gcc/Structure_002dPacking-Pragmas.html */

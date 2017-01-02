@@ -105,7 +105,7 @@ class HBCIDDVConnection : HBCIConnection {
             if tries == 30 {
                 break;
             }
-            tries++;
+            tries += 1;
         }
         if tries == 30 {
             logError("Timeout");

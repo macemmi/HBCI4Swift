@@ -21,7 +21,7 @@ public class HBCICallbackConsole : HBCICallback {
         print("Enter TAN (challenge:\(challenge)): ", terminator: "");
         let stdIn = NSFileHandle.fileHandleWithStandardInput();
         let data = stdIn.availableData.mutableCopy() as! NSMutableData;
-        data.length--;
+        data.length -= 1;
         let input = NSString(data: data, encoding: NSUTF8StringEncoding) as! String;
         return input;
     }

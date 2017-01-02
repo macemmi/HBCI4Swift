@@ -210,7 +210,7 @@ public class HBCISmartcard {
             let count = Int(length) / sizeof(PCSC_TLV_STRUCTURE);
             
             var p = UnsafeMutablePointer<PCSC_TLV_STRUCTURE>(pRecBuffer);
-            for var i = 0; i<count; i++ {
+            for _ in 0 ..< count {
                 switch(p.memory.tag) {
                 case UInt8(FEATURE_VERIFY_PIN_DIRECT): _ioctl_verify = p.memory.value.bigEndian;
                 //case UInt8(FEATURE_IFD_PIN_PROPERTIES): _ioctl_pinprops = p.memory.value.bigEndian;
@@ -296,7 +296,7 @@ public class HBCISmartcard {
                         a.tv_nsec = 500000000;
                         nanosleep(&a, &b);
                     }
-                    n++;
+                    n += 1;
                 } else {
                     break;
                 }

@@ -123,9 +123,10 @@ class HBCIDataElementDescription: HBCISyntaxElementDescription {
             
             if escaped {
                 // advance source but not target pointer
-                sidx++;
+                sidx += 1;
             } else {
-                target[tidx++] = bytes[sidx++];
+                target[tidx] = bytes[sidx];
+                tidx += 1; sidx += 1;
                 escaped = false;
             }
         }
@@ -162,7 +163,7 @@ class HBCIDataElementDescription: HBCISyntaxElementDescription {
                         }
                     case .Binary:
                         if sValue.hasPrefix("@") && sValue.hasSuffix("@") {
-                            let range = Range<String.Index>(start: sValue.startIndex.advancedBy(1), end: sValue.endIndex.advancedBy(-1));
+                            let range = Range<String.Index>(sValue.startIndex.advancedBy(1) ..< sValue.endIndex.advancedBy(-1));
                             let idxString = sValue.substringWithRange(range);
                             if let idx = Int(idxString) {
                                 de.value = binaries[idx];

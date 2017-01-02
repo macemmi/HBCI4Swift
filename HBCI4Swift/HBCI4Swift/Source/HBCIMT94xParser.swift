@@ -58,7 +58,7 @@ class HBCIMT94xParser {
                     tags.append(tag);
                     
                     var tagRange = nextTagRange;
-                    tagRange.location++;
+                    tagRange.location += 1;
                     tagRange.length -= 2;
                     tagString = mtString.substringWithRange(tagRange);
                 } else {
@@ -161,10 +161,10 @@ class HBCIMT94xParser {
                     
                     if var year = Int(valutaDateString.substringToIndex(2)) {
                         if valutaMonth < 4 && postingMonth >= 10 {
-                            year--;
+                            year -= 1;
                         }
                         if valutaMonth >= 10 && postingMonth < 4 {
-                            year++
+                            year += 1
                         }
                         postingDateString = String(format: "%0.2d", year)+postingDateString;
                     } else {
@@ -192,15 +192,15 @@ class HBCIMT94xParser {
             // debit credit
             if tagValue.substringWithRange(NSRange(location: location, length: 1)) == "R" {
                 item.isCancellation = true;
-                location++;
+                location += 1;
             }
             let debitcredit = tagValue.substringWithRange(NSRange(location: location, length: 1));
-            location++;
+            location += 1;
             
             // check for currency kind
             let a = UInt32(tagValue.characterAtIndex(location));
             if a > UnicodeScalar("9").value || a < UnicodeScalar("0").value {
-                location++;
+                location += 1;
             }
             
             range = tagValue.rangeOfString("N", options: NSStringCompareOptions(), range: NSRange(location: location, length: tagValue.length-location));
@@ -376,7 +376,7 @@ class HBCIMT94xParser {
         let statement = HBCIStatement();
 
         let tags = try getTagsFromString(rawStatement);
-        var tag = tags[idx++];
+        var tag = tags[idx]; idx += 1;
         if tag.tag == "20" {
             statement.orderRef = tag.value as String;
         } else {
@@ -388,7 +388,7 @@ class HBCIMT94xParser {
             logError(missingTagsString);
             throw HBCIError.ParseError;
         }
-        tag = tags[idx++];
+        tag = tags[idx]; idx += 1;
         // optional reference
         if tag.tag == "21" {
             statement.statementRef = tag.value as String;
@@ -400,7 +400,7 @@ class HBCIMT94xParser {
                 logError(missingTagsString);
                 throw HBCIError.ParseError;
             }
-            tag = tags[idx++];
+            tag = tags[idx]; idx += 1;
         }
         
         if tag.tag == "25" {
@@ -416,7 +416,7 @@ class HBCIMT94xParser {
             logError(missingTagsString);
             throw HBCIError.ParseError;
         }
-        tag = tags[idx++];
+        tag = tags[idx]; idx += 1;
         if tag.tag == "28C" {
             statement.statementNumber = tag.value as String;
         } else {
@@ -428,7 +428,7 @@ class HBCIMT94xParser {
             logError(missingTagsString);
             throw HBCIError.ParseError;
         }
-        tag = tags[idx++];
+        tag = tags[idx]; idx += 1;
         if tag.tag == "60F" || tag.tag == "60M" {
             statement.startBalance = parseBalance(tag.value);
             if statement.startBalance == nil {
@@ -445,7 +445,7 @@ class HBCIMT94xParser {
             // in some cases banks send wrong MT94x data. If there are no statements the ending balance can be missing
             return statement;
         }
-        tag = tags[idx++];
+        tag = tags[idx]; idx += 1;
         while tag.tag == "61" {
             //items
             let item = HBCIStatementItem();
@@ -461,7 +461,7 @@ class HBCIMT94xParser {
                 logError(missingTagsString);
                 throw HBCIError.ParseError;
             }
-            tag = tags[idx++];
+            tag = tags[idx]; idx += 1;
             if tag.tag == "86" {
                 do {
                     try parseTag86ForItem(item, tagValue: tag.value);
@@ -474,7 +474,7 @@ class HBCIMT94xParser {
                     logError(missingTagsString);
                     throw HBCIError.ParseError;
                 }
-                tag = tags[idx++];
+                tag = tags[idx]; idx += 1;
             }
             statement.items.append(item);
         }

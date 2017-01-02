@@ -90,7 +90,7 @@ class HBCISyntaxElementDescription: CustomStringConvertible, CustomDebugStringCo
     
     func descriptionWithLevel(level: Int) -> String {
         var s:String = "";
-        for var i=0; i<level; i++ {
+        for _ in 0 ..< level {
             s += "\t";
         }
         s += elementDescription();

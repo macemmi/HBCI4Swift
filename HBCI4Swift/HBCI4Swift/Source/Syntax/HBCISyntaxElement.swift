@@ -245,7 +245,7 @@ public class HBCISyntaxElement {
         for _ in 0..<self.children.count {
             let p = UnsafePointer<CChar>(content.advancedBy(size-1));
             if p.memory == delim {
-                size--;
+                size -= 1;
             } else {
                 break;
             }
@@ -292,12 +292,12 @@ public class HBCISyntaxElement {
             
             if ref.elemDescr === childElem.descr {
                 if !childElem.isEmpty {
-                    childCount++;
+                    childCount += 1;
                     if !childElem.validate() {
                         success = false;
                     }
                 }
-                elemIdx++;
+                elemIdx += 1;
             }
             if !(ref.elemDescr === childElem.descr) || elemIdx >= self.children.count {
                 // we have a different element
@@ -310,7 +310,7 @@ public class HBCISyntaxElement {
                 if elemIdx < self.children.count {
                     childCount = 0;
                 }
-                idx++;
+                idx += 1;
             }
         }
         return success;
@@ -349,7 +349,7 @@ public class HBCISyntaxElement {
                     return nil;
                 }
             }
-            idx++;
+            idx += 1;
         }
         return nil;
     }

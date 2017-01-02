@@ -99,14 +99,15 @@ public class HBCIParameters {
         
         while i < data.length {
             //q.memory = p.memory;
-            segContent[segSize++] = p.memory;
+            segContent[segSize] = p.memory;
+            segSize += 1;
             if p.memory == HBCIChar.quote.rawValue && !isEscaped(p) {
                 // now we have a segment in segContent
                 let data = NSData(bytes: segContent, length: segSize);
                 segmentData.append(data);
                 segSize = 0;
             }
-            i++;
+            i += 1;
             p = p.advancedBy(1);
         }
         

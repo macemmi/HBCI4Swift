@@ -104,7 +104,7 @@ class RIPEMD160 {
         var E´ = h4;
         var T:UInt32;
         
-        for var j = 0; j <= 79; j++ {
+        for j in 0...79 {
             T = rol(A &+ f(j, x:B, y:C, z:D) &+ X[r[j]] &+ K[j>>4], n: s[j]) &+ E;
             A = E;
             E = D;
@@ -130,7 +130,7 @@ class RIPEMD160 {
         let blocks = paddedData.length / 64;
         var x = UnsafeMutablePointer<UInt32>(paddedData.bytes);
         
-        for var i = 0; i<blocks; i++ {
+        for _ in 0 ..< blocks {
             hash(x);
             x = x.advancedBy(16);
         }

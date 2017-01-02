@@ -43,7 +43,7 @@ class HBCIDataElementGroupDescription: HBCISyntaxElementDescription {
             //  check if optional tail is cut
             if delimiter == HBCIChar.plus.rawValue || delimiter == HBCIChar.quote.rawValue {
                 if num >= ref.minnum {
-                    refIdx++;
+                    refIdx += 1;
                     continue; // check next
                 } else {
                     // error: non-optional element but end of DEG
@@ -74,7 +74,7 @@ class HBCIDataElementGroupDescription: HBCISyntaxElementDescription {
                         return nil;
                     } else {
                         num = 0;
-                        refIdx++;
+                        refIdx += 1;
                     }
                 } else {
                     // element is not empty
@@ -86,11 +86,11 @@ class HBCIDataElementGroupDescription: HBCISyntaxElementDescription {
                     }
                     deg.children.append(element);
                     
-                    num++;
+                    num += 1;
                     if num == ref.maxnum {
                         // new object
                         num = 0;
-                        refIdx++;
+                        refIdx += 1;
                     }
                 }
                 

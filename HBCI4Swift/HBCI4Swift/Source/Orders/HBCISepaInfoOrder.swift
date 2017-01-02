@@ -50,7 +50,7 @@ public class HBCISepaInfoOrder : HBCIOrder {
                     }
                 }
             }
-            idx++;
+            idx += 1;
         }
         // add to message
         msg.addOrder(self);

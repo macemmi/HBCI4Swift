@@ -102,7 +102,7 @@ public class HBCIDialog {
                     if let dialogId = resultMsg_crypted.valueForPath("MsgHead.dialogid") as? String {
                         self.dialogId = dialogId;
                     }
-                    self.messageNum++;
+                    self.messageNum += 1;
                     if let value = user.securityMethod.decryptMessage(resultMsg_crypted, dialog: self) {
                         if value.checkResponses() {
                             return value

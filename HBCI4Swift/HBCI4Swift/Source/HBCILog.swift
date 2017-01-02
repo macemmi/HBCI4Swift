@@ -9,25 +9,25 @@
 import Foundation
 
 
-func logError(message:String, file:String = __FILE__, function:String = __FUNCTION__, line:Int = __LINE__) {
+func logError(message:String, file:String = #file, function:String = #function, line:Int = #line) {
     if let log = _log {
         log.logError(message, file: file, function: function, line: line);
     }
 }
 
-func logWarning(message:String, file:String = __FILE__, function:String = __FUNCTION__, line:Int = __LINE__) {
+func logWarning(message:String, file:String = #file, function:String = #function, line:Int = #line) {
     if let log = _log {
         log.logWarning(message, file: file, function: function, line: line);
     }
 }
 
-func logInfo(message:String, file:String = __FILE__, function:String = __FUNCTION__, line:Int = __LINE__) {
+func logInfo(message:String, file:String = #file, function:String = #function, line:Int = #line) {
     if let log = _log {
         log.logError(message, file: file, function: function, line: line);
     }
 }
 
-func logDebug(message:String, file:String = __FILE__, function:String = __FUNCTION__, line:Int = __LINE__, values:Int...) {
+func logDebug(message:String, file:String = #file, function:String = #function, line:Int = #line, values:Int...) {
     let m = String(format: message, arguments: values);
     if let log = _log {
         log.logError(m, file: file, function: function, line: line);

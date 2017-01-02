@@ -96,7 +96,7 @@ extension String {
     }
     
     func substringWithRange(range:NSRange) ->String {
-        return self.substringWithRange(Range(start: startIndex.advancedBy(range.location), end: startIndex.advancedBy(range.location+range.length)));
+        return self.substringWithRange(Range(startIndex.advancedBy(range.location) ..< startIndex.advancedBy(range.location+range.length)));
         
     }
     

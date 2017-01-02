@@ -79,14 +79,16 @@ public class HBCISmartcardDDV : HBCISmartcard {
         
         // do  not log errors
         noErrorLog = true;
-        for i = 0; i<3; i++ {
+        while i < 3 {
             if !selectRoot() {
+                i += 1;
                 continue;
             }
             let fileName = NSData(bytes: files[i], length: 9);
             if selectFileByName(fileName) {
                 break;
             }
+            i += 1;
         }
         noErrorLog = false;
         
@@ -105,7 +107,7 @@ public class HBCISmartcardDDV : HBCISmartcard {
             
             var cardid = [UInt8](count:16, repeatedValue:0);
             let p = UnsafePointer<UInt8>(res.bytes);
-            for var i = 0; i<8; i++ {
+            for i in 0 ..< 8 {
                 cardid[i<<1] = ((p[i+1] >> 4) & 0x0F) + 0x30;
                 cardid[(i<<1)+1] = ((p[i+1]) & 0x0F) + 0x30;
             }
@@ -117,7 +119,7 @@ public class HBCISmartcardDDV : HBCISmartcard {
     
     public func writeBankData(idx:Int, data:HBCICardBankData) ->Bool {
         let raw = UnsafeMutablePointer<UInt8>.alloc(88);
-        for var i=0; i<88; i++ {
+        for i in 0 ..< 88 {
             raw[i] = 0x20;
         }
         
@@ -138,7 +140,7 @@ public class HBCISmartcardDDV : HBCISmartcard {
         }
         if let bankCode = data.bankCode.dataUsingEncoding(NSISOLatin1StringEncoding) {
             let p = UnsafeMutablePointer<UInt8>(bankCode.bytes);
-            for var i=0; i<4; i++ {
+            for i in 0 ..< 4 {
                 var c1 = p[i<<1] - 0x30;
                 let c2 = p[i<<1 + 1] - 0x30;
                 
@@ -187,7 +189,7 @@ public class HBCISmartcardDDV : HBCISmartcard {
             
             p = UnsafeMutablePointer<UInt8>(result.bytes).advancedBy(20);
             var blz = [UInt8](count:8, repeatedValue:0);
-            for var i = 0; i < 4; i++ {
+            for i in 0 ..< 4 {
                 var nibble:UInt8 = 0;
                 nibble=(p[i]>>4)&0x0F;
                 if (nibble>0x09) {

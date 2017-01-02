@@ -14,7 +14,7 @@ func isEscaped(pointer:UnsafePointer<CChar>) ->Bool {
     p = p.advancedBy(-1);
     while p.memory == HBCIChar.qmark.rawValue {
         p = p.advancedBy(-1);
-        count++;
+        count += 1;
     }
     return count%2 == 1;
 }
@@ -43,7 +43,7 @@ func checkForDataTag(pointer:UnsafePointer<CChar>) ->(dataLength:Int, tagLength:
             // no number
             return (0,0);
         }
-        i++;
+        i += 1;
         p = p.advancedBy(1);
         if i > 9 {
             // safety exit condition
@@ -99,7 +99,8 @@ public class HBCIResultMessage {
                         // copy tag to buffer
                         for c in cstr {
                             if c != 0 {
-                                target[j++] = c;
+                                target[j] = c;
+                                j += 1;
                             }
                         }
                         i += tag_size+bin_size;
@@ -113,8 +114,9 @@ public class HBCIResultMessage {
                 }
             }
             
-            target[j++] = p.memory;
-            i++;
+            target[j] = p.memory;
+            j += 1;
+            i += 1;
             p = p.advancedBy(1);
         }
         
@@ -127,7 +129,8 @@ public class HBCIResultMessage {
         
         p = UnsafeMutablePointer<CChar>(target);
         while i < messageSize {
-            segContent[segSize++] = p.memory
+            segContent[segSize] = p.memory;
+            segSize += 1;
             if p.memory == HBCIChar.quote.rawValue && !isEscaped(p) {
                 // now we have a segment in segContent
                 let data = NSData(bytes: segContent, length: segSize);
@@ -139,7 +142,7 @@ public class HBCIResultMessage {
                 }
                 segSize = 0;
             }
-            i++;
+            i += 1;
             p = p.advancedBy(1);
         }
         

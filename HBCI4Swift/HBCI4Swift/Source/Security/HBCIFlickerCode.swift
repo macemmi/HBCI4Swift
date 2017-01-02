@@ -80,7 +80,7 @@ public class HBCIFlickerCode {
             }
             
             // get element data
-            self.data = s.substringWithRange(Range(start: index, end: index.advancedBy(length)));
+            self.data = s.substringWithRange(Range(index ..< index.advancedBy(length)));
             
             // return reststring
             return s.substringFromIndex(index.advancedBy(length));
@@ -188,12 +188,12 @@ public class HBCIFlickerCode {
                 owner.version = .HHD14;
                 
                 // there can be 9 control bytes at most
-                for var i = 0; i < 10; i++ {
+                for _ in 0 ..< 10 {
                     if index.distanceTo(s.endIndex) < 2 {
                         throw HBCIError.ParseError;
                     }
                     // 2 characters, Hex
-                    let byteString = s.substringWithRange(Range(start: index, end: index.advancedBy(2)));
+                    let byteString = s.substringWithRange(Range(index ..< index.advancedBy(2)));
                     index = index.advancedBy(2);
                     if let byte = Int(byteString, radix: 16) {
                         controlBytes.append(UInt8(byte));
@@ -210,7 +210,7 @@ public class HBCIFlickerCode {
             if index.distanceTo(s.endIndex) < length {
                 throw HBCIError.ParseError;
             }
-            self.data = s.substringWithRange(Range(start: index, end: index.advancedBy(length)));
+            self.data = s.substringWithRange(Range(index ..< index.advancedBy(length)));
             return s.substringFromIndex(index.advancedBy(length));
         }
         
@@ -291,7 +291,7 @@ public class HBCIFlickerCode {
             if r1.startIndex.distanceTo(cleaned.endIndex) < 10 {
                 throw HBCIError.ParseError;
             }
-            cleaned = cleaned.substringWithRange(Range(start: r1.startIndex.advancedBy(10), end: r2.startIndex));
+            cleaned = cleaned.substringWithRange(Range(r1.startIndex.advancedBy(10) ..< r2.startIndex));
 
             // append "0" to make LC 3 digits, just like for HHD 1.4
             return "0" + cleaned;

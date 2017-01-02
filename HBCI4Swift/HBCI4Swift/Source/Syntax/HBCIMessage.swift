@@ -17,7 +17,7 @@ public class HBCIMessage: HBCISyntaxElement {
                 if !element.setElementValue(idx, path: "SegHead.seq") {
                     return false;
                 }
-                idx++;
+                idx += 1;
             }
         }
         return true;
