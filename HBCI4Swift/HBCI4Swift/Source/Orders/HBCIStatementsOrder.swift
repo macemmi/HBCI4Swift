@@ -8,11 +8,11 @@
 
 import Foundation
 
-public class HBCIStatementsOrder: HBCIOrder {
-    public let account:HBCIAccount;
-    public var statements:Array<HBCIStatement>?
-    public var dateFrom:NSDate?
-    public var dateTo:NSDate?
+open class HBCIStatementsOrder: HBCIOrder {
+    open let account:HBCIAccount;
+    open var statements:Array<HBCIStatement>?
+    open var dateFrom:Date?
+    open var dateTo:Date?
     
     var offset:String?
     var mt94xString:NSString?
@@ -26,14 +26,14 @@ public class HBCIStatementsOrder: HBCIOrder {
         }
     }
 
-    public func enqueue() ->Bool {
+    open func enqueue() ->Bool {
         // check if order is supported
         if !user.parameters.isOrderSupportedForAccount(self, number: account.number, subNumber: account.subNumber) {
             logError(self.name + " is not supported for account " + account.number);
             return false;
         }
         
-        var values = Dictionary<String,AnyObject>();
+        var values = Dictionary<String,Any>();
         
         // check if SEPA version is supported (only globally for bank -
         // later we check if account supports this as well
@@ -72,7 +72,7 @@ public class HBCIStatementsOrder: HBCIOrder {
         return true;
     }
     
-    func getOutstandingPart(offset:String) ->NSString? {
+    func getOutstandingPart(_ offset:String) ->NSString? {
         do {
             if let msg = HBCICustomMessage.newInstance(msg.dialog) {
                 if let order = HBCIStatementsOrder(message: msg, account: self.account) {
@@ -94,7 +94,7 @@ public class HBCIStatementsOrder: HBCIOrder {
         return nil;
     }
     
-    override public func updateResult(result: HBCIResultMessage) {
+    override open func updateResult(_ result: HBCIResultMessage) {
         super.updateResult(result);
         
         // check whether result is incomplete
@@ -107,14 +107,14 @@ public class HBCIStatementsOrder: HBCIOrder {
         
         // now parse statements
         if let seg = resultSegments.first {
-            if let booked = seg.elementValueForPath("booked") as? NSData {
-                if var mt94x = NSString(data: booked, encoding: NSISOLatin1StringEncoding) {
+            if let booked = seg.elementValueForPath("booked") as? Data {
+                if var mt94x = NSString(data: booked, encoding: String.Encoding.isoLatin1.rawValue) {
                     
                     // check whether result is incomplete
                     for response in result.segmentResponses {
                         if response.code == "3040" && response.parameters.count > 0 {
                             if let part2 = getOutstandingPart(response.parameters[0]) {
-                                mt94x = mt94x.stringByAppendingFormat(part2);
+                                mt94x = mt94x.appendingFormat(part2);
                             }
                         }
                     }

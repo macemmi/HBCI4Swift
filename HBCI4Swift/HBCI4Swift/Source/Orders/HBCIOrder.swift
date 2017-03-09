@@ -7,16 +7,40 @@
 //
 
 import Foundation
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
 
-public class HBCIOrder {
-    public let user:HBCIUser;
-    public var success = false;
-    public var needsTan = false;
-    public var responses:Array<HBCIOrderResponse>?
-    public let name:String;
-    public let msg: HBCICustomMessage;
-    public var segment:HBCISegment!
-    public var resultSegments = Array<HBCISegment>();
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func >= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l >= r
+  default:
+    return !(lhs < rhs)
+  }
+}
+
+
+open class HBCIOrder {
+    open let user:HBCIUser;
+    open var success = false;
+    open var needsTan = false;
+    open var responses:Array<HBCIOrderResponse>?
+    open let name:String;
+    open let msg: HBCICustomMessage;
+    open var segment:HBCISegment!
+    open var resultSegments = Array<HBCISegment>();
     
     public init?(name:String, message:HBCICustomMessage) {
         self.name = name;
@@ -34,7 +58,7 @@ public class HBCIOrder {
                     return nil;
                 }
             } else {
-                logError("Missing PIN/TAN information for user "+(self.user.userId ?? "<unknown>"));
+                logError("Missing PIN/TAN information for user \(self.user.userId)");
                 return nil;
             }
         } else {
@@ -42,7 +66,7 @@ public class HBCIOrder {
         }
     }
     
-    public func updateResult(result:HBCIResultMessage) {
+    open func updateResult(_ result:HBCIResultMessage) {
         // first get segment number
         if let seg = self.segment {
             if let segNum = seg.elementValueForPath("SegHead.seq") as? Int {
@@ -71,7 +95,7 @@ public class HBCIOrder {
         }
     }
     
-    public class func getParameterElement(user:HBCIUser, orderName:String) ->(element:HBCISyntaxElement, segment:HBCISegment)? {
+    open class func getParameterElement(_ user:HBCIUser, orderName:String) ->(element:HBCISyntaxElement, segment:HBCISegment)? {
         guard let seg = user.parameters.parametersForJob(orderName) else {
             logError("User parameter: parameters for order \(orderName) not found");
             return nil;

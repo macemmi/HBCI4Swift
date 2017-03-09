@@ -10,6 +10,6 @@ import Foundation
 
 protocol HBCISepaGeneratorCredit {
     
-    func documentForTransfer(transfer:HBCISepaTransfer) ->NSData?
+    func documentForTransfer(_ transfer:HBCISepaTransfer) ->Data?
     var sepaFormat:HBCISepaFormat { get };
 }

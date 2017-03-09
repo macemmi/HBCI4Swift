@@ -11,14 +11,14 @@ import Foundation
 class HBCISepaParser {
     let format:HBCISepaFormat;
 
-    let numberFormatter = NSNumberFormatter();
+    let numberFormatter = NumberFormatter();
 
     init(format:HBCISepaFormat) {
         self.format = format;
         initFormatters();
     }
     
-    private func initFormatters() {
+    fileprivate func initFormatters() {
         numberFormatter.decimalSeparator = ".";
         numberFormatter.alwaysShowsDecimalSeparator = true;
         numberFormatter.minimumFractionDigits = 2;
@@ -26,8 +26,8 @@ class HBCISepaParser {
         numberFormatter.generatesDecimalNumbers = true;
     }
     
-    func stringToNumber(s:String) ->NSDecimalNumber? {
-        if let number = numberFormatter.numberFromString(s) as? NSDecimalNumber {
+    func stringToNumber(_ s:String) ->NSDecimalNumber? {
+        if let number = numberFormatter.number(from: s) as? NSDecimalNumber {
             return number;
         } else {
             logError("Sepa document parser: not able to convert \(s) to a value");
@@ -35,10 +35,10 @@ class HBCISepaParser {
         }
     }
     
-    func stringToDate(s:String) ->NSDate? {
-        let formatter = NSDateFormatter();
+    func stringToDate(_ s:String) ->Date? {
+        let formatter = DateFormatter();
         formatter.dateFormat = "yyyy-MM-dd";
-        if let date = formatter.dateFromString(s) {
+        if let date = formatter.date(from: s) {
             return date;
         } else {
             logError("Sepa document parser: not able to convert \(s) to a date");
@@ -46,7 +46,7 @@ class HBCISepaParser {
         }
     }
     
-    func checkTransferData(iban:String?, bic:String?, name:String?, value:NSDecimalNumber?, currency:String?) ->Bool {
+    func checkTransferData(_ iban:String?, bic:String?, name:String?, value:NSDecimalNumber?, currency:String?) ->Bool {
         if iban == nil {
             logError("Sepa document parser: IBAN is missing");
             return false;

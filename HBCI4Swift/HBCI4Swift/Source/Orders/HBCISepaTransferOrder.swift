@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class HBCISepaTransferOrder : HBCIAbstractSepaTransferOrder {
+open class HBCISepaTransferOrder : HBCIAbstractSepaTransferOrder {
     
     public init?(message: HBCICustomMessage, transfer:HBCISepaTransfer) {
         super.init(name: "SepaTransfer", message: message, transfer: transfer);
@@ -17,7 +17,7 @@ public class HBCISepaTransferOrder : HBCIAbstractSepaTransferOrder {
         }
     }
     
-    public override func enqueue() ->Bool {
+    open override func enqueue() ->Bool {
 
         if transfer.date != nil {
             logError("SEPA Transfer: date is not allowed");

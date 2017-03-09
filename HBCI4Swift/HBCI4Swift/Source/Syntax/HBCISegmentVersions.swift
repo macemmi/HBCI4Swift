@@ -11,27 +11,27 @@ import Foundation
 class HBCISegmentVersions {
     let identifier:String!
     var code: String!                   // todo: replace with let after Xcode bug fixed
-    var syntaxElement: NSXMLElement;
+    var syntaxElement: XMLElement;
     var versions = Dictionary<Int, HBCISegmentDescription>();
     var versionNumbers = Array<Int>();
     
     
-    init(syntax: HBCISyntax, element: NSXMLElement) throws {
+    init(syntax: HBCISyntax, element: XMLElement) throws {
         self.syntaxElement = element;
         self.identifier = element.valueForAttribute("id");
         if self.identifier == nil {
             // error
             logError("Syntax file error: attribute ID is missing for element \(element)");
-            throw HBCIError.SyntaxFileError;
+            throw HBCIError.syntaxFileError;
         }
         self.code = element.valueForAttribute("code");
         if self.code == nil {
             // error
             logError("Syntax file error: attribute CODE is missing for element \(element)");
-            throw HBCIError.SyntaxFileError;
+            throw HBCIError.syntaxFileError;
         }
         
-        let all_vers = element.elementsForName("SEGVersion") ;
+        let all_vers = element.elements(forName: "SEGVersion") ;
         for segv in all_vers {
             if let versionString = segv.valueForAttribute("id") {
                 if let version = Int(versionString) {
@@ -48,26 +48,26 @@ class HBCISegmentVersions {
                     continue;
                 } else {
                     logError("Syntax file error: ID \(versionString) cannot be converted to a number");
-                    throw HBCIError.SyntaxFileError;
+                    throw HBCIError.syntaxFileError;
                 }
             } else {
                 logError("Syntax file error: attribute ID is missing for element \(segv)");
-                throw HBCIError.SyntaxFileError;
+                throw HBCIError.syntaxFileError;
             }
         }
 
         // get and sort version codes
         self.versionNumbers = Array(versions.keys);
         if self.versionNumbers.count > 0 {
-            self.versionNumbers.sortInPlace({$0 < $1})
+            self.versionNumbers.sort(by: {$0 < $1})
         } else {
             // error
             logError("Syntax file error: segment \(element) has no versions");
-            throw HBCIError.SyntaxFileError;
+            throw HBCIError.syntaxFileError;
         }
 
         // values
-        let all_values = element.elementsForName("value") ;
+        let all_values = element.elements(forName: "value") ;
         for elem in all_values {
             if let path = elem.valueForAttribute("path") {
                 if let value = elem.stringValue {
@@ -81,7 +81,7 @@ class HBCISegmentVersions {
             }
             // error occured
             logError("Syntax file error: value element \(elem) could not be parsed");
-            throw HBCIError.SyntaxFileError;
+            throw HBCIError.syntaxFileError;
         }
     }
     
@@ -89,11 +89,11 @@ class HBCISegmentVersions {
         return self.versions[self.versionNumbers.last!]!;
     }
     
-    func isVersionSupported(version:Int) ->Bool {
-        return versionNumbers.indexOf(version) != nil;
+    func isVersionSupported(_ version:Int) ->Bool {
+        return versionNumbers.index(of: version) != nil;
     }
     
-    func segmentWithVersion(version:Int) -> HBCISegmentDescription? {
+    func segmentWithVersion(_ version:Int) -> HBCISegmentDescription? {
         return versions[version];
     }
         

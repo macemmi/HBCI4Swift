@@ -10,7 +10,7 @@ import Foundation
 
 
 
-public class HBCIDialog {
+open class HBCIDialog {
     var connection:HBCIConnection!
     var dialogId:String?
     var user:HBCIUser;
@@ -20,7 +20,7 @@ public class HBCIDialog {
     var orders = Array<HBCIOrder>();
     
     // the callback handler
-    public static var callback:HBCICallback?
+    open static var callback:HBCICallback?
     
     public init(user:HBCIUser) throws {
         
@@ -29,7 +29,7 @@ public class HBCIDialog {
         
         if user.securityMethod == nil {
             logError("Security method for user not defined");
-            throw HBCIError.MissingData("SecurityMethod");
+            throw HBCIError.missingData("SecurityMethod");
         }
 
         self.syntax = try HBCISyntax.syntaxWithVersion(hbciVersion);
@@ -38,17 +38,17 @@ public class HBCIDialog {
             self.connection = try HBCIDDVConnection(host: user.bankURL);
             return;
         } else {
-            if let url = NSURL(string:user.bankURL) {
+            if let url = URL(string:user.bankURL) {
                 self.connection = HBCIPinTanConnection(url: url);
                 return;
             } else {
                 logError("Could not create URL from \(user.bankURL)");
-                throw HBCIError.BadURL(user.bankURL);
+                throw HBCIError.badURL(user.bankURL);
             }
         }
     }
     
-    func sendMessage(message:String, values:Dictionary<String,AnyObject>) throws ->HBCIResultMessage? {
+    func sendMessage(_ message:String, values:Dictionary<String,Any>) throws ->HBCIResultMessage? {
         if let md = self.syntax.msgs[message] {
             if let msg = md.compose() as? HBCIMessage {
                 for (path, value) in values {
@@ -62,7 +62,7 @@ public class HBCIDialog {
         return nil;
     }
     
-    func sendMessage(msg:HBCIMessage) throws ->HBCIResultMessage? {
+    func sendMessage(_ msg:HBCIMessage) throws ->HBCIResultMessage? {
         if !msg.enumerateSegments() {
             logError(msg.description);
             return nil;
@@ -108,17 +108,18 @@ public class HBCIDialog {
                             return value
                         } else {
                             logError("Error message from bank");
-                            logError(NSString(data: result, encoding: NSISOLatin1StringEncoding) as! String);
+                            logError(String(data:result, encoding:String.Encoding.isoLatin1));
+                            logError(String(data: result, encoding: String.Encoding.isoLatin1));
                             logError("Message sent: " + msg.messageString());
                             return value;
                         }
                     }
                     logError("Message could not be decrypted");
-                    logError(NSString(data: result, encoding: NSISOLatin1StringEncoding) as! String);
+                    logError(String(data: result, encoding: String.Encoding.isoLatin1));
                     return nil;
                 } else {
                     logError("Message could not be parsed");
-                    logError(NSString(data: result, encoding: NSISOLatin1StringEncoding) as! String);
+                    logError(String(data: result, encoding: String.Encoding.isoLatin1));
                     return nil;
                 }
             } catch {
@@ -128,17 +129,22 @@ public class HBCIDialog {
         return nil;
     }
 
-    public func dialogInit() throws ->HBCIResultMessage? {
+    open func dialogInit() throws ->HBCIResultMessage? {
         if user.sysId == nil {
             logError("Dialog Init failed: missing sysId");
             return nil;
         }
         
-        var values:Dictionary<String,AnyObject> = ["Idn.KIK.country":"280", "Idn.KIK.blz":user.bankCode, "Idn.customerid":user.customerId,
-            "Idn.sysid":user.sysId!, "Idn.sysStatus":"1", "ProcPrep.BPD":user.parameters.bpdVersion,
-            "ProcPrep.UPD":user.parameters.updVersion, "ProcPrep.lang":"0", "ProcPrep.prodName":"PecuniaBanking",
-            "ProcPrep.prodVersion":"100"
-        ];
+        var values:Dictionary<String,Any> = ["Idn.KIK.country":"280",
+                                                   "Idn.KIK.blz":user.bankCode,
+                                                   "Idn.customerid":user.customerId,
+                                                   "Idn.sysid":user.sysId!,
+                                                   "Idn.sysStatus":"1",
+                                                   "ProcPrep.BPD":user.parameters.bpdVersion,
+                                                   "ProcPrep.UPD":user.parameters.updVersion,
+                                                   "ProcPrep.lang":"0",
+                                                   "ProcPrep.prodName":"PecuniaBanking",
+                                                   "ProcPrep.prodVersion":"100" ];
         
         if user.securityMethod is HBCISecurityMethodDDV {
             values["Idn.sysStatus"] = "0";
@@ -155,9 +161,12 @@ public class HBCIDialog {
         return nil;
     }
     
-    public func dialogEnd() ->HBCIResultMessage? {
+    open func dialogEnd() ->HBCIResultMessage? {
         if let dialogId = self.dialogId {
-            let values:Dictionary<String,AnyObject> = ["DialogEnd.dialogid":dialogId, "MsgHead.dialogid":dialogId, "MsgHead.msgnum":messageNum, "MsgTail.msgnum":messageNum];
+            let values:Dictionary<String,Any> = ["DialogEnd.dialogid":dialogId,
+                                                 "MsgHead.dialogid":dialogId,
+                                                 "MsgHead.msgnum":messageNum,
+                                                 "MsgTail.msgnum":messageNum];
             do {
                 if let result = try sendMessage("DialogEnd", values: values) {
                     self.connection.close();
@@ -169,15 +178,21 @@ public class HBCIDialog {
         return nil;
     }
     
-    public func syncInit() throws ->HBCIResultMessage? {
+    open func syncInit() throws ->HBCIResultMessage? {
         user.tanMethod = "999";
         user.sysId = "0";
         
-        let values:Dictionary<String,AnyObject> = ["Idn.KIK.country":"280", "Idn.KIK.blz":user.bankCode, "Idn.customerid":user.customerId,
-            "Idn.sysid":"0", "Idn.sysStatus":"1", "ProcPrep.BPD":"0", "Sync.mode":0,
-            "ProcPrep.UPD":"0", "ProcPrep.lang":"0", "ProcPrep.prodName":"PecuniaBanking",
-            "ProcPrep.prodVersion":"100"
-        ];
+        let values:Dictionary<String,Any> = ["Idn.KIK.country":"280",
+                                             "Idn.KIK.blz":user.bankCode,
+                                             "Idn.customerid":user.customerId,
+                                             "Idn.sysid":"0",
+                                             "Idn.sysStatus":"1",
+                                             "ProcPrep.BPD":"0",
+                                             "Sync.mode":0,
+                                             "ProcPrep.UPD":"0",
+                                             "ProcPrep.lang":"0",
+                                             "ProcPrep.prodName":"PecuniaBanking",
+                                             "ProcPrep.prodVersion":"100"];
         
         self.dialogId = "0";
         
@@ -199,7 +214,7 @@ public class HBCIDialog {
         return nil;
     }
     
-    func segmentWithName(segName:String) ->HBCISegment? {
+    func segmentWithName(_ segName:String) ->HBCISegment? {
         if let segVersions = self.syntax.segs[segName] {
             // now find the right segment version
             // check which segment versions are supported by the bank
@@ -219,7 +234,7 @@ public class HBCIDialog {
                 return nil;
             }
             // now sort the versions - we take the latest supported version
-            supportedVersions.sortInPlace(>);
+            supportedVersions.sort(by: >);
             
             if let sd = segVersions.segmentWithVersion(supportedVersions.first!) {
                 if let segment = sd.compose() as? HBCISegment {
@@ -234,7 +249,7 @@ public class HBCIDialog {
     }
     
     
-    func customMessageForSegment(segName:String) ->HBCIMessage? {
+    func customMessageForSegment(_ segName:String) ->HBCIMessage? {
         if let md = self.syntax.msgs["CustomMessage"] {
             if let msg = md.compose() as? HBCIMessage {
                 if let segVersions = self.syntax.segs[segName] {
@@ -256,12 +271,12 @@ public class HBCIDialog {
                         return nil;
                     }
                     // now sort the versions - we take the latest supported version
-                    supportedVersions.sortInPlace(>);
+                    supportedVersions.sort(by: >);
                     
                     if let sd = segVersions.segmentWithVersion(supportedVersions.first!) {
                         if let segment = sd.compose() {
                             segment.name = segName;
-                            msg.children.insert(segment, atIndex: 2);
+                            msg.children.insert(segment, at: 2);
                             return msg;
                         }
                     }
@@ -273,7 +288,7 @@ public class HBCIDialog {
         return nil;
     }
 
-    func sendCustomMessage(message:HBCICustomMessage) throws ->Bool {
+    func sendCustomMessage(_ message:HBCICustomMessage) throws ->Bool {
         if let _ = try sendMessage(message) {
             return true;
         }

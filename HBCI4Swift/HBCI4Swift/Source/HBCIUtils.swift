@@ -10,9 +10,9 @@ import Foundation
 
 var _instance:HBCIUtils?
 
-private var __dateFormatter:NSDateFormatter?
-private var __timeFormatter:NSDateFormatter?
-private var __numberFormatter:NSNumberFormatter?
+private var __dateFormatter:DateFormatter?
+private var __timeFormatter:DateFormatter?
+private var __numberFormatter:NumberFormatter?
 private var __numberHandler:NSDecimalNumberHandler?
 
 
@@ -30,35 +30,35 @@ class HBCIUtils {
         }
     }
     
-    class func dateFormatter() ->NSDateFormatter {
+    class func dateFormatter() ->DateFormatter {
         if let formatter = __dateFormatter {
             return formatter;
         } else {
-            let formatter = NSDateFormatter();
+            let formatter = DateFormatter();
             formatter.dateFormat = "yyyyMMdd";
-            formatter.timeZone = NSTimeZone(name: "Europe/Berlin");
+            formatter.timeZone = TimeZone(identifier: "Europe/Berlin");
             __dateFormatter = formatter;
             return formatter;
         }
     }
     
-    class func timeFormatter() ->NSDateFormatter {
+    class func timeFormatter() ->DateFormatter {
         if let formatter = __timeFormatter {
             return formatter;
         } else {
-            let formatter = NSDateFormatter();
+            let formatter = DateFormatter();
             formatter.dateFormat = "HHmmss";
-            formatter.timeZone = NSTimeZone(name: "Europe/Berlin");
+            formatter.timeZone = TimeZone(identifier: "Europe/Berlin");
             __timeFormatter = formatter;
             return formatter;
         }
     }
     
-    class func numberFormatter() ->NSNumberFormatter {
+    class func numberFormatter() ->NumberFormatter {
         if let formatter = __numberFormatter {
             return formatter;
         } else {
-            let formatter = NSNumberFormatter();
+            let formatter = NumberFormatter();
             formatter.decimalSeparator = ",";
             formatter.alwaysShowsDecimalSeparator = true;
             formatter.minimumFractionDigits = 0;
@@ -73,14 +73,14 @@ class HBCIUtils {
         if let handler = __numberHandler {
             return handler;
         } else {
-            let handler = NSDecimalNumberHandler(roundingMode: NSRoundingMode.RoundPlain, scale: 2, raiseOnExactness: true, raiseOnOverflow: true, raiseOnUnderflow: true, raiseOnDivideByZero: true);
+            let handler = NSDecimalNumberHandler(roundingMode: NSDecimalNumber.RoundingMode.plain, scale: 2, raiseOnExactness: true, raiseOnOverflow: true, raiseOnUnderflow: true, raiseOnDivideByZero: true);
             __numberHandler = handler;
             return handler;
         }
     }
     
-    class func round(x:NSDecimalNumber) ->NSDecimalNumber {
-        return x.decimalNumberByRoundingAccordingToBehavior(HBCIUtils.numberHandler());
+    class func round(_ x:NSDecimalNumber) ->NSDecimalNumber {
+        return x.rounding(accordingToBehavior: HBCIUtils.numberHandler());
     }
     
 }

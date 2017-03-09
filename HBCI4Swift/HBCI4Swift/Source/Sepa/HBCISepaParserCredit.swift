@@ -10,5 +10,5 @@ import Foundation
 
 protocol HBCISepaParserCredit {
     
-    func transferForDocument(account:HBCIAccount, data:NSData) ->HBCISepaTransfer?
+    func transferForDocument(_ account:HBCIAccount, data:Data) ->HBCISepaTransfer?
 }

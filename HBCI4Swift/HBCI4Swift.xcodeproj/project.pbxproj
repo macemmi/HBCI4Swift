@@ -201,13 +201,13 @@
 /* Begin PBXFileReference section */
 		0165FAA01C5CAAFC0076AC81 /* HBCISyntaxTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISyntaxTest.swift; sourceTree = "<group>"; };
 		0165FAA21C5CC76C0076AC81 /* HBCIFlickerTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIFlickerTest.swift; sourceTree = "<group>"; };
-		B14184321AF5610000F9B6FA /* HBCISepaInfoOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaInfoOrder.swift; sourceTree = "<group>"; };
+		B14184321AF5610000F9B6FA /* HBCISepaInfoOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = HBCISepaInfoOrder.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B14184361B0634B300F9B6FA /* HBCISepaDatedTransferOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaDatedTransferOrder.swift; sourceTree = "<group>"; };
 		B14184391B06902500F9B6FA /* HBCISepaInternalTransferOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaInternalTransferOrder.swift; sourceTree = "<group>"; };
-		B141843C1B06925800F9B6FA /* HBCIAbstractSepaTransferOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIAbstractSepaTransferOrder.swift; sourceTree = "<group>"; };
+		B141843C1B06925800F9B6FA /* HBCIAbstractSepaTransferOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = HBCIAbstractSepaTransferOrder.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B14184421B07281800F9B6FA /* HBCIStandingOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIStandingOrder.swift; sourceTree = "<group>"; };
 		B14184451B07A0A000F9B6FA /* HBCISepaStandingOrderNewOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaStandingOrderNewOrder.swift; sourceTree = "<group>"; };
-		B14184481B07E34E00F9B6FA /* HBCISepaStandingOrderListOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaStandingOrderListOrder.swift; sourceTree = "<group>"; };
+		B14184481B07E34E00F9B6FA /* HBCISepaStandingOrderListOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = HBCISepaStandingOrderListOrder.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B141844B1B0FBE4200F9B6FA /* HBCISepaParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaParser.swift; sourceTree = "<group>"; };
 		B141844E1B0FC0A600F9B6FA /* HBCISepaParserCredit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaParserCredit.swift; sourceTree = "<group>"; };
 		B14184541B0FD9A200F9B6FA /* HBCISepaParserFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaParserFactory.swift; sourceTree = "<group>"; };
@@ -223,11 +223,11 @@
 		B163F0DF1CC96350001E1009 /* HBCIValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIValue.swift; sourceTree = "<group>"; };
 		B163F0E21CCAC51B001E1009 /* HBCISyntaxExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISyntaxExtension.swift; sourceTree = "<group>"; };
 		B16A223E1B7A811D005E84FC /* RIPEMD160.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RIPEMD160.swift; path = Source/RIPEMD160.swift; sourceTree = "<group>"; };
-		B174E89A1CA1E3E0004FD3F0 /* HBCIAccountStatementOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIAccountStatementOrder.swift; sourceTree = "<group>"; };
+		B174E89A1CA1E3E0004FD3F0 /* HBCIAccountStatementOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = HBCIAccountStatementOrder.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B174E89C1CA32336004FD3F0 /* HBCIAccountStatement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIAccountStatement.swift; sourceTree = "<group>"; };
-		B174E8A31CA88D1F004FD3F0 /* HBCISepaStandingOrderDeleteOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaStandingOrderDeleteOrder.swift; sourceTree = "<group>"; };
+		B174E8A31CA88D1F004FD3F0 /* HBCISepaStandingOrderDeleteOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = HBCISepaStandingOrderDeleteOrder.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B174E8A71CAB0E34004FD3F0 /* HBCIStandingOrderEditOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIStandingOrderEditOrder.swift; sourceTree = "<group>"; };
-		B174E8AA1CAB0FE8004FD3F0 /* HBCIAbstractStandingOrderOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIAbstractStandingOrderOrder.swift; sourceTree = "<group>"; };
+		B174E8AA1CAB0FE8004FD3F0 /* HBCIAbstractStandingOrderOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = HBCIAbstractStandingOrderOrder.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B178C60E1C31F0A20082E25F /* PCSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PCSC.framework; path = System/Library/Frameworks/PCSC.framework; sourceTree = SDKROOT; };
 		B197CB491C53EC8000D3945B /* HBCIFlickerCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCIFlickerCode.swift; path = Source/Security/HBCIFlickerCode.swift; sourceTree = "<group>"; };
 		B19B35921AF1792A00F20B9A /* HBCI4Swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HBCI4Swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -241,19 +241,19 @@
 		B19B35B11AF28AC500F20B9A /* CChar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CChar.swift; sourceTree = "<group>"; };
 		B19B35B21AF28AC500F20B9A /* HBCISyntax.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISyntax.swift; sourceTree = "<group>"; };
 		B19B35B31AF28AC500F20B9A /* HBCISyntaxElementReference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISyntaxElementReference.swift; sourceTree = "<group>"; };
-		B19B35B41AF28AC500F20B9A /* HBCISyntaxElementDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISyntaxElementDescription.swift; sourceTree = "<group>"; };
+		B19B35B41AF28AC500F20B9A /* HBCISyntaxElementDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = HBCISyntaxElementDescription.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B19B35B51AF28AC500F20B9A /* HBCIDataElementDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIDataElementDescription.swift; sourceTree = "<group>"; };
 		B19B35B61AF28AC500F20B9A /* HBCIDataElementGroupDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIDataElementGroupDescription.swift; sourceTree = "<group>"; };
 		B19B35B71AF28AC500F20B9A /* HBCISegmentDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISegmentDescription.swift; sourceTree = "<group>"; };
 		B19B35B81AF28AC500F20B9A /* HBCIMessageDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIMessageDescription.swift; sourceTree = "<group>"; };
 		B19B35B91AF28AC500F20B9A /* HBCISegmentVersions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISegmentVersions.swift; sourceTree = "<group>"; };
 		B19B35BA1AF28AC500F20B9A /* HBCISyntaxElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISyntaxElement.swift; sourceTree = "<group>"; };
-		B19B35BB1AF28AC500F20B9A /* HBCIDataElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIDataElement.swift; sourceTree = "<group>"; };
+		B19B35BB1AF28AC500F20B9A /* HBCIDataElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = HBCIDataElement.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B19B35BC1AF28AC500F20B9A /* HBCIDataElementGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIDataElementGroup.swift; sourceTree = "<group>"; };
 		B19B35BD1AF28AC500F20B9A /* HBCISegment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISegment.swift; sourceTree = "<group>"; };
 		B19B35BE1AF28AC500F20B9A /* HBCIMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIMessage.swift; sourceTree = "<group>"; };
-		B19B35E01AF28B1500F20B9A /* HBCIAnonymousDialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIAnonymousDialog.swift; sourceTree = "<group>"; };
-		B19B35E11AF28B1500F20B9A /* HBCIDialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIDialog.swift; sourceTree = "<group>"; };
+		B19B35E01AF28B1500F20B9A /* HBCIAnonymousDialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = HBCIAnonymousDialog.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		B19B35E11AF28B1500F20B9A /* HBCIDialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = HBCIDialog.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B19B35E71AF28B4900F20B9A /* HBCISepaGeneratorFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaGeneratorFactory.swift; sourceTree = "<group>"; };
 		B19B35E81AF28B4900F20B9A /* HBCISepaGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaGenerator.swift; sourceTree = "<group>"; };
 		B19B35E91AF28B4900F20B9A /* HBCISepaGeneratorCredit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaGeneratorCredit.swift; sourceTree = "<group>"; };
@@ -261,12 +261,12 @@
 		B19B35F81AF28BA500F20B9A /* HBCIString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIString.swift; sourceTree = "<group>"; };
 		B19B35F91AF28BA500F20B9A /* HBCIExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIExtensions.swift; sourceTree = "<group>"; };
 		B19B35FE1AF28BB900F20B9A /* HBCIResultMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIResultMessage.swift; sourceTree = "<group>"; };
-		B19B35FF1AF28BB900F20B9A /* HBCICustomMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCICustomMessage.swift; sourceTree = "<group>"; };
+		B19B35FF1AF28BB900F20B9A /* HBCICustomMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = HBCICustomMessage.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B19B36001AF28BB900F20B9A /* HBCIResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIResponse.swift; sourceTree = "<group>"; };
 		B19B36071AF28BCE00F20B9A /* HBCIOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIOrder.swift; sourceTree = "<group>"; };
-		B19B36081AF28BCE00F20B9A /* HBCIStatementsOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIStatementsOrder.swift; sourceTree = "<group>"; };
-		B19B36091AF28BCE00F20B9A /* HBCIBalanceOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIBalanceOrder.swift; sourceTree = "<group>"; };
-		B19B360A1AF28BCE00F20B9A /* HBCITanOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCITanOrder.swift; sourceTree = "<group>"; };
+		B19B36081AF28BCE00F20B9A /* HBCIStatementsOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = HBCIStatementsOrder.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		B19B36091AF28BCE00F20B9A /* HBCIBalanceOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = HBCIBalanceOrder.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		B19B360A1AF28BCE00F20B9A /* HBCITanOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = HBCITanOrder.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B19B360B1AF28BCE00F20B9A /* HBCISepaTransferOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaTransferOrder.swift; sourceTree = "<group>"; };
 		B19B360C1AF28BCE00F20B9A /* HBCITanMediaOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCITanMediaOrder.swift; sourceTree = "<group>"; };
 		B19B36191AF28BE500F20B9A /* HBCIParameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIParameters.swift; sourceTree = "<group>"; };
@@ -280,7 +280,7 @@
 		B19B36291AF28BF900F20B9A /* HBCISepaTransfer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaTransfer.swift; sourceTree = "<group>"; };
 		B19B362A1AF28BF900F20B9A /* HBCITanMedium.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCITanMedium.swift; sourceTree = "<group>"; };
 		B19B36371AF28C1800F20B9A /* HBCILog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCILog.swift; path = Source/HBCILog.swift; sourceTree = "<group>"; };
-		B19B36381AF28C1800F20B9A /* HBCIError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCIError.swift; path = Source/HBCIError.swift; sourceTree = "<group>"; };
+		B19B36381AF28C1800F20B9A /* HBCIError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = HBCIError.swift; path = Source/HBCIError.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B19B36391AF28C1800F20B9A /* HBCIConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCIConnection.swift; path = Source/HBCIConnection.swift; sourceTree = "<group>"; };
 		B19B363A1AF28C1800F20B9A /* HBCIUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCIUtils.swift; path = Source/HBCIUtils.swift; sourceTree = "<group>"; };
 		B19B363B1AF28C1800F20B9A /* HBCIMT94xParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCIMT94xParser.swift; path = Source/HBCIMT94xParser.swift; sourceTree = "<group>"; };
@@ -298,7 +298,7 @@
 		B1AFEC621B5B9F12002F1DDF /* CommonCrypto.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = CommonCrypto.xcconfig; sourceTree = "<group>"; };
 		B1AFECA21B5C28D7002F1DDF /* iphoneos.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = iphoneos.modulemap; sourceTree = "<group>"; };
 		B1AFECA31B5C28D7002F1DDF /* iphonesimulator.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = iphonesimulator.modulemap; sourceTree = "<group>"; };
-		B1AFECA41B5C28D7002F1DDF /* macosx.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = macosx.modulemap; sourceTree = "<group>"; };
+		B1AFECA41B5C28D7002F1DDF /* macosx.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = macosx.modulemap; sourceTree = "<group>"; wrapsLines = 0; };
 		B1AFECA81B5C313C002F1DDF /* HBCI4SwiftTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HBCI4SwiftTests-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -716,20 +716,23 @@
 			attributes = {
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0710;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Frank Emminghaus";
 				TargetAttributes = {
 					B19B35911AF1792A00F20B9A = {
 						CreatedOnToolsVersion = 6.3;
+						LastSwiftMigration = 0820;
 					};
 					B19B359C1AF1792B00F20B9A = {
 						CreatedOnToolsVersion = 6.3;
 					};
 					B1AF0FF71BC45A6D00365496 = {
 						CreatedOnToolsVersion = 7.0.1;
+						LastSwiftMigration = 0820;
 					};
 					B1AFEC481B5B9E7D002F1DDF = {
 						CreatedOnToolsVersion = 6.3.2;
+						LastSwiftMigration = 0820;
 					};
 				};
 			};
@@ -1007,8 +1010,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
@@ -1056,8 +1061,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
@@ -1078,6 +1085,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -1111,6 +1119,7 @@
 				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -1141,6 +1150,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -1202,6 +1212,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = de.pecuniabanking.PCSCard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -1221,6 +1232,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = de.pecuniabanking.PCSCard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -1234,16 +1246,13 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
 				INFOPLIST_FILE = CommonCrypto/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.pecuniabanking.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -1263,6 +1272,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "de.pecuniabanking.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

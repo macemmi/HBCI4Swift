@@ -9,20 +9,19 @@
 import Foundation
 
 public protocol HBCICallback {
-    func getTan(user:HBCIUser, challenge:String?, challenge_hdd_uc:String?) throws ->String;
+    func getTan(_ user:HBCIUser, challenge:String?, challenge_hdd_uc:String?) throws ->String;
     
 }
 
-public class HBCICallbackConsole : HBCICallback {
+open class HBCICallbackConsole : HBCICallback {
     
     public init() {}
     
-    public func getTan(user:HBCIUser, challenge:String?, challenge_hdd_uc:String?) ->String {
+    open func getTan(_ user:HBCIUser, challenge:String?, challenge_hdd_uc:String?) ->String {
         print("Enter TAN (challenge:\(challenge)): ", terminator: "");
-        let stdIn = NSFileHandle.fileHandleWithStandardInput();
-        let data = stdIn.availableData.mutableCopy() as! NSMutableData;
-        data.length -= 1;
-        let input = NSString(data: data, encoding: NSUTF8StringEncoding) as! String;
-        return input;
+        let stdIn = FileHandle.standardInput;
+        let data = Data(stdIn.availableData.dropLast());
+        let input = String(data: data, encoding: String.Encoding.utf8);
+        return input!;
     }
 }

@@ -12,16 +12,16 @@ public struct HBCIValue {
     public let value:NSDecimalNumber;
     public let currency:String;
     
-    public init(value:NSDecimalNumber, date:NSDate, currency:String) {
+    public init(value:NSDecimalNumber, date:Date, currency:String) {
         self.value = value;
         self.currency = currency;
     }
     
     public init?(element: HBCISyntaxElement) {
         if let cd = element.elementValueForPath("debitcredit") as? String,
-            value = element.elementValueForPath("value") as? NSDecimalNumber,
-            curr = element.elementValueForPath("curr") as? String {
-                self.value = cd == "C" ? value:NSDecimalNumber.zero().decimalNumberBySubtracting(value);
+            let value = element.elementValueForPath("value") as? NSDecimalNumber,
+            let curr = element.elementValueForPath("curr") as? String {
+                self.value = cd == "C" ? value:NSDecimalNumber.zero.subtracting(value);
                 self.currency = curr;
         } else {
             logError("Value could not be extracted");

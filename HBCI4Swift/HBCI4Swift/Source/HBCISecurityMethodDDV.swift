@@ -9,7 +9,7 @@
 import Foundation
 import CommonCrypto
 
-public class HBCISecurityMethodDDV : HBCISecurityMethod {
+open class HBCISecurityMethodDDV : HBCISecurityMethod {
     
     var card:HBCISmartcardDDV!
     var sigKeyNumber:Int!;
@@ -20,10 +20,10 @@ public class HBCISecurityMethodDDV : HBCISecurityMethod {
     public init(card:HBCISmartcardDDV) {
         self.card = card;
         super.init();
-        self.code = .DDV;
+        self.code = .ddv;
     }
     
-    override func signMessage(msg:HBCIMessage) ->Bool {
+    override func signMessage(_ msg:HBCIMessage) ->Bool {
         //let secref:String = NSString(format: "%d", arc4random());
         var version = 0;
         
@@ -80,11 +80,11 @@ public class HBCISecurityMethodDDV : HBCISecurityMethod {
         var values_head = ["SigHead.secfunc":"2",
             "SigHead.seccheckref":secref, "SigHead.range":"1", "SigHead.role":"1", "SigHead.SecIdnDetails.func":"1",
             "SigHead.SecIdnDetails.cid":card.cardID!, "SigHead.secref":sigid, "SigHead.SecTimestamp.type":"1",
-            "SigHead.SecTimestamp.date":NSDate(), "SigHead.SecTimestamp.time":NSDate(), "SigHead.HashAlg.alg":"999",
+            "SigHead.SecTimestamp.date":Date(), "SigHead.SecTimestamp.time":Date(), "SigHead.HashAlg.alg":"999",
             "SigHead.SigAlg.alg":"1", "SigHead.SigAlg.mode":"999", "SigHead.KeyName.country":"280",
             "SigHead.KeyName.blz":user.bankCode, "SigHead.KeyName.userid":user.userId, "SigHead.KeyName.keytype":"S",
             "SigHead.KeyName.keynum":sigKeyNumber, "SigHead.KeyName.keyversion":sigKeyVersion, "SigTail.seccheckref":secref
-        ];
+        ] as [String : Any];
         
         if version > 3 {
             values_head["SigHead.SecProfile.method"] = "DDV";
@@ -98,7 +98,7 @@ public class HBCISecurityMethodDDV : HBCISecurityMethod {
         
         // calculate message hash
         let msgData = msg.messageDataForSignature();
-        let hash:NSData = RIPEMD160(data: msgData).digest();
+        let hash:Data = RIPEMD160(data: msgData).digest() as Data;
         
         // sign hash
         let signedHash = card.sign(hash);
@@ -111,7 +111,7 @@ public class HBCISecurityMethodDDV : HBCISecurityMethod {
         return true;
     }
     
-    func buildCryptHead(msg:HBCIMessage, key:NSData) ->Bool {
+    func buildCryptHead(_ msg:HBCIMessage, key:Data) ->Bool {
         var version = 0;
         
         if let seg = msg.elementForPath("CryptHead") as? HBCISegment {
@@ -123,12 +123,12 @@ public class HBCISecurityMethodDDV : HBCISecurityMethod {
 
         var values = [ "CryptHead.SegHead.seq":"998",
             "CryptHead.secfunc":"4", "CryptHead.role":"1", "CryptHead.SecIdnDetails.func":"1",
-            "CryptHead.SecIdnDetails.cid":card.cardID!, "CryptHead.SecTimestamp.date":NSDate(), "CryptHead.SecTimestamp.time":NSDate(),
+            "CryptHead.SecIdnDetails.cid":card.cardID!, "CryptHead.SecTimestamp.date":Date(), "CryptHead.SecTimestamp.time":Date(),
             "CryptHead.CryptAlg.mode":"2", "CryptHead.CryptAlg.alg":"13", "CryptHead.CryptAlg.enckey":key,
             "CryptHead.CryptAlg.keytype":"5", "CryptHead.KeyName.country":"280", "CryptHead.KeyName.blz":user.bankCode,
             "CryptHead.KeyName.userid":user.userId, "CryptHead.KeyName.keynum":cryptKeyNumber, "CryptHead.KeyName.keyversion":cryptKeyVersion,
             "CryptHead.compfunc":"0"
-        ];
+        ] as [String : Any];
         
         if version > 2 {
             values["CryptHead.SecProfile.method"] = "DDV";
@@ -158,32 +158,32 @@ public class HBCISecurityMethodDDV : HBCISecurityMethod {
     }
     */
     
-    override func encryptMessage(msg:HBCIMessage, dialog:HBCIDialog) ->HBCIMessage? {
+    override func encryptMessage(_ msg:HBCIMessage, dialog:HBCIDialog) ->HBCIMessage? {
 
         if let lastSegNum = msg.lastSegmentNumber() {
             if let dialogId = dialog.dialogId {
-                var cryptedData:NSData!
+                var cryptedData:Data!
                 let msgBody = msg.messageDataForEncryption();
                 
                 // encrypt message body
                 if let (plain, enc) = card.getEncryptionKeys(3) {
                     // build 3DES key
-                    let key = NSMutableData(data: plain);
-                    key.appendBytes(plain.bytes, length: 8);
+                    let key = NSMutableData(data: plain as Data);
+                    key.append(plain.bytes, length: 8);
                     
                     //iv
-                    let iv = [UInt8](count:8, repeatedValue:0);
+                    let iv = [UInt8](repeating: 0, count: 8);
                     
-                    let bufSize = msgBody.length+8;
-                    var encrypted = [UInt8](count:bufSize, repeatedValue:0);
+                    let bufSize = msgBody.count+8;
+                    var encrypted = [UInt8](repeating: 0, count: bufSize);
                     var encSize = 0;
                     
                     // pad message data
                     let paddedData = NSMutableData(data: msgBody);
-                    let padlen = 8-msgBody.length%8;
+                    let padlen = 8-msgBody.count%8;
                     var padLen_pad = UInt8(padlen);
-                    paddedData.appendBytes(iv, length: padlen-1);
-                    paddedData.appendBytes(&padLen_pad, length: 1);
+                    paddedData.append(iv, length: padlen-1);
+                    paddedData.append(&padLen_pad, length: 1);
                     
                     let rv = CCCrypt(UInt32(kCCEncrypt), UInt32(kCCAlgorithm3DES), UInt32(0), key.bytes, kCCKeySize3DES, iv, paddedData.bytes, paddedData.length, &encrypted, bufSize, &encSize);
                     if Int(rv) != kCCSuccess {
@@ -191,21 +191,21 @@ public class HBCISecurityMethodDDV : HBCISecurityMethod {
                         return nil;
                     }
                     
-                    cryptedData = NSData(bytes: encrypted, length: encSize);
+                    cryptedData = Data(bytes: UnsafePointer<UInt8>(encrypted), count: encSize);
                     
                     //self.decryptTest(plain, encData: cryptedData);
                     
                     let values = ["MsgHead.dialogid":dialogId, "MsgHead.msgnum":"\(dialog.messageNum)", "CryptData.data":cryptedData,
                         "CryptData.SegHead.seq":"999", "MsgHead.SegHead.seq":"1", "MsgTail.msgnum":"\(dialog.messageNum)",
                         "MsgTail.SegHead.seq":"\(lastSegNum)"
-                    ]
+                    ] as [String : Any]
                     
                     if let md = dialog.syntax.msgs["Crypted"] {
                         if let msg_crypted = md.compose() as? HBCIMessage {
-                            if buildCryptHead(msg_crypted, key: enc) {
+                            if buildCryptHead(msg_crypted, key: enc as Data) {
                                 if msg_crypted.setElementValues(values) {
                                     let cryptedMsgData = msg_crypted.messageData();
-                                    let sizeString = NSString(format: "%012d", cryptedMsgData.length) as String;
+                                    let sizeString = NSString(format: "%012d", cryptedMsgData.count) as String;
                                     if msg_crypted.setElementValue(sizeString, path: "MsgHead.msgsize") {
                                         return msg_crypted;
                                     }
@@ -225,15 +225,15 @@ public class HBCISecurityMethodDDV : HBCISecurityMethod {
         return nil;
     }
     
-    override func decryptMessage(rmsg:HBCIResultMessage, dialog:HBCIDialog) ->HBCIResultMessage? {
+    override func decryptMessage(_ rmsg:HBCIResultMessage, dialog:HBCIDialog) ->HBCIResultMessage? {
         if let cryptedData = rmsg.valueForPath("CryptData.data") as? NSData {
-            if let enc = rmsg.valueForPath("CryptHead.CryptAlg.enckey") as? NSData {
-                if let plain = card.decryptKey(3, encrypted: enc) {
+            if let enc = rmsg.valueForPath("CryptHead.CryptAlg.enckey") as? Data {
+                if let plain = card.decryptKey(3, encrypted: enc as NSData) {
                     // decrypt message
-                    let key = NSMutableData(data: plain);
-                    key.appendBytes(plain.bytes, length: 8);
+                    let key = NSMutableData(data: plain as Data);
+                    key.append(plain.bytes, length: 8);
                     
-                    var decrypted = [UInt8](count:cryptedData.length+8, repeatedValue:0);
+                    var decrypted = [UInt8](repeating: 0, count: cryptedData.length+8);
                     var plainSize = 0;
                   
                     let rv = CCCrypt(UInt32(kCCDecrypt), UInt32(kCCAlgorithm3DES), UInt32(0), key.bytes, 24, nil, cryptedData.bytes, cryptedData.length, &decrypted, cryptedData.length+8, &plainSize);
@@ -242,12 +242,12 @@ public class HBCISecurityMethodDDV : HBCISecurityMethod {
                         return nil;
                     }
                     
-                    let msgData = NSData(bytes: decrypted, length: plainSize);
+                    let msgData = Data(bytes: UnsafePointer<UInt8>(decrypted), count: plainSize);
                     
                     let result = HBCIResultMessage(syntax: dialog.syntax);
                     if !result.parse(msgData) {
                         logError("Result Message could not be parsed");
-                        logError(NSString(data: msgData, encoding: NSISOLatin1StringEncoding) as! String);
+                        logError(String(data: msgData, encoding: String.Encoding.isoLatin1));
                     }
                     return result;
                 } else {

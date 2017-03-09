@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class HBCIAbstractStandingOrderOrder: HBCIOrder {
+open class HBCIAbstractStandingOrderOrder: HBCIOrder {
     var standingOrder:HBCIStandingOrder;
     
     init?(name:String, message:HBCICustomMessage, order:HBCIStandingOrder) {
@@ -19,7 +19,7 @@ public class HBCIAbstractStandingOrderOrder: HBCIOrder {
         }
     }
     
-    public func enqueue() ->Bool {
+    open func enqueue() ->Bool {
         // todo: validation only needed if transfer data is mandatory
         if !standingOrder.validate() {
             return false;
@@ -34,10 +34,17 @@ public class HBCIAbstractStandingOrderOrder: HBCIOrder {
         // create SEPA data
         if let gen = HBCISepaGeneratorFactory.creditGenerator(self.user) {
             if let data = gen.documentForTransfer(standingOrder) {
-                if let iban = standingOrder.account.iban, bic = standingOrder.account.bic {
-                    var values:Dictionary<String,AnyObject> = ["My.iban":iban, "My.bic":bic, "sepapain":data, "sepadescr":gen.sepaFormat.urn, "details.firstdate":standingOrder.startDate,
-                        "details.timeunit":standingOrder.cycleUnit == HBCIStandingOrderCycleUnit.monthly ? "M":"W", "details.turnus":standingOrder.cycle,
-                        "details.execday":standingOrder.executionDay];
+                if let iban = standingOrder.account.iban, let bic = standingOrder.account.bic {
+                    var values:Dictionary<String,Any> = [
+                        "My.iban":iban,
+                        "My.bic":bic,
+                        "sepapain":data,
+                        "sepadescr":gen.sepaFormat.urn,
+                        "details.firstdate":standingOrder.startDate,
+                        "details.timeunit":(standingOrder.cycleUnit == HBCIStandingOrderCycleUnit.monthly ? "M":"W"),
+                        "details.turnus":standingOrder.cycle,
+                        "details.execday":standingOrder.executionDay
+                    ];
                     if let lastDate = standingOrder.lastDate {
                         values["details.lastdate"] = lastDate;
                     }

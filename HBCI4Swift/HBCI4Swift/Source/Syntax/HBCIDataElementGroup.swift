@@ -10,7 +10,6 @@ import Foundation
 
 class HBCIDataElementGroup: HBCISyntaxElement {
     override func elementDescription() -> String {
-        let name = self.name ?? "none";
-        return "DEG name: \(name)\n";
+        return "DEG name: \(self.name)\n";
     }
 }

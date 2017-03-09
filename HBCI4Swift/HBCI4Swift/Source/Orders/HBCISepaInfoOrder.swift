@@ -8,8 +8,8 @@
 
 import Foundation
 
-public class HBCISepaInfoOrder : HBCIOrder {
-    public let accounts:Array<HBCIAccount>;
+open class HBCISepaInfoOrder : HBCIOrder {
+    open let accounts:Array<HBCIAccount>;
     
     public init?(message: HBCICustomMessage, accounts:Array<HBCIAccount>) {
         self.accounts = accounts;
@@ -19,7 +19,7 @@ public class HBCISepaInfoOrder : HBCIOrder {
         }
     }
 
-    public func enqueue() ->Bool {
+    open func enqueue() ->Bool {
         
         var idx = 0;
         for account in accounts {
@@ -30,7 +30,7 @@ public class HBCISepaInfoOrder : HBCIOrder {
             }
             
             if idx == 0 {
-                var values:Dictionary<String,AnyObject> = ["KTV.number":account.number, "KTV.KIK.country":"280", "KTV.KIK.blz":account.bankCode];
+                var values:Dictionary<String,Any> = ["KTV.number":account.number, "KTV.KIK.country":"280", "KTV.KIK.blz":account.bankCode];
                 if account.subNumber != nil {
                     values["KTV.subnumber"] = account.subNumber!
                 }
@@ -40,7 +40,7 @@ public class HBCISepaInfoOrder : HBCIOrder {
                 }
             } else {
                 if let element = self.segment.addElement("KTV") {
-                    var values:Dictionary<String,AnyObject> = ["number":account.number, "KIK.country":"280", "KIK.blz":account.bankCode];
+                    var values:Dictionary<String,Any> = ["number":account.number, "KIK.country":"280", "KIK.blz":account.bankCode];
                     if account.subNumber != nil {
                         values["subnumber"] = account.subNumber!
                     }
@@ -58,7 +58,7 @@ public class HBCISepaInfoOrder : HBCIOrder {
         return true;
     }
     
-    override public func updateResult(result:HBCIResultMessage) {
+    override open func updateResult(_ result:HBCIResultMessage) {
         super.updateResult(result);
         
         if let segment = resultSegments.first {

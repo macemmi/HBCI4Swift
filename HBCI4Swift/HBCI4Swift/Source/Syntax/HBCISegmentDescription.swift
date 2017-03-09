@@ -12,12 +12,12 @@ class HBCISegmentDescription: HBCISyntaxElementDescription {
     let code:String;
     let version:Int;
     
-    init(syntax:HBCISyntax, element:NSXMLElement, code:String, version:Int) throws {
+    init(syntax:HBCISyntax, element:XMLElement, code:String, version:Int) throws {
         self.code = code;
         self.version = version;
         try super.init(syntax: syntax, element: element);
         self.delimiter = HBCIChar.plus.rawValue;
-        self.elementType = ElementType.Segment;
+        self.elementType = ElementType.segment;
     }
     
     override func elementDescription() -> String {
@@ -30,7 +30,7 @@ class HBCISegmentDescription: HBCISyntaxElementDescription {
         }
     }
 
-    override func parse(bytes: UnsafePointer<CChar>, length: Int, binaries:Array<NSData>)->HBCISyntaxElement? {
+    override func parse(_ bytes: UnsafePointer<CChar>, length: Int, binaries:Array<Data>)->HBCISyntaxElement? {
         let seg = HBCISegment(description: self);
         var ref:HBCISyntaxElementReference;
         var refIdx = 0;
@@ -38,7 +38,7 @@ class HBCISegmentDescription: HBCISyntaxElementDescription {
         var count = 0;
         var delimiter = HBCIChar.plus.rawValue;
         
-        var p: UnsafeMutablePointer<CChar> = UnsafeMutablePointer<CChar>(bytes);
+        var p: UnsafeMutablePointer<CChar> = UnsafeMutablePointer<CChar>(mutating: bytes);
         var resLength = length;
         
         while(refIdx < self.children.count) {
@@ -56,7 +56,7 @@ class HBCISegmentDescription: HBCISyntaxElementDescription {
                 }
             }
             
-            if p.memory == HBCIChar.plus.rawValue && refIdx > 0 {
+            if p.pointee == HBCIChar.plus.rawValue && refIdx > 0 {
                 // empty element - check if element was optional
                 if ref.minnum < num {
                     // error: minimal occurence
@@ -66,7 +66,7 @@ class HBCISegmentDescription: HBCISyntaxElementDescription {
                     num = 0;
                     refIdx += 1;
                     
-                    p = p.advancedBy(1); // consume delimiter
+                    p = p.advanced(by: 1); // consume delimiter
                     count += 1;
                     resLength = length - count;
                 }
@@ -99,9 +99,9 @@ class HBCISegmentDescription: HBCISyntaxElementDescription {
                         }
                     }
                     
-                    p = p.advancedBy(element.length);
-                    delimiter = p.memory;
-                    p = p.advancedBy(1); // consume delimiter
+                    p = p.advanced(by: element.length);
+                    delimiter = p.pointee;
+                    p = p.advanced(by: 1); // consume delimiter
                     count += element.length + 1;
                     resLength = length - count;
                 } else {
@@ -118,8 +118,8 @@ class HBCISegmentDescription: HBCISyntaxElementDescription {
         return seg;
     }
     
-    func parse(segData:NSData, binaries:Array<NSData>) ->HBCISegment? {
-        return parse(UnsafePointer<CChar>(segData.bytes), length: segData.length, binaries: binaries) as? HBCISegment;
+    func parse(_ segData:Data, binaries:Array<Data>) ->HBCISegment? {
+        return parse((segData as NSData).bytes.bindMemory(to: CChar.self, capacity: segData.count), length: segData.count, binaries: binaries) as? HBCISegment;
     }
     
     override func getElement() -> HBCISyntaxElement? {

@@ -10,7 +10,7 @@ import Foundation
 
 class HBCISepaParserFactory {
     
-    class func creditParser(urn:String) ->HBCISepaParserCredit? {
+    class func creditParser(_ urn:String) ->HBCISepaParserCredit? {
         if let format = HBCISepaFormat(urn: urn) {
             switch format.variant {
             case "003":

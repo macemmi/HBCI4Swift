@@ -14,7 +14,7 @@ class HBCISyntaxElementReference {
     let maxnum:Int
     let elemDescr: HBCISyntaxElementDescription;
     
-    init(element:NSXMLElement, description: HBCISyntaxElementDescription) throws {
+    init(element:XMLElement, description: HBCISyntaxElementDescription) throws {
         self.elemDescr = description;
 
         var num = element.valueForAttribute("minnum")
@@ -37,7 +37,7 @@ class HBCISyntaxElementReference {
         } else {
             logError("Missing attribute 'name' in element \(element.description)");
             self.name = "<unknown>";
-            throw HBCIError.SyntaxFileError;
+            throw HBCIError.syntaxFileError;
         }
 
     }

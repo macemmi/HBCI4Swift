@@ -8,21 +8,21 @@
 
 import Foundation
 
-public class HBCIUser {
-    public let bankCode:String;
-    public let hbciVersion:String;
-    public let bankURL:String;
-    public let userId:String;
-    public let customerId:String;
+open class HBCIUser {
+    open let bankCode:String;
+    open let hbciVersion:String;
+    open let bankURL:String;
+    open let userId:String;
+    open let customerId:String;
     
     internal var _securityMethod:HBCISecurityMethod!
     
-    public var sysId:String?
-    public var tanMethod:String?
-    public var tanMediumName:String?
-    public var pin:String?
-    public var parameters = HBCIParameters();
-    public var bankName:String?
+    open var sysId:String?
+    open var tanMethod:String?
+    open var tanMediumName:String?
+    open var pin:String?
+    open var parameters = HBCIParameters();
+    open var bankName:String?
     
     public init(userId:String, customerId:String, bankCode:String, hbciVersion:String, bankURLString:String) {
         self.userId = userId;
@@ -32,7 +32,7 @@ public class HBCIUser {
         self.bankURL = bankURLString;
     }
     
-    public func setSecurityMethod(method:HBCISecurityMethod) {
+    open func setSecurityMethod(_ method:HBCISecurityMethod) {
         self.securityMethod = method;
         method.user = self;
         
@@ -41,7 +41,7 @@ public class HBCIUser {
         }
     }
     
-    public var securityMethod:HBCISecurityMethod! {
+    open var securityMethod:HBCISecurityMethod! {
         get {
             return self._securityMethod;
         }
@@ -55,7 +55,7 @@ public class HBCIUser {
         }
     }
     
-    public func setParameterData(data:NSData) throws {
+    open func setParameterData(_ data:Data) throws {
         let syntax = try HBCISyntax.syntaxWithVersion(hbciVersion);
         self.parameters = try HBCIParameters(data: data, syntax: syntax);
     }

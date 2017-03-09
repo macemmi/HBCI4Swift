@@ -17,15 +17,15 @@ public struct HBCITanMedium {
     cardNumber:String?,
     cardSeqNumber:String?,
     cardType:Int?,
-    validFrom:NSDate?,
-    validTo:NSDate?,
+    validFrom:Date?,
+    validTo:Date?,
     tanListNumber:String?,
     name:String?,
     mobileNumber:String?,
     mobileNumberSecure:String?,
     freeTans:Int?,
-    lastUse:NSDate?,
-    activatedOn:NSDate?
+    lastUse:Date?,
+    activatedOn:Date?
     
     
     init?(element: HBCISyntaxElement, version:Int) {
@@ -36,13 +36,13 @@ public struct HBCITanMedium {
         self.cardSeqNumber = element.elementValueForPath("cardseqnumber") as? String;
         self.tanListNumber = element.elementValueForPath("tanlistnumber") as? String;
         self.freeTans = element.elementValueForPath("freetans") as? Int;
-        self.lastUse = element.elementValueForPath("lastuse") as? NSDate;
-        self.activatedOn = element.elementValueForPath("activatedon") as? NSDate;
+        self.lastUse = element.elementValueForPath("lastuse") as? Date;
+        self.activatedOn = element.elementValueForPath("activatedon") as? Date;
         
         if version > 1 {
             self.cardType = element.elementValueForPath("cardtype") as? Int;
-            self.validFrom = element.elementValueForPath("validfrom") as? NSDate;
-            self.validTo = element.elementValueForPath("validto") as? NSDate;
+            self.validFrom = element.elementValueForPath("validfrom") as? Date;
+            self.validTo = element.elementValueForPath("validto") as? Date;
             self.name = element.elementValueForPath("medianame") as? String;
         }
         

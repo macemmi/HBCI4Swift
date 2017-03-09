@@ -9,21 +9,21 @@
 import Foundation
 
 enum ElementType {
-    case None, Message, Segment, DataElementGroup, DataElement
+    case none, message, segment, dataElementGroup, dataElement
 }
 
 class HBCISyntaxElementDescription: CustomStringConvertible, CustomDebugStringConvertible {
     let syntax: HBCISyntax;
-    var syntaxElement: NSXMLElement;
+    var syntaxElement: XMLElement;
     var children = Array<HBCISyntaxElementReference>();
-    var values = Dictionary<String, AnyObject>();
+    var values = Dictionary<String, Any>();
     var valids = Dictionary<String, Array<String>>();
     var identifier, name, type: String?;
     var delimiter = HBCIChar.qmark.rawValue;
-    var elementType: ElementType = .None;
+    var elementType: ElementType = .none;
     var stringValue: String?;
     
-    init(syntax:HBCISyntax, element:NSXMLElement) throws {
+    init(syntax:HBCISyntax, element:XMLElement) throws {
         self.syntax = syntax;
         self.syntaxElement = element;
         
@@ -33,8 +33,8 @@ class HBCISyntaxElementDescription: CustomStringConvertible, CustomDebugStringCo
         
         if let children = element.children {
             for node in children {
-                if node.kind == NSXMLNodeKind.ElementKind {
-                    let childElem = node as! NSXMLElement;
+                if node.kind == XMLNode.Kind.element {
+                    let childElem = node as! XMLElement;
                     
                     if childElem.name == "DEG" || childElem.name == "SEG" || childElem.name == "DE" {
                         var child: HBCISyntaxElementDescription?
@@ -58,7 +58,7 @@ class HBCISyntaxElementDescription: CustomStringConvertible, CustomDebugStringCo
                                 if child == nil {
                                     // no reference found
                                     logError("Type \(type) not found in syntax");
-                                    throw HBCIError.SyntaxFileError;
+                                    throw HBCIError.syntaxFileError;
                                 }
                             }
                         }
@@ -77,7 +77,7 @@ class HBCISyntaxElementDescription: CustomStringConvertible, CustomDebugStringCo
                     } else {
                         // invalid
                         logError("Syntax file error: invalid child element \(childElem)");
-                        throw HBCIError.SyntaxFileError;
+                        throw HBCIError.syntaxFileError;
                     }
                 }
             }
@@ -88,7 +88,7 @@ class HBCISyntaxElementDescription: CustomStringConvertible, CustomDebugStringCo
         return "name: \(self.name) value: \(self.stringValue) \n";
     }
     
-    func descriptionWithLevel(level: Int) -> String {
+    func descriptionWithLevel(_ level: Int) -> String {
         var s:String = "";
         for _ in 0 ..< level {
             s += "\t";
@@ -108,7 +108,7 @@ class HBCISyntaxElementDescription: CustomStringConvertible, CustomDebugStringCo
         get { return descriptionWithLevel(0); }
     }
     
-    func parseValueForElement(elem: NSXMLElement) ->Bool {
+    func parseValueForElement(_ elem: XMLElement) ->Bool {
         if let path = elem.valueForAttribute("path") {
             if let value = elem.stringValue {
                 self.values[path] = value;
@@ -118,14 +118,14 @@ class HBCISyntaxElementDescription: CustomStringConvertible, CustomDebugStringCo
         return false;
     }
     
-    func parseValidsForElement(elem: NSXMLElement) {
+    func parseValidsForElement(_ elem: XMLElement) {
         var values: Array<String> = [];
         
         if let path = elem.valueForAttribute("path") {
             if let children = elem.children {
                 for node in children {
-                    if node.kind == NSXMLNodeKind.ElementKind {
-                        let element = node as! NSXMLElement;
+                    if node.kind == XMLNode.Kind.element {
+                        let element = node as! XMLElement;
                         if element.name == "validvalue" && element.stringValue != nil {
                             values.append(element.stringValue!);
                         }
@@ -136,7 +136,7 @@ class HBCISyntaxElementDescription: CustomStringConvertible, CustomDebugStringCo
         }
     }
     
-    func parse(bytes: UnsafePointer<CChar>, length: Int, binaries:Array<NSData>) ->HBCISyntaxElement? {
+    func parse(_ bytes: UnsafePointer<CChar>, length: Int, binaries:Array<Data>) ->HBCISyntaxElement? {
         return nil;
     }
     

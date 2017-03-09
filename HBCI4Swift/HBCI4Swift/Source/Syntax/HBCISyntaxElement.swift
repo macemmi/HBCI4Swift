@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class HBCISyntaxElement {
+open class HBCISyntaxElement {
     let descr: HBCISyntaxElementDescription
     var children = Array<HBCISyntaxElement>();
     var name: String = "";
@@ -24,7 +24,7 @@ public class HBCISyntaxElement {
         return "";
     }
     
-    func descriptionWithLevel(level: Int) ->String {
+    func descriptionWithLevel(_ level: Int) ->String {
         var s:String = "";
         for _ in 0..<level {
             s += "\t";
@@ -59,7 +59,7 @@ public class HBCISyntaxElement {
         return true;
     }
     
-    public func setElementValue(value:AnyObject, path:String) ->Bool {
+    open func setElementValue(_ value:Any, path:String) ->Bool {
         let (name, newPath) = firstComponent(path);
         
         for elem in self.children {
@@ -67,7 +67,7 @@ public class HBCISyntaxElement {
                 if newPath != nil {
                     return elem.setElementValue(value, path: newPath!);
                 } else {
-                    if elem.type == ElementType.DataElement {
+                    if elem.type == ElementType.dataElement {
                         if let de = elem as? HBCIDataElement {
                             de.value = value;
                             return true;
@@ -83,7 +83,7 @@ public class HBCISyntaxElement {
         return false;
     }
     
-    public func setElementValues(values:Dictionary<String,AnyObject>) ->Bool {
+    open func setElementValues(_ values:Dictionary<String,Any>) ->Bool {
         for (path, value) in values {
             if !setElementValue(value, path: path) {
                 return false;
@@ -93,7 +93,7 @@ public class HBCISyntaxElement {
     }
     
     /*
-    func elementValueForPath(comps:Array<String>) ->AnyObject? {
+    func elementValueForPath(comps:Array<String>) ->Any? {
         let name = comps[0];
         var newComps = comps;
         newComps.removeAtIndex(0);
@@ -119,12 +119,12 @@ public class HBCISyntaxElement {
     }
     */
     
-    public func elementValueForPath(path:String) ->AnyObject? {
+    open func elementValueForPath(_ path:String) ->Any? {
         let (name, newPath) = firstComponent(path);
         
         for elem in self.children {
             if elem.name == name {
-                if elem.type == ElementType.DataElement {
+                if elem.type == ElementType.dataElement {
                     if let de = elem as? HBCIDataElement {
                         return de.value;
                     }
@@ -152,15 +152,15 @@ public class HBCISyntaxElement {
         return nil;
     }
     
-    public func elementValuesForPath(path:String) ->Array<AnyObject> {
-        var result = Array<AnyObject>();
+    open func elementValuesForPath(_ path:String) ->Array<Any> {
+        var result = Array<Any>();
         let (name, newPath) = firstComponent(path);
 
         for elem in self.children {
             if elem.name == name {
-                if elem.type == ElementType.DataElement {
+                if elem.type == ElementType.dataElement {
                     if let de = elem as? HBCIDataElement {
-                        if let value:AnyObject = de.value {
+                        if let value:Any = de.value {
                             result.append(value);
                         }
                     }
@@ -178,7 +178,7 @@ public class HBCISyntaxElement {
         return result;
     }
     
-    public func elementForPath(path:String) ->HBCISyntaxElement? {
+    open func elementForPath(_ path:String) ->HBCISyntaxElement? {
         let (name, newPath) = firstComponent(path);
         
         for elem in self.children {
@@ -193,7 +193,7 @@ public class HBCISyntaxElement {
         return nil;
     }
     
-    public func elementsForPath(path:String) ->Array<HBCISyntaxElement> {
+    open func elementsForPath(_ path:String) ->Array<HBCISyntaxElement> {
         var result = Array<HBCISyntaxElement>();
         let (name, newPath) = firstComponent(path);
         
@@ -210,7 +210,7 @@ public class HBCISyntaxElement {
     }
 
     
-    public func checkValidsForPath(path:String, valids:Array<String>) ->Bool {
+    open func checkValidsForPath(_ path:String, valids:Array<String>) ->Bool {
         let (name, newPath) = firstComponent(path);
         
         for elem in self.children {
@@ -229,22 +229,22 @@ public class HBCISyntaxElement {
         return true;
     }
     
-    public func messageData(data:NSMutableData) {
+    open func messageData(_ data:NSMutableData) {
         var delim = self.descr.delimiter;
         for idx in 0..<self.children.count {
             let element = self.children[idx];
             element.messageData(data);
             if idx < self.children.count - 1 {
-                data.appendBytes(&delim, length: 1);
+                data.append(&delim, length: 1);
             }
         }
         
         // now remove unneccesary delimiters from the end
         var size = data.length;
-        let content = data.bytes;
+        let content = data.bytes.assumingMemoryBound(to: CChar.self);
         for _ in 0..<self.children.count {
-            let p = UnsafePointer<CChar>(content.advancedBy(size-1));
-            if p.memory == delim {
+            let p = content.advanced(by: size-1);
+            if p.pointee == delim {
                 size -= 1;
             } else {
                 break;
@@ -255,9 +255,9 @@ public class HBCISyntaxElement {
         }
     }
     
-    public func messageString() ->String {
+    open func messageString() ->String {
         let delim = self.descr.delimiter;
-        let delimStr = String(Character(UnicodeScalar(Int(delim))));
+        let delimStr = String(Character(UnicodeScalar(Int(delim))!));
         var empties = "";
         var result = ""
         for idx in 0..<self.children.count {
@@ -316,7 +316,7 @@ public class HBCISyntaxElement {
         return success;
     }
     
-    public func addElement(name:String) ->HBCISyntaxElement? {
+    open func addElement(_ name:String) ->HBCISyntaxElement? {
         var idx = 0;
         var reference:HBCISyntaxElementReference?
         

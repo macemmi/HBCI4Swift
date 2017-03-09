@@ -9,14 +9,14 @@
 import Foundation
 
 class HBCIMessageDescription: HBCISyntaxElementDescription {
-    var defaults:Dictionary<String, AnyObject> = [:];
+    var defaults:Dictionary<String, Any> = [:];
     
-    override init(syntax: HBCISyntax, element: NSXMLElement) throws {
+    override init(syntax: HBCISyntax, element: XMLElement) throws {
         try super.init(syntax: syntax, element: element);
         self.delimiter = HBCIChar.quote.rawValue;
-        self.elementType = ElementType.Message;
+        self.elementType = ElementType.message;
         
-        let defs = element.elementsForName("default") ;
+        let defs = element.elements(forName: "default") ;
         for def in defs {
             if let path = def.valueForAttribute("path") {
                 if let s = def.stringValue {

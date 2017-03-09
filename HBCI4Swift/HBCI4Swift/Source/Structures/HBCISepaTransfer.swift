@@ -8,15 +8,15 @@
 
 import Foundation
 
-public class HBCISepaTransfer {
-    public class Item {
-        public var remoteIban:String
-        public var remoteBic:String
-        public var remoteName:String
-        public var purpose:String?
-        public var endToEndId:String?
-        public var currency:String
-        public var value:NSDecimalNumber
+open class HBCISepaTransfer {
+    open class Item {
+        open var remoteIban:String
+        open var remoteBic:String
+        open var remoteName:String
+        open var purpose:String?
+        open var endToEndId:String?
+        open var currency:String
+        open var value:NSDecimalNumber
         
         public init(iban:String, bic:String, name:String, value:NSDecimalNumber, currency:String) {
             remoteIban = iban;
@@ -27,19 +27,19 @@ public class HBCISepaTransfer {
         }
     }
     
-    public var account:HBCIAccount;
-    public var batchbook:Bool = false;
-    public var sepaId:String?
-    public var paymentInfoId:String?
-    public var date:NSDate?
+    open var account:HBCIAccount;
+    open var batchbook:Bool = false;
+    open var sepaId:String?
+    open var paymentInfoId:String?
+    open var date:Date?
     
-    public var items = Array<HBCISepaTransfer.Item>();
+    open var items = Array<HBCISepaTransfer.Item>();
     
     public init(account:HBCIAccount) {
         self.account = account;
     }
     
-    public func addItem(item: HBCISepaTransfer.Item, validate:Bool = true) -> Bool {
+    open func addItem(_ item: HBCISepaTransfer.Item, validate:Bool = true) -> Bool {
         if validate {
             // validate item
             if item.remoteIban.characters.count == 0 {
@@ -54,7 +54,7 @@ public class HBCISepaTransfer {
                 logError("Remote Name not specified");
                 return false;
             }
-            if item.value.compare(NSDecimalNumber.zero()) != NSComparisonResult.OrderedDescending {
+            if item.value.compare(NSDecimalNumber.zero) != ComparisonResult.orderedDescending {
                 logError("Transfer value must be positive");
                 return false;
             }            
@@ -64,7 +64,7 @@ public class HBCISepaTransfer {
         return true;
     }
     
-    public func validate() ->Bool {
+    open func validate() ->Bool {
         if items.count == 0 {
             logError("SEPA Transfer: no transfer items");
             return false;

@@ -7,12 +7,36 @@
 //
 
 import Foundation
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
 
-public class HBCICustomMessage : HBCIMessage {
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func >= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l >= r
+  default:
+    return !(lhs < rhs)
+  }
+}
+
+
+open class HBCICustomMessage : HBCIMessage {
     let dialog:HBCIDialog;
     var success = false;
     var tan:String?
-    public var orders = Array<HBCIOrder>();
+    open var orders = Array<HBCIOrder>();
     var result:HBCIResultMessage?
     
     init(msg:HBCIMessage, dialog:HBCIDialog) {
@@ -24,7 +48,7 @@ public class HBCICustomMessage : HBCIMessage {
     }
     
     
-    public class func newInstance(dialog:HBCIDialog) ->HBCICustomMessage? {
+    open class func newInstance(_ dialog:HBCIDialog) ->HBCICustomMessage? {
         if let md = dialog.syntax.msgs["CustomMessage"] {
             if let msg = md.compose() as? HBCIMessage {
                 if let dialogId = dialog.dialogId {
@@ -40,16 +64,16 @@ public class HBCICustomMessage : HBCIMessage {
         return nil;
     }
     
-    public func addOrder(order:HBCIOrder) {
+    open func addOrder(_ order:HBCIOrder) {
         if let segment = order.segment {
             orders.append(order);
-            self.children.insert(segment, atIndex: 2);
+            self.children.insert(segment, at: 2);
         } else {
             logError("Order comes without segment!");
         }
     }
     
-    func segmentWithName(segName:String) ->HBCISegment? {
+    func segmentWithName(_ segName:String) ->HBCISegment? {
         if let segVersions = self.descr.syntax.segs[segName] {
             // now find the right segment version
             // check which segment versions are supported by the bank
@@ -69,7 +93,7 @@ public class HBCICustomMessage : HBCIMessage {
                 return nil;
             }
             // now sort the versions - we take the latest supported version
-            supportedVersions.sortInPlace(>);
+            supportedVersions.sort(by: >);
             
             if let sd = segVersions.segmentWithVersion(supportedVersions.first!) {
                 if let segment = sd.compose() as? HBCISegment {
@@ -83,7 +107,7 @@ public class HBCICustomMessage : HBCIMessage {
         return nil;
     }
     
-    public func send() throws ->Bool {
+    open func send() throws ->Bool {
         // check
         if orders.count == 0 {
             logError("Custom message contains no orders");

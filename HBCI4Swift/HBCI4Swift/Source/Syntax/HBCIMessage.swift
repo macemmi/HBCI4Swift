@@ -8,12 +8,12 @@
 
 import Foundation
 
-public class HBCIMessage: HBCISyntaxElement {
+open class HBCIMessage: HBCISyntaxElement {
     
     func enumerateSegments() ->Bool {
         var idx = 1;
         for element in self.children {
-            if element.type == ElementType.Segment {
+            if element.type == ElementType.segment {
                 if !element.setElementValue(idx, path: "SegHead.seq") {
                     return false;
                 }
@@ -34,9 +34,7 @@ public class HBCIMessage: HBCISyntaxElement {
     }
     
     override func elementDescription() -> String {
-        let name =
-        self.name ?? "none";
-        return "MSG name: \(name)\n";
+        return "MSG name: \(self.name)\n";
     }
     
     func finalize() ->Bool {
@@ -46,19 +44,19 @@ public class HBCIMessage: HBCISyntaxElement {
         }
         */
         let data = self.messageData();
-        let sizeString = NSString(format: "%012d", data.length);
+        let sizeString = NSString(format: "%012d", data.count);
         return setElementValue(sizeString, path: "MsgHead.msgsize");
     }
     
-    func messageData() ->NSData {
+    func messageData() ->Data {
         let data = NSMutableData();
         self.messageData(data);
         var c = self.descr.delimiter;
-        data.appendBytes(&c, length: 1);
-        return data;
+        data.append(&c, length: 1);
+        return data as Data;
     }
     
-    func messageDataForSignature() ->NSData {
+    func messageDataForSignature() ->Data {
         let data = NSMutableData();
         var delim = self.descr.delimiter;
         for idx in 0..<self.children.count {
@@ -68,13 +66,13 @@ public class HBCIMessage: HBCISyntaxElement {
             }
             element.messageData(data);
             if idx < self.children.count-1 {
-                data.appendBytes(&delim, length: 1);
+                data.append(&delim, length: 1);
             }
         }
-        return data;
+        return data as Data;
     }
     
-    func messageDataForEncryption() ->NSData {
+    func messageDataForEncryption() ->Data {
         let data = NSMutableData();
         var delim = self.descr.delimiter;
         for idx in 0..<self.children.count {
@@ -84,13 +82,13 @@ public class HBCIMessage: HBCISyntaxElement {
             }
             element.messageData(data);
             if idx < self.children.count-1 {
-                data.appendBytes(&delim, length: 1);
+                data.append(&delim, length: 1);
             }
         }
-        return data;
+        return data as Data;
     }
     
-    override public func messageString() -> String {
+    override open func messageString() -> String {
         return super.messageString()+"'";
     }
 

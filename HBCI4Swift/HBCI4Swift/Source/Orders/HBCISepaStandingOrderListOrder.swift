@@ -8,10 +8,10 @@
 
 import Foundation
 
-public class HBCISepaStandingOrderListOrder : HBCIOrder {
-    public let account:HBCIAccount;
-    public var standingOrders = [HBCIStandingOrder]();
-    public var offset:String?
+open class HBCISepaStandingOrderListOrder : HBCIOrder {
+    open let account:HBCIAccount;
+    open var standingOrders = [HBCIStandingOrder]();
+    open var offset:String?
     
     public init?(message: HBCICustomMessage, account:HBCIAccount) {
         self.account = account;
@@ -21,7 +21,7 @@ public class HBCISepaStandingOrderListOrder : HBCIOrder {
         }
     }
     
-    public func enqueue() -> Bool {
+    open func enqueue() -> Bool {
         
         // check if order is supported
         if !user.parameters.isOrderSupportedForAccount(self, number: account.number, subNumber: account.subNumber) {
@@ -30,8 +30,8 @@ public class HBCISepaStandingOrderListOrder : HBCIOrder {
         }
 
         if let gen = HBCISepaGeneratorFactory.creditGenerator(self.user) {
-            if let iban = account.iban, bic = account.bic {
-                var values:Dictionary<String,AnyObject> = ["My.iban":iban, "My.bic":bic, "sepadescr":gen.sepaFormat.urn];
+            if let iban = account.iban, let bic = account.bic {
+                var values:Dictionary<String,Any> = ["My.iban":iban, "My.bic":bic, "sepadescr":gen.sepaFormat.urn];
                 if let ofs = offset {
                     values["offset"] = ofs;
                 }
@@ -54,7 +54,7 @@ public class HBCISepaStandingOrderListOrder : HBCIOrder {
         return true;
     }
     
-    override public func updateResult(result:HBCIResultMessage) {
+    override open func updateResult(_ result:HBCIResultMessage) {
         super.updateResult(result);
         
         // check whether result is incomplete
@@ -66,17 +66,17 @@ public class HBCISepaStandingOrderListOrder : HBCIOrder {
         }
         
         for segment in resultSegments {
-            if let urn = segment.elementValueForPath("sepadescr") as? String, pain = segment.elementValueForPath("sepapain") as? NSData {
+            if let urn = segment.elementValueForPath("sepadescr") as? String, let pain = segment.elementValueForPath("sepapain") as? Data {
                 if let parser = HBCISepaParserFactory.creditParser(urn) {
                     if let transfer = parser.transferForDocument(account, data: pain) {
                         // get standing order data
-                        let lastDate = segment.elementValueForPath("details.lastdate") as? NSDate;
+                        let lastDate = segment.elementValueForPath("details.lastdate") as? Date;
                         
                         if let unit = segment.elementValueForPath("details.timeunit") as? String,
-                            startDate = segment.elementValueForPath("details.firstdate") as? NSDate,
-                            day = segment.elementValueForPath("details.execday") as? Int,
-                            cycle = segment.elementValueForPath("details.turnus") as? Int,
-                            cycleUnit = HBCIStandingOrderCycleUnit(rawValue: unit) {
+                            let startDate = segment.elementValueForPath("details.firstdate") as? Date,
+                            let day = segment.elementValueForPath("details.execday") as? Int,
+                            let cycle = segment.elementValueForPath("details.turnus") as? Int,
+                            let cycleUnit = HBCIStandingOrderCycleUnit(rawValue: unit) {
                                 let stord = HBCIStandingOrder(transfer: transfer, startDate: startDate, cycle: cycle, day: day, cycleUnit: cycleUnit);
                                 stord.lastDate = lastDate;
                                 stord.orderId = segment.elementValueForPath("orderid") as? String;

@@ -8,26 +8,26 @@
 
 import Foundation
 
-public enum HBCIError : ErrorType {
-    case BadURL(String)
-    case Connection(String)
-    case ServerTimeout(String)
-    case MissingData(String)
-    case InvalidHBCIVersion(String)
-    case SyntaxFileError
-    case ParseError
-    case UserAbort
+public enum HBCIError : Error {
+    case badURL(String)
+    case connection(String)
+    case serverTimeout(String)
+    case missingData(String)
+    case invalidHBCIVersion(String)
+    case syntaxFileError
+    case parseError
+    case userAbort
     
 }
 
 
 public enum HBCIErrorCode:Int {
-    case URLError = 1, SyntaxFileError, ParseError, MessageError, ConnectionError, ConnectionTestError
+    case urlError = 1, syntaxFileError, parseError, messageError, connectionError, connectionTestError
 }
 
 
-func createError(code: HBCIErrorCode, message:String?, arguments:[String]? = nil) ->NSError {
-    var userInfo:Dictionary<String, AnyObject> = [:];
+func createError(_ code: HBCIErrorCode, message:String?, arguments:[String]? = nil) ->NSError {
+    var userInfo:Dictionary<String, Any> = [:];
     if let msg = message {
         userInfo[NSLocalizedDescriptionKey] = msg;
     }

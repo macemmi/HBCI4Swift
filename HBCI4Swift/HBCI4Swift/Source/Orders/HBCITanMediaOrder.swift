@@ -8,12 +8,12 @@
 
 import Foundation
 
-public class HBCITanMediaOrder : HBCIOrder {
-    public var mediaType:String?
-    public var mediaCategory:String?
+open class HBCITanMediaOrder : HBCIOrder {
+    open var mediaType:String?
+    open var mediaCategory:String?
     
     // result
-    public var tanMedia = Array<HBCITanMedium>();
+    open var tanMedia = Array<HBCITanMedium>();
     
     public init?(message: HBCICustomMessage) {
         super.init(name: "TANMediaList", message: message);
@@ -22,7 +22,7 @@ public class HBCITanMediaOrder : HBCIOrder {
         }
     }
     
-    public func enqueue() ->Bool {
+    open func enqueue() ->Bool {
         // check if order is supported
         if !user.parameters.isOrderSupported(self) {
             logError(self.name + " is not supported for user " + user.userId);
@@ -48,7 +48,7 @@ public class HBCITanMediaOrder : HBCIOrder {
         return true;
     }
     
-    override public func updateResult(result:HBCIResultMessage) {
+    override open func updateResult(_ result:HBCIResultMessage) {
         super.updateResult(result);
         
         if let retSeg = resultSegments.first {

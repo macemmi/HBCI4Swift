@@ -7,6 +7,41 @@
 //
 
 import Foundation
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func >= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l >= r
+  default:
+    return !(lhs < rhs)
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func <= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l <= r
+  default:
+    return !(rhs < lhs)
+  }
+}
+
 
 struct HBCIMT94xTag {
     let tag:String;
@@ -36,7 +71,7 @@ class HBCIMT94xParser {
         self.mt94xString = mt94xString;
     }
     
-    func getTagsFromString(mtString:NSString) throws ->Array<HBCIMT94xTag> {
+    func getTagsFromString(_ mtString:NSString) throws ->Array<HBCIMT94xTag> {
         let pattern = ":21:|:25:|:28C:|:60F:|:60M:|:61:|:86:|:62F:|:62M:|:64:|:65:";
         var nextTagRange, valueRange, residualRange: NSRange;
         var finished:Bool = false;
@@ -46,58 +81,58 @@ class HBCIMT94xParser {
         residualRange = NSRange(location:0, length: mtString.length);
         
         do {
-            let regex = try NSRegularExpression(pattern: pattern, options: NSRegularExpressionOptions.CaseInsensitive)
+            let regex = try NSRegularExpression(pattern: pattern, options: NSRegularExpression.Options.caseInsensitive)
             while !finished {
-                nextTagRange = regex.rangeOfFirstMatchInString(mtString as String, options: NSMatchingOptions(), range: residualRange);
+                nextTagRange = regex.rangeOfFirstMatch(in: mtString as String, options: NSRegularExpression.MatchingOptions(), range: residualRange);
                 if nextTagRange.location != NSNotFound {
                     valueRange = NSRange(location: residualRange.location, length: nextTagRange.location-residualRange.location);
                     residualRange.location = nextTagRange.location+nextTagRange.length;
                     residualRange.length = mtString.length-residualRange.location;
-                    let tagValue = mtString.substringWithRange(valueRange);
-                    let tag = HBCIMT94xTag(tag: tagString, value: tagValue);
+                    let tagValue = mtString.substring(with: valueRange);
+                    let tag = HBCIMT94xTag(tag: tagString, value: tagValue as NSString);
                     tags.append(tag);
                     
                     var tagRange = nextTagRange;
                     tagRange.location += 1;
                     tagRange.length -= 2;
-                    tagString = mtString.substringWithRange(tagRange);
+                    tagString = mtString.substring(with: tagRange);
                 } else {
-                    let tag = HBCIMT94xTag(tag: tagString, value: mtString.substringWithRange(residualRange));
+                    let tag = HBCIMT94xTag(tag: tagString, value: mtString.substring(with: residualRange) as NSString);
                     tags.append(tag);
                     finished = true;
                 }
             }
         } catch let err as NSError {
             logError("MT94xParse error: "+err.description);
-            throw HBCIError.ParseError;
+            throw HBCIError.parseError;
         }
         return tags;
     }
     
-    func getTag86FieldsFromString(tag86String:NSString) throws ->Array<HBCIMT94xField> {
+    func getTag86FieldsFromString(_ tag86String:NSString) throws ->Array<HBCIMT94xField> {
         var fields = Array<HBCIMT94xField>();
         var residualRange = NSRange(location: 0, length: tag86String.length);
 
         do {
-            let regex = try NSRegularExpression(pattern: "\\?[0-9][0-9]", options: NSRegularExpressionOptions.CaseInsensitive)
-            var range1 = regex.rangeOfFirstMatchInString(tag86String as String, options: NSMatchingOptions(), range: residualRange);
+            let regex = try NSRegularExpression(pattern: "\\?[0-9][0-9]", options: NSRegularExpression.Options.caseInsensitive)
+            var range1 = regex.rangeOfFirstMatch(in: tag86String as String, options: NSRegularExpression.MatchingOptions(), range: residualRange);
             while range1.location != NSNotFound {
                 residualRange.location = range1.location+range1.length;
                 residualRange.length = tag86String.length-residualRange.location;
-                let fieldTag = tag86String.substringWithRange(NSRange(location: range1.location+1, length: 2));
+                let fieldTag = tag86String.substring(with: NSRange(location: range1.location+1, length: 2));
                 let fieldNum = Int(fieldTag);
                 if fieldNum == nil {
                     logError("MT94xParse error: field tag \(fieldTag) is not a number");
-                    throw HBCIError.ParseError;
+                    throw HBCIError.parseError;
                 }
 
-                let range2 = regex.rangeOfFirstMatchInString(tag86String as String, options: NSMatchingOptions(), range: residualRange);
+                let range2 = regex.rangeOfFirstMatch(in: tag86String as String, options: NSRegularExpression.MatchingOptions(), range: residualRange);
                 if range2.location != NSNotFound {
-                    let fieldValue = tag86String.substringWithRange(NSRange(location: residualRange.location, length: range2.location-residualRange.location));
+                    let fieldValue = tag86String.substring(with: NSRange(location: residualRange.location, length: range2.location-residualRange.location));
                     let field = HBCIMT94xField(field: fieldNum!, value: fieldValue);
                     fields.append(field);
                 } else {
-                    let fieldValue = tag86String.substringWithRange(residualRange);
+                    let fieldValue = tag86String.substring(with: residualRange);
                     let field = HBCIMT94xField(field: fieldNum!, value: fieldValue);
                     fields.append(field);
                 }
@@ -105,45 +140,46 @@ class HBCIMT94xParser {
             }
         } catch let err as NSError {
             logError("MT94xParse error: "+err.description);
-            throw HBCIError.ParseError;
+            throw HBCIError.parseError;
         }
         return fields;
     }
 
     
-    func checkSpecialDate(dateString:NSString) ->NSDate? {
+    func checkSpecialDate(_ dateString:NSString) ->Date? {
         // special check for February - here banks often send 30. February
-        if dateString.substringWithRange(NSMakeRange(2, 2)) == "02" {
-            let day = dateString.substringWithRange(NSMakeRange(4, 2));
+        if dateString.substring(with: NSMakeRange(2, 2)) == "02" {
+            let day = dateString.substring(with: NSMakeRange(4, 2));
             if day == "30" || day == "31" {
                 // take first of March and subract 1 day to come to the right day
-                let march = dateString.substringToIndex(2).stringByAppendingString("0301");
-                if let date = HBCIUtils.dateFormatter().dateFromString(march), calendar = NSCalendar(identifier: NSCalendarIdentifierGregorian) {
-                    return calendar.dateByAddingUnit(NSCalendarUnit.Day, value: -1, toDate: date, options: NSCalendarOptions.WrapComponents);
+                let march = dateString.substring(to: 2) + "0301";
+                if let date = HBCIUtils.dateFormatter().date(from: march) {
+                    let calendar = Calendar(identifier: Calendar.Identifier.gregorian);
+                    return (calendar as NSCalendar).date(byAdding: NSCalendar.Unit.day, value: -1, to: date, options: NSCalendar.Options.wrapComponents);
                 }
             }
         }
         return nil;
     }
     
-    func parseTag61ForItem(item:HBCIStatementItem, tagValue:NSString) throws {
+    func parseTag61ForItem(_ item:HBCIStatementItem, tagValue:NSString) throws {
         var location = 0;
         
-        let valutaDateString = tagValue.substringWithRange(NSRange(location: 0, length: 6));
-        item.valutaDate = HBCIUtils.dateFormatter().dateFromString(valutaDateString);
+        let valutaDateString = tagValue.substring(with: NSRange(location: 0, length: 6));
+        item.valutaDate = HBCIUtils.dateFormatter().date(from: valutaDateString);
         if item.valutaDate == nil {
-            item.valutaDate = checkSpecialDate(valutaDateString);
+            item.valutaDate = checkSpecialDate(valutaDateString as NSString);
             if item.valutaDate == nil {
                 logError("MT94xParse error: could not determine valuta date from "+valutaDateString);
-                throw HBCIError.ParseError;
+                throw HBCIError.parseError;
             }
         }
         
         // check if posting date is provided
-        var postingDateString = tagValue.substringWithRange(NSRange(location: 6, length: 4));
+        var postingDateString = tagValue.substring(with: NSRange(location: 6, length: 4));
         do {
-            let regex = try NSRegularExpression(pattern: "[0-9]+", options: NSRegularExpressionOptions.CaseInsensitive)
-            var range = regex.rangeOfFirstMatchInString(postingDateString as String, options: NSMatchingOptions(), range: NSRange(location: 0, length: 4));
+            let regex = try NSRegularExpression(pattern: "[0-9]+", options: NSRegularExpression.Options.caseInsensitive)
+            var range = regex.rangeOfFirstMatch(in: postingDateString as String, options: NSRegularExpression.MatchingOptions(), range: NSRange(location: 0, length: 4));
             if range.location == 0 && range.length == 4 {
                 // posting date is provided - now set the correct year
                 // if it is the same month, we use the same year
@@ -152,7 +188,7 @@ class HBCIMT94xParser {
                 
                 if valutaMonth == nil || postingMonth == nil {
                     logError("MT94xParse error: could not extract month from dates "+valutaDateString+"/"+postingDateString);
-                    throw HBCIError.ParseError;
+                    throw HBCIError.parseError;
                 }
                 
                 if valutaMonth != postingMonth {
@@ -169,18 +205,18 @@ class HBCIMT94xParser {
                         postingDateString = String(format: "%0.2d", year)+postingDateString;
                     } else {
                         logError("MT94xParse error: could not extract year from valuta date string "+valutaDateString);
-                        throw HBCIError.ParseError;
+                        throw HBCIError.parseError;
                     }
                 } else {
                     // valutaMonth = postingMonth
                     postingDateString = valutaDateString.substringToIndex(2)+postingDateString;
                 }
-                item.date = HBCIUtils.dateFormatter().dateFromString(postingDateString as String);
+                item.date = HBCIUtils.dateFormatter().date(from: postingDateString as String);
                 if item.date == nil {
-                    item.date = checkSpecialDate(postingDateString);
+                    item.date = checkSpecialDate(postingDateString as NSString);
                     if item.date == nil {
                         logError("MT94xParse error: could not determine posting date from "+postingDateString);
-                        throw HBCIError.ParseError;
+                        throw HBCIError.parseError;
                     }
                 }
                 location = 10;
@@ -190,78 +226,78 @@ class HBCIMT94xParser {
             }
             
             // debit credit
-            if tagValue.substringWithRange(NSRange(location: location, length: 1)) == "R" {
+            if tagValue.substring(with: NSRange(location: location, length: 1)) == "R" {
                 item.isCancellation = true;
                 location += 1;
             }
-            let debitcredit = tagValue.substringWithRange(NSRange(location: location, length: 1));
+            let debitcredit = tagValue.substring(with: NSRange(location: location, length: 1));
             location += 1;
             
             // check for currency kind
-            let a = UInt32(tagValue.characterAtIndex(location));
+            let a = UInt32(tagValue.character(at: location));
             if a > UnicodeScalar("9").value || a < UnicodeScalar("0").value {
                 location += 1;
             }
             
-            range = tagValue.rangeOfString("N", options: NSStringCompareOptions(), range: NSRange(location: location, length: tagValue.length-location));
+            range = tagValue.range(of: "N", options: NSString.CompareOptions(), range: NSRange(location: location, length: tagValue.length-location));
             if range.location == NSNotFound {
-                logError("MT94xParse error: could not find N in tag61 (reststring: "+tagValue.substringFromIndex(location));
-                throw HBCIError.ParseError;
+                logError("MT94xParse error: could not find N in tag61 (reststring: "+tagValue.substring(from: location));
+                throw HBCIError.parseError;
             }
-            let valueString = tagValue.substringWithRange(NSRange(location: location, length: range.location-location));
-            item.value = HBCIUtils.numberFormatter().numberFromString(valueString) as? NSDecimalNumber;
+            let valueString = tagValue.substring(with: NSRange(location: location, length: range.location-location));
+            item.value = HBCIUtils.numberFormatter().number(from: valueString) as? NSDecimalNumber;
             if item.value == nil {
                 logError("MT94xParse error: could not parse value from "+valueString);
-                throw HBCIError.ParseError;
+                throw HBCIError.parseError;
             }
             
             if debitcredit == "D" {
-                item.value = NSDecimalNumber.zero().decimalNumberBySubtracting(item.value!);
+                item.value = NSDecimalNumber.zero.subtracting(item.value!);
             }
             
             // round
             item.value = HBCIUtils.round(item.value!);
             
             location = range.location+1;
-            item.postingKey = tagValue.substringWithRange(NSRange(location: location, length: 3));
+            item.postingKey = tagValue.substring(with: NSRange(location: location, length: 3));
             location += 3;
             
-            range = tagValue.rangeOfString("//", options: NSStringCompareOptions(), range: NSRange(location: location, length: tagValue.length-location));
+            range = tagValue.range(of: "//", options: NSString.CompareOptions(), range: NSRange(location: location, length: tagValue.length-location));
             if range.location == NSNotFound {
-                item.customerReference = tagValue.substringFromIndex(location);
+                item.customerReference = tagValue.substring(from: location);
                 return;
             }
-            item.customerReference = tagValue.substringWithRange(NSRange(location: location, length: range.location-location));
+            item.customerReference = tagValue.substring(with: NSRange(location: location, length: range.location-location));
             location = range.location+2;
             
             // todo
             
         }
         catch {
-            throw HBCIError.ParseError;
+            throw HBCIError.parseError;
         }
         return;
     }
     
     
-    func parseTag86ForItem(item:HBCIStatementItem, tagValue:NSString) throws {
-        let transactionCode = tagValue.substringToIndex(3);
+    func parseTag86ForItem(_ item:HBCIStatementItem, tagValue:NSString) throws {
+        let transactionCode = tagValue.substring(to: 3);
         let location = 3;
         
         item.transactionCode = Int(transactionCode);
         if item.transactionCode == 999 {
             // unstructured
-            item.purpose = tagValue.substringFromIndex(location);
+            item.purpose = tagValue.substring(from: location);
             return;
         }
         
         // structured
-        let fieldString = tagValue.substringFromIndex(location);
+        let fieldString = tagValue.substring(from: location);
         item.isSEPA = item.transactionCode >= 100 && item.transactionCode <= 199;
         
         // get fields
         do {
-            let fields = try getTag86FieldsFromString(fieldString);
+            let fields = try getTag86FieldsFromString(fieldString as NSString);
             var purpose = "";
             
             for field in fields {
@@ -301,23 +337,23 @@ class HBCIMT94xParser {
         }
         catch {
             logError("MT94xParse error: not able to get field86 tags from "+fieldString);
-            throw HBCIError.ParseError;
+            throw HBCIError.parseError;
         }
     }
     
-    func parseBalance(s:NSString) ->HBCIAccountBalance? {
-        let debitcredit = s.substringToIndex(1);
-        let dateString = s.substringWithRange(NSRange(location: 1, length: 6));
-        let postingDate = HBCIUtils.dateFormatter().dateFromString(dateString);
+    func parseBalance(_ s:NSString) ->HBCIAccountBalance? {
+        let debitcredit = s.substring(to: 1);
+        let dateString = s.substring(with: NSRange(location: 1, length: 6));
+        let postingDate = HBCIUtils.dateFormatter().date(from: dateString);
         if postingDate == nil {
             logError("MT94xParse error: cannot parse posting date from "+dateString);
             return nil;
         }
-        let currency = s.substringWithRange(NSRange(location: 7, length: 3));
-        let valueString = s.substringFromIndex(10);
-        if var value = HBCIUtils.numberFormatter().numberFromString(valueString) as? NSDecimalNumber {
+        let currency = s.substring(with: NSRange(location: 7, length: 3));
+        let valueString = s.substring(from: 10);
+        if var value = HBCIUtils.numberFormatter().number(from: valueString) as? NSDecimalNumber {
             if debitcredit == "D" {
-                value = NSDecimalNumber.zero().decimalNumberBySubtracting(value);
+                value = NSDecimalNumber.zero.subtracting(value);
             }
             
             // round
@@ -329,13 +365,13 @@ class HBCIMT94xParser {
         }
     }
     
-    func parseAccountName(name:NSString, statement:HBCIStatement) {
-        let range = name.rangeOfString("/");
+    func parseAccountName(_ name:NSString, statement:HBCIStatement) {
+        let range = name.range(of: "/");
         if range.location == NSNotFound {
             return;
         }
-        let part1 = name.substringWithRange(NSRange(location: 0, length: range.location));
-        let part2 = name.substringWithRange(NSRange(location: range.location+1, length: name.length-range.location-1));
+        let part1 = name.substring(with: NSRange(location: 0, length: range.location));
+        let part2 = name.substring(with: NSRange(location: range.location+1, length: name.length-range.location-1));
         var isBLZ = true;
         if range.location == 8 {
             // is part1 a BLZ or BIC?
@@ -367,7 +403,7 @@ class HBCIMT94xParser {
         }
     }
     
-    func parseStatement(rawStatement:NSString) throws ->HBCIStatement {
+    func parseStatement(_ rawStatement:NSString) throws ->HBCIStatement {
         var idx = 0;
         
         let rawStatementString = rawStatement as String;
@@ -386,7 +422,7 @@ class HBCIMT94xParser {
         
         if idx >= tags.count {
             logError(missingTagsString);
-            throw HBCIError.ParseError;
+            throw HBCIError.parseError;
         }
         tag = tags[idx]; idx += 1;
         // optional reference
@@ -394,11 +430,11 @@ class HBCIMT94xParser {
             statement.statementRef = tag.value as String;
             if idx >= tags.count {
                 logError(missingTagsString);
-                throw HBCIError.ParseError;
+                throw HBCIError.parseError;
             }
             if idx >= tags.count {
                 logError(missingTagsString);
-                throw HBCIError.ParseError;
+                throw HBCIError.parseError;
             }
             tag = tags[idx]; idx += 1;
         }
@@ -414,7 +450,7 @@ class HBCIMT94xParser {
         // statement number
         if idx >= tags.count {
             logError(missingTagsString);
-            throw HBCIError.ParseError;
+            throw HBCIError.parseError;
         }
         tag = tags[idx]; idx += 1;
         if tag.tag == "28C" {
@@ -426,18 +462,18 @@ class HBCIMT94xParser {
         
         if idx >= tags.count {
             logError(missingTagsString);
-            throw HBCIError.ParseError;
+            throw HBCIError.parseError;
         }
         tag = tags[idx]; idx += 1;
         if tag.tag == "60F" || tag.tag == "60M" {
             statement.startBalance = parseBalance(tag.value);
             if statement.startBalance == nil {
                 logError("MT94xParse error: cannot parse start balance in MT94x entry "+rawStatementString);
-                throw HBCIError.ParseError;
+                throw HBCIError.parseError;
             }
         } else {
             logError("MT94xParse error: start balance is missing in MT94x entry "+rawStatementString);
-            throw HBCIError.ParseError;
+            throw HBCIError.parseError;
         }
         
         // statement items
@@ -454,12 +490,12 @@ class HBCIMT94xParser {
             }
             catch {
                 logError("MT94xParseError: cannot parse tag61 from "+(tag.value as String));
-                throw HBCIError.ParseError;
+                throw HBCIError.parseError;
             }
             
             if idx >= tags.count {
                 logError(missingTagsString);
-                throw HBCIError.ParseError;
+                throw HBCIError.parseError;
             }
             tag = tags[idx]; idx += 1;
             if tag.tag == "86" {
@@ -468,11 +504,11 @@ class HBCIMT94xParser {
                 }
                 catch {
                     logError("MT94xParseError: cannot parse tag86 from "+(tag.value as String));
-                    throw HBCIError.ParseError;
+                    throw HBCIError.parseError;
                 }
                 if idx >= tags.count {
                     logError(missingTagsString);
-                    throw HBCIError.ParseError;
+                    throw HBCIError.parseError;
                 }
                 tag = tags[idx]; idx += 1;
             }
@@ -509,13 +545,13 @@ class HBCIMT94xParser {
     
     func parse() throws ->Array<HBCIStatement> {
         var statements = Array<HBCIStatement>();
-        let rawStatements = self.mt94xString.componentsSeparatedByString(":20:START") ;
+        let rawStatements = self.mt94xString.components(separatedBy: ":20:START") ;
         for raw in rawStatements {
             if raw.characters.count > 2 {
-                var trimmed = raw.stringByReplacingOccurrencesOfString("@@", withString: "") as NSString;
-                trimmed = trimmed.stringByReplacingOccurrencesOfString("\n", withString: "");
-                trimmed = trimmed.stringByReplacingOccurrencesOfString("\r", withString: "");
-                trimmed = trimmed.stringByTrimmingCharactersInSet(NSCharacterSet(charactersInString: "-")) as NSString;
+                var trimmed = raw.replacingOccurrences(of: "@@", with: "") as NSString;
+                trimmed = trimmed.replacingOccurrences(of: "\n", with: "") as NSString;
+                trimmed = trimmed.replacingOccurrences(of: "\r", with: "") as NSString;
+                trimmed = trimmed.trimmingCharacters(in: CharacterSet(charactersIn: "-")) as NSString;
                 
                 do {
                     let statement = try parseStatement(trimmed);
@@ -523,7 +559,7 @@ class HBCIMT94xParser {
                 }
                 catch {
                     logError("MT94xParse error: cannot parse MT94x statement: "+(trimmed as String));
-                    throw HBCIError.ParseError;
+                    throw HBCIError.parseError;
                 }
             }
         }

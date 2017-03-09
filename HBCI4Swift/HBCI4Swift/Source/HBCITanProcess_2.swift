@@ -16,12 +16,12 @@ class HBCITanProcess_2 {
     }
 
     // parse flicker code out of hhduc (preferred) or challenge (if hhduc is not available)
-    func parseFlickerCode(challenge:String?, hhduc:NSData?) ->String? {
+    func parseFlickerCode(_ challenge:String?, hhduc:Data?) ->String? {
 
         // hhduc has priority. available from HITAN4
         if let hhduc = hhduc {
-            if let s = String(data: hhduc, encoding: NSASCIIStringEncoding) {
-                let trimmed = s.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet());
+            if let s = String(data: hhduc, encoding: String.Encoding.ascii) {
+                let trimmed = s.trimmingCharacters(in: CharacterSet.whitespaces);
                 if trimmed.characters.count > 0 {
                     do {
                         let code = try HBCIFlickerCode(code: trimmed);
@@ -37,7 +37,7 @@ class HBCITanProcess_2 {
         
         // check if challenge contains something to parse
         if let challenge = challenge {
-            let trimmed = challenge.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet());
+            let trimmed = challenge.trimmingCharacters(in: CharacterSet.whitespaces);
             if trimmed.characters.count > 0 {
                 do {
                     let code = try HBCIFlickerCode(code: trimmed);
@@ -51,7 +51,7 @@ class HBCITanProcess_2 {
         return nil;
     }
     
-    func processOrder(order:HBCIOrder) throws ->Bool {
+    func processOrder(_ order:HBCIOrder) throws ->Bool {
         // create message with order and HKTAN
         if let msg = HBCICustomMessage.newInstance(dialog) {
 
@@ -66,7 +66,7 @@ class HBCITanProcess_2 {
                 
                 // do we need tan medium information?
                 let parameters = dialog.user.parameters;
-                if let processInfos = parameters.tanProcessInfos, secfunc = dialog.user.tanMethod {
+                if let processInfos = parameters.tanProcessInfos, let secfunc = dialog.user.tanMethod {
                     for tanMethod in processInfos.tanMethods {
                         if tanMethod.identifier == secfunc {
                             // check parameters for the selected Tan Method

@@ -7,20 +7,44 @@
 //
 
 import Foundation
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
 
-func isEscaped(pointer:UnsafePointer<CChar>) ->Bool {
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func >= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l >= r
+  default:
+    return !(lhs < rhs)
+  }
+}
+
+
+func isEscaped(_ pointer:UnsafePointer<CChar>) ->Bool {
     var count = 0;
-    var p = UnsafeMutablePointer<CChar>(pointer);
-    p = p.advancedBy(-1);
-    while p.memory == HBCIChar.qmark.rawValue {
-        p = p.advancedBy(-1);
+    var p = UnsafeMutablePointer<CChar>(mutating: pointer);
+    p = p.advanced(by: -1);
+    while p.pointee == HBCIChar.qmark.rawValue {
+        p = p.advanced(by: -1);
         count += 1;
     }
     return count%2 == 1;
 }
 
-func isDelimiter(pointer:UnsafePointer<CChar>) ->Bool {
-    if pointer.memory == HBCIChar.plus.rawValue || pointer.memory == HBCIChar.dpoint.rawValue || pointer.memory == HBCIChar.quote.rawValue {
+func isDelimiter(_ pointer:UnsafePointer<CChar>) ->Bool {
+    if pointer.pointee == HBCIChar.plus.rawValue || pointer.pointee == HBCIChar.dpoint.rawValue || pointer.pointee == HBCIChar.quote.rawValue {
         if !isEscaped(pointer) {
             return true;
         }
@@ -28,23 +52,23 @@ func isDelimiter(pointer:UnsafePointer<CChar>) ->Bool {
     return false;
 }
 
-func checkForDataTag(pointer:UnsafePointer<CChar>) ->(dataLength:Int, tagLength:Int) {
+func checkForDataTag(_ pointer:UnsafePointer<CChar>) ->(dataLength:Int, tagLength:Int) {
     // first check if we are at the beginning of a syntax element
-    let prev = pointer.advancedBy(-1);
+    let prev = pointer.advanced(by: -1);
     if !isDelimiter(prev) {
         return (0,0);
     }
     
     // now search for ending @
-    var p = pointer.advancedBy(1);
+    var p = pointer.advanced(by: 1);
     var i = 0;
-    while p.memory != HBCIChar.amper.rawValue {
-        if p.memory < 0x30 || p.memory > 0x39 {
+    while p.pointee != HBCIChar.amper.rawValue {
+        if p.pointee < 0x30 || p.pointee > 0x39 {
             // no number
             return (0,0);
         }
         i += 1;
-        p = p.advancedBy(1);
+        p = p.advanced(by: 1);
         if i > 9 {
             // safety exit condition
             return (0,0);
@@ -53,15 +77,15 @@ func checkForDataTag(pointer:UnsafePointer<CChar>) ->(dataLength:Int, tagLength:
     if i == 0 {
         return (0,0);
     }
-    var endp = UnsafeMutablePointer<CChar>(pointer.advancedBy(1));
+    var endp:UnsafeMutablePointer<Int8>? = UnsafeMutablePointer<Int8>(mutating: pointer.advanced(by: 1));
     let dataLength = strtol(endp, &endp, 10);
     return (dataLength, i+2);
 }
 
-public class HBCIResultMessage {
+open class HBCIResultMessage {
     let syntax:HBCISyntax;
-    var binaries = Array<NSData>();
-    var segmentData = Array<NSData>();
+    var binaries = Array<Data>();
+    var segmentData = Array<Data>();
     var segmentStrings = Array<NSString>();
     var segments = Array<HBCISegment>();
     var messageResponses = Array<HBCIMessageResponse>();
@@ -71,31 +95,31 @@ public class HBCIResultMessage {
         self.syntax = syntax;
     }
     
-    func addBinary(binary:NSData) ->Int {
+    func addBinary(_ binary:Data) ->Int {
         let idx = binaries.count;
         binaries.append(binary);
         return idx;
     }
     
-    func parse(msgData:NSData) ->Bool {
+    func parse(_ msgData:Data) ->Bool {
         // first extract binary data
-        let content = UnsafePointer<CChar>(msgData.bytes);
-        var target = [CChar](count:msgData.length, repeatedValue:0);
+        let content = (msgData as NSData).bytes.bindMemory(to: CChar.self, capacity: msgData.count);
+        var target = [CChar](repeating: 0, count: msgData.count);
         var i = 0, j = 0;
-        var p = UnsafeMutablePointer<CChar>(content);
+        var p = UnsafeMutablePointer<CChar>(mutating: content);
         
-        while i < msgData.length {
-            if p.memory == HBCIChar.amper.rawValue && i > 0 {
+        while i < msgData.count {
+            if p.pointee == HBCIChar.amper.rawValue && i > 0 {
                 // first check if we have binary data
                 let (bin_size, tag_size) = checkForDataTag(p);
                 if bin_size > 0 {
                     // now we have binary data
-                    let bin_start = p.advancedBy(tag_size);
-                    let data = NSData(bytes: bin_start, length: bin_size);
+                    let bin_start = p.advanced(by: tag_size);
+                    let data = Data(bytes: bin_start, count: bin_size);
                     // add data to repository
                     let bin_idx = addBinary(data);
                     let tag = "@\(bin_idx)@";
-                    if let cstr = tag.cStringUsingEncoding(NSISOLatin1StringEncoding) {
+                    if let cstr = tag.cString(using: String.Encoding.isoLatin1) {
                         // copy tag to buffer
                         for c in cstr {
                             if c != 0 {
@@ -104,7 +128,7 @@ public class HBCIResultMessage {
                             }
                         }
                         i += tag_size+bin_size;
-                        p = p.advancedBy(tag_size+bin_size);
+                        p = p.advanced(by: tag_size+bin_size);
                     } else {
                         // issue during conversion
                         logError("tag \(tag) cannot be converted to Latin1");
@@ -114,36 +138,36 @@ public class HBCIResultMessage {
                 }
             }
             
-            target[j] = p.memory;
+            target[j] = p.pointee;
             j += 1;
             i += 1;
-            p = p.advancedBy(1);
+            p = p.advanced(by: 1);
         }
         
         // now we have data that does not contain binary data any longer
         // next step: split into sequence of segments
         let messageSize = j;
-        var segContent = [CChar](count:messageSize, repeatedValue:0);
+        var segContent = [CChar](repeating: 0, count: messageSize);
         i = 0;
         var segSize = 0;
         
-        p = UnsafeMutablePointer<CChar>(target);
+        p = UnsafeMutablePointer<CChar>(mutating: target);
         while i < messageSize {
-            segContent[segSize] = p.memory;
+            segContent[segSize] = p.pointee;
             segSize += 1;
-            if p.memory == HBCIChar.quote.rawValue && !isEscaped(p) {
+            if p.pointee == HBCIChar.quote.rawValue && !isEscaped(p) {
                 // now we have a segment in segContent
-                let data = NSData(bytes: segContent, length: segSize);
+                let data = Data(bytes: segContent, count: segSize);
                 self.segmentData.append(data);
                 
                 // we convert to String as well for debugging
-                if let s = NSString(data: data, encoding: NSISOLatin1StringEncoding) {
+                if let s = NSString(data: data, encoding: String.Encoding.isoLatin1.rawValue) {
                     self.segmentStrings.append(s);
                 }
                 segSize = 0;
             }
             i += 1;
-            p = p.advancedBy(1);
+            p = p.advanced(by: 1);
         }
         
         // now we have all segment strings and we can start to parse each segment
@@ -154,7 +178,7 @@ public class HBCIResultMessage {
                 }
             }
             catch {
-                if let segmentString = NSString(data: segData, encoding: NSISOLatin1StringEncoding) {
+                if let segmentString = NSString(data: segData, encoding: String.Encoding.isoLatin1.rawValue) {
                     logError("Parse error: segment \(segmentString) could not be parsed");
                 } else {
                     logError("Parse error: segment (no conversion possible) could not be parsed");
@@ -165,12 +189,12 @@ public class HBCIResultMessage {
         return true;
     }
     
-    func valueForPath(path:String) ->AnyObject? {
+    func valueForPath(_ path:String) ->Any? {
         var name:String?
         var newPath:String?
-        if let range = path.rangeOfString(".", options: NSStringCompareOptions(), range: nil, locale: nil) {
-            name = path.substringToIndex(range.startIndex);
-            newPath = path.substringFromIndex(range.startIndex.successor());
+        if let range = path.range(of: ".", options: NSString.CompareOptions(), range: nil, locale: nil) {
+            name = path.substring(to: range.lowerBound);
+            newPath = path.substring(from: path.index(after: range.lowerBound));
         } else {
             name = path;
         }
@@ -188,13 +212,13 @@ public class HBCIResultMessage {
         return nil;
     }
     
-    func valuesForPath(path:String) ->Array<AnyObject> {
-        var result = Array<AnyObject>();
+    func valuesForPath(_ path:String) ->Array<Any> {
+        var result = Array<Any>();
         var name:String?
         var newPath:String?
-        if let range = path.rangeOfString(".", options: NSStringCompareOptions(), range: nil, locale: nil) {
-            name = path.substringToIndex(range.startIndex);
-            newPath = path.substringFromIndex(range.startIndex.successor());
+        if let range = path.range(of: ".", options: NSString.CompareOptions(), range: nil, locale: nil) {
+            name = path.substring(to: range.lowerBound);
+            newPath = path.substring(from: path.index(after: range.lowerBound));
         } else {
             name = path;
         }
@@ -211,32 +235,32 @@ public class HBCIResultMessage {
         return result;
     }
     
-    func extractBPData() ->NSData? {
+    func extractBPData() ->Data? {
         let bpData = NSMutableData();
         
         for data in segmentData {
             //print(NSString(data: data, encoding: NSISOLatin1StringEncoding));
-            if let code = NSString(bytes: data.bytes, length: 5, encoding: NSISOLatin1StringEncoding) {
+            if let code = NSString(bytes: (data as NSData).bytes, length: 5, encoding: String.Encoding.isoLatin1.rawValue) {
                 if code == "HIUPA" || code == "HIUPD" || code == "HIBPA" ||
                     (code.hasPrefix("HI") && code.hasSuffix("S")) {
-                        bpData.appendData(data);
+                        bpData.append(data);
                         continue;
                 }
             }
-            if let code = NSString(bytes: data.bytes, length: 6, encoding: NSISOLatin1StringEncoding) {
+            if let code = NSString(bytes: (data as NSData).bytes, length: 6, encoding: String.Encoding.isoLatin1.rawValue) {
                 if code == "DIPINS" || (code.hasPrefix("HI") && code.hasSuffix("S")) {
-                        bpData.appendData(data);
+                        bpData.append(data);
                 }
             }
         }
         if bpData.length > 0 {
-            return bpData;
+            return bpData as Data;
         } else {
             return nil;
         }
     }
         
-    func updateParameterForUser(user:HBCIUser) {
+    func updateParameterForUser(_ user:HBCIUser) {
         // find BPD version
         var updateParameters = false;
         
@@ -274,7 +298,7 @@ public class HBCIResultMessage {
         user.parameters.bpData = extractBPData();
     }
     
-    func segmentWithReference(number:Int, orderName:String) ->HBCISegment? {
+    func segmentWithReference(_ number:Int, orderName:String) ->HBCISegment? {
         for segment in self.segments {
             if segment.name == orderName + "Res" {
                 if let _ = segment.elementValueForPath("SegHead.ref") as? Int {
@@ -285,7 +309,7 @@ public class HBCIResultMessage {
         return nil;
     }
     
-    func segmentsWithReference(number:Int, orderName:String) ->Array<HBCISegment> {
+    func segmentsWithReference(_ number:Int, orderName:String) ->Array<HBCISegment> {
         var segs = Array<HBCISegment>();
         for segment in self.segments {
             if segment.name == orderName + "Res" {
@@ -297,7 +321,7 @@ public class HBCIResultMessage {
         return segs;
     }
     
-    func responsesForSegmentWithNumber(number:Int) ->Array<HBCIOrderResponse> {
+    func responsesForSegmentWithNumber(_ number:Int) ->Array<HBCIOrderResponse> {
         var responses = Array<HBCIOrderResponse>();
         for response in responsesForSegments() {
             if response.reference == number {
@@ -360,7 +384,7 @@ public class HBCIResultMessage {
         return self.messageResponses;
     }
     
-    public func isOk() ->Bool {
+    open func isOk() ->Bool {
         let responses = responsesForMessage();
         for response in responses {
             if let code = Int(response.code) {
@@ -374,11 +398,11 @@ public class HBCIResultMessage {
         return true;
     }
     
-    public func hbciParameters() -> HBCIParameters {
+    open func hbciParameters() -> HBCIParameters {
         return HBCIParameters(segments: self.segments, syntax: self.syntax);
     }
     
-    func segmentsForOrder(orderName:String) ->Array<HBCISegment> {
+    func segmentsForOrder(_ orderName:String) ->Array<HBCISegment> {
         var result = Array<HBCISegment>();
         for segment in self.segments {
             if segment.name == orderName + "Res" {

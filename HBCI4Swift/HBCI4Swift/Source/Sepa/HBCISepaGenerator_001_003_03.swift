@@ -10,7 +10,7 @@ import Foundation
 
 class HBCISepaGenerator_001_003_03 : HBCISepaGenerator, HBCISepaGeneratorCredit {
     
-    func documentForTransfer(transfer: HBCISepaTransfer) -> NSData? {
+    func documentForTransfer(_ transfer: HBCISepaTransfer) -> Data? {
         
         if transfer.items.count == 0 {
             logError("SEPA document error: not items");
@@ -18,9 +18,9 @@ class HBCISepaGenerator_001_003_03 : HBCISepaGenerator, HBCISepaGeneratorCredit 
         }
         
         // calculate total
-        var total = NSDecimalNumber.zero();
+        var total = NSDecimalNumber.zero;
         for item in transfer.items {
-            total = total.decimalNumberByAdding(item.value);
+            total = total.adding(item.value);
         }
         
         // Group Header
@@ -51,7 +51,7 @@ class HBCISepaGenerator_001_003_03 : HBCISepaGenerator, HBCISepaGeneratorCredit 
         // Transaction Info
         for item in transfer.items {
             let parent = root.createPath("CstmrCdtTrfInitn.PmtInf");
-            let elem = NSXMLElement(name: "CdtTrfTxInf");
+            let elem = XMLElement(name: "CdtTrfTxInf");
             
             elem.setStringValueForPath(item.endToEndId ?? "NOTPROVIDED", path: "PmtId.EndToEndId");
             
@@ -59,7 +59,7 @@ class HBCISepaGenerator_001_003_03 : HBCISepaGenerator, HBCISepaGeneratorCredit 
             if let amountValue = numberToString(item.value) {
                 elem.setStringValueForPath(amountValue, path: "Amt.InstdAmt");
                 
-                let attr = NSXMLNode(kind: NSXMLNodeKind.AttributeKind);
+                let attr = XMLNode(kind: XMLNode.Kind.attribute);
                 attr.name = "Ccy";
                 attr.stringValue = item.currency;
                 let amElem = elem.createPath("Amt.InstdAmt");
@@ -80,7 +80,7 @@ class HBCISepaGenerator_001_003_03 : HBCISepaGenerator, HBCISepaGeneratorCredit 
         }
         
         // create data from xml document
-        return document.XMLData;
+        return document.xmlData;
     }
     
 }

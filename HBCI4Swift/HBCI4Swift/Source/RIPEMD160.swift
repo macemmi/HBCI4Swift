@@ -15,7 +15,7 @@ class RIPEMD160 {
     var h3:UInt32 = 0x10325476;
     var h4:UInt32 = 0xc3d2e1f0;
     
-    var paddedData:NSData!
+    var paddedData:Data!
 
     
     let r = [   0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
@@ -54,23 +54,23 @@ class RIPEMD160 {
                         0x7a6d76e9,
                         0x00000000 ];
     
-    init(data: NSData) {
+    init(data: Data) {
         self.paddedData = pad(data);
     }
     
-    func pad(data:NSData) ->NSData {
-        let paddedData = NSMutableData(data: data);
-        var paddingData = [UInt8](count: 72, repeatedValue: 0);
+    func pad(_ data:Data) ->Data {
+        var paddedData = NSData(data: data) as Data;
+        var paddingData = [UInt8](repeating: 0, count: 72);
         paddingData[0] = 0x80;
         
-        let zeros = (64 - ((data.length+9) % 64)) % 64;
-        var n = data.length * 8;
-        paddedData.appendBytes(paddingData, length: zeros+1);
-        paddedData.appendBytes(&n, length: 8);
+        let zeros = (64 - ((data.count+9) % 64)) % 64;
+        var n = data.count * 8;
+        paddedData.append(paddingData, count: zeros+1);
+        paddedData.append(UnsafeBufferPointer<Int>(start: &n, count: 1));
         return paddedData;
     }
     
-    func f(j:Int, x:UInt32, y:UInt32, z:UInt32) ->UInt32 {
+    func f(_ j:Int, x:UInt32, y:UInt32, z:UInt32) ->UInt32 {
         if j<=15 {
             return x ^ y ^ z;
         } else if j <= 31 {
@@ -87,11 +87,11 @@ class RIPEMD160 {
         return 0;
     }
     
-    func rol(x:UInt32, n:Int) -> UInt32 {
+    func rol(_ x:UInt32, n:Int) -> UInt32 {
         return (x << UInt32(n)) | (x >> UInt32(32 - n));
     }
     
-    func hash(X:UnsafePointer<UInt32>) {
+    func hash(_ X:UnsafePointer<UInt32>) {
         var A = h0;
         var B = h1;
         var C = h2;
@@ -126,22 +126,24 @@ class RIPEMD160 {
         h0 = T;
     }
     
-    func digest() ->NSData {
-        let blocks = paddedData.length / 64;
-        var x = UnsafeMutablePointer<UInt32>(paddedData.bytes);
+    func digest() ->Data {
+        let blocks = paddedData.count / 64;
         
-        for _ in 0 ..< blocks {
-            hash(x);
-            x = x.advancedBy(16);
+        paddedData.withUnsafeBytes { (p:UnsafePointer<UInt32>) in
+            var x = p;
+            for _ in 0 ..< blocks {
+                hash(x);
+                x = x.advanced(by: 16);
+            }
         }
         
         let digest = NSMutableData();
-        digest.appendBytes(&h0, length: 4);
-        digest.appendBytes(&h1, length: 4);
-        digest.appendBytes(&h2, length: 4);
-        digest.appendBytes(&h3, length: 4);
-        digest.appendBytes(&h4, length: 4);
-        return digest;
+        digest.append(&h0, length: 4);
+        digest.append(&h1, length: 4);
+        digest.append(&h2, length: 4);
+        digest.append(&h3, length: 4);
+        digest.append(&h4, length: 4);
+        return digest as Data;
     }
     
     

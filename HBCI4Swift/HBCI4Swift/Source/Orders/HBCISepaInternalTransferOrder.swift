@@ -14,7 +14,7 @@ public struct HBCISepaInternalTransferPar {
 }
 
 
-public class HBCISepaInternalTransferOrder : HBCIAbstractSepaTransferOrder {
+open class HBCISepaInternalTransferOrder : HBCIAbstractSepaTransferOrder {
     
     public init?(message: HBCICustomMessage, transfer:HBCISepaTransfer) {
         super.init(name: "SepaInternalTransfer", message: message, transfer: transfer);
@@ -23,7 +23,7 @@ public class HBCISepaInternalTransferOrder : HBCIAbstractSepaTransferOrder {
         }
     }
     
-    public override func enqueue() ->Bool {
+    open override func enqueue() ->Bool {
 
         if transfer.date != nil {
             logError("SEPA Transfer: date is not allowed");
@@ -33,7 +33,7 @@ public class HBCISepaInternalTransferOrder : HBCIAbstractSepaTransferOrder {
         return super.enqueue();
     }
     
-    public class func getParameters(user:HBCIUser) ->HBCISepaInternalTransferPar? {
+    open class func getParameters(_ user:HBCIUser) ->HBCISepaInternalTransferPar? {
         guard let (elem, _) = self.getParameterElement(user, orderName: "SepaInternalTransfer") else {
             return nil;
         }

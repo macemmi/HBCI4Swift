@@ -8,14 +8,14 @@
 
 import Foundation
 
-public class HBCISecurityMethodPinTan : HBCISecurityMethod {
+open class HBCISecurityMethodPinTan : HBCISecurityMethod {
 
     public override init() {
         super.init();
-        self.code = .PinTan;
+        self.code = .pinTan;
     }
 
-    override func signMessage(msg:HBCIMessage) ->Bool {
+    override func signMessage(_ msg:HBCIMessage) ->Bool {
         //let secref:String = NSString(format: "%d", arc4random());
         var version = 0;
         
@@ -45,18 +45,18 @@ public class HBCISecurityMethodPinTan : HBCISecurityMethod {
         var values = ["SigHead.secfunc":user.tanMethod!,
             "SigHead.seccheckref":secref, "SigHead.range":"1", "SigHead.role":"1", "SigHead.SecIdnDetails.func":"1",
             "SigHead.SecIdnDetails.sysid":user.sysId!, "SigHead.secref":"1", "SigHead.SecTimestamp.type":"1",
-            "SigHead.SecTimestamp.date":NSDate(), "SigHead.SecTimestamp.time":NSDate(), "SigHead.HashAlg.alg":"999",
+            "SigHead.SecTimestamp.date":Date(), "SigHead.SecTimestamp.time":Date(), "SigHead.HashAlg.alg":"999",
             "SigHead.SigAlg.alg":"10", "SigHead.SigAlg.mode":"16", "SigHead.KeyName.country":"280",
             "SigHead.KeyName.blz":user.bankCode, "SigHead.KeyName.userid":user.userId, "SigHead.KeyName.keytype":"S",
             "SigHead.KeyName.keynum":"0", "SigHead.KeyName.keyversion":"0", "SigTail.seccheckref":secref,
             "SigTail.UserSig.pin":user.pin!
-        ];
+        ] as [String : Any];
         
         if version > 3 {
             values["SigHead.SecProfile.method"] = "PIN";
             values["SigHead.SecProfile.version"] = "2";
 
-            if values["SigHead.secfunc"] == "999" {
+            if values["SigHead.secfunc"] as! String == "999" {
                 values["SigHead.SecProfile.version"] = "1";
             }
         }
@@ -71,11 +71,11 @@ public class HBCISecurityMethodPinTan : HBCISecurityMethod {
         return msg.setElementValues(values);
     }
     
-    func signCryptedMessage(msg:HBCIMessage) ->Bool {
+    func signCryptedMessage(_ msg:HBCIMessage) ->Bool {
         var version = 0;
         
-        let encKey = [UInt8](count:8, repeatedValue:0);
-        let encKeyData = NSData(bytes: encKey, length: 8);
+        let encKey = [UInt8](repeating: 0, count: 8);
+        let encKeyData = Data(bytes: UnsafePointer<UInt8>(encKey), count: 8);
         
         if user.sysId == nil {
             logError("Signing failed: missing sysId");
@@ -92,12 +92,12 @@ public class HBCISecurityMethodPinTan : HBCISecurityMethod {
         
         var values = [ "CryptHead.SegHead.seq":"998",
             "CryptHead.secfunc":"998", "CryptHead.role":"1", "CryptHead.SecIdnDetails.func":"1",
-            "CryptHead.SecIdnDetails.sysid":user.sysId!, "CryptHead.SecTimestamp.date":NSDate(), "CryptHead.SecTimestamp.time":NSDate(),
+            "CryptHead.SecIdnDetails.sysid":user.sysId!, "CryptHead.SecTimestamp.date":Date(), "CryptHead.SecTimestamp.time":Date(),
             "CryptHead.CryptAlg.mode":"2", "CryptHead.CryptAlg.alg":"13", "CryptHead.CryptAlg.enckey":encKeyData,
             "CryptHead.CryptAlg.keytype":"5", "CryptHead.KeyName.country":"280", "CryptHead.KeyName.blz":user.bankCode,
             "CryptHead.KeyName.userid":user.userId, "CryptHead.KeyName.keynum":"0", "CryptHead.KeyName.keyversion":"0",
             "CryptHead.compfunc":"0"
-        ];
+        ] as [String : Any];
         
         if version > 2 {
             values["CryptHead.SecProfile.method"] = "PIN";
@@ -107,7 +107,7 @@ public class HBCISecurityMethodPinTan : HBCISecurityMethod {
         return msg.setElementValues(values);
     }
     
-    override func encryptMessage(msg:HBCIMessage, dialog:HBCIDialog) ->HBCIMessage? {
+    override func encryptMessage(_ msg:HBCIMessage, dialog:HBCIDialog) ->HBCIMessage? {
         if let lastSegNum = msg.lastSegmentNumber() {
             if let dialogId = dialog.dialogId {
                 let msgBody = msg.messageDataForEncryption();
@@ -115,14 +115,14 @@ public class HBCISecurityMethodPinTan : HBCISecurityMethod {
                 let values = ["MsgHead.dialogid":dialogId, "MsgHead.msgnum":"\(dialog.messageNum)", "CryptData.data":msgBody,
                     "CryptData.SegHead.seq":"999", "MsgHead.SegHead.seq":"1", "MsgTail.msgnum":"\(dialog.messageNum)",
                     "MsgTail.SegHead.seq":"\(lastSegNum)"
-                ]
+                ] as [String : Any]
                 
                 if let md = dialog.syntax.msgs["Crypted"] {
                     if let msg_crypted = md.compose() as? HBCIMessage {
                         if signCryptedMessage(msg_crypted) {
                             if msg_crypted.setElementValues(values) {
                                 let cryptedData = msg_crypted.messageData();
-                                let sizeString = NSString(format: "%012d", cryptedData.length) as String;
+                                let sizeString = NSString(format: "%012d", cryptedData.count) as String;
                                 if msg_crypted.setElementValue(sizeString, path: "MsgHead.msgsize") {
                                     return msg_crypted;
                                 }
@@ -139,12 +139,12 @@ public class HBCISecurityMethodPinTan : HBCISecurityMethod {
         return nil;
     }
     
-    override func decryptMessage(rmsg:HBCIResultMessage, dialog:HBCIDialog) ->HBCIResultMessage? {
-        if let msgData = rmsg.valueForPath("CryptData.data") as? NSData {
+    override func decryptMessage(_ rmsg:HBCIResultMessage, dialog:HBCIDialog) ->HBCIResultMessage? {
+        if let msgData = rmsg.valueForPath("CryptData.data") as? Data {
             let result = HBCIResultMessage(syntax: dialog.syntax);
             if !result.parse(msgData) {
                 logError("Result Message could not be parsed");
-                logError(NSString(data: msgData, encoding: NSISOLatin1StringEncoding) as! String);
+                logError(String(data: msgData, encoding: String.Encoding.isoLatin1));
             }
             return result;
         }

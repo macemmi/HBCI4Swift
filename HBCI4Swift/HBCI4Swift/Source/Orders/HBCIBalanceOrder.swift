@@ -8,10 +8,10 @@
 
 import Foundation
 
-public class HBCIBalanceOrder : HBCIOrder {
-    public let account:HBCIAccount;
-    public var bookedBalance:HBCIAccountBalance?
-    public var pendingBalance:HBCIAccountBalance?
+open class HBCIBalanceOrder : HBCIOrder {
+    open let account:HBCIAccount;
+    open var bookedBalance:HBCIAccountBalance?
+    open var pendingBalance:HBCIAccountBalance?
     
     
     public init?(message: HBCICustomMessage, account:HBCIAccount) {
@@ -22,7 +22,7 @@ public class HBCIBalanceOrder : HBCIOrder {
         }
     }
     
-    public func enqueue() ->Bool {
+    open func enqueue() ->Bool {
         // check if order is supported
         if !user.parameters.isOrderSupportedForAccount(self, number: account.number, subNumber: account.subNumber) {
             logError(self.name + " is not supported for account " + account.number);
@@ -42,7 +42,7 @@ public class HBCIBalanceOrder : HBCIOrder {
                 return false;
             }
             
-            let values:Dictionary<String,AnyObject> = ["KTV.bic":account.bic!, "KTV.iban":account.iban!, "allaccounts":false];
+            let values:Dictionary<String,Any> = ["KTV.bic":account.bic!, "KTV.iban":account.iban!, "allaccounts":false];
             if !segment.setElementValues(values) {
                 logError("Balance Order values could not be set");
                 return false;
@@ -52,7 +52,7 @@ public class HBCIBalanceOrder : HBCIOrder {
             msg.addOrder(self);
         } else {
             // we have the old version
-            var values:Dictionary<String,AnyObject> = ["KTV.number":account.number, "KTV.KIK.country":"280", "KTV.KIK.blz":account.bankCode, "allaccounts":false];
+            var values:Dictionary<String,Any> = ["KTV.number":account.number, "KTV.KIK.country":"280", "KTV.KIK.blz":account.bankCode, "allaccounts":false];
             if account.subNumber != nil {
                 values["KTV.subnumber"] = account.subNumber!
             }
@@ -67,7 +67,7 @@ public class HBCIBalanceOrder : HBCIOrder {
         return true;
     }
     
-    override public func updateResult(result:HBCIResultMessage) {
+    override open func updateResult(_ result:HBCIResultMessage) {
         super.updateResult(result);
         
         if let retSeg = resultSegments.first {

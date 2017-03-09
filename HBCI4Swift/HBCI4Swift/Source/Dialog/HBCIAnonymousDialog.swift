@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class HBCIAnonymousDialog {
+open class HBCIAnonymousDialog {
     var connection:HBCIConnection?
     var dialogId:String?;
     let hbciVersion:String!
@@ -21,7 +21,7 @@ public class HBCIAnonymousDialog {
         self.syntax = syntax
     }
 
-    func sendMessage(message:String, values:Dictionary<String,AnyObject>) throws ->HBCIResultMessage? {
+    func sendMessage(_ message:String, values:Dictionary<String,Any>) throws ->HBCIResultMessage? {
         if let md = self.syntax.msgs[message] {
             if let msg = md.compose() as? HBCIMessage {
                 for (path, value) in values {
@@ -57,10 +57,10 @@ public class HBCIAnonymousDialog {
         return nil;
     }
 
-    public func dialogWithURL(url:NSURL, bankCode:String) throws ->HBCIResultMessage? {
+    open func dialogWithURL(_ url:URL, bankCode:String) throws ->HBCIResultMessage? {
         self.connection = HBCIPinTanConnection(url: url);
         
-        let values:Dictionary<String,AnyObject> = ["ProcPrep.BPD":"0", "ProcPrep.UPD":"0", "ProcPrep.lang":"0", "ProcPrep.prodName":"Pecunia",
+        let values:Dictionary<String,Any> = ["ProcPrep.BPD":"0", "ProcPrep.UPD":"0", "ProcPrep.lang":"0", "ProcPrep.prodName":"Pecunia",
             "ProcPrep.prodVersion":"1.0", "Idn.KIK.country":"280", "Idn.KIK.blz":bankCode ];
         
         if let resultMsg = try sendMessage("DialogInitAnon", values: values) {
@@ -74,7 +74,7 @@ public class HBCIAnonymousDialog {
                 
                 do {
                     // don't care if end dialog message fails or not
-                    try sendMessage("DialogEndAnon", values: values)
+                    try sendMessage("DialogEndAnon", values: values as Dictionary<String, Any>)
                 } catch { };
             }
             return resultMsg;            

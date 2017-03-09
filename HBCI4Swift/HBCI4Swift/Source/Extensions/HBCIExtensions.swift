@@ -8,31 +8,31 @@
 
 import Foundation
 
-extension NSData {
+extension Data {
     func hasNonPrintableChars() ->Bool {
-        var p = UnsafeMutablePointer<UInt8>(self.bytes);
-        for _ in 0..<self.length {
-            let c = p.memory;
+        var p = UnsafeMutablePointer<UInt8>(mutating: (self as NSData).bytes.bindMemory(to: UInt8.self, capacity: self.count));
+        for _ in 0..<self.count {
+            let c = p.pointee;
             if !((c >= 0x20 && c <= 0x7E) || c >= 0xA1 || c == 0x0A || c == 0x0D) {
                 return true;
             }
-            p = p.advancedBy(1);
+            p = p.advanced(by: 1);
         }
         
         return false;
     }
 }
 
-extension NSXMLElement {
-    func elementsForPath(path:String) ->[NSXMLElement] {
-        var result = Array<NSXMLElement>();
+extension XMLElement {
+    func elementsForPath(_ path:String) ->[XMLElement] {
+        var result = Array<XMLElement>();
         
         let (name, newPath) = firstComponent(path);
         
         if let nodes = self.children {
             for node in nodes {
-                if node.kind == NSXMLNodeKind.ElementKind {
-                    if let child = node as? NSXMLElement {
+                if node.kind == XMLNode.Kind.element {
+                    if let child = node as? XMLElement {
                         if child.name == name {
                             if newPath == nil {
                                 result.append(child);
@@ -47,18 +47,18 @@ extension NSXMLElement {
         return result;
     }
     
-    func stringValueForPath(path:String) ->String? {
+    func stringValueForPath(_ path:String) ->String? {
         let elems = elementsForPath(path);
         return elems.first?.stringValue;
     }
     
-    func createPath(path:String) ->NSXMLElement {
+    func createPath(_ path:String) ->XMLElement {
         let (name, newPath) = firstComponent(path);
         
         if let nodes = self.children {
             for node in nodes {
-                if node.kind == NSXMLNodeKind.ElementKind {
-                    if let child = node as? NSXMLElement {
+                if node.kind == XMLNode.Kind.element {
+                    if let child = node as? XMLElement {
                         if child.name == name {
                             if newPath == nil {
                                 return child;
@@ -70,7 +70,7 @@ extension NSXMLElement {
                 }
             }
         }
-        let child = NSXMLElement(name: name);
+        let child = XMLElement(name: name);
         self.addChild(child);
         if newPath == nil {
             return child;
@@ -79,7 +79,7 @@ extension NSXMLElement {
         }
     }
     
-    func setStringValueForPath(value:String, path:String) {
+    func setStringValueForPath(_ value:String, path:String) {
         let elem = createPath(path);
         elem.stringValue = value;
     }
@@ -87,21 +87,21 @@ extension NSXMLElement {
 
 
 extension String {
-    func substringToIndex(index:Int) ->String {
-        return self.substringToIndex(startIndex.advancedBy(index));
+    func substringToIndex(_ index:Int) ->String {
+        return self.substring(to: characters.index(startIndex, offsetBy: index));
     }
     
-    func substringFromIndex(index:Int) ->String {
-        return self.substringFromIndex(startIndex.advancedBy(index));
+    func substringFromIndex(_ index:Int) ->String {
+        return self.substring(from: characters.index(startIndex, offsetBy: index));
     }
     
-    func substringWithRange(range:NSRange) ->String {
-        return self.substringWithRange(Range(startIndex.advancedBy(range.location) ..< startIndex.advancedBy(range.location+range.length)));
+    func substringWithRange(_ range:NSRange) ->String {
+        return self.substring(with: Range(characters.index(startIndex, offsetBy: range.location) ..< characters.index(startIndex, offsetBy: range.location+range.length)));
         
     }
     
     func escape() ->String? {
-        if let chars = self.cStringUsingEncoding(NSISOLatin1StringEncoding) {
+        if let chars = self.cString(using: String.Encoding.isoLatin1) {
             var res = Array<CChar>();
             for x in chars {
                 if x == HBCIChar.plus.rawValue || x == HBCIChar.dpoint.rawValue || x == HBCIChar.quote.rawValue || x == HBCIChar.qmark.rawValue {
@@ -109,7 +109,7 @@ extension String {
                 }
                 res.append(x);
             }
-            return String(CString: res, encoding: NSISOLatin1StringEncoding);
+            return String(cString: res, encoding: String.Encoding.isoLatin1);
         } else {
             logError("String "+self+" could not be converted to ISOLatin1");
             return nil;

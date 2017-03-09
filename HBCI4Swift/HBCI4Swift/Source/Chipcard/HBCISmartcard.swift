@@ -15,8 +15,8 @@ import PCSCard.pcsclite
 typealias DWORD = UInt32
 
 
-public class HBCISmartcard {
-    public let readerName:String;
+open class HBCISmartcard {
+    open let readerName:String;
     var version:UInt8 = 0;
     var _hCard:SCARDHANDLE?
     var _ioctl_verify:DWORD?
@@ -64,7 +64,7 @@ public class HBCISmartcard {
         return true;
     }
     
-    public class func readers() ->Array<String>? {
+    open class func readers() ->Array<String>? {
         var readerInfoLen:DWORD = 0;
         var result = Array<String>();
         
@@ -79,15 +79,15 @@ public class HBCISmartcard {
                 return nil;
             }
             
-            var readerInfo = [Int8](count:Int(readerInfoLen), repeatedValue:0);
+            var readerInfo = [Int8](repeating: 0, count: Int(readerInfoLen));
             rv = SCardListReaders(context, nil, &readerInfo, &readerInfoLen);
             
-            var p = UnsafeMutablePointer<Int8>(readerInfo);
-            while p.memory != 0 {
-                if let s = NSString(CString: p, encoding: NSISOLatin1StringEncoding) {
+            var p = UnsafeMutablePointer<Int8>(mutating: readerInfo);
+            while p.pointee != 0 {
+                if let s = NSString(cString: p, encoding: String.Encoding.isoLatin1.rawValue) {
                     result.append(s as String);
                 }
-                p = p.advancedBy(Int(strlen(p))+1);
+                p = p.advanced(by: Int(strlen(p))+1);
             }
         }
         return result;
@@ -108,7 +108,7 @@ public class HBCISmartcard {
         connected = false;
     }
     
-    func convertToUInt32(x:Int32) ->UInt32 {
+    func convertToUInt32(_ x:Int32) ->UInt32 {
         if x >= 0 {
             return UInt32(x);
         } else {
@@ -117,12 +117,12 @@ public class HBCISmartcard {
         }
     }
     
-    func checkResult(result:NSData?) ->Bool {
+    func checkResult(_ result:NSData?) ->Bool {
         if let data = result {
-            var p = UnsafePointer<UInt8>(data.bytes).advancedBy(data.length-2);
-            var status = UInt16(p.memory) << 8;
-            p = p.advancedBy(1);
-            status = status + (UInt16(p.memory) & 0xff);
+            var p = data.bytes.bindMemory(to: UInt8.self, capacity: data.length).advanced(by: data.length-2);
+            var status = UInt16(p.pointee) << 8;
+            p = p.advanced(by: 1);
+            status = status + (UInt16(p.pointee) & 0xff);
             
             if status & 0xFFFF == 0x9000 {
                 return true;
@@ -131,17 +131,14 @@ public class HBCISmartcard {
         return false;
     }
     
-    func extractDataFromResult(result:NSData) ->NSData {
+    func extractDataFromResult(_ result:NSData) ->NSData {
         return NSData(bytes: result.bytes, length: result.length-2);
     }
     
-    func toPointer<T>(x: UnsafeMutablePointer<T>) -> UnsafeMutablePointer<UInt8> {
-        return UnsafeMutablePointer<UInt8>(x);
-    }
     
-    public func verifyPin() ->Bool {
-        var sendBuffer = [UInt8](count:Int(MAX_BUFFER_SIZE), repeatedValue:0);
-        var recBuffer = [UInt8](count:Int(MAX_BUFFER_SIZE), repeatedValue:0);
+    open func verifyPin() ->Bool {
+        var sendBuffer = [UInt8](repeating:0, count:Int(MAX_BUFFER_SIZE));
+        var recBuffer = [UInt8](repeating:0, count:Int(MAX_BUFFER_SIZE));
         var pin_verify = PIN_VERIFY_STRUCTURE();
         
         var command:[UInt8] = [ APDU_CLA_STD, APDU_INS_VERIFY, 0x00, 0x81, 0x08, 0x25, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff ];
@@ -161,11 +158,13 @@ public class HBCISmartcard {
         pin_verify.bTeoPrologue.2 = 0x00;
         pin_verify.ulDataLength = 13;
         
-        let p = toPointer(&pin_verify);
-        let vLen = sizeof(PIN_VERIFY_STRUCTURE) - 1;
-        
-        for i in 0..<vLen {
-            sendBuffer[i] = p[i];
+        //let p = toPointer(&pin_verify);
+        let vLen = MemoryLayout<PIN_VERIFY_STRUCTURE>.size - 1;
+        //let p = UnsafeRawPointer(UnsafeMutablePointer(&pin_verify)).assumingMemoryBound(to: UInt8.self);
+        UnsafeMutablePointer(&pin_verify).withMemoryRebound(to: UInt8.self, capacity: vLen) {
+            for i in 0..<vLen {
+                sendBuffer[i] = $0[i];
+            }
         }
         
         for i in 0..<command.count {
@@ -175,7 +174,7 @@ public class HBCISmartcard {
         let length = DWORD(vLen + command.count);
         var rLength:DWORD = 0;
         
-        if let hCard = _hCard, ioctl_verify = _ioctl_verify {
+        if let hCard = _hCard, let ioctl_verify = _ioctl_verify {
             let rv = SCardControl132(hCard, ioctl_verify, &sendBuffer, length, &recBuffer, DWORD(MAX_BUFFER_SIZE), &rLength);
             if rv == SCARD_S_SUCCESS {
                 if recBuffer[0] == 0x90 && recBuffer[1] == 0x00 {
@@ -183,7 +182,7 @@ public class HBCISmartcard {
                 }
             } else {
                 logError(String(format:"HBCISmartcard: verify failed (%X)", rv));
-                logCommand(NSData(bytes: sendBuffer, length: Int(length)), result: NSData(bytes: recBuffer, length: Int(rLength)));
+                logCommand(NSData(bytes:sendBuffer, length:Int(length)), result:NSData(bytes:recBuffer, length:Int(rLength)));
             }
         }
         return false;
@@ -193,8 +192,8 @@ public class HBCISmartcard {
         var length:DWORD = 0;
         
         if let hCard = _hCard {
-            let recBuffer = [UInt8](count:Int(MAX_BUFFER_SIZE), repeatedValue:0);
-            let pRecBuffer = UnsafeMutablePointer<UInt8>(recBuffer);
+            let recBuffer = [UInt8](repeating:0, count:Int(MAX_BUFFER_SIZE));
+            let pRecBuffer = UnsafeMutablePointer<UInt8>(mutating: recBuffer);
             let rv = SCardControl132(hCard, CM_IOCTL_GET_FEATURE_REQUEST, nil, 0, pRecBuffer, DWORD(MAX_BUFFER_SIZE), &length);
             if rv != SCARD_S_SUCCESS {
                 // log
@@ -202,24 +201,26 @@ public class HBCISmartcard {
                 return false;
             }
             
-            if (Int(length) % sizeof(PCSC_TLV_STRUCTURE)) != 0 {
+            if (Int(length) % MemoryLayout<PCSC_TLV_STRUCTURE>.size) != 0 {
                 // log
                 return false;
             }
             
-            let count = Int(length) / sizeof(PCSC_TLV_STRUCTURE);
+            let count = Int(length) / MemoryLayout<PCSC_TLV_STRUCTURE>.size;
             
-            var p = UnsafeMutablePointer<PCSC_TLV_STRUCTURE>(pRecBuffer);
-            for _ in 0 ..< count {
-                switch(p.memory.tag) {
-                case UInt8(FEATURE_VERIFY_PIN_DIRECT): _ioctl_verify = p.memory.value.bigEndian;
-                //case UInt8(FEATURE_IFD_PIN_PROPERTIES): _ioctl_pinprops = p.memory.value.bigEndian;
-                //case UInt8(FEATURE_MCT_READER_DIRECT): _ioctl_readerdirect = p.memory.value.bigEndian;
-                default: break;
+            pRecBuffer.withMemoryRebound(to: PCSC_TLV_STRUCTURE.self, capacity: count) {
+                var p = $0;
+                for _ in 0 ..< count {
+                    switch(p.pointee.tag) {
+                    case UInt8(FEATURE_VERIFY_PIN_DIRECT): _ioctl_verify = p.pointee.value.bigEndian;
+                        //case UInt8(FEATURE_IFD_PIN_PROPERTIES): _ioctl_pinprops = p.memory.value.bigEndian;
+                        //case UInt8(FEATURE_MCT_READER_DIRECT): _ioctl_readerdirect = p.memory.value.bigEndian;
+                    default: break;
+                    }
+                    p = p.advanced(by: 1);
                 }
-                p = p.advancedBy(1);
             }
-
+            
             if _ioctl_verify == nil {
                 // log
                 logError("HBCISmartcard: IOCTL for verify could not be retrieved");
@@ -229,7 +230,7 @@ public class HBCISmartcard {
         return true;
     }
     
-    public func isConnected() ->Bool {
+    open func isConnected() ->Bool {
         var state:DWORD = 0;
         var prot:DWORD = 0;
         var length:DWORD = 0;
@@ -237,7 +238,7 @@ public class HBCISmartcard {
         
         // get card status
         if let hCard = _hCard {
-            var attributes = [UInt8](count:Int(attrLen), repeatedValue:0);
+            var attributes = [UInt8](repeating:0, count:Int(attrLen));
             
             let rv = SCardStatus(hCard, nil, &length, &state, &prot, &attributes, &attrLen);
             
@@ -254,14 +255,14 @@ public class HBCISmartcard {
     }
     
     // check if reader ist still connected
-    public func isReaderConnected() ->Bool {
+    open func isReaderConnected() ->Bool {
         if let readers = HBCISmartcard.readers() {
             return readers.contains(readerName);
         }
         return false;
     }
     
-    public func connect(tries:Int) ->ConnectResult {
+    open func connect(_ tries:Int) ->ConnectResult {
         var prot:DWORD = 0;
         var n = 0;
         var reconnected = false;
@@ -282,7 +283,7 @@ public class HBCISmartcard {
                     }
                 } else {
                     var hCard:SCARDHANDLE = 0;
-                    rv = SCardConnect(context, readerName.cStringUsingEncoding(NSISOLatin1StringEncoding)!, DWORD(SCARD_SHARE_EXCLUSIVE), DWORD(SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1), &hCard, &prot);
+                    rv = SCardConnect(context, readerName.cString(using: String.Encoding.isoLatin1)!, DWORD(SCARD_SHARE_EXCLUSIVE), DWORD(SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1), &hCard, &prot);
                     if rv == SCARD_S_SUCCESS {
                         _hCard = hCard;
                     }
@@ -322,22 +323,22 @@ public class HBCISmartcard {
         }
     }
     
-    public func disconnect() {
+    open func disconnect() {
         if let hCard = _hCard {
             SCardDisconnect(hCard, DWORD(SCARD_UNPOWER_CARD));
         }
     }
     
-    func logCommand(command:NSData, result: NSData?) {
+    func logCommand(_ command:NSData, result: NSData?) {
         var cm = "APDU command: ";
-        var p = UnsafeMutablePointer<UInt8>(command.bytes);
+        var p = UnsafeMutablePointer<UInt8>(mutating: command.bytes.bindMemory(to: UInt8.self, capacity: command.length));
         for i in 0..<command.length {
             cm += String(format: "%.02X ", p[i]);
         }
         logError(cm);
         cm = "APDU command result: ";
         if let res = result {
-            p = UnsafeMutablePointer<UInt8>(res.bytes);
+            p = UnsafeMutablePointer<UInt8>(mutating: res.bytes.bindMemory(to: UInt8.self, capacity: res.length));
             for i in 0..<res.length {
                 cm += String(format: "%.02X ", p[i]);
             }
@@ -347,15 +348,15 @@ public class HBCISmartcard {
         logError(cm);
     }
     
-    func sendAPDU(command:NSData) ->NSData? {
+    func sendAPDU(_ command:NSData) ->NSData? {
         var length = DWORD(MAX_BUFFER_SIZE);
         var result:NSData?
         
         if let hCard = _hCard {
             var pioReceive = SCARD_IO_REQUEST();
-            var recBuffer = [UInt8](count:Int(MAX_BUFFER_SIZE), repeatedValue:0);
+            var recBuffer = [UInt8](repeating:0, count:Int(MAX_BUFFER_SIZE));
             
-            let rv = SCardTransmit(hCard, &g_rgSCardT1Pci, UnsafePointer<UInt8>(command.bytes), DWORD(command.length), &pioReceive, &recBuffer, &length);
+            let rv = SCardTransmit(hCard, &g_rgSCardT1Pci, command.bytes.assumingMemoryBound(to: UInt8.self), DWORD(command.length), &pioReceive, &recBuffer, &length);
             if rv == SCARD_S_SUCCESS {
                 result = NSData(bytes: recBuffer, length: Int(length));
             }
@@ -368,20 +369,20 @@ public class HBCISmartcard {
     
     func selectRoot() ->Bool {
         let command:[UInt8] = [ APDU_CLA_STD, APDU_INS_SELECT_FILE, 0x00, APDU_SEL_RET_NOTHING, 0x02, 0x3F, 0x00 ];
-        let apdu = NSData(bytes: command, length: 7);
-        let result = sendAPDU(apdu);
+        let apdu = Data(command);
+        let result = sendAPDU(apdu as NSData);
         return checkResult(result);
     }
     
-    func selectFileByName(fileName:NSData) ->Bool {
+    func selectFileByName(_ fileName:NSData) ->Bool {
         let command:[UInt8] = [ APDU_CLA_STD, APDU_INS_SELECT_FILE, 0x04, APDU_SEL_RET_NOTHING, UInt8(fileName.length) ];
         let apdu = NSMutableData(bytes: command, length: 5);
-        apdu.appendData(fileName);
+        apdu.append(fileName as Data);
         let result = sendAPDU(apdu);
         return checkResult(result);
     }
     
-    func readRecordWithSFI(recordNumber:Int, sfi:Int) ->NSData? {
+    func readRecordWithSFI(_ recordNumber:Int, sfi:Int) ->NSData? {
         let command:[UInt8] = [ APDU_CLA_STD, APDU_INS_READ_RECORD, UInt8(recordNumber), UInt8((sfi<<3) | 0x04), 0x00];
         let apdu = NSData(bytes: command, length: 5);
         let result = sendAPDU(apdu);
@@ -391,39 +392,39 @@ public class HBCISmartcard {
         return nil;
     }
     
-    func writeRecordWithSFI(recordNumber:Int, sfi:Int, data:NSData) ->Bool {
+    func writeRecordWithSFI(_ recordNumber:Int, sfi:Int, data:NSData) ->Bool {
         let command:[UInt8] = [APDU_CLA_STD, APDU_INS_WRITE_RECORD, UInt8(recordNumber), UInt8((sfi<<3) | 0x04), UInt8(data.length) ];
         
         let apdu = NSMutableData(bytes: command, length: 5);
-        apdu.appendData(data);
+        apdu.append(data as Data);
         if let result = sendAPDU(apdu) {
             return checkResult(result);
         }
         return false;
      }
     
-    func putData(tag:Int, data:NSData) ->Bool {
+    func putData(_ tag:Int, data:NSData) ->Bool {
         let command:[UInt8] = [APDU_CLA_STD, APDU_INS_WRITE_RECORD, UInt8((tag>>8) & 0xff), UInt8(tag & 0xff), UInt8(data.length) ];
         let apdu = NSMutableData(bytes: command, length: 5);
-        apdu.appendData(data);
+        apdu.append(data as Data);
         if let result = sendAPDU(apdu) {
             return checkResult(result);
         }
         return false;
     }
 
-    func readRecord(recordNumber:Int) ->NSData? {
+    func readRecord(_ recordNumber:Int) ->NSData? {
         return readRecordWithSFI(recordNumber, sfi: 0);
     }
     
-    func selectSubFileWithId(fileId:Int) ->Bool {
+    func selectSubFileWithId(_ fileId:Int) ->Bool {
         let command:[UInt8] = [ APDU_CLA_STD, APDU_INS_SELECT_FILE, 0x02, APDU_SEL_RET_NOTHING, 0x02, UInt8((fileId>>8) & 0xFF), UInt8(fileId & 0xFF) ];
         let apdu = NSData(bytes: command, length: 7);
         let result = sendAPDU(apdu);
         return checkResult(result);
     }
     
-    func getChallenge(size:UInt8) ->NSData? {
+    func getChallenge(_ size:UInt8) ->NSData? {
         let command:[UInt8] = [ APDU_CLA_STD, APDU_INS_GET_CHALLENGE, 0x00, 0x00, size ];
         let apdu = NSData(bytes: command, length: 5);
         if let result = sendAPDU(apdu) {
@@ -434,13 +435,13 @@ public class HBCISmartcard {
         return nil;
     }
     
-    func internal_authenticate(keyNum:UInt8, keyType:UInt8, data:NSData) ->NSData? {
+    func internal_authenticate(_ keyNum:UInt8, keyType:UInt8, data:NSData) ->NSData? {
         let command:[UInt8] = [ APDU_CLA_STD, APDU_INS_AUTH_INT, 0x00, keyType | keyNum, UInt8(data.length) ];
         let apdu = NSMutableData(bytes: command, length: 5);
-        apdu.appendData(data);
+        apdu.append(data as Data);
         // append zero at the end
         var x:UInt8 = 0;
-        apdu.appendBytes(&x, length: 1);
+        apdu.append(&x, length: 1);
         if let result = sendAPDU(apdu) {
             if checkResult(result) {
                 return extractDataFromResult(result);

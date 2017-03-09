@@ -18,7 +18,7 @@ public struct HBCISepaStandingOrderNewPar {
     public var daysPerWeek:String?
 }
 
-public class HBCISepaStandingOrderNewOrder : HBCIOrder {
+open class HBCISepaStandingOrderNewOrder : HBCIOrder {
     var standingOrder:HBCIStandingOrder;
     
     public init?(message: HBCICustomMessage, order:HBCIStandingOrder) {
@@ -29,7 +29,7 @@ public class HBCISepaStandingOrderNewOrder : HBCIOrder {
         }
     }
     
-    public func enqueue() ->Bool {
+    open func enqueue() ->Bool {
         if !standingOrder.validate() {
             return false;
         }
@@ -43,10 +43,15 @@ public class HBCISepaStandingOrderNewOrder : HBCIOrder {
         // create SEPA data
         if let gen = HBCISepaGeneratorFactory.creditGenerator(self.user) {
             if let data = gen.documentForTransfer(standingOrder) {
-                if let iban = standingOrder.account.iban, bic = standingOrder.account.bic {
-                    var values:Dictionary<String,AnyObject> = ["My.iban":iban, "My.bic":bic, "sepapain":data, "sepadescr":gen.sepaFormat.urn, "details.firstdate":standingOrder.startDate,
-                        "details.timeunit":standingOrder.cycleUnit == HBCIStandingOrderCycleUnit.monthly ? "M":"W", "details.turnus":standingOrder.cycle,
-                        "details.execday":standingOrder.executionDay];
+                if let iban = standingOrder.account.iban, let bic = standingOrder.account.bic {
+                    var values:Dictionary<String,Any> = ["My.iban":iban,
+                                                         "My.bic":bic,
+                                                         "sepapain":data,
+                                                         "sepadescr":gen.sepaFormat.urn,
+                                                         "details.firstdate":standingOrder.startDate,
+                                                         "details.timeunit":standingOrder.cycleUnit == HBCIStandingOrderCycleUnit.monthly ? "M":"W",
+                                                         "details.turnus":standingOrder.cycle,
+                                                         "details.execday":standingOrder.executionDay ];
                     if let lastDate = standingOrder.lastDate {
                         values["details.lastdate"] = lastDate;
                     }
@@ -70,7 +75,7 @@ public class HBCISepaStandingOrderNewOrder : HBCIOrder {
         return false;
     }
     
-    override public func updateResult(result:HBCIResultMessage) {
+    override open func updateResult(_ result:HBCIResultMessage) {
         super.updateResult(result);
         
         for segment in resultSegments {
@@ -78,7 +83,7 @@ public class HBCISepaStandingOrderNewOrder : HBCIOrder {
         }
     }
 
-    public class func getParameters(user:HBCIUser) ->HBCISepaStandingOrderNewPar? {
+    open class func getParameters(_ user:HBCIUser) ->HBCISepaStandingOrderNewPar? {
         guard let (elem, seg) = self.getParameterElement(user, orderName: "SepaStandingOrderNew") else {
             return nil;
         }

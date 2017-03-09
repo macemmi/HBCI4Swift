@@ -10,13 +10,13 @@ import Foundation
 
 // HBCI String extensions
 
-func firstComponent(path:String) ->(component:String, residual:String?) {
+func firstComponent(_ path:String) ->(component:String, residual:String?) {
     // path or final element?
     var name:String?
     var newPath:String?
-    if let range = path.rangeOfString(".", options: NSStringCompareOptions(), range: nil, locale: nil) {
-        name = path.substringToIndex(range.startIndex);
-        newPath = path.substringFromIndex(range.startIndex.successor());
+    if let range = path.range(of: ".", options: NSString.CompareOptions(), range: nil, locale: nil) {
+        name = path.substring(to: range.lowerBound);
+        newPath = path.substring(from: path.index(after: range.lowerBound));
     } else {
         name = path;
     }

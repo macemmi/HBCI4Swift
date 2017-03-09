@@ -15,7 +15,7 @@ public struct HBCISepaStandingOrderDeletePar {
     public var requiresOrderData:Bool;
 }
 
-public class HBCISepaStandingOrderDeleteOrder: HBCIOrder {
+open class HBCISepaStandingOrderDeleteOrder: HBCIOrder {
     var standingOrder:HBCIStandingOrder;
     var orderId:String?
     
@@ -29,7 +29,7 @@ public class HBCISepaStandingOrderDeleteOrder: HBCIOrder {
         }
     }
     
-    public func enqueue() ->Bool {
+    open func enqueue() ->Bool {
         
         // todo: validation only needed if transfer data is mandatory
         if !standingOrder.validate() {
@@ -45,8 +45,8 @@ public class HBCISepaStandingOrderDeleteOrder: HBCIOrder {
         // create SEPA data
         if let gen = HBCISepaGeneratorFactory.creditGenerator(self.user) {
             if let data = gen.documentForTransfer(standingOrder) {
-                if let iban = standingOrder.account.iban, bic = standingOrder.account.bic {
-                    var values:Dictionary<String,AnyObject> = ["My.iban":iban, "My.bic":bic, "sepapain":data, "sepadescr":gen.sepaFormat.urn, "details.firstdate":standingOrder.startDate,
+                if let iban = standingOrder.account.iban, let bic = standingOrder.account.bic {
+                    var values:Dictionary<String,Any> = ["My.iban":iban, "My.bic":bic, "sepapain":data, "sepadescr":gen.sepaFormat.urn, "details.firstdate":standingOrder.startDate,
                         "details.timeunit":standingOrder.cycleUnit == HBCIStandingOrderCycleUnit.monthly ? "M":"W", "details.turnus":standingOrder.cycle,
                         "details.execday":standingOrder.executionDay];
                     if let lastDate = standingOrder.lastDate {
@@ -75,7 +75,7 @@ public class HBCISepaStandingOrderDeleteOrder: HBCIOrder {
         return false;
     }
 
-    public class func getParameters(user:HBCIUser) ->HBCISepaStandingOrderDeletePar? {
+    open class func getParameters(_ user:HBCIUser) ->HBCISepaStandingOrderDeletePar? {
         guard let (elem, seg) = self.getParameterElement(user, orderName: "SepaStandingOrderDelete") else {
             return nil;
         }

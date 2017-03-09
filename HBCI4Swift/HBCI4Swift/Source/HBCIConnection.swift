@@ -9,46 +9,46 @@
 import Foundation
 
 protocol HBCIConnection {
-    func sendMessage(msg:NSData) throws ->NSData;
+    func sendMessage(_ msg:Data) throws ->Data;
     func close();
 }
 
 class HBCIPinTanConnection : HBCIConnection {
-    let url:NSURL;
+    let url:URL;
     
-    init(url:NSURL) {
+    init(url:URL) {
         self.url = url;
     }
     
-    func sendMessage(msg:NSData) throws ->NSData {
+    func sendMessage(_ msg:Data) throws ->Data {
         
-        let encData = msg.base64EncodedDataWithOptions(NSDataBase64EncodingOptions());
+        let encData = msg.base64EncodedData(options: NSData.Base64EncodingOptions());
         
-        let request = NSMutableURLRequest(URL: url);
-        request.HTTPMethod = "POST";
-        request.HTTPBody = encData;
+        let request = NSMutableURLRequest(url: url);
+        request.httpMethod = "POST";
+        request.httpBody = encData;
         request.timeoutInterval = 240;
         request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type");
         
-        var response:NSURLResponse?;
+        var response:URLResponse?;
         
         do {
-            let result = try NSURLConnection.sendSynchronousRequest(request, returningResponse: &response);
+            let result = try NSURLConnection.sendSynchronousRequest(request as URLRequest, returning: &response);
             
             // check status code
-            if let httpResponse = response as? NSHTTPURLResponse {
+            if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode != 200 {
                     logError(httpResponse.description);
-                    logError(NSString(data: result, encoding: NSISOLatin1StringEncoding) as! String)
-                    throw HBCIError.Connection(url.path!);
+                    logError(String(data: result, encoding: String.Encoding.isoLatin1));
+                    throw HBCIError.connection(url.path);
                 }
             } else {
                 logError("No HTTP response");
-                throw HBCIError.Connection(url.path!);
+                throw HBCIError.connection(url.path);
             }
             
             
-            let decoded = NSData(base64EncodedData: result, options: NSDataBase64DecodingOptions.IgnoreUnknownCharacters);
+            let decoded = Data(base64Encoded: result, options: NSData.Base64DecodingOptions.ignoreUnknownCharacters);
             
             if let value = decoded {
                 return value
@@ -56,10 +56,10 @@ class HBCIPinTanConnection : HBCIConnection {
             
         } catch let err as NSError {
             logError(err.localizedDescription);
-            throw HBCIError.Connection(url.path!);
+            throw HBCIError.connection(url.path);
         }
         
-        throw HBCIError.Connection(url.path!);
+        throw HBCIError.connection(url.path);
     }
     
     func close() {
@@ -68,35 +68,35 @@ class HBCIPinTanConnection : HBCIConnection {
 
 class HBCIDDVConnection : HBCIConnection {
     let host:String;
-    var inputStream:NSInputStream!
-    var outputStream:NSOutputStream!
+    var inputStream:InputStream!
+    var outputStream:OutputStream!
 
     init(host:String) throws {
         self.host = host;
         
-        var inp :NSInputStream?
-        var out :NSOutputStream?
+        var inp :InputStream?
+        var out :OutputStream?
         
-        NSStream.getStreamsToHostWithName(host, port: 3000, inputStream: &inp, outputStream: &out);
+        Stream.getStreamsToHost(withName: host, port: 3000, inputStream: &inp, outputStream: &out);
         
-        if let inpStr = inp, outStr = out {
+        if let inpStr = inp, let outStr = out {
             self.inputStream = inpStr;
             self.outputStream = outStr;
         } else {
             logError("Unable to open connection to server \(host)");
-            throw HBCIError.Connection(host);
+            throw HBCIError.connection(host);
         }
     }
     
-    func sendMessage(msg: NSData) throws -> NSData {
-        if inputStream.streamStatus != NSStreamStatus.Open {
+    func sendMessage(_ msg: Data) throws -> Data {
+        if inputStream.streamStatus != Stream.Status.open {
             inputStream.open();
         }
-        if outputStream.streamStatus != NSStreamStatus.Open {
+        if outputStream.streamStatus != Stream.Status.open {
             outputStream.open();
         }
         
-        outputStream.write(UnsafePointer<UInt8>(msg.bytes), maxLength: msg.length);
+        outputStream.write((msg as NSData).bytes.bindMemory(to: UInt8.self, capacity: msg.count), maxLength: msg.count);
         
         var tries = 0;
         // wait for server to respond
@@ -110,18 +110,18 @@ class HBCIDDVConnection : HBCIConnection {
         if tries == 30 {
             logError("Timeout");
             inputStream.close();
-            throw HBCIError.ServerTimeout(host);
+            throw HBCIError.serverTimeout(host);
         }
         
         let data = NSMutableData();
-        let buffer = UnsafeMutablePointer<UInt8>.alloc(4000);
+        let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: 4000);
         while inputStream.hasBytesAvailable {
             let bytes = inputStream.read(buffer, maxLength: 4000);
-            data.appendBytes(buffer, length: bytes);
+            data.append(buffer, length: bytes);
         }
-        buffer.destroy();
+        buffer.deinitialize();
         
-        return data;
+        return data as Data;
     }
     
     func close() {

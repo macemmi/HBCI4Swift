@@ -13,7 +13,7 @@ public struct HBCISepaDatedTransferPar {
     public var maxPreDays:Int;
 }
 
-public class HBCISepaDatedTransferOrder : HBCIAbstractSepaTransferOrder {
+open class HBCISepaDatedTransferOrder : HBCIAbstractSepaTransferOrder {
 
     public init?(message: HBCICustomMessage, transfer:HBCISepaTransfer) {
         super.init(name: "SepaDatedTransfer", message: message, transfer: transfer);
@@ -22,7 +22,7 @@ public class HBCISepaDatedTransferOrder : HBCIAbstractSepaTransferOrder {
         }
     }
     
-    public override func enqueue() ->Bool {
+    open override func enqueue() ->Bool {
 
         if transfer.date == nil {
             logError("SEPA Dated Transfer: date is missing");
@@ -31,7 +31,7 @@ public class HBCISepaDatedTransferOrder : HBCIAbstractSepaTransferOrder {
         return super.enqueue();
     }
     
-    public class func getParameters(user:HBCIUser) ->HBCISepaDatedTransferPar? {
+    open class func getParameters(_ user:HBCIUser) ->HBCISepaDatedTransferPar? {
         guard let (elem, seg) = self.getParameterElement(user, orderName: "SepaDatedTransfer") else {
             return nil;
         }

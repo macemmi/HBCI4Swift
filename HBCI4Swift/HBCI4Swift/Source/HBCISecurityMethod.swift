@@ -9,22 +9,22 @@
 import Foundation
 
 public enum HBCISecurityMethodCode {
-    case Undefined, PinTan, DDV;
+    case undefined, pinTan, ddv;
 }
 
-public class HBCISecurityMethod {
+open class HBCISecurityMethod {
     weak var user:HBCIUser!
-    public var code = HBCISecurityMethodCode.Undefined;
+    open var code = HBCISecurityMethodCode.undefined;
     
-    func signMessage(msg:HBCIMessage) ->Bool {
+    func signMessage(_ msg:HBCIMessage) ->Bool {
         return false;
     }
     
-    func encryptMessage(msg:HBCIMessage, dialog:HBCIDialog) ->HBCIMessage? {
+    func encryptMessage(_ msg:HBCIMessage, dialog:HBCIDialog) ->HBCIMessage? {
         return nil;
     }
     
-    func decryptMessage(rmsg:HBCIResultMessage, dialog:HBCIDialog) ->HBCIResultMessage? {
+    func decryptMessage(_ rmsg:HBCIResultMessage, dialog:HBCIDialog) ->HBCIResultMessage? {
         return nil;
     }
 

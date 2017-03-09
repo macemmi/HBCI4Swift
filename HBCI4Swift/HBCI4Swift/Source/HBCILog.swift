@@ -9,60 +9,77 @@
 import Foundation
 
 
-func logError(message:String, file:String = #file, function:String = #function, line:Int = #line) {
+func logError(_ message:String?, file:String = #file, function:String = #function, line:Int = #line) {
     if let log = _log {
         log.logError(message, file: file, function: function, line: line);
     }
 }
 
-func logWarning(message:String, file:String = #file, function:String = #function, line:Int = #line) {
+func logWarning(_ message:String?, file:String = #file, function:String = #function, line:Int = #line) {
     if let log = _log {
         log.logWarning(message, file: file, function: function, line: line);
     }
 }
 
-func logInfo(message:String, file:String = #file, function:String = #function, line:Int = #line) {
+func logInfo(_ message:String?, file:String = #file, function:String = #function, line:Int = #line) {
     if let log = _log {
         log.logError(message, file: file, function: function, line: line);
     }
 }
 
-func logDebug(message:String, file:String = #file, function:String = #function, line:Int = #line, values:Int...) {
-    let m = String(format: message, arguments: values);
-    if let log = _log {
-        log.logError(m, file: file, function: function, line: line);
+func logDebug(_ message:String?, file:String = #file, function:String = #function, line:Int = #line, values:Int...) {
+    if let msg = message {
+        let m = String(format: msg, arguments: values);
+        if let log = _log {
+            log.logError(m, file: file, function: function, line: line);
+        }
     }
 }
 
 public protocol HBCILog {
-     func logError(message:String, file:String, function:String, line:Int);
-     func logWarning(message:String, file:String, function:String, line:Int);
-     func logInfo(message:String, file:String, function:String, line:Int);
+     func logError(_ message:String?, file:String, function:String, line:Int);
+     func logWarning(_ message:String?, file:String, function:String, line:Int);
+     func logInfo(_ message:String?, file:String, function:String, line:Int);
     
 }
 
 var _log:HBCILog?;
 
-public class HBCILogManager {
-    public class func setLog(log:HBCILog) {
+open class HBCILogManager {
+    open class func setLog(_ log:HBCILog) {
         _log = log;
     }    
 }
 
-public class HBCIConsoleLog: HBCILog {
+open class HBCIConsoleLog: HBCILog {
     
     public init() {}
     
-    public func logError(message: String, file:String, function:String, line:Int) {
-        let url = NSURL(fileURLWithPath: file);
-        print(url.lastPathComponent!+", "+function+" \(line): "+message);
+    open func logError(_ message: String?, file:String, function:String, line:Int) {
+        if let msg = message {
+            let url = URL(fileURLWithPath: file);
+            print(url.lastPathComponent+", "+function+" \(line): "+msg);
+        } else {
+            let url = URL(fileURLWithPath: file);
+            print(url.lastPathComponent+", "+function+" \(line): nil message");
+        }
     }
-    public func logWarning(message: String, file:String, function:String, line:Int) {
-        let url = NSURL(fileURLWithPath: file);
-        print(url.lastPathComponent!+", "+function+" \(line): "+message);
+    open func logWarning(_ message: String?, file:String, function:String, line:Int) {
+        if let msg = message {
+            let url = URL(fileURLWithPath: file);
+            print("Warning"+url.lastPathComponent+", "+function+" \(line): "+msg);
+        } else {
+            let url = URL(fileURLWithPath: file);
+            print("Warning: "+url.lastPathComponent+", "+function+" \(line): nil message");
+        }
     }
-    public func logInfo(message: String, file:String, function:String, line:Int) {
-        let url = NSURL(fileURLWithPath: file);
-        print("Info: "+url.lastPathComponent!+", "+function+" \(line): "+message);
+    open func logInfo(_ message: String?, file:String, function:String, line:Int) {
+        if let msg = message {
+            let url = URL(fileURLWithPath: file);
+            print("Info"+url.lastPathComponent+", "+function+" \(line): "+msg);
+        } else {
+            let url = URL(fileURLWithPath: file);
+            print("Info"+url.lastPathComponent+", "+function+" \(line): nil message");
+        }
     }
 }

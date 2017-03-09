@@ -10,17 +10,17 @@ import Foundation
 
 public struct HBCIAccountBalance {
     public let value:NSDecimalNumber;
-    public let postingDate:NSDate;
+    public let postingDate:Date;
     public let currency:String;
     
-    public init(value:NSDecimalNumber, date:NSDate, currency:String) {
+    public init(value:NSDecimalNumber, date:Date, currency:String) {
         self.value = value;
         self.postingDate = date;
         self.currency = currency;
     }
     
     public init?(element: HBCISyntaxElement) {
-        if let value = HBCIValue(element: element), date = element.elementValueForPath("date") as? NSDate {
+        if let value = HBCIValue(element: element), let date = element.elementValueForPath("date") as? Date {
             self.value = value.value;
             self.currency = value.currency;
             self.postingDate = date;

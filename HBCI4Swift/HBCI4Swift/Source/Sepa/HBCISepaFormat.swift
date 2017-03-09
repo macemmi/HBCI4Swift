@@ -49,8 +49,8 @@ class HBCISepaFormat {
     init?(urn:String) {
         let pattern = "[0-9]{3}.[0-9]{3}.[0-9]{2}";
         
-        if let match = urn.rangeOfString(pattern, options: NSStringCompareOptions.RegularExpressionSearch, range: nil, locale: nil) {
-            let format = urn.substringWithRange(match);
+        if let match = urn.range(of: pattern, options: NSString.CompareOptions.regularExpression, range: nil, locale: nil) {
+            let format = urn.substring(with: match);
             self.type = HBCISepaFormatType(rawValue: format.substringToIndex(3));
             self.variant = format.substringWithRange(NSMakeRange(4, 3));
             self.version = format.substringFromIndex(8);
@@ -86,7 +86,7 @@ class HBCISepaFormat {
     
     var validationSchemaLocation:String {
         get {
-            var path = NSBundle.mainBundle().bundlePath;
+            var path = Bundle.main.bundlePath;
             path = path + "/Contents/Frameworks/HBCI4Swift.framework/Resources/pain.";
             return urns[formatString]! + " " + path + formatString + ".xsd";
         }

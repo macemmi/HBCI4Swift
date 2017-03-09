@@ -10,21 +10,21 @@ import Foundation
 
 var _extension:HBCISyntaxExtension?
 
-public class HBCISyntaxExtension {
+open class HBCISyntaxExtension {
     var extensions = Dictionary<String, HBCISyntax>();
     
     init() {}
     
-    public func add(path:String, version:String) throws {
+    open func add(_ path:String, version:String) throws {
         if !["220", "300"].contains(version) {
-            throw HBCIError.InvalidHBCIVersion(version);
+            throw HBCIError.invalidHBCIVersion(version);
         }
 
         let syntax = try HBCISyntax(path: path);
         extensions[version] = syntax;
     }
     
-    public class var instance:HBCISyntaxExtension {
+    open class var instance:HBCISyntaxExtension {
         get {
             if _extension == nil {
                 _extension = HBCISyntaxExtension();

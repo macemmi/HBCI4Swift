@@ -18,7 +18,7 @@ class HBCITanOrder : HBCIOrder {
     
     // results
     var challenge:String?
-    var challenge_hhd_uc:NSData?
+    var challenge_hhd_uc:Data?
     
     // todo(?)
     
@@ -32,7 +32,7 @@ class HBCITanOrder : HBCIOrder {
     
     func enqueue() ->Bool {
         if let process = self.process {
-            var values:Dictionary<String,AnyObject> = ["process":process];
+            var values:Dictionary<String,Any> = ["process":process];
             if tanMediumName != nil {
                 values["tanmedia"] = tanMediumName!
             }
@@ -57,7 +57,7 @@ class HBCITanOrder : HBCIOrder {
         return true;
     }
     
-    override func updateResult(result:HBCIResultMessage) {
+    override func updateResult(_ result:HBCIResultMessage) {
         super.updateResult(result);
         
         // get challenge information
@@ -66,7 +66,7 @@ class HBCITanOrder : HBCIOrder {
             self.orderRef = seg.elementValueForPath("orderref") as? String;
             
             if seg.version > 3 {
-                self.challenge_hhd_uc = seg.elementValueForPath("challenge_hhd_uc") as? NSData;
+                self.challenge_hhd_uc = seg.elementValueForPath("challenge_hhd_uc") as? Data;
             }
         }
     }

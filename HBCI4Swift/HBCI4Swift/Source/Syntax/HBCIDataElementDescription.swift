@@ -9,24 +9,24 @@
 import Foundation
 
 enum HBCIDataElementType {
-    case AlphaNumeric,  // FinTS character set withoug CR/LF
-    Binary,
-    Code,
-    Country,
-    Currency,
-    DTAUS,
-    Date,
-    Digits,  // 0-9, leading zeroes are allowed
-    ID,
-    Boole,
-    Numeric, // 0-9, leading zeroes not allowed
-    Time,
-    Value
+    case alphaNumeric,  // FinTS character set withoug CR/LF
+    binary,
+    code,
+    country,
+    currency,
+    dtaus,
+    date,
+    digits,  // 0-9, leading zeroes are allowed
+    id,
+    boole,
+    numeric, // 0-9, leading zeroes not allowed
+    time,
+    value
 }
 
-var _dateFormatter: NSDateFormatter!
-var _timeFormatter: NSDateFormatter!
-var _numberFormatter: NSNumberFormatter!
+var _dateFormatter: DateFormatter!
+var _timeFormatter: DateFormatter!
+var _numberFormatter: NumberFormatter!
 var _numberHandler: NSDecimalNumberHandler!
 
 
@@ -34,19 +34,19 @@ class HBCIDataElementDescription: HBCISyntaxElementDescription {
     let minsize = 0, maxsize = 0;
     var dataType: HBCIDataElementType!
     
-    override init(syntax: HBCISyntax, element: NSXMLElement) throws {
+    override init(syntax: HBCISyntax, element: XMLElement) throws {
         try super.init(syntax: syntax, element: element)
         self.delimiter = HBCIChar.plus.rawValue;
-        self.elementType = .DataElement
+        self.elementType = .dataElement
         
         if let type = self.type {
             if(!setDataType(type)) {
                 logError("Syntax file error: unknown data type \(self.type!)");
-                throw HBCIError.SyntaxFileError;
+                throw HBCIError.syntaxFileError;
             }
         } else {
             logError("Syntax file error: Data Element has no type");
-            throw HBCIError.SyntaxFileError;
+            throw HBCIError.syntaxFileError;
         }
         
         initFormatters()
@@ -54,17 +54,17 @@ class HBCIDataElementDescription: HBCISyntaxElementDescription {
     
     func initFormatters() {
         if _dateFormatter == nil {
-            _dateFormatter = NSDateFormatter()
+            _dateFormatter = DateFormatter()
             _dateFormatter.dateFormat = "yyyyMMdd"
-            _dateFormatter.timeZone = NSTimeZone(name: "Europe/Berlin")
+            _dateFormatter.timeZone = TimeZone(identifier: "Europe/Berlin")
         }
         if _timeFormatter == nil {
-            _timeFormatter = NSDateFormatter()
+            _timeFormatter = DateFormatter()
             _timeFormatter.dateFormat = "HHmmss"
-            _timeFormatter.timeZone = NSTimeZone(name: "Europe/Berlin")
+            _timeFormatter.timeZone = TimeZone(identifier: "Europe/Berlin")
         }
         if _numberFormatter == nil {
-            _numberFormatter = NSNumberFormatter()
+            _numberFormatter = NumberFormatter()
             _numberFormatter.decimalSeparator = ","
             _numberFormatter.alwaysShowsDecimalSeparator = true
             _numberFormatter.minimumFractionDigits = 0
@@ -72,25 +72,25 @@ class HBCIDataElementDescription: HBCISyntaxElementDescription {
             _numberFormatter.generatesDecimalNumbers = true;
         }
         if _numberHandler == nil {
-            _numberHandler = NSDecimalNumberHandler(roundingMode: NSRoundingMode.RoundPlain, scale: 2, raiseOnExactness: true, raiseOnOverflow: true, raiseOnUnderflow: true, raiseOnDivideByZero: true);
+            _numberHandler = NSDecimalNumberHandler(roundingMode: NSDecimalNumber.RoundingMode.plain, scale: 2, raiseOnExactness: true, raiseOnOverflow: true, raiseOnUnderflow: true, raiseOnDivideByZero: true);
         }
     }
     
-    func setDataType(type:String) ->Bool {
+    func setDataType(_ type:String) ->Bool {
         switch type {
-            case "AN": self.dataType = .AlphaNumeric
-            case "Code": self.dataType = .Code
-            case "Bin": self.dataType = .Binary
-            case "Ctr": self.dataType = .Country
-            case "Cur": self.dataType = .Currency
-            case "DTAUS": self.dataType = .DTAUS
-            case "Date": self.dataType = .Date
-            case "Dig": self.dataType = .Digits
-            case "ID": self.dataType = .ID
-            case "JN": self.dataType = .Boole
-            case "Num": self.dataType = .Numeric
-            case "Time": self.dataType = .Time
-            case "Wrt": self.dataType = .Value
+            case "AN": self.dataType = .alphaNumeric
+            case "Code": self.dataType = .code
+            case "Bin": self.dataType = .binary
+            case "Ctr": self.dataType = .country
+            case "Cur": self.dataType = .currency
+            case "DTAUS": self.dataType = .dtaus
+            case "Date": self.dataType = .date
+            case "Dig": self.dataType = .digits
+            case "ID": self.dataType = .id
+            case "JN": self.dataType = .boole
+            case "Num": self.dataType = .numeric
+            case "Time": self.dataType = .time
+            case "Wrt": self.dataType = .value
         default: self.dataType = nil; return false;
         }
         return true;
@@ -102,14 +102,14 @@ class HBCIDataElementDescription: HBCISyntaxElementDescription {
         return "DE name: \(n) value: \(s) \n"
     }
     
-    override func parse(bytes: UnsafePointer<CChar>, length: Int, binaries:Array<NSData>) ->HBCISyntaxElement? {
+    override func parse(_ bytes: UnsafePointer<CChar>, length: Int, binaries:Array<Data>) ->HBCISyntaxElement? {
         let de = HBCIDataElement(description: self);
         de.name = self.name ?? "";
         
         // check if first character is a delimiter
         var sidx = 0, tidx = 0;
         var escaped: Bool = false;
-        var target = [CChar](count:length+1, repeatedValue:0);
+        var target = [CChar](repeating: 0, count: length+1);
         while sidx < length {
             let c = bytes[sidx];
             if (c == HBCIChar_plus || c == HBCIChar_dpoint || c == HBCIChar_quote) && !escaped {
@@ -133,38 +133,38 @@ class HBCIDataElementDescription: HBCISyntaxElementDescription {
         
         target[tidx] = 0;
         if sidx > 0 && tidx > 0 {
-            if let sValue = String(CString: target, encoding: NSISOLatin1StringEncoding) {
+            if let sValue = String(cString: target, encoding: String.Encoding.isoLatin1) {
                 
                 if let type = self.dataType {
                     switch type {
-                    case .Value:
-                        if let value = _numberFormatter.numberFromString(sValue) {
+                    case .value:
+                        if let value = _numberFormatter.number(from: sValue) {
                             // formatter returns a NSDecimalNumber
-                            de.value = (value as! NSDecimalNumber).decimalNumberByRoundingAccordingToBehavior(_numberHandler);
+                            de.value = (value as! NSDecimalNumber).rounding(accordingToBehavior: _numberHandler);
                         } else {
                             logError("Parse error: string \(sValue) cannot be converted to a number");
                             return nil;
                         }
                         
-                    case .Boole: de.value = (sValue == "J");
-                    case .Date:
-                        if let date = _dateFormatter.dateFromString(sValue) {
+                    case .boole: de.value = (sValue == "J");
+                    case .date:
+                        if let date = _dateFormatter.date(from: sValue) {
                             de.value = date;
                         } else {
                             logError("Parse error: string \(sValue) cannot be converted to a date");
                             return nil;
                         }
-                    case .Time:
-                        if let time = _timeFormatter.dateFromString(sValue) {
+                    case .time:
+                        if let time = _timeFormatter.date(from: sValue) {
                             de.value = time;
                         } else {
                             logError("Parse error: string \(sValue) cannot be converted to a time");
                             return nil;
                         }
-                    case .Binary:
+                    case .binary:
                         if sValue.hasPrefix("@") && sValue.hasSuffix("@") {
-                            let range = Range<String.Index>(sValue.startIndex.advancedBy(1) ..< sValue.endIndex.advancedBy(-1));
-                            let idxString = sValue.substringWithRange(range);
+                            let range = Range<String.Index>(sValue.characters.index(sValue.startIndex, offsetBy: 1) ..< sValue.characters.index(sValue.endIndex, offsetBy: -1));
+                            let idxString = sValue.substring(with: range);
                             if let idx = Int(idxString) {
                                 de.value = binaries[idx];
                             }
@@ -172,7 +172,7 @@ class HBCIDataElementDescription: HBCISyntaxElementDescription {
                             logError("Invalid binary tag: \(sValue)");
                             return nil;
                         }
-                    case .Numeric:
+                    case .numeric:
                         de.value = Int(sValue);
                         
                         

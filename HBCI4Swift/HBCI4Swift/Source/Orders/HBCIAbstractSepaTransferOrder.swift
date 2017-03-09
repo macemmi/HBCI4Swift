@@ -8,8 +8,8 @@
 
 import Foundation
 
-public class HBCIAbstractSepaTransferOrder : HBCIOrder {
-    public let transfer:HBCISepaTransfer;
+open class HBCIAbstractSepaTransferOrder : HBCIOrder {
+    open let transfer:HBCISepaTransfer;
     
     init?(name: String, message: HBCICustomMessage, transfer:HBCISepaTransfer) {
         self.transfer = transfer;
@@ -33,8 +33,12 @@ public class HBCIAbstractSepaTransferOrder : HBCIOrder {
         // create SEPA data
         if let gen = HBCISepaGeneratorFactory.creditGenerator(self.user) {
             if let data = gen.documentForTransfer(transfer) {
-                if let iban = transfer.account.iban, bic = transfer.account.bic {
-                    let values:Dictionary<String,AnyObject> = ["My.iban":iban, "My.bic":bic, "sepapain":data, "sepadescr":gen.sepaFormat.urn];
+                if let iban = transfer.account.iban, let bic = transfer.account.bic {
+                    let values:Dictionary<String,Any> = [
+                        "My.iban":iban,
+                        "My.bic":bic,
+                        "sepapain":data,
+                        "sepadescr":gen.sepaFormat.urn];
                     if self.segment.setElementValues(values) {
                         // add to dialog
                         msg.addOrder(self);

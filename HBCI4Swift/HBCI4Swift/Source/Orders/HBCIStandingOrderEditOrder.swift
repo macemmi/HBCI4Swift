@@ -28,7 +28,7 @@ public struct HBCISepaStandingOrderEditPar {
 }
 
 
-public class HBCISepaStandingOrderEditOrder: HBCIAbstractStandingOrderOrder {
+open class HBCISepaStandingOrderEditOrder: HBCIAbstractStandingOrderOrder {
     var orderId:String?
     
     
@@ -40,7 +40,7 @@ public class HBCISepaStandingOrderEditOrder: HBCIAbstractStandingOrderOrder {
         }
     }
     
-    public override func enqueue() -> Bool {
+    open override func enqueue() -> Bool {
         if super.enqueue() {
             if let id = self.orderId {
                 self.segment.setElementValue(id, path: "orderid");
@@ -51,7 +51,7 @@ public class HBCISepaStandingOrderEditOrder: HBCIAbstractStandingOrderOrder {
         return false;
     }
     
-    override public func updateResult(result:HBCIResultMessage) {
+    override open func updateResult(_ result:HBCIResultMessage) {
         super.updateResult(result);
         
         for segment in resultSegments {
@@ -60,7 +60,7 @@ public class HBCISepaStandingOrderEditOrder: HBCIAbstractStandingOrderOrder {
     }
 
     
-    public class func getParameters(user:HBCIUser) ->HBCISepaStandingOrderEditPar? {
+    open class func getParameters(_ user:HBCIUser) ->HBCISepaStandingOrderEditPar? {
         guard let (elem, seg) = self.getParameterElement(user, orderName: "SepaStandingOrderEdit") else {
             return nil;
         }

@@ -8,9 +8,9 @@
 
 import Foundation
 
-public class HBCISegment: HBCISyntaxElement {
-    public let code:String;
-    public let version:Int;
+open class HBCISegment: HBCISyntaxElement {
+    open let code:String;
+    open let version:Int;
     
     override init(description: HBCISyntaxElementDescription) {
         let sd = description as! HBCISegmentDescription;
@@ -21,8 +21,7 @@ public class HBCISegment: HBCISyntaxElement {
 
     
     override func elementDescription() -> String {
-        let name = self.name ?? "none";
-        return "SEG name: \(name)\n";
+        return "SEG name: \(self.name)\n";
     }
     
 

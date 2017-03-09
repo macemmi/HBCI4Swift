@@ -10,11 +10,11 @@ import Foundation
 
 class HBCISepaParser_001_003_03 : HBCISepaParser, HBCISepaParserCredit {
     
-    func transferForDocument(account:HBCIAccount, data:NSData) ->HBCISepaTransfer? {
+    func transferForDocument(_ account:HBCIAccount, data:Data) ->HBCISepaTransfer? {
         let transfer = HBCISepaTransfer(account: account);
         
         do {
-            let document = try NSXMLDocument(data: data, options: Int(NSXMLDocumentTidyXML))
+            let document = try XMLDocument(data: data, options: Int(XMLDocument.Options.documentTidyXML.rawValue))
             if let root = document.rootElement() {
                 
                 // Group Header
@@ -39,10 +39,10 @@ class HBCISepaParser_001_003_03 : HBCISepaParser, HBCISepaParserCredit {
                     var currency:String?
                     
                     let elems = element.elementsForPath("Amt.InstdAmt");
-                    if let elem = elems.first, valueString = elem.stringValue {
+                    if let elem = elems.first, let valueString = elem.stringValue {
                         value = stringToNumber(valueString);
                         
-                        if let node = elem.attributeForName("Ccy") {
+                        if let node = elem.attribute(forName: "Ccy") {
                             currency = node.stringValue;
                         }
                     }

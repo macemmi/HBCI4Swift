@@ -13,11 +13,11 @@ enum SepaOrderType: String {
 }
 
 class HBCISepaGenerator {
-    let document:NSXMLDocument;
-    let root:NSXMLElement;
-    let numberFormatter = NSNumberFormatter();
+    let document:XMLDocument;
+    let root:XMLElement;
+    let numberFormatter = NumberFormatter();
     let format:HBCISepaFormat;
-    var schemaLocationAttrNode:NSXMLNode!
+    var schemaLocationAttrNode:XMLNode!
     
     init(format:HBCISepaFormat) {
         
@@ -25,8 +25,8 @@ class HBCISepaGenerator {
         self.format = format;
         
         // create document
-        self.root = NSXMLElement(name: "Document");
-        self.document = NSXMLDocument(rootElement: self.root);
+        self.root = XMLElement(name: "Document");
+        self.document = XMLDocument(rootElement: self.root);
         
         self.document.version = "1.0";
         self.document.characterEncoding = "UTF-8";
@@ -44,7 +44,7 @@ class HBCISepaGenerator {
         }
     }
     
-    private func initFormatters() {
+    fileprivate func initFormatters() {
         numberFormatter.decimalSeparator = ".";
         numberFormatter.alwaysShowsDecimalSeparator = true;
         numberFormatter.minimumFractionDigits = 2;
@@ -52,28 +52,28 @@ class HBCISepaGenerator {
         numberFormatter.generatesDecimalNumbers = true;
     }
     
-    func numberToString(number:NSDecimalNumber) ->String? {
-        return numberFormatter.stringFromNumber(number);
+    func numberToString(_ number:NSDecimalNumber) ->String? {
+        return numberFormatter.string(from: number);
     }
     
     func defaultMessageId() ->String {
-        let formatter = NSDateFormatter();
+        let formatter = DateFormatter();
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSS";
-        return formatter.stringFromDate(NSDate());
+        return formatter.string(from: Date());
     }
     
     func setNamespace() {
-        var namespace = NSXMLNode(kind: NSXMLNodeKind.NamespaceKind);
+        var namespace = XMLNode(kind: XMLNode.Kind.namespace);
         namespace.stringValue = format.urn;
         namespace.name = "";
         root.addNamespace(namespace);
         
-        namespace = NSXMLNode(kind: NSXMLNodeKind.NamespaceKind);
+        namespace = XMLNode(kind: XMLNode.Kind.namespace);
         namespace.stringValue = "http://www.w3.org/2001/XMLSchema-instance";
         namespace.name = "xsi";
         root.addNamespace(namespace);
         
-        schemaLocationAttrNode = NSXMLNode(kind: NSXMLNodeKind.AttributeKind);
+        schemaLocationAttrNode = XMLNode(kind: XMLNode.Kind.attribute);
         schemaLocationAttrNode.name = "xsi:schemaLocation"
         schemaLocationAttrNode.stringValue = format.schemaLocation;
         root.addAttribute(schemaLocationAttrNode);
@@ -97,15 +97,15 @@ class HBCISepaGenerator {
     }
     
     func sepaISODateString() ->String {
-        let formatter = NSDateFormatter();
+        let formatter = DateFormatter();
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssXXX";
-        return formatter.stringFromDate(NSDate());
+        return formatter.string(from: Date());
     }
     
-    func sepaDateString(date:NSDate) ->String {
-        let formatter = NSDateFormatter();
+    func sepaDateString(_ date:Date) ->String {
+        let formatter = DateFormatter();
         formatter.dateFormat = "yyyy-MM-dd";
-        return formatter.stringFromDate(date);
+        return formatter.string(from: date);
     }
 
     

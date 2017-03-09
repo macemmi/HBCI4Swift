@@ -10,10 +10,10 @@ import Foundation
 
 public typealias HBCISegmentCode = String;
 
-public class HBCIParameters {
-    public var bpdVersion = 0, updVersion = 0;
-    public var pinTanInfos:HBCIPinTanInformation?
-    var bpData:NSData?
+open class HBCIParameters {
+    open var bpdVersion = 0, updVersion = 0;
+    open var pinTanInfos:HBCIPinTanInformation?
+    var bpData:Data?
     var bpSegments = Array<HBCISegment>();
     var tanProcessInfos:HBCITanProcessInformation?
     var supportedTanMethods = Array<String>();
@@ -21,7 +21,7 @@ public class HBCIParameters {
     
     init() {}
     
-    public func data() ->NSData? {
+    open func data() ->Data? {
         return bpData;
     }
     
@@ -88,27 +88,27 @@ public class HBCIParameters {
         }
     }
     
-    convenience init(data:NSData, syntax:HBCISyntax) throws {
-        var segmentData = Array<NSData>();
+    convenience init(data:Data, syntax:HBCISyntax) throws {
+        var segmentData = Array<Data>();
         var segments = Array<HBCISegment>();
-        let binaries = Array<NSData>();
-        var segContent = [CChar](count:data.length, repeatedValue:0);
+        let binaries = Array<Data>();
+        var segContent = [CChar](repeating: 0, count: data.count);
         var i = 0, segSize = 0;
         
-        var p = UnsafeMutablePointer<CChar>(data.bytes);
+        var p = UnsafeMutablePointer<CChar>(mutating: (data as NSData).bytes.bindMemory(to: CChar.self, capacity: data.count));
         
-        while i < data.length {
+        while i < data.count {
             //q.memory = p.memory;
-            segContent[segSize] = p.memory;
+            segContent[segSize] = p.pointee;
             segSize += 1;
-            if p.memory == HBCIChar.quote.rawValue && !isEscaped(p) {
+            if p.pointee == HBCIChar.quote.rawValue && !isEscaped(p) {
                 // now we have a segment in segContent
-                let data = NSData(bytes: segContent, length: segSize);
+                let data = Data(bytes: segContent, count: segSize);
                 segmentData.append(data);
                 segSize = 0;
             }
             i += 1;
-            p = p.advancedBy(1);
+            p = p.advanced(by: 1);
         }
         
         // now we have all segment strings and we can start to parse each segment
@@ -120,12 +120,12 @@ public class HBCIParameters {
                 }
             }
             catch is HBCIError {
-                if let segmentString = NSString(data: segData, encoding: NSISOLatin1StringEncoding) {
+                if let segmentString = NSString(data: segData, encoding: String.Encoding.isoLatin1.rawValue) {
                     logError("Parse error: segment \(segmentString) could not be parsed");
-                    throw HBCIError.ParseError;
+                    throw HBCIError.parseError;
                 } else {
                     logError("Parse error: segment (no conversion possible) could not be parsed");
-                    throw HBCIError.ParseError;
+                    throw HBCIError.parseError;
                 }
             }
         }
@@ -133,7 +133,7 @@ public class HBCIParameters {
         bpData = data;
     }
     
-    public func getTanMethods() ->Array<HBCITanMethod> {
+    open func getTanMethods() ->Array<HBCITanMethod> {
         var result = Array<HBCITanMethod>();
         
         if let tpi = self.tanProcessInfos {
@@ -146,7 +146,7 @@ public class HBCIParameters {
         return result;
     }
     
-    public func supportedVersionsForOrder(name:String) ->Array<Int> {
+    open func supportedVersionsForOrder(_ name:String) ->Array<Int> {
         var versions = Array<Int>();
         
         for seg in bpSegments {
@@ -158,7 +158,7 @@ public class HBCIParameters {
         return versions;
     }
     
-    func supportedSegmentVersion(name:String) ->HBCISegmentDescription? {
+    func supportedSegmentVersion(_ name:String) ->HBCISegmentDescription? {
         if let segVersions = syntax.segs[name] {
             // now find the right segment version
             // check which segment versions are supported by the bank
@@ -177,7 +177,7 @@ public class HBCIParameters {
                 return nil;
             }
             // now sort the versions - we take the latest supported version
-            supportedVersions.sortInPlace(>);
+            supportedVersions.sort(by: >);
             
             return segVersions.segmentWithVersion(supportedVersions.first!);
         }
@@ -185,7 +185,7 @@ public class HBCIParameters {
         return nil;
     }
     
-    public func isSegmentCodeSupported(segmentCode:String, accountNumber:String? = nil, accountSubNumber:String? = nil) ->Bool {
+    open func isSegmentCodeSupported(_ segmentCode:String, accountNumber:String? = nil, accountSubNumber:String? = nil) ->Bool {
         for seg in bpSegments {
             if seg.name == "KInfo" {
                 // if account is defined, we check that the account matches
@@ -233,7 +233,7 @@ public class HBCIParameters {
         return false;
     }
     
-    public func isOrderSupported(segmentName:String) ->Bool {
+    open func isOrderSupported(_ segmentName:String) ->Bool {
         guard let sd = supportedSegmentVersion(segmentName) else {
             return false;
         }
@@ -241,15 +241,15 @@ public class HBCIParameters {
         return isSegmentCodeSupported(sd.code);
     }
     
-    public func isOrderSupported(order:HBCIOrder) ->Bool {
+    open func isOrderSupported(_ order:HBCIOrder) ->Bool {
         return isSegmentCodeSupported(order.segment.code);
     }
     
-    public func isOrderSupportedForAccount(order:HBCIOrder, number:String, subNumber:String? = nil) ->Bool {
+    open func isOrderSupportedForAccount(_ order:HBCIOrder, number:String, subNumber:String? = nil) ->Bool {
         return isSegmentCodeSupported(order.segment.code, accountNumber: number, accountSubNumber: subNumber);
     }
     
-    public func isOrderSupportedForAccount(segmentName:String, number:String, subNumber:String? = nil) ->Bool {
+    open func isOrderSupportedForAccount(_ segmentName:String, number:String, subNumber:String? = nil) ->Bool {
         guard let sd = supportedSegmentVersion(segmentName) else {
             return false;
         }
@@ -257,7 +257,7 @@ public class HBCIParameters {
     }
     
     
-    public func supportedOrderCodesForAccount(number:String, subNumber:String? = nil) ->Array<String> {
+    open func supportedOrderCodesForAccount(_ number:String, subNumber:String? = nil) ->Array<String> {
         var orderCodes = Array<String>();
         var found = false;
         
@@ -306,7 +306,7 @@ public class HBCIParameters {
 
     }
     
-    public func supportedOrdersForAccount(number:String, subNumber:String? = nil) ->Array<String> {
+    open func supportedOrdersForAccount(_ number:String, subNumber:String? = nil) ->Array<String> {
         var orderNames = Array<String>();
         
         let codes = supportedOrderCodesForAccount(number, subNumber: subNumber);
@@ -319,7 +319,7 @@ public class HBCIParameters {
         return orderNames;
     }
     
-    func parametersForJob(jobName:String) ->HBCISegment? {
+    func parametersForJob(_ jobName:String) ->HBCISegment? {
         let parSegName = jobName + "Par";
         for seg in bpSegments {
             if seg.name == parSegName {
@@ -329,7 +329,7 @@ public class HBCIParameters {
         return nil;
     }
     
-    func sepaFormats(type:HBCISepaFormatType, orderName:String?) ->[HBCISepaFormat] {
+    func sepaFormats(_ type:HBCISepaFormatType, orderName:String?) ->[HBCISepaFormat] {
         var result:[HBCISepaFormat] = [];
         for seg in bpSegments {
             if seg.name == "SepaInfoPar" {
@@ -345,11 +345,11 @@ public class HBCIParameters {
             }
         }
         // sort array by version
-        result.sortInPlace({$1 < $0})
+        result.sort(by: {$1 < $0})
         return result;
     }
     
-    public func getAccounts() ->Array<HBCIAccount> {
+    open func getAccounts() ->Array<HBCIAccount> {
         var result = Array<HBCIAccount>();
         
         for seg in bpSegments {
@@ -362,7 +362,7 @@ public class HBCIParameters {
         return result;
     }
     
-    public var description:String {
+    open var description:String {
         get {
             var result = "";
             for segment in bpSegments {

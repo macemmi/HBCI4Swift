@@ -16,14 +16,14 @@ public struct HBCIAccountStatementOrderPar {
 }
 
 
-public class HBCIAccountStatementOrder: HBCIOrder {
-    public let account:HBCIAccount;
-    public var number:Int?
-    public var year:Int?
-    public var format:HBCIAccountStatementFormat?
+open class HBCIAccountStatementOrder: HBCIOrder {
+    open let account:HBCIAccount;
+    open var number:Int?
+    open var year:Int?
+    open var format:HBCIAccountStatementFormat?
     
     // result
-    public var statements = Array<HBCIAccountStatement>();
+    open var statements = Array<HBCIAccountStatement>();
 
     public init?(message: HBCICustomMessage, account:HBCIAccount) {
         self.account = account;
@@ -33,14 +33,14 @@ public class HBCIAccountStatementOrder: HBCIOrder {
         }
     }
     
-    public func enqueue() ->Bool {
+    open func enqueue() ->Bool {
         // check if order is supported
         if !user.parameters.isOrderSupportedForAccount(self, number: account.number, subNumber: account.subNumber) {
             logError(self.name + " is not supported for account " + account.number);
             return false;
         }
         
-        var values = Dictionary<String,AnyObject>();
+        var values = Dictionary<String,Any>();
         
         // check if SEPA version is supported (only globally for bank -
         // later we check if account supports this as well
@@ -80,7 +80,7 @@ public class HBCIAccountStatementOrder: HBCIOrder {
         return true;
     }
 
-    override public func updateResult(result:HBCIResultMessage) {
+    override open func updateResult(_ result:HBCIResultMessage) {
         super.updateResult(result);
         
         for seg in resultSegments {
@@ -90,7 +90,7 @@ public class HBCIAccountStatementOrder: HBCIOrder {
         }
     }
     
-    public class func getParameters(user:HBCIUser) ->HBCIAccountStatementOrderPar? {
+    open class func getParameters(_ user:HBCIUser) ->HBCIAccountStatementOrderPar? {
         guard let (elem, seg) = self.getParameterElement(user, orderName: "AccountStatement") else {
             return nil;
         }

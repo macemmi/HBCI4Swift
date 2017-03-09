@@ -10,7 +10,7 @@ import Foundation
 
 class HBCISepaGeneratorFactory {
     
-    class func creditGenerator(user:HBCIUser, orderName:String? = nil) ->HBCISepaGeneratorCredit? {
+    class func creditGenerator(_ user:HBCIUser, orderName:String? = nil) ->HBCISepaGeneratorCredit? {
         let formats = user.parameters.sepaFormats(HBCISepaFormatType.CreditTransfer, orderName: orderName);
         
         for format in formats {

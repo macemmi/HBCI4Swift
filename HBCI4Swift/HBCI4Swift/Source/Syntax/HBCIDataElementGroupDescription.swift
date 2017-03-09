@@ -10,10 +10,10 @@ import Foundation
 
 
 class HBCIDataElementGroupDescription: HBCISyntaxElementDescription {
-    override init(syntax: HBCISyntax, element: NSXMLElement) throws {
+    override init(syntax: HBCISyntax, element: XMLElement) throws {
         try super.init(syntax: syntax, element: element)
         self.delimiter = HBCIChar.dpoint.rawValue;
-        self.elementType = .DataElementGroup
+        self.elementType = .dataElementGroup
     }
     
     override func elementDescription() -> String {
@@ -26,7 +26,7 @@ class HBCIDataElementGroupDescription: HBCISyntaxElementDescription {
         }
     }
     
-    func parseDEG(bytes: UnsafePointer<CChar>, length: Int, binaries:Array<NSData>, optional:Bool)->HBCISyntaxElement? {
+    func parseDEG(_ bytes: UnsafePointer<CChar>, length: Int, binaries:Array<Data>, optional:Bool)->HBCISyntaxElement? {
         let deg = HBCIDataElementGroup(description: self);
         var ref:HBCISyntaxElementReference;
         var refIdx = 0;
@@ -34,7 +34,7 @@ class HBCIDataElementGroupDescription: HBCISyntaxElementDescription {
         var count = 0;
         var delimiter = CChar(":");
         
-        var p: UnsafeMutablePointer<CChar> = UnsafeMutablePointer<CChar>(bytes);
+        var p: UnsafeMutablePointer<CChar> = UnsafeMutablePointer<CChar>(mutating: bytes);
         var resLength = length;
         
         while(refIdx < self.children.count) {
@@ -54,7 +54,7 @@ class HBCIDataElementGroupDescription: HBCISyntaxElementDescription {
             
             // DE or nested DEG?
             var parsedElem:HBCISyntaxElement?
-            if ref.elemDescr.elementType == ElementType.DataElementGroup {
+            if ref.elemDescr.elementType == ElementType.dataElementGroup {
                 if let descr = ref.elemDescr as? HBCIDataElementGroupDescription {
                     parsedElem = descr.parseDEG(p, length: resLength, binaries: binaries, optional: ref.minnum == 0 || optional);
                 } else {
@@ -94,9 +94,9 @@ class HBCIDataElementGroupDescription: HBCISyntaxElementDescription {
                     }
                 }
                 
-                p = p.advancedBy(element.length);
-                delimiter = p.memory;
-                p = p.advancedBy(1); // consume delimiter
+                p = p.advanced(by: element.length);
+                delimiter = p.pointee;
+                p = p.advanced(by: 1); // consume delimiter
                 count += element.length + 1;
                 resLength = length - count;
 
@@ -111,7 +111,7 @@ class HBCIDataElementGroupDescription: HBCISyntaxElementDescription {
      }
     
     
-    override func parse(bytes: UnsafePointer<CChar>, length: Int, binaries:Array<NSData>)->HBCISyntaxElement? {
+    override func parse(_ bytes: UnsafePointer<CChar>, length: Int, binaries:Array<Data>)->HBCISyntaxElement? {
         return parseDEG(bytes, length: length, binaries: binaries, optional: false);
         /*
         var deg = HBCIDataElementGroup(description: self);

@@ -14,8 +14,8 @@ public enum TanProcess:String {
     case none = "0", process1 = "1", process2 = "2"
 }
 
-public class HBCITanMethod {
-    public let
+open class HBCITanMethod {
+    open let
     identifier:String!,
     secfunc:String!,
     inputInfo:String!,
@@ -23,7 +23,7 @@ public class HBCITanMethod {
     format:String!,
     maxTanLength:Int!
     
-    public var
+    open var
     needTanMedia:String?,
     process:TanProcess!,
     zkaMethodName:String?,
