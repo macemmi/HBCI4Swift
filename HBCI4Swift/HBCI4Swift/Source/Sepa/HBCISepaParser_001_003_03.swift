@@ -14,7 +14,7 @@ class HBCISepaParser_001_003_03 : HBCISepaParser, HBCISepaParserCredit {
         let transfer = HBCISepaTransfer(account: account);
         
         do {
-            let document = try XMLDocument(data: data, options: Int(XMLDocument.Options.documentTidyXML.rawValue))
+            let document = try XMLDocument(data: data, options: XMLNode.Options(rawValue: XMLNode.Options.RawValue(Int(XMLDocument.Options.documentTidyXML.rawValue))))
             if let root = document.rootElement() {
                 
                 // Group Header

@@ -208,7 +208,7 @@ open class HBCIResultMessage {
                 }
             }
         }
-        logError("Segment with name \(name) not found");
+        logError("Segment with name \(name ?? "<nil>") not found");
         return nil;
     }
     

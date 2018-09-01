@@ -151,8 +151,8 @@ open class HBCIFlickerCode {
             var res = "";
             res = res + "  Length  : \(length)\n";
             res = res + "  LDE     : \(lde)\n";
-            res = res + "  Data    : \(data)\n";
-            res = res + "  Encoding: \(encoding)\n";
+            res = res + "  Data    : \(data ?? "<nil>")\n";
+            res = res + "  Encoding: \(String(describing: encoding))\n";
             return res;
         }
         

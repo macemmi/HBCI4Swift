@@ -85,7 +85,7 @@ class HBCISyntaxElementDescription: CustomStringConvertible, CustomDebugStringCo
     }
     
     func elementDescription() -> String {
-        return "name: \(self.name) value: \(self.stringValue) \n";
+        return "name: \(self.name ?? "<nil>") value: \(self.stringValue ?? "<nil>") \n";
     }
     
     func descriptionWithLevel(_ level: Int) -> String {

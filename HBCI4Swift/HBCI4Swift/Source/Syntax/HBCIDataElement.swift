@@ -31,6 +31,14 @@ class HBCIDataElement: HBCISyntaxElement {
         return true;
     }
     
+    func valueString() -> String {
+        if let val = self.value {
+            return "\(val)";
+        } else {
+            return "<nil>";
+        }
+    }
+    
     func toString() ->String? {
         if self.value == nil {
             // no value
@@ -43,28 +51,28 @@ class HBCIDataElement: HBCISyntaxElement {
                 if let val = self.value as? NSDecimalNumber {
                     return _numberFormatter.string(from: val);
                 } else {
-                    logError("Element value \(self.value) is not a number value");
+                    logError("Element value \(valueString()) is not a number value");
                     return nil;
                 }
             case HBCIDataElementType.date:
                 if let date = self.value as? Date {
                     return _dateFormatter.string(from: date);
                 } else {
-                    logError("Element value \(self.value) is not a date value");
+                    logError("Element value \(valueString()) is not a date value");
                     return nil;
                 }
             case HBCIDataElementType.time:
                 if let time = self.value as? Date {
                     return _timeFormatter.string(from: time).escape();
                 } else {
-                    logError("Element value \(self.value) is not a date(time) value");
+                    logError("Element value \(valueString()) is not a date(time) value");
                     return nil;
                 }
             case HBCIDataElementType.boole:
                 if let b:Bool = self.value as? Bool {
                     return b ? "J" : "N";
                 } else {
-                    logError("Element value \(self.value) is not a boolean value");
+                    logError("Element value \(valueString()) is not a boolean value");
                     return nil;
                 }
             case HBCIDataElementType.binary:
@@ -76,12 +84,12 @@ class HBCIDataElement: HBCISyntaxElement {
                         if let dataString = NSString(data: data, encoding: String.Encoding.isoLatin1.rawValue) as? String {
                             return sizeString+dataString;
                         } else {
-                            logError("Element value \(self.value) cannot be converted to a string");
+                            logError("Element value \(valueString()) cannot be converted to a string");
                             return nil;
                         }
                     }
                 } else {
-                    logError("Element value \(self.value) is not a NSData object");
+                    logError("Element value \(valueString()) is not a NSData object");
                     return nil;
                 }
             case HBCIDataElementType.numeric:
@@ -94,7 +102,7 @@ class HBCIDataElement: HBCISyntaxElement {
                             return s;
                         }
                     }
-                    logError("Element value \(self.value) is not an Integer");
+                    logError("Element value \(valueString()) is not an Integer");
                     return nil;
                 }
                 
@@ -102,7 +110,7 @@ class HBCIDataElement: HBCISyntaxElement {
                 if let s = self.value as? String {
                     return s.escape();
                 } else {
-                    logError("Element value \(self.value) is not a string value");
+                    logError("Element value \(valueString()) is not a string value");
                     return nil;
                 }
             }
@@ -137,7 +145,7 @@ class HBCIDataElement: HBCISyntaxElement {
                             }
                         }
                     } else {
-                        logError("Element value \(value) is not a number");
+                        logError("Element value \(valueString()) is not a number");
                         return false;
                     }
                 default:
@@ -166,13 +174,13 @@ class HBCIDataElement: HBCISyntaxElement {
                         logError("Error generating sizeString");
                     }
                 } else {
-                    logError("Value \(self.value) cannot be converted to NSData");
+                    logError("Value \(valueString()) cannot be converted to NSData");
                 }
             } else {
                 if let s = toString() {
                     data.append(s.data(using: String.Encoding.isoLatin1, allowLossyConversion:true)!);
                 } else {
-                    logError("Value \(self.value) cannot be converted to string");
+                    logError("Value \(valueString()) cannot be converted to string");
                 }
             }
         }

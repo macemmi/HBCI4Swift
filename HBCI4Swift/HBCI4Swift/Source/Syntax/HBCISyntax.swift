@@ -46,10 +46,10 @@ class HBCISyntax {
         var xmlDoc: XMLDocument?
         let furl = URL(fileURLWithPath: path);
         do {
-            xmlDoc = try XMLDocument(contentsOf: furl, options:Int(XMLNode.Options.nodePreserveWhitespace.rawValue|XMLNode.Options.nodePreserveCDATA.rawValue));
+            xmlDoc = try XMLDocument(contentsOf: furl, options:XMLNode.Options(rawValue: XMLNode.Options.RawValue(Int(XMLNode.Options.nodePreserveWhitespace.rawValue|XMLNode.Options.nodePreserveCDATA.rawValue))));
             
             if xmlDoc == nil {
-                xmlDoc = try XMLDocument(contentsOf: furl, options: Int(XMLDocument.Options.documentTidyXML.rawValue));
+                xmlDoc = try XMLDocument(contentsOf: furl, options: XMLNode.Options(rawValue: XMLNode.Options.RawValue(Int(XMLDocument.Options.documentTidyXML.rawValue))));
             }
         }
         catch let err as NSError {

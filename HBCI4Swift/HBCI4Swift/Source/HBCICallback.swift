@@ -18,7 +18,7 @@ open class HBCICallbackConsole : HBCICallback {
     public init() {}
     
     open func getTan(_ user:HBCIUser, challenge:String?, challenge_hdd_uc:String?) ->String {
-        print("Enter TAN (challenge:\(challenge)): ", terminator: "");
+        print("Enter TAN (challenge:\(challenge ?? "<nil>")): ", terminator: "");
         let stdIn = FileHandle.standardInput;
         let data = Data(stdIn.availableData.dropLast());
         let input = String(data: data, encoding: String.Encoding.utf8);
