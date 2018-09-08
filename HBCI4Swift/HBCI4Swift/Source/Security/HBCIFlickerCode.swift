@@ -55,17 +55,17 @@ open class HBCIFlickerCode {
         func parse(_ s:String) throws ->String {
             
             // nothing to parse
-            if s.characters.count == 0 {
+            if s.count == 0 {
                 return s;
             }
             
-            if s.characters.count < 2 {
+            if s.count < 2 {
                 throw HBCIError.parseError;
             }
             
             // determine LDE (decimal)
-            let index = s.characters.index(s.startIndex, offsetBy: 2);
-            let lenString = s.substring(to: index);
+            let index = s.index(s.startIndex, offsetBy: 2);
+            let lenString = s[..<index];
             if let len = Int(lenString) {
                 self.lde = len;
             } else {
@@ -80,10 +80,10 @@ open class HBCIFlickerCode {
             }
             
             // get element data
-            self.data = s.substring(with: Range(index ..< s.index(index, offsetBy: length)));
-            
+            self.data = String(s[index ..< s.index(index, offsetBy: length)]);
+
             // return reststring
-            return s.substring(from: s.index(index, offsetBy: length));
+            return String(s.suffix(from: s.index(index, offsetBy: length)));
         }
         
         func getEncoding() throws -> HHDEncoding {
@@ -130,7 +130,7 @@ open class HBCIFlickerCode {
             
             let enc = try getEncoding();
             
-            var len = try renderData().characters.count / 2;
+            var len = try renderData().count / 2;
             
             // a) BCD -> nothing further to encode
             if enc == .bcd {
@@ -163,12 +163,12 @@ open class HBCIFlickerCode {
         
         override func parse(_ s: String) throws -> String {
             // get LDE (hex)
-            if s.characters.count < 2 {
+            if s.count < 2 {
                 throw HBCIError.parseError;
             }
             
-            var index = s.characters.index(s.startIndex, offsetBy: 2);
-            let lenString = s.substring(to: index);
+            var index = s.index(s.startIndex, offsetBy: 2);
+            let lenString = s.prefix(upTo: index);
             if let len = Int(lenString, radix: 16) {
                 self.lde = len;
             } else {
@@ -193,7 +193,7 @@ open class HBCIFlickerCode {
                         throw HBCIError.parseError;
                     }
                     // 2 characters, Hex
-                    let byteString = s.substring(with: Range(index ..< s.index(index, offsetBy: 2)));
+                    let byteString = s[Range(index ..< s.index(index, offsetBy: 2))];
                     index = s.index(index, offsetBy: 2);
                     if let byte = Int(byteString, radix: 16) {
                         controlBytes.append(UInt8(byte));
@@ -210,8 +210,8 @@ open class HBCIFlickerCode {
             if s.distance(from: index, to: s.endIndex) < length {
                 throw HBCIError.parseError;
             }
-            self.data = s.substring(with: Range(index ..< s.index(index, offsetBy: length)));
-            return s.substring(from: s.index(index, offsetBy: length));
+            self.data = String(s[Range(index ..< s.index(index, offsetBy: length))]);
+            return String(s.suffix(from: s.index(index, offsetBy: length)));
         }
         
         override func renderLength() throws -> String {
@@ -291,7 +291,7 @@ open class HBCIFlickerCode {
             if cleaned.distance(from: r1.lowerBound, to: cleaned.endIndex) < 10 {
                 throw HBCIError.parseError;
             }
-            cleaned = cleaned.substring(with: Range(cleaned.index(r1.lowerBound, offsetBy: 10) ..< r2.lowerBound));
+            cleaned = String(cleaned[Range(cleaned.index(r1.lowerBound, offsetBy: 10) ..< r2.lowerBound)]);
 
             // append "0" to make LC 3 digits, just like for HHD 1.4
             return "0" + cleaned;
@@ -322,7 +322,7 @@ open class HBCIFlickerCode {
         cd = try de2.parse(cd);
         cd = try de3.parse(cd);
         
-        if cd.characters.count > 0 {
+        if cd.count > 0 {
             rest = cd;
         }
     }
@@ -370,7 +370,7 @@ open class HBCIFlickerCode {
             s += try de!.renderData();
         }
         
-        var len = s.characters.count;
+        var len = s.count;
         len += 2; // include check sums
         len /= 2; // number of bytes - each byte consists of 2 chars
         let lc = toHex(UInt8(len));
@@ -409,7 +409,7 @@ open class HBCIFlickerCode {
         
         // step 2: calculate checksum
         var luhn = 0;
-        for (index, char) in s.characters.enumerated() {
+        for (index, char) in s.enumerated() {
             if let x = Int(String(char), radix: 16) {
                 luhn += index % 2 == 0 ? x : quersumme(2*x);
             } else {

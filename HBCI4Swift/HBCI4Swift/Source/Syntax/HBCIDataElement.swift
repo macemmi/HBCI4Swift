@@ -81,8 +81,8 @@ class HBCIDataElement: HBCISyntaxElement {
                     if data.hasNonPrintableChars() {
                         return sizeString+data.description;
                     } else {
-                        if let dataString = NSString(data: data, encoding: String.Encoding.isoLatin1.rawValue) as? String {
-                            return sizeString+dataString;
+                        if let dataString = NSString(data: data, encoding: String.Encoding.isoLatin1.rawValue) {
+                            return sizeString + (dataString as String);
                         } else {
                             logError("Element value \(valueString()) cannot be converted to a string");
                             return nil;

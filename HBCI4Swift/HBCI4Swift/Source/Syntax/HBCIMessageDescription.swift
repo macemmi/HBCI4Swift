@@ -29,7 +29,7 @@ class HBCIMessageDescription: HBCISyntaxElementDescription {
     override func compose() -> HBCISyntaxElement? {
         if let element = super.compose() {
             for (path, value) in self.defaults {
-                element.setElementValue(value, path: path);
+                if !element.setElementValue(value, path: path) { return nil; }
             }
             return element;
         }

@@ -119,7 +119,8 @@ class HBCIDDVConnection : HBCIConnection {
             let bytes = inputStream.read(buffer, maxLength: 4000);
             data.append(buffer, length: bytes);
         }
-        buffer.deinitialize();
+        buffer.deinitialize(count: 4000);
+        buffer.deallocate();
         
         return data as Data;
     }

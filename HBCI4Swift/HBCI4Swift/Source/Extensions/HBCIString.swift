@@ -15,8 +15,8 @@ func firstComponent(_ path:String) ->(component:String, residual:String?) {
     var name:String?
     var newPath:String?
     if let range = path.range(of: ".", options: NSString.CompareOptions(), range: nil, locale: nil) {
-        name = path.substring(to: range.lowerBound);
-        newPath = path.substring(from: path.index(after: range.lowerBound));
+        name = String(path.prefix(through: range.lowerBound));
+        newPath = String(path.suffix(from: path.index(after: range.lowerBound)));
     } else {
         name = path;
     }

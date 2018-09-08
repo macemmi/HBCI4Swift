@@ -15,7 +15,7 @@ class HBCISyntaxTest: XCTestCase {
     override func setUp() {
         if self.syntax == nil {
             do {
-                let path = NSBundle(forClass: self.classForCoder).resourcePath;
+                let path = Bundle(for: self.classForCoder).resourcePath;
                 try self.syntax = HBCISyntax(path: path! + "/hbci300.xml");
             }
             catch {
@@ -35,14 +35,15 @@ class HBCISyntaxTest: XCTestCase {
         super.tearDown()
     }
     
-    func getPointer(s:String) ->(UnsafePointer<CChar>, Int)? {
-        if let data = s.dataUsingEncoding(NSISOLatin1StringEncoding, allowLossyConversion: true) {
-            return (UnsafePointer<CChar>(data.bytes), data.length);
+    func getPointer(_ s:String) ->(UnsafePointer<CChar>, Int)? {
+        if let data = s.data(using: String.Encoding.isoLatin1, allowLossyConversion: true) as NSData? {
+            return (data.bytes.bindMemory(to: CChar.self, capacity: data.length), data.length);
+            //return (UnsafePointer<CChar>(data.bytes), data.length);
         }
         return nil;
     }
     
-    func parseDEG(degName:String, toParse:String) ->HBCIDataElementGroup? {
+    func parseDEG(_ degName:String, toParse:String) ->HBCIDataElementGroup? {
         if syntax == nil {
             XCTFail("No syntax");
             return nil;
@@ -50,7 +51,7 @@ class HBCISyntaxTest: XCTestCase {
         let binaries = Array<NSData>();
         if let deg = syntax!.degs[degName] {
             if let (p, n) = getPointer(toParse) {
-                let de = deg.parse(p, length: n, binaries: binaries);
+                let de = deg.parse(p, length: n, binaries: binaries as Array<Data>);
                 XCTAssertNotNil(de, degName + " parsing failed");
                 return de as? HBCIDataElementGroup;
             }
@@ -59,7 +60,7 @@ class HBCISyntaxTest: XCTestCase {
         return nil;
     }
     
-    func parseSEG(segName:String, version:Int, toParse:String) ->HBCISegment? {
+    func parseSEG(_ segName:String, version:Int, toParse:String) ->HBCISegment? {
         if syntax == nil {
             XCTFail("No syntax");
             return nil;
@@ -68,7 +69,7 @@ class HBCISyntaxTest: XCTestCase {
         if let segv = syntax!.segs[segName] {
             if let seg = segv.segmentWithVersion(version) {
                 if let (p, n) = getPointer(toParse) {
-                    let segment = seg.parse(p, length: n, binaries: binaries);
+                    let segment = seg.parse(p, length: n, binaries: binaries as Array<Data>);
                     XCTAssertNotNil(segment, segName + " parsing failed");
                     return segment as? HBCISegment;
                 }
@@ -89,7 +90,7 @@ class HBCISyntaxTest: XCTestCase {
         if let degBTR = syntax!.degs["BTG"] {
             let des = degBTR.children[0].elemDescr as! HBCIDataElementDescription;
             if let (p, n) = getPointer(s) {
-                if let de = des.parse(p, length: n, binaries: binaries) as? HBCIDataElement {
+                if let de = des.parse(p, length: n, binaries: binaries as Array<Data>) as? HBCIDataElement {
                     if let d:NSDecimalNumber = de.value as? NSDecimalNumber {
                         XCTAssertNotNil(d, "Amount conversion failed");
                         return;
@@ -111,9 +112,9 @@ class HBCISyntaxTest: XCTestCase {
         if let degBTR = syntax!.degs["BTG"] {
             let des = degBTR.children[0].elemDescr as! HBCIDataElementDescription;
             if let (p, n) = getPointer(s) {
-                if let de = des.parse(p, length: n, binaries: binaries) as? HBCIDataElement {
+                if let de = des.parse(p, length: n, binaries: binaries as Array<Data>) as? HBCIDataElement {
                     if let d:NSDecimalNumber = de.value as? NSDecimalNumber {
-                        XCTAssertEqual(d, NSDecimalNumber.zero(), "Amount not zero");
+                        XCTAssertEqual(d, NSDecimalNumber.zero, "Amount not zero");
                         return;
                     }
                 }
@@ -193,7 +194,7 @@ class HBCISyntaxTest: XCTestCase {
 
     func testPerformanceExample() {
         // This is an example of a performance test case.
-        self.measureBlock() {
+        self.measure() {
             // Put the code you want to measure the time of here.
         }
     }

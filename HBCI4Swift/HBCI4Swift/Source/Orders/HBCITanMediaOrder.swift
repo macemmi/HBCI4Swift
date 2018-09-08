@@ -31,7 +31,7 @@ open class HBCITanMediaOrder : HBCIOrder {
         
         if segment.version >= 4 {
             if let cat = self.mediaCategory {
-                segment.setElementValue(cat, path: "mediacategory");
+                if !segment.setElementValue(cat, path: "mediacategory") { return false; }
             } else {
                 logError("TAN media category not provided");
                 return false;
@@ -39,7 +39,7 @@ open class HBCITanMediaOrder : HBCIOrder {
         }
         
         if let type = self.mediaType {
-            segment.setElementValue(type, path: "mediatype");
+            if !segment.setElementValue(type, path: "mediatype") { return false; }
         } else {
             logError("TAN media type is not provided");
             return false;

@@ -331,7 +331,7 @@ class HBCIMT94xParser {
                     }
                 }
             }
-            if purpose.characters.count > 0 {
+            if purpose.count > 0 {
                 item.purpose = purpose;
             }
         }
@@ -375,7 +375,7 @@ class HBCIMT94xParser {
         var isBLZ = true;
         if range.location == 8 {
             // is part1 a BLZ or BIC?
-            for character in part1.characters {
+            for character in part1 {
                 if character < "0" || character > "9" {
                     isBLZ = false;
                     break;
@@ -387,12 +387,12 @@ class HBCIMT94xParser {
         } else {
             statement.localBIC = part1;
         }
-        if part2.characters.count > 23 {
+        if part2.count > 23 {
             statement.localIBAN = part2;
         } else {
             // extract account number
             var number = "";
-            for character in part2.characters {
+            for character in part2 {
                 if character < "0" || character > "9" {
                     break;
                 } else {
@@ -547,7 +547,7 @@ class HBCIMT94xParser {
         var statements = Array<HBCIStatement>();
         let rawStatements = self.mt94xString.components(separatedBy: ":20:START") ;
         for raw in rawStatements {
-            if raw.characters.count > 2 {
+            if raw.count > 2 {
                 var trimmed = raw.replacingOccurrences(of: "@@", with: "") as NSString;
                 trimmed = trimmed.replacingOccurrences(of: "\n", with: "") as NSString;
                 trimmed = trimmed.replacingOccurrences(of: "\r", with: "") as NSString;

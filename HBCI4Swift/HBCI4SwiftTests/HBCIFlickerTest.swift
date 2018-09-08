@@ -79,7 +79,7 @@ class HBCIFlickerTest: XCTestCase {
     func test6() {
         do {
             let code = HBCIFlickerCode();
-            code.version = .HHD14;
+            code.version = .hhd14;
             code.startCode.data = "1120492";
             code.startCode.length = 7;
             code.startCode.controlBytes.append(1);
@@ -125,7 +125,7 @@ class HBCIFlickerTest: XCTestCase {
     func test8() {
         do {
             let code = try HBCIFlickerCode(code: "250891715637071234567041,00");
-            XCTAssertTrue(code.version == HHDVersion.HHD13);
+            XCTAssertTrue(code.version == HHDVersion.hhd13);
             
         }
         catch {
@@ -136,7 +136,7 @@ class HBCIFlickerTest: XCTestCase {
 
     func testPerformanceExample() {
         // This is an example of a performance test case.
-        self.measureBlock {
+        self.measure {
             // Put the code you want to measure the time of here.
         }
     }

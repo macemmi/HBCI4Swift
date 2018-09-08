@@ -22,7 +22,7 @@ class HBCITanProcess_2 {
         if let hhduc = hhduc {
             if let s = String(data: hhduc, encoding: String.Encoding.ascii) {
                 let trimmed = s.trimmingCharacters(in: CharacterSet.whitespaces);
-                if trimmed.characters.count > 0 {
+                if trimmed.count > 0 {
                     do {
                         let code = try HBCIFlickerCode(code: trimmed);
                         return try code.render();
@@ -38,7 +38,7 @@ class HBCITanProcess_2 {
         // check if challenge contains something to parse
         if let challenge = challenge {
             let trimmed = challenge.trimmingCharacters(in: CharacterSet.whitespaces);
-            if trimmed.characters.count > 0 {
+            if trimmed.count > 0 {
                 do {
                     let code = try HBCIFlickerCode(code: trimmed);
                     return try code.render();
@@ -88,7 +88,7 @@ class HBCITanProcess_2 {
                 
                 // now send message
                 do {
-                    try msg.sendNoTan();
+                    if !(try msg.sendNoTan()) { return false };
                 } catch {
                     logError("Error sending first TAN step message");
                     return false;
@@ -119,7 +119,7 @@ class HBCITanProcess_2 {
                         tanOrder2.orderRef = tanOrder.orderRef;
                         
                         // add order to message
-                        tanOrder2.enqueue();
+                        if !tanOrder2.enqueue() { return false; }
                         
                         // now send TAN
                         tanMsg.tan = tan;

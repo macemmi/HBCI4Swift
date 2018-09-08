@@ -263,10 +263,10 @@ open class HBCISyntaxElement {
         for idx in 0..<self.children.count {
             let element = self.children[idx];
             let elemStr = element.messageString();
-            if elemStr.characters.count == 0 {
+            if elemStr.count == 0 {
                 empties += delimStr;
             } else {
-                if empties.characters.count > 0 {
+                if empties.count > 0 {
                     result += empties;
                     empties = "";
                 }

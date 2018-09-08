@@ -80,9 +80,9 @@ open class HBCIStatementsOrder: HBCIOrder {
                     order.dateTo = self.dateTo;
                     order.offset = offset;
                     order.isPartial = true;
-                    order.enqueue();
+                    if !order.enqueue() { return nil; }
                     
-                    try msg.send();
+                    _ = try msg.send();
                     
                     return order.mt94xString;
                 }

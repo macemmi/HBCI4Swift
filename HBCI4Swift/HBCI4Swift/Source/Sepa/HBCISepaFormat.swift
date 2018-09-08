@@ -50,7 +50,7 @@ class HBCISepaFormat {
         let pattern = "[0-9]{3}.[0-9]{3}.[0-9]{2}";
         
         if let match = urn.range(of: pattern, options: NSString.CompareOptions.regularExpression, range: nil, locale: nil) {
-            let format = urn.substring(with: match);
+            let format = String(urn[match]);
             self.type = HBCISepaFormatType(rawValue: format.substringToIndex(3));
             self.variant = format.substringWithRange(NSMakeRange(4, 3));
             self.version = format.substringFromIndex(8);

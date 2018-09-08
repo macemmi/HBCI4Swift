@@ -88,15 +88,15 @@ extension XMLElement {
 
 extension String {
     func substringToIndex(_ index:Int) ->String {
-        return self.substring(to: characters.index(startIndex, offsetBy: index));
+        return String(self.prefix(through: self.index(startIndex, offsetBy: index)));
     }
     
     func substringFromIndex(_ index:Int) ->String {
-        return self.substring(from: characters.index(startIndex, offsetBy: index));
+        return String(self.suffix(from: self.index(startIndex, offsetBy: index)));
     }
     
     func substringWithRange(_ range:NSRange) ->String {
-        return self.substring(with: Range(characters.index(startIndex, offsetBy: range.location) ..< characters.index(startIndex, offsetBy: range.location+range.length)));
+        return String(self[Range(self.index(startIndex, offsetBy: range.location) ..< self.index(startIndex, offsetBy: range.location+range.length))]);
         
     }
     

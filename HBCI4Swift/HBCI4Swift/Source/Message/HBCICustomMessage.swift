@@ -52,9 +52,9 @@ open class HBCICustomMessage : HBCIMessage {
         if let md = dialog.syntax.msgs["CustomMessage"] {
             if let msg = md.compose() as? HBCIMessage {
                 if let dialogId = dialog.dialogId {
-                    msg.setElementValue(dialogId, path: "MsgHead.dialogid");
-                    msg.setElementValue(dialog.messageNum, path: "MsgHead.msgnum");
-                    msg.setElementValue(dialog.messageNum, path: "MsgTail.msgnum");
+                    if !msg.setElementValue(dialogId, path: "MsgHead.dialogid") { return nil; }
+                    if !msg.setElementValue(dialog.messageNum, path: "MsgHead.msgnum") { return nil; }
+                    if !msg.setElementValue(dialog.messageNum, path: "MsgTail.msgnum") { return nil; }
                     return HBCICustomMessage(msg: msg, dialog: dialog);
                 } else {
                     logError("No dialog started yet (dialog ID is missing)");

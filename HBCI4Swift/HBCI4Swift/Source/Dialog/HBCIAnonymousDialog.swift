@@ -21,7 +21,7 @@ open class HBCIAnonymousDialog {
         self.syntax = syntax
     }
 
-    func sendMessage(_ message:String, values:Dictionary<String,Any>) throws ->HBCIResultMessage? {
+    @discardableResult func sendMessage(_ message:String, values:Dictionary<String,Any>) throws ->HBCIResultMessage? {
         if let md = self.syntax.msgs[message] {
             if let msg = md.compose() as? HBCIMessage {
                 for (path, value) in values {
@@ -74,7 +74,7 @@ open class HBCIAnonymousDialog {
                 
                 do {
                     // don't care if end dialog message fails or not
-                    try sendMessage("DialogEndAnon", values: values as Dictionary<String, Any>)
+                    _ = try sendMessage("DialogEndAnon", values: values as Dictionary<String, Any>);
                 } catch { };
             }
             return resultMsg;            

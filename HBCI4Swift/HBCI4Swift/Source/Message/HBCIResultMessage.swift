@@ -193,8 +193,9 @@ open class HBCIResultMessage {
         var name:String?
         var newPath:String?
         if let range = path.range(of: ".", options: NSString.CompareOptions(), range: nil, locale: nil) {
-            name = path.substring(to: range.lowerBound);
-            newPath = path.substring(from: path.index(after: range.lowerBound));
+            //name = path.substring(to: range.lowerBound);
+            name = String(path[..<range.lowerBound]);
+            newPath = String(path.suffix(from: path.index(after: range.lowerBound)));
         } else {
             name = path;
         }
@@ -217,8 +218,8 @@ open class HBCIResultMessage {
         var name:String?
         var newPath:String?
         if let range = path.range(of: ".", options: NSString.CompareOptions(), range: nil, locale: nil) {
-            name = path.substring(to: range.lowerBound);
-            newPath = path.substring(from: path.index(after: range.lowerBound));
+            name = String(path[..<range.lowerBound]);
+            newPath = String(path.suffix(from: path.index(after: range.lowerBound)));
         } else {
             name = path;
         }

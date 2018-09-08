@@ -107,7 +107,7 @@ open class HBCISecurityMethodDDV : HBCISecurityMethod {
             return false;
         }
         
-        msg.setElementValue(signedHash!, path: "SigTail.sig");
+        if !msg.setElementValue(signedHash!, path: "SigTail.sig") { return false; }
         return true;
     }
     

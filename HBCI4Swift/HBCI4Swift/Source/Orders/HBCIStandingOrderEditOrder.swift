@@ -43,7 +43,7 @@ open class HBCISepaStandingOrderEditOrder: HBCIAbstractStandingOrderOrder {
     open override func enqueue() -> Bool {
         if super.enqueue() {
             if let id = self.orderId {
-                self.segment.setElementValue(id, path: "orderid");
+                if(!self.segment.setElementValue(id, path: "orderid")) { return false };
             }
             msg.addOrder(self);
             return true;
