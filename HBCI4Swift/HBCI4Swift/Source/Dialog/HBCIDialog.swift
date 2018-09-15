@@ -81,7 +81,7 @@ open class HBCIDialog {
             return nil;
         }
         
-        //println(msg.description)
+        //print(msg.description)
         
         if let msg_crypted = user.securityMethod.encryptMessage(msg, dialog: self) {
             

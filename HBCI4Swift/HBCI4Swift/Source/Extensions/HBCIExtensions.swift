@@ -88,7 +88,7 @@ extension XMLElement {
 
 extension String {
     func substringToIndex(_ index:Int) ->String {
-        return String(self.prefix(through: self.index(startIndex, offsetBy: index)));
+        return String(self[..<self.index(startIndex, offsetBy: index)]);
     }
     
     func substringFromIndex(_ index:Int) ->String {

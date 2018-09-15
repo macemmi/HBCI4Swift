@@ -168,7 +168,7 @@ open class HBCIFlickerCode {
             }
             
             var index = s.index(s.startIndex, offsetBy: 2);
-            let lenString = s.prefix(upTo: index);
+            let lenString = s[..<index];
             if let len = Int(lenString, radix: 16) {
                 self.lde = len;
             } else {
