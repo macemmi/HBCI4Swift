@@ -35,6 +35,7 @@
 		B141845C1B10871100F9B6FA /* HBCISepaFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = B141845A1B10871100F9B6FA /* HBCISepaFormat.swift */; };
 		B141845E1B12765000F9B6FA /* HBCISepaCollectiveTransferOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B141845D1B12765000F9B6FA /* HBCISepaCollectiveTransferOrder.swift */; };
 		B141845F1B12765000F9B6FA /* HBCISepaCollectiveTransferOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B141845D1B12765000F9B6FA /* HBCISepaCollectiveTransferOrder.swift */; };
+		B1454F23214EF527001F91E0 /* HBCIMT94xTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1454F22214EF527001F91E0 /* HBCIMT94xTest.swift */; };
 		B155FA1C1B598C1800C122E1 /* HBCISecurityMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = B155FA1B1B598C1800C122E1 /* HBCISecurityMethod.swift */; };
 		B155FA1D1B598C1800C122E1 /* HBCISecurityMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = B155FA1B1B598C1800C122E1 /* HBCISecurityMethod.swift */; };
 		B155FA221B598CFC00C122E1 /* HBCISecurityMethodPinTan.swift in Sources */ = {isa = PBXBuildFile; fileRef = B155FA211B598CFC00C122E1 /* HBCISecurityMethodPinTan.swift */; };
@@ -214,6 +215,7 @@
 		B14184571B0FDACD00F9B6FA /* HBCISepaParser_001_003_03.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaParser_001_003_03.swift; sourceTree = "<group>"; };
 		B141845A1B10871100F9B6FA /* HBCISepaFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaFormat.swift; sourceTree = "<group>"; };
 		B141845D1B12765000F9B6FA /* HBCISepaCollectiveTransferOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaCollectiveTransferOrder.swift; sourceTree = "<group>"; };
+		B1454F22214EF527001F91E0 /* HBCIMT94xTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCIMT94xTest.swift; sourceTree = "<group>"; };
 		B155FA1B1B598C1800C122E1 /* HBCISecurityMethod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCISecurityMethod.swift; path = Source/HBCISecurityMethod.swift; sourceTree = "<group>"; };
 		B155FA211B598CFC00C122E1 /* HBCISecurityMethodPinTan.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCISecurityMethodPinTan.swift; path = Source/HBCISecurityMethodPinTan.swift; sourceTree = "<group>"; };
 		B15B72F81B559CA6008D2E55 /* HBCISmartcard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCISmartcard.swift; path = Source/Chipcard/HBCISmartcard.swift; sourceTree = "<group>"; };
@@ -437,6 +439,7 @@
 				B1AFECA81B5C313C002F1DDF /* HBCI4SwiftTests-Bridging-Header.h */,
 				B19B35A41AF1792B00F20B9A /* HBCI4SwiftTests.swift */,
 				0165FAA21C5CC76C0076AC81 /* HBCIFlickerTest.swift */,
+				B1454F22214EF527001F91E0 /* HBCIMT94xTest.swift */,
 				B19B35A21AF1792B00F20B9A /* Supporting Files */,
 			);
 			path = HBCI4SwiftTests;
@@ -935,6 +938,7 @@
 				B19B36241AF28BE500F20B9A /* HBCITanMethod.swift in Sources */,
 				B19B35E51AF28B1500F20B9A /* HBCIDialog.swift in Sources */,
 				B19B35FB1AF28BA500F20B9A /* HBCIString.swift in Sources */,
+				B1454F23214EF527001F91E0 /* HBCIMT94xTest.swift in Sources */,
 				B141843E1B06925800F9B6FA /* HBCIAbstractSepaTransferOrder.swift in Sources */,
 				B19B360E1AF28BCE00F20B9A /* HBCIOrder.swift in Sources */,
 				B14184381B0634B300F9B6FA /* HBCISepaDatedTransferOrder.swift in Sources */,

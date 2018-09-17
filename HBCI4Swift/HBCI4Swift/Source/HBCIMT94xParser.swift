@@ -522,6 +522,7 @@ class HBCIMT94xParser {
                 logError("MT94xParse error: cannot parse end balance in MT94x entry "+rawStatementString);
                 // we will nevertheless go on                
             }
+            tag = tags[idx]; idx += 1;
         } else {
             logError("MT94xParse error: end balance is missing in MT94x entry "+rawStatementString);
             // we will nevertheless go on
@@ -538,6 +539,7 @@ class HBCIMT94xParser {
             if tag.tag == "65" {
                 statement.futureValutaBalance = parseBalance(tag.value);
             }
+            tag = tags[idx]; idx += 1;
         }
         
         return statement;
