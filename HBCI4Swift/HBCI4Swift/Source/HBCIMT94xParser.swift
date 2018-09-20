@@ -72,7 +72,7 @@ class HBCIMT94xParser {
     }
     
     func getTagsFromString(_ mtString:NSString) throws ->Array<HBCIMT94xTag> {
-        let pattern = ":21:|:25:|:28C:|:60F:|:60M:|:61:|:86:|:62F:|:62M:|:64:|:65:";
+        let pattern = "\r\n:21:|\r\n:25:|\r\n:28C:|\r\n:60F:|\r\n:60M:|\r\n:61:|\r\n:86:|\r\n:62F:|\r\n:62M:|\r\n:64:|\r\n:65:";
         var nextTagRange, valueRange, residualRange: NSRange;
         var finished:Bool = false;
         var tagString = "20";
@@ -93,8 +93,8 @@ class HBCIMT94xParser {
                     tags.append(tag);
                     
                     var tagRange = nextTagRange;
-                    tagRange.location += 1;
-                    tagRange.length -= 2;
+                    tagRange.location += 3;
+                    tagRange.length -= 4;
                     tagString = mtString.substring(with: tagRange);
                 } else {
                     let tag = HBCIMT94xTag(tag: tagString, value: mtString.substring(with: residualRange) as NSString);
@@ -292,7 +292,7 @@ class HBCIMT94xParser {
         }
         
         // structured
-        let fieldString = tagValue.substring(from: location);
+        let fieldString = tagValue.substring(from: location).replacingOccurrences(of: "\r", with: "");
         item.isSEPA = item.transactionCode >= 100 && item.transactionCode <= 199;
         
         // get fields
@@ -307,23 +307,23 @@ class HBCIMT94xParser {
                 case 10: item.primaNota = field.value;
                 case 30:
                     if (item.isSEPA!) {
-                        item.remoteBIC = field.value;
+                        item.remoteBIC = field.value.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines);
                     } else {
-                        item.remoteBankCode = field.value;
+                        item.remoteBankCode = field.value.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines);
                     }
                 case 20: purpose += field.value;
                 case 31:
                     if item.isSEPA! {
-                        item.remoteIBAN = field.value;
+                        item.remoteIBAN = field.value.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines);
                     } else {
-                        item.remoteAccountNumber = field.value;
+                        item.remoteAccountNumber = field.value.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines);
                     }
-                case 32: item.remoteName = field.value;
+                case 32: item.remoteName = field.value.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines);
                 case 33:
                     if item.remoteName != nil {
-                        item.remoteName! += field.value;
+                        item.remoteName! += field.value.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines);
                     } else {
-                        item.remoteName = field.value;
+                        item.remoteName = field.value.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines);
                     }
                 default:
                     if (fieldNum >= 20 && fieldNum <= 29) || (fieldNum >= 60 && fieldNum <= 63) {
@@ -522,7 +522,6 @@ class HBCIMT94xParser {
                 logError("MT94xParse error: cannot parse end balance in MT94x entry "+rawStatementString);
                 // we will nevertheless go on                
             }
-            tag = tags[idx]; idx += 1;
         } else {
             logError("MT94xParse error: end balance is missing in MT94x entry "+rawStatementString);
             // we will nevertheless go on
@@ -530,6 +529,8 @@ class HBCIMT94xParser {
         
         // further data
         while idx < tags.count {
+            tag = tags[idx]; idx += 1;
+
             // valuta balace
             if tag.tag == "64" {
                 statement.valutaBalance = parseBalance(tag.value);
@@ -539,7 +540,6 @@ class HBCIMT94xParser {
             if tag.tag == "65" {
                 statement.futureValutaBalance = parseBalance(tag.value);
             }
-            tag = tags[idx]; idx += 1;
         }
         
         return statement;
@@ -547,14 +547,18 @@ class HBCIMT94xParser {
     
     func parse() throws ->Array<HBCIStatement> {
         var statements = Array<HBCIStatement>();
-        let rawStatements = self.mt94xString.components(separatedBy: ":20:START") ;
+        logError(self.mt94xString as String);
+        let rawStatements = self.mt94xString.components(separatedBy: "\r\n:20:") ;
         for raw in rawStatements {
             if raw.count > 2 {
-                var trimmed = raw.replacingOccurrences(of: "@@", with: "") as NSString;
-                trimmed = trimmed.replacingOccurrences(of: "\n", with: "") as NSString;
-                trimmed = trimmed.replacingOccurrences(of: "\r", with: "") as NSString;
-                trimmed = trimmed.trimmingCharacters(in: CharacterSet(charactersIn: "-")) as NSString;
-                
+                var trimmed = raw.replacingOccurrences(of: "@@", with: "\r\n") as NSString;
+                trimmed = trimmed.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) as NSString;
+                let ending = trimmed.substring(from: trimmed.length-3);
+                if ending != "\r\n-" {
+                    logError("MT94xParse error: cannot parse MT94x statement: "+(trimmed as String));
+                    throw HBCIError.parseError;
+                }
+                trimmed = trimmed.substring(to: trimmed.length-3) as NSString;
                 do {
                     let statement = try parseStatement(trimmed);
                     statements.append(statement);

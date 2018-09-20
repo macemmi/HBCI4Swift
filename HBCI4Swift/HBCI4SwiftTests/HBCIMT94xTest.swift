@@ -23,13 +23,14 @@ class HBCIMT94xTest: XCTestCase {
     func testMT94x() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
-        let ums = "";
-        
-        let parser = HBCIMT94xParser(mt94xString: "");
+        let path = "~/ums.txt" as NSString;
+
         do {
-            if ums.count > 0 {
-                _ = try parser.parseStatement(ums as NSString);
-            }
+            let newPath = path.expandingTildeInPath;
+            let ums = try String(contentsOfFile: newPath);
+            let parser = HBCIMT94xParser(mt94xString: ums as NSString);
+            var statements = try parser.parse();
+            statements.removeAll();
         }
         catch {
             XCTAssertTrue(false, "");
