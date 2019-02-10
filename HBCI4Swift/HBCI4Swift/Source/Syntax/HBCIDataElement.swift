@@ -18,8 +18,7 @@ class HBCIDataElement: HBCISyntaxElement {
     }
     
     override func elementDescription() -> String {
-        let val: Any = self.value ?? "none";
-        return "DE name: \(self.name), value: \(val)\n";
+        return "DE name: \(self.name), value: \(messageString())\n";
     }
     
     override var isEmpty: Bool {
@@ -186,6 +185,21 @@ class HBCIDataElement: HBCISyntaxElement {
         }
     }
     
+    func anonymize(_ s:String) ->String {
+        var result = "";
+        
+        let len = s.count / 2;
+        if len == 0 {
+            return s;
+        }
+        
+        for _ in 0..<len {
+            result += "*";
+        }
+        result += s.substringFromIndex(len);
+        return result;
+    }
+    
     override func messageString() -> String {
         if self.value == nil {
             // no value
@@ -194,11 +208,14 @@ class HBCIDataElement: HBCISyntaxElement {
         
         if let s = toString() {
             if name == "pin" {
-                return "pin";
+                return "pin\(s.count)";
+            }
+            if name == "number" || name == "subnumber" || name == "iban" {
+                return anonymize(s);
             }
             return s;
         } else {
-            return "<undefined>";
+            return "<none>";
         }
     }
     

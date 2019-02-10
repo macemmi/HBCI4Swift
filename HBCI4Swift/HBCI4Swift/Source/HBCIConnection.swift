@@ -27,7 +27,7 @@ class HBCIPinTanConnection : HBCIConnection {
         let request = NSMutableURLRequest(url: url);
         request.httpMethod = "POST";
         request.httpBody = encData;
-        request.timeoutInterval = 240;
+        request.timeoutInterval = 30;
         request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type");
         
         var response:URLResponse?;
@@ -56,9 +56,10 @@ class HBCIPinTanConnection : HBCIConnection {
             
         } catch let err as NSError {
             logError(err.localizedDescription);
+            logError(url.path);
             throw HBCIError.connection(url.path);
         }
-        
+        logError(url.path);
         throw HBCIError.connection(url.path);
     }
     

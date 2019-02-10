@@ -173,6 +173,8 @@
 		B1AE54A81B1A57D1008C7BBE /* pain.001.003.03.xsd in Resources */ = {isa = PBXBuildFile; fileRef = B1AE54A71B1A57D1008C7BBE /* pain.001.003.03.xsd */; };
 		B1AFEC3F1B5B0244002F1DDF /* reader.h in Headers */ = {isa = PBXBuildFile; fileRef = B1AFEC3E1B5B0244002F1DDF /* reader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B1AFEC401B5B026F002F1DDF /* HBCISmartcard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15B72F81B559CA6008D2E55 /* HBCISmartcard.swift */; };
+		B1E26C562210853F0033603E /* HBCIBankMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E26C552210853F0033603E /* HBCIBankMessage.swift */; };
+		B1E26C572210853F0033603E /* HBCIBankMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E26C552210853F0033603E /* HBCIBankMessage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -302,6 +304,7 @@
 		B1AFECA31B5C28D7002F1DDF /* iphonesimulator.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = iphonesimulator.modulemap; sourceTree = "<group>"; };
 		B1AFECA41B5C28D7002F1DDF /* macosx.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = macosx.modulemap; sourceTree = "<group>"; wrapsLines = 0; };
 		B1AFECA81B5C313C002F1DDF /* HBCI4SwiftTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HBCI4SwiftTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		B1E26C552210853F0033603E /* HBCIBankMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCIBankMessage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -514,6 +517,7 @@
 				B14184421B07281800F9B6FA /* HBCIStandingOrder.swift */,
 				B174E89C1CA32336004FD3F0 /* HBCIAccountStatement.swift */,
 				B163F0DF1CC96350001E1009 /* HBCIValue.swift */,
+				B1E26C552210853F0033603E /* HBCIBankMessage.swift */,
 			);
 			name = Structures;
 			path = Source/Structures;
@@ -833,6 +837,7 @@
 				B19B36211AF28BE500F20B9A /* HBCITanProcessInformation.swift in Sources */,
 				B19B36351AF28BF900F20B9A /* HBCITanMedium.swift in Sources */,
 				B14184371B0634B300F9B6FA /* HBCISepaDatedTransferOrder.swift in Sources */,
+				B1E26C562210853F0033603E /* HBCIBankMessage.swift in Sources */,
 				B14184461B07A0A000F9B6FA /* HBCISepaStandingOrderNewOrder.swift in Sources */,
 				B19B35FC1AF28BA500F20B9A /* HBCIExtensions.swift in Sources */,
 				B19B36051AF28BB900F20B9A /* HBCIResponse.swift in Sources */,
@@ -891,6 +896,7 @@
 				B19B362E1AF28BF900F20B9A /* HBCIStatement.swift in Sources */,
 				B19B36321AF28BF900F20B9A /* HBCIAccountBalance.swift in Sources */,
 				B19B35D81AF28AC500F20B9A /* HBCIDataElement.swift in Sources */,
+				B1E26C572210853F0033603E /* HBCIBankMessage.swift in Sources */,
 				B19B36041AF28BB900F20B9A /* HBCICustomMessage.swift in Sources */,
 				B14184471B07A0A000F9B6FA /* HBCISepaStandingOrderNewOrder.swift in Sources */,
 				B15B73001B559CA6008D2E55 /* HBCISmartcardDDV.swift in Sources */,

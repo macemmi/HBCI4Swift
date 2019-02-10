@@ -322,6 +322,19 @@ open class HBCIResultMessage {
         return segs;
     }
     
+    func bankMessages() ->Array<HBCIBankMessage> {
+        var messages = Array<HBCIBankMessage>();
+        
+        for segment in self.segments {
+            if segment.name == "KIMsg" {
+                if let msg = HBCIBankMessage(element: segment) {
+                    messages.append(msg);
+                }
+            }
+        }
+        return messages;
+    }
+    
     func responsesForSegmentWithNumber(_ number:Int) ->Array<HBCIOrderResponse> {
         var responses = Array<HBCIOrderResponse>();
         for response in responsesForSegments() {
