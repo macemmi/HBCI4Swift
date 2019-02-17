@@ -185,7 +185,8 @@ class HBCISyntax {
                 
                     if supportedVersions.count == 0 {
                         // this process is not supported by the bank
-                        logError("Process \(segName) is not supported");
+                        logDebug("Process \(segName) is not supported");
+                        logDebug(user.parameters.bpSegments.description);
                         return nil;
                     }
                     // now sort the versions - we take the latest supported version

@@ -322,7 +322,7 @@ open class HBCIResultMessage {
         return segs;
     }
     
-    func bankMessages() ->Array<HBCIBankMessage> {
+    open func bankMessages() ->Array<HBCIBankMessage> {
         var messages = Array<HBCIBankMessage>();
         
         for segment in self.segments {

@@ -547,7 +547,6 @@ class HBCIMT94xParser {
     
     func parse() throws ->Array<HBCIStatement> {
         var statements = Array<HBCIStatement>();
-        logError(self.mt94xString as String);
         let rawStatements = self.mt94xString.components(separatedBy: "\r\n:20:") ;
         for raw in rawStatements {
             if raw.count > 2 {

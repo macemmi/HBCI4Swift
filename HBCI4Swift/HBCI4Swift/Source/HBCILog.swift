@@ -23,7 +23,7 @@ func logWarning(_ message:String?, file:String = #file, function:String = #funct
 
 func logInfo(_ message:String?, file:String = #file, function:String = #function, line:Int = #line) {
     if let log = _log {
-        log.logError(message, file: file, function: function, line: line);
+        log.logInfo(message, file: file, function: function, line: line);
     }
 }
 
@@ -31,7 +31,7 @@ func logDebug(_ message:String?, file:String = #file, function:String = #functio
     if let msg = message {
         let m = String(format: msg, arguments: values);
         if let log = _log {
-            log.logError(m, file: file, function: function, line: line);
+            log.logDebug(m, file: file, function: function, line: line);
         }
     }
 }
@@ -40,7 +40,7 @@ public protocol HBCILog {
      func logError(_ message:String?, file:String, function:String, line:Int);
      func logWarning(_ message:String?, file:String, function:String, line:Int);
      func logInfo(_ message:String?, file:String, function:String, line:Int);
-    
+     func logDebug(_ message:String?, file:String, function:String, line:Int);
 }
 
 var _log:HBCILog?;
@@ -80,6 +80,15 @@ open class HBCIConsoleLog: HBCILog {
         } else {
             let url = URL(fileURLWithPath: file);
             print("Info"+url.lastPathComponent+", "+function+" \(line): nil message");
+        }
+    }
+    open func logDebug(_ message: String?, file:String, function:String, line:Int) {
+        if let msg = message {
+            let url = URL(fileURLWithPath: file);
+            print("Debug"+url.lastPathComponent+", "+function+" \(line): "+msg);
+        } else {
+            let url = URL(fileURLWithPath: file);
+            print("Debug"+url.lastPathComponent+", "+function+" \(line): nil message");
         }
     }
 }
