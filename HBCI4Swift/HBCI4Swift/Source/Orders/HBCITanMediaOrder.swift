@@ -25,7 +25,7 @@ open class HBCITanMediaOrder : HBCIOrder {
     open func enqueue() ->Bool {
         // check if order is supported
         if !user.parameters.isOrderSupported(self) {
-            logError(self.name + " is not supported for user " + user.userId);
+            logDebug(self.name + " is not supported for user " + user.userId);
             return false;
         }
         
@@ -33,7 +33,7 @@ open class HBCITanMediaOrder : HBCIOrder {
             if let cat = self.mediaCategory {
                 if !segment.setElementValue(cat, path: "mediacategory") { return false; }
             } else {
-                logError("TAN media category not provided");
+                logDebug("TAN media category not provided");
                 return false;
             }
         }
@@ -41,7 +41,7 @@ open class HBCITanMediaOrder : HBCIOrder {
         if let type = self.mediaType {
             if !segment.setElementValue(type, path: "mediatype") { return false; }
         } else {
-            logError("TAN media type is not provided");
+            logDebug("TAN media type is not provided");
             return false;
         }
         msg.addOrder(self);

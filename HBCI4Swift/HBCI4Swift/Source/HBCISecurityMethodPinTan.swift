@@ -22,22 +22,22 @@ open class HBCISecurityMethodPinTan : HBCISecurityMethod {
         let secref = "\(arc4random())";
         
         if user.tanMethod == nil {
-            logError("Signing failed: missing tanMethod");
+            logDebug("Signing failed: missing tanMethod");
             return false;
         }
         if user.sysId == nil {
-            logError("Signing failed: missing sysId");
+            logDebug("Signing failed: missing sysId");
             return false;
         }
         if user.pin == nil {
-            logError("Signing failed: missing PIN");
+            logDebug("Signing failed: missing PIN");
             return false;
         }
         
         if let seg = msg.elementForPath("SigHead") as? HBCISegment {
             version = seg.version;
         } else {
-            logError("SigHead segment not found");
+            logDebug("SigHead segment not found");
             return false;
         }
         
@@ -78,14 +78,14 @@ open class HBCISecurityMethodPinTan : HBCISecurityMethod {
         let encKeyData = Data(bytes: UnsafePointer<UInt8>(encKey), count: 8);
         
         if user.sysId == nil {
-            logError("Signing failed: missing sysId");
+            logDebug("Signing failed: missing sysId");
             return false;
         }
         
         if let seg = msg.elementForPath("CryptHead") as? HBCISegment {
             version = seg.version;
         } else {
-            logError("CryptHead segment not found");
+            logDebug("CryptHead segment not found");
             return false;
         }
         
@@ -130,10 +130,10 @@ open class HBCISecurityMethodPinTan : HBCISecurityMethod {
                         }
                     }
                 } else {
-                    logError("SyntaxFile error: Crypted message not found");
+                    logDebug("SyntaxFile error: Crypted message not found");
                 }
             } else {
-                logError("Dialog ID is not defined");
+                logDebug("Dialog ID is not defined");
             }
         }
         return nil;
@@ -143,8 +143,8 @@ open class HBCISecurityMethodPinTan : HBCISecurityMethod {
         if let msgData = rmsg.valueForPath("CryptData.data") as? Data {
             let result = HBCIResultMessage(syntax: dialog.syntax);
             if !result.parse(msgData) {
-                logError("Result Message could not be parsed");
-                logError(String(data: msgData, encoding: String.Encoding.isoLatin1));
+                logDebug("Result Message could not be parsed");
+                logDebug(String(data: msgData, encoding: String.Encoding.isoLatin1));
             }
             return result;
         }

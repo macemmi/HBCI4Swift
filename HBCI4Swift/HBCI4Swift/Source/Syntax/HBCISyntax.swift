@@ -53,13 +53,13 @@ class HBCISyntax {
             }
         }
         catch let err as NSError {
-            logError("HBCI Syntax file error: \(err.localizedDescription)");
-            logError("HBCI syntax file issue at path \(path)");
+            logDebug("HBCI Syntax file error: \(err.localizedDescription)");
+            logDebug("HBCI syntax file issue at path \(path)");
             throw HBCIError.syntaxFileError;
         }
 
         if xmlDoc == nil {
-            logError("HBCI syntax file not found (xmlDoc=nil) at path \(path)");
+            logDebug("HBCI syntax file not found (xmlDoc=nil) at path \(path)");
             throw HBCIError.syntaxFileError;
         } else {
             document = xmlDoc!;
@@ -80,19 +80,19 @@ class HBCISyntax {
                         self.degs[identifier] = elem;
                     } else {
                         // syntax error
-                        logError("Syntax file error: invalid DEGdef element found");
+                        logDebug("Syntax file error: invalid DEGdef element found");
                         throw HBCIError.syntaxFileError;
                     }
                 }
                 return;
             } else {
                 // error
-                logError("Syntax file error: DEGs element not found");
+                logDebug("Syntax file error: DEGs element not found");
                 throw HBCIError.syntaxFileError;
             }
         } else {
             // error
-            logError("Synax file error: root element not found");
+            logDebug("Synax file error: root element not found");
             throw HBCIError.syntaxFileError;
         }
     }
@@ -108,12 +108,12 @@ class HBCISyntax {
                 return;
             } else {
                 // error
-                logError("Syntax file error: SEGs element not found");
+                logDebug("Syntax file error: SEGs element not found");
                 throw HBCIError.syntaxFileError;
             }
         } else {
             // error
-            logError("Synax file error: root element not found");
+            logDebug("Synax file error: root element not found");
             throw HBCIError.syntaxFileError;
         }
     }
@@ -131,12 +131,12 @@ class HBCISyntax {
                 return;
             } else {
                 // error
-                logError("Syntax file error: MSGs element not found");
+                logDebug("Syntax file error: MSGs element not found");
                 throw HBCIError.syntaxFileError;
             }
         } else {
             // error
-            logError("Synax file error: root element not found");
+            logDebug("Synax file error: root element not found");
             throw HBCIError.syntaxFileError;
         }
     }
@@ -159,10 +159,10 @@ class HBCISyntax {
                     }
                 }
             }
-            logError("Parse error: segment code or segment version could not be determined");
+            logDebug("Parse error: segment code or segment version could not be determined");
             throw HBCIError.parseError;
         } else {
-            logError("Syntax file error: segment SegHead is missing");
+            logDebug("Syntax file error: segment SegHead is missing");
             throw HBCIError.syntaxFileError;
         }
     }
@@ -200,7 +200,7 @@ class HBCISyntax {
                         }
                     }
                 } else {
-                    logError("Segment \(segName) is not supported by HBCI4Swift");
+                    logDebug("Segment \(segName) is not supported by HBCI4Swift");
                 }
             }
         }

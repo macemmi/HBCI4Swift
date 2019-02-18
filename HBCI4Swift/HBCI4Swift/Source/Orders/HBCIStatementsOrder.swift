@@ -29,7 +29,7 @@ open class HBCIStatementsOrder: HBCIOrder {
     open func enqueue() ->Bool {
         // check if order is supported
         if !user.parameters.isOrderSupportedForAccount(self, number: account.number, subNumber: account.subNumber) {
-            logError(self.name + " is not supported for account " + account.number);
+            logDebug(self.name + " is not supported for account " + account.number);
             return false;
         }
         
@@ -40,7 +40,7 @@ open class HBCIStatementsOrder: HBCIOrder {
         if segment.version >= 7 {
             // we have the SEPA version
             if account.iban == nil || account.bic == nil {
-                logError("Account has no IBAN or BIC information");
+                logDebug("Account has no IBAN or BIC information");
                 return false;
             }
             
@@ -62,7 +62,7 @@ open class HBCIStatementsOrder: HBCIOrder {
             values["offset"] = ofs;
         }
         if !segment.setElementValues(values) {
-            logError("Statements Order values could not be set");
+            logDebug("Statements Order values could not be set");
             return false;
         }
         

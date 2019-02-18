@@ -54,11 +54,11 @@ open class HBCIOrder {
                 if let tan_needed = ptInfo.supportedSegs[seg.code] {
                     self.needsTan = tan_needed;
                 } else {
-                    logError(name + " is not supported!");
+                    logDebug(name + " is not supported!");
                     return nil;
                 }
             } else {
-                logError("Missing PIN/TAN information for user \(self.user.userId)");
+                logDebug("Missing PIN/TAN information for user \(self.user.userId)");
                 return nil;
             }
         } else {
@@ -80,7 +80,7 @@ open class HBCIOrder {
                     self.responses = responses;
                     for response in responses {
                         if Int(response.code) >= 9000 {
-                            logError("Message from Bank: "+response.description);
+                            logDebug("Message from Bank: "+response.description);
                             self.success = false;
                         } else {
                             logInfo("Message from Bank: "+response.description);
@@ -88,20 +88,20 @@ open class HBCIOrder {
                     }
                 }
             } else {
-                logError("UpdateResult: segment number not defined");
+                logDebug("UpdateResult: segment number not defined");
             }
         } else {
-            logError("UpdateResult: segment not defined");
+            logDebug("UpdateResult: segment not defined");
         }
     }
     
     open class func getParameterElement(_ user:HBCIUser, orderName:String) ->(element:HBCISyntaxElement, segment:HBCISegment)? {
         guard let seg = user.parameters.parametersForJob(orderName) else {
-            logError("User parameter: parameters for order \(orderName) not found");
+            logDebug("User parameter: parameters for order \(orderName) not found");
             return nil;
         }
         guard let elem = seg.elementForPath("Par"+orderName) else {
-            logError(seg.description);
+            logDebug(seg.description);
             return nil;
         }
         return (elem, seg);

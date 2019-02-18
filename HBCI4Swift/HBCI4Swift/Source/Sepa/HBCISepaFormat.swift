@@ -56,12 +56,12 @@ class HBCISepaFormat {
             self.version = format.substringFromIndex(8);
         
             if type == nil || variant == nil || version == nil {
-                logError("Cannot parse urn " + urn);
+                logDebug("Cannot parse urn " + urn);
                 return nil;
             }
             
             if urns[formatString] == nil {
-                logError("Sepa format \(formatString) is not supported");
+                logDebug("Sepa format \(formatString) is not supported");
                 return nil;
             }
         } else {

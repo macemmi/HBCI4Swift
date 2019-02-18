@@ -13,7 +13,7 @@ class HBCISepaGenerator_001_003_03 : HBCISepaGenerator, HBCISepaGeneratorCredit 
     func documentForTransfer(_ transfer: HBCISepaTransfer) -> Data? {
         
         if transfer.items.count == 0 {
-            logError("SEPA document error: not items");
+            logDebug("SEPA document error: not items");
             return nil;
         }
         
@@ -37,7 +37,7 @@ class HBCISepaGenerator_001_003_03 : HBCISepaGenerator, HBCISepaGeneratorCredit 
         if let totalValue = numberToString(total) {
             root.setStringValueForPath(totalValue, path: "CstmrCdtTrfInitn.PmtInf.CtrlSum");
         } else {
-            logError("Value \(total) cannot be converted to sepa string");
+            logDebug("Value \(total) cannot be converted to sepa string");
             return nil;
         }
         
@@ -75,7 +75,7 @@ class HBCISepaGenerator_001_003_03 : HBCISepaGenerator, HBCISepaGeneratorCredit 
         }
         
         if !validate() {
-            logError(document.description);
+            logDebug(document.description);
             return nil;
         }
         

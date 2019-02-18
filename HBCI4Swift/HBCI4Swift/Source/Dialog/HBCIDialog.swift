@@ -28,7 +28,7 @@ open class HBCIDialog {
         self.hbciVersion = user.hbciVersion;
         
         if user.securityMethod == nil {
-            logError("Security method for user not defined");
+            logDebug("Security method for user not defined");
             throw HBCIError.missingData("SecurityMethod");
         }
 
@@ -42,7 +42,7 @@ open class HBCIDialog {
                 self.connection = HBCIPinTanConnection(url: url);
                 return;
             } else {
-                logError("Could not create URL from \(user.bankURL)");
+                logDebug("Could not create URL from \(user.bankURL)");
                 throw HBCIError.badURL(user.bankURL);
             }
         }
@@ -64,20 +64,20 @@ open class HBCIDialog {
     
     func sendMessage(_ msg:HBCIMessage) throws ->HBCIResultMessage? {
         if !msg.enumerateSegments() {
-            logError(msg.description);
+            logDebug(msg.description);
             return nil;
         }
         
         if !user.securityMethod.signMessage(msg) {
-            logError(msg.description);
+            logDebug(msg.description);
             return nil;
         }
         if !msg.finalize() {
-            logError(msg.description);
+            logDebug(msg.description);
             return nil;
         }
         if !msg.validate() {
-            logError(msg.description);
+            logDebug(msg.description);
             return nil;
         }
         
@@ -86,7 +86,7 @@ open class HBCIDialog {
         if let msg_crypted = user.securityMethod.encryptMessage(msg, dialog: self) {
             
             if !msg_crypted.validate() {
-                logError(msg_crypted.description);
+                logDebug(msg_crypted.description);
                 return nil;
             }
             
@@ -108,22 +108,22 @@ open class HBCIDialog {
                             return value
                         } else {
                             logError("Error message from bank");
-                            logError(String(data:result, encoding:String.Encoding.isoLatin1));
-                            logError(String(data: result, encoding: String.Encoding.isoLatin1));
-                            logError("Message sent: " + msg.messageString());
+                            logDebug(String(data:result, encoding:String.Encoding.isoLatin1));
+                            logDebug(String(data: result, encoding: String.Encoding.isoLatin1));
+                            logDebug("Message sent: " + msg.messageString());
                             return value;
                         }
                     }
-                    logError("Message could not be decrypted");
-                    logError(String(data: result, encoding: String.Encoding.isoLatin1));
+                    logDebug("Message could not be decrypted");
+                    logDebug(String(data: result, encoding: String.Encoding.isoLatin1));
                     return nil;
                 } else {
-                    logError("Message could not be parsed");
-                    logError(String(data: result, encoding: String.Encoding.isoLatin1));
+                    logDebug("Message could not be parsed");
+                    logDebug(String(data: result, encoding: String.Encoding.isoLatin1));
                     return nil;
                 }
             } catch {
-                logError("Message sent: " + msg.messageString());
+                logDebug("Message sent: " + msg.messageString());
             }
         }
         return nil;
@@ -131,7 +131,7 @@ open class HBCIDialog {
 
     open func dialogInit() throws ->HBCIResultMessage? {
         if user.sysId == nil {
-            logError("Dialog Init failed: missing sysId");
+            logDebug("Dialog Init failed: missing sysId");
             return nil;
         }
         
@@ -204,7 +204,7 @@ open class HBCIDialog {
                     if seg.name == "SyncRes" {
                         user.sysId = seg.elementValueForPath("sysid") as? String;
                         if user.sysId == nil {
-                            logError("SysID could not be found");
+                            logDebug("SysID could not be found");
                         }
                     }
                 }
@@ -230,7 +230,7 @@ open class HBCIDialog {
             
             if supportedVersions.count == 0 {
                 // this process is not supported by the bank
-                logError("Process \(segName) is not supported");
+                logDebug("Process \(segName) is not supported");
                 return nil;
             }
             // now sort the versions - we take the latest supported version
@@ -243,7 +243,7 @@ open class HBCIDialog {
                 }
             }
         } else {
-            logError("Segment \(segName) is not supported by HBCI4Swift");
+            logDebug("Segment \(segName) is not supported by HBCI4Swift");
         }
         return nil;
     }
@@ -267,7 +267,7 @@ open class HBCIDialog {
                     
                     if supportedVersions.count == 0 {
                         // this process is not supported by the bank
-                        logError("Process \(segName) is not supported");
+                        logDebug("Process \(segName) is not supported");
                         return nil;
                     }
                     // now sort the versions - we take the latest supported version
@@ -281,7 +281,7 @@ open class HBCIDialog {
                         }
                     }
                 } else {
-                    logError("Segment \(segName) is not supported by HBCI4Swift");
+                    logDebug("Segment \(segName) is not supported by HBCI4Swift");
                 }
             }
         }

@@ -246,7 +246,7 @@ open class HBCISmartcardDDV : HBCISmartcard {
             }
         } else {
             // not supported
-            logError("HBCISmartcard: get key data is not supported for this card type");
+            logDebug("HBCISmartcard: get key data is not supported for this card type");
         }
         
         return keys;

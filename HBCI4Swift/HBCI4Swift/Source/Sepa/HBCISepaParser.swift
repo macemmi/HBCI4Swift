@@ -30,7 +30,7 @@ class HBCISepaParser {
         if let number = numberFormatter.number(from: s) as? NSDecimalNumber {
             return number;
         } else {
-            logError("Sepa document parser: not able to convert \(s) to a value");
+            logDebug("Sepa document parser: not able to convert \(s) to a value");
             return nil;
         }
     }
@@ -41,30 +41,30 @@ class HBCISepaParser {
         if let date = formatter.date(from: s) {
             return date;
         } else {
-            logError("Sepa document parser: not able to convert \(s) to a date");
+            logDebug("Sepa document parser: not able to convert \(s) to a date");
             return nil;
         }
     }
     
     func checkTransferData(_ iban:String?, bic:String?, name:String?, value:NSDecimalNumber?, currency:String?) ->Bool {
         if iban == nil {
-            logError("Sepa document parser: IBAN is missing");
+            logDebug("Sepa document parser: IBAN is missing");
             return false;
         }
         if bic == nil {
-            logError("Sepa document parser: BIC is missing");
+            logDebug("Sepa document parser: BIC is missing");
             return false;
         }
         if name == nil {
-            logError("Sepa document parser: Creditor name is missing");
+            logDebug("Sepa document parser: Creditor name is missing");
             return false;
         }
         if value == nil {
-            logError("Sepa document parser: value is missing");
+            logDebug("Sepa document parser: value is missing");
             return false;
         }
         if currency == nil {
-            logError("Sepa document parser: currency is missing");
+            logDebug("Sepa document parser: currency is missing");
             return false;
         }
         return true;

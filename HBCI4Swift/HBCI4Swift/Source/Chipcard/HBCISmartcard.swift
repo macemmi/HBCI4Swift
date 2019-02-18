@@ -55,7 +55,7 @@ open class HBCISmartcard {
             var context:SCARDCONTEXT = 0;
             let rv = SCardEstablishContext(UInt32(SCARD_SCOPE_SYSTEM), nil, nil, &context);
             if rv != SCARD_S_SUCCESS {
-                logError(String(format:"HBCISmartcard: could not establish connection to chipcard driver (%X)", rv));
+                logDebug(String(format:"HBCISmartcard: could not establish connection to chipcard driver (%X)", rv));
                 return false;
             } else {
                 _hContext = context;
@@ -75,7 +75,7 @@ open class HBCISmartcard {
         if let context = _hContext {
             var rv = SCardListReaders(context, nil, nil, &readerInfoLen);
             if rv != SCARD_S_SUCCESS {
-                logError(String(format:"HBCISmartcard: could not list available readers (%X)", rv));
+                logDebug(String(format:"HBCISmartcard: could not list available readers (%X)", rv));
                 return nil;
             }
             
@@ -181,7 +181,7 @@ open class HBCISmartcard {
                     return true;
                 }
             } else {
-                logError(String(format:"HBCISmartcard: verify failed (%X)", rv));
+                logDebug(String(format:"HBCISmartcard: verify failed (%X)", rv));
                 logCommand(NSData(bytes:sendBuffer, length:Int(length)), result:NSData(bytes:recBuffer, length:Int(rLength)));
             }
         }
@@ -197,7 +197,7 @@ open class HBCISmartcard {
             let rv = SCardControl132(hCard, CM_IOCTL_GET_FEATURE_REQUEST, nil, 0, pRecBuffer, DWORD(MAX_BUFFER_SIZE), &length);
             if rv != SCARD_S_SUCCESS {
                 // log
-                logError(String(format:"HBCISmartcard: feature request failed (%X)", rv));
+                logDebug(String(format:"HBCISmartcard: feature request failed (%X)", rv));
                 return false;
             }
             
@@ -223,7 +223,7 @@ open class HBCISmartcard {
             
             if _ioctl_verify == nil {
                 // log
-                logError("HBCISmartcard: IOCTL for verify could not be retrieved");
+                logDebug("HBCISmartcard: IOCTL for verify could not be retrieved");
                 return false;
             }
         }
@@ -243,7 +243,7 @@ open class HBCISmartcard {
             let rv = SCardStatus(hCard, nil, &length, &state, &prot, &attributes, &attrLen);
             
             if rv != SCARD_S_SUCCESS {
-                logError(String(format:"HBCISmartcard: chipcard status could not be retrieved (%X)", rv));
+                logDebug(String(format:"HBCISmartcard: chipcard status could not be retrieved (%X)", rv));
                 return false;
             }
             if (state & DWORD(SCARD_ABSENT)) != 0 {
@@ -316,7 +316,7 @@ open class HBCISmartcard {
                     return ConnectResult.no_card;
                 }
             }
-            logError(String(format: "HBCISmartcard: connection error (%X)", rv));
+            logDebug(String(format: "HBCISmartcard: connection error (%X)", rv));
             return ConnectResult.error;
         } else {
             return ConnectResult.no_context;
@@ -335,7 +335,7 @@ open class HBCISmartcard {
         for i in 0..<command.length {
             cm += String(format: "%.02X ", p[i]);
         }
-        logError(cm);
+        logDebug(cm);
         cm = "APDU command result: ";
         if let res = result {
             p = UnsafeMutablePointer<UInt8>(mutating: res.bytes.bindMemory(to: UInt8.self, capacity: res.length));
@@ -345,7 +345,7 @@ open class HBCISmartcard {
         } else {
             cm += "none";
         }
-        logError(cm);
+        logDebug(cm);
     }
     
     func sendAPDU(_ command:NSData) ->NSData? {

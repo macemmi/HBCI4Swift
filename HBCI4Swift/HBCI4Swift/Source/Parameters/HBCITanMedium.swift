@@ -55,8 +55,8 @@ public struct HBCITanMedium {
         }
         
         if self.category == nil || self.status == nil {
-            logError("TanMedium \(self.name ?? unknown): not all mandatory fields are provided for version \(version)");
-            logError(element.description);
+            logDebug("TanMedium \(self.name ?? unknown): not all mandatory fields are provided for version \(version)");
+            logDebug(element.description);
             return nil;
 
         }

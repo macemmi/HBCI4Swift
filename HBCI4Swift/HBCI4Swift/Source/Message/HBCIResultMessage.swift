@@ -131,7 +131,7 @@ open class HBCIResultMessage {
                         p = p.advanced(by: tag_size+bin_size);
                     } else {
                         // issue during conversion
-                        logError("tag \(tag) cannot be converted to Latin1");
+                        logDebug("tag \(tag) cannot be converted to Latin1");
                         return false;
                     }
                     continue;
@@ -179,9 +179,9 @@ open class HBCIResultMessage {
             }
             catch {
                 if let segmentString = NSString(data: segData, encoding: String.Encoding.isoLatin1.rawValue) {
-                    logError("Parse error: segment \(segmentString) could not be parsed");
+                    logDebug("Parse error: segment \(segmentString) could not be parsed");
                 } else {
-                    logError("Parse error: segment (no conversion possible) could not be parsed");
+                    logDebug("Parse error: segment (no conversion possible) could not be parsed");
                 }
                 return false;
             }
@@ -209,7 +209,7 @@ open class HBCIResultMessage {
                 }
             }
         }
-        logError("Segment with name \(name ?? "<nil>") not found");
+        logDebug("Segment with name \(name ?? "<nil>") not found");
         return nil;
     }
     

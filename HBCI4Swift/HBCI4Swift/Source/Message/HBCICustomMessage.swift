@@ -57,7 +57,7 @@ open class HBCICustomMessage : HBCIMessage {
                     if !msg.setElementValue(dialog.messageNum, path: "MsgTail.msgnum") { return nil; }
                     return HBCICustomMessage(msg: msg, dialog: dialog);
                 } else {
-                    logError("No dialog started yet (dialog ID is missing)");
+                    logDebug("No dialog started yet (dialog ID is missing)");
                 }
             }
         }
@@ -69,7 +69,7 @@ open class HBCICustomMessage : HBCIMessage {
             orders.append(order);
             self.children.insert(segment, at: 2);
         } else {
-            logError("Order comes without segment!");
+            logDebug("Order comes without segment!");
         }
     }
     
@@ -89,7 +89,7 @@ open class HBCICustomMessage : HBCIMessage {
             
             if supportedVersions.count == 0 {
                 // this process is not supported by the bank
-                logError("Process \(segName) is not supported");
+                logDebug("Process \(segName) is not supported");
                 return nil;
             }
             // now sort the versions - we take the latest supported version
@@ -102,7 +102,7 @@ open class HBCICustomMessage : HBCIMessage {
                 }
             }
         } else {
-            logError("Segment \(segName) is not supported by HBCI4Swift");
+            logDebug("Segment \(segName) is not supported by HBCI4Swift");
         }
         return nil;
     }
@@ -110,7 +110,7 @@ open class HBCICustomMessage : HBCIMessage {
     open func send() throws ->Bool {
         // check
         if orders.count == 0 {
-            logError("Custom message contains no orders");
+            logDebug("Custom message contains no orders");
             return false;
         }
         
@@ -122,13 +122,13 @@ open class HBCICustomMessage : HBCIMessage {
             }
         }
         if needsTan && orders.count > 1 {
-            logError("Custom message contains several TAN-based orders. This is not supported");
+            logDebug("Custom message contains several TAN-based orders. This is not supported");
             return false;
         }
 
         if needsTan {
             if dialog.user.tanMethod == nil {
-                logError("Custom message order needs TAN but no TAN method provided for user");
+                logDebug("Custom message order needs TAN but no TAN method provided for user");
                 return false;
             }
             // if order needs TAN transfer to TAN message processor
@@ -148,9 +148,11 @@ open class HBCICustomMessage : HBCIMessage {
                 let responses = result.responsesForMessage();
                 self.success = true;
                 for response in responses {
-                    logInfo("Message from Bank: "+response.description);
                     if Int(response.code) >= 9000 {
+                        logError("Message from Bank: "+response.description);
                         self.success = false;
+                    } else {
+                        logInfo("Message from Bank: "+response.description);
                     }
                 }
                 

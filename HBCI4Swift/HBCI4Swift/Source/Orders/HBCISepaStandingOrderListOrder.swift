@@ -25,7 +25,7 @@ open class HBCISepaStandingOrderListOrder : HBCIOrder {
         
         // check if order is supported
         if !user.parameters.isOrderSupportedForAccount(self, number: account.number, subNumber: account.subNumber) {
-            logError(self.name + " is not supported for account " + account.number);
+            logDebug(self.name + " is not supported for account " + account.number);
             return false;
         }
 
@@ -40,14 +40,14 @@ open class HBCISepaStandingOrderListOrder : HBCIOrder {
                     msg.addOrder(self);
                     return true;
                 } else {
-                    logError("Could not set values for StandingOrderList");
+                    logDebug("Could not set values for StandingOrderList");
                 }
             } else {
                 if account.iban == nil {
-                    logError("IBAN is missing for StandingOrderList");
+                    logDebug("IBAN is missing for StandingOrderList");
                 }
                 if account.bic == nil {
-                    logError("BIC is missing for StandingOrderList");
+                    logDebug("BIC is missing for StandingOrderList");
                 }
             }
         }
@@ -82,7 +82,7 @@ open class HBCISepaStandingOrderListOrder : HBCIOrder {
                                 stord.orderId = segment.elementValueForPath("orderid") as? String;
                                 standingOrders.append(stord);
                         } else {
-                            logError("StandingOrder: could not parse data from segment: " + segment.description);
+                            logDebug("StandingOrder: could not parse data from segment: " + segment.description);
                         }
                     }
                 }

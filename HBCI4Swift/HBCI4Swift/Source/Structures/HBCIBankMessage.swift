@@ -17,8 +17,8 @@ public struct HBCIBankMessage {
             self.header = hd;
             self.message = text;
         } else {
-            logError("BankMessage could not be extracted");
-            logError(element.description);
+            logDebug("BankMessage could not be extracted");
+            logDebug(element.description);
             return nil;
         }
     }

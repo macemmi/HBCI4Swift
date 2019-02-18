@@ -51,8 +51,8 @@ open class HBCITanMethod {
         
         
         if self.identifier == nil || self.secfunc == nil || self.inputInfo == nil || self.name == nil || self.format == nil || self.maxTanLength == nil || self.process == nil {
-                logError("TanMethod \(self.identifier ?? unknown): not all mandatory fields are provided for version \(version)");
-                logError(element.description);
+                logDebug("TanMethod \(self.identifier ?? unknown): not all mandatory fields are provided for version \(version)");
+                logDebug(element.description);
                 return nil;
         }
     }

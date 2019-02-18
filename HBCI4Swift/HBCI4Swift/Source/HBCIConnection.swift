@@ -38,12 +38,12 @@ class HBCIPinTanConnection : HBCIConnection {
             // check status code
             if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode != 200 {
-                    logError(httpResponse.description);
-                    logError(String(data: result, encoding: String.Encoding.isoLatin1));
+                    logDebug(httpResponse.description);
+                    logDebug(String(data: result, encoding: String.Encoding.isoLatin1));
                     throw HBCIError.connection(url.path);
                 }
             } else {
-                logError("No HTTP response");
+                logDebug("No HTTP response");
                 throw HBCIError.connection(url.path);
             }
             
@@ -55,11 +55,11 @@ class HBCIPinTanConnection : HBCIConnection {
             }
             
         } catch let err as NSError {
-            logError(err.localizedDescription);
-            logError(url.path);
+            logDebug(err.localizedDescription);
+            logDebug(url.path);
             throw HBCIError.connection(url.path);
         }
-        logError(url.path);
+        logDebug(url.path);
         throw HBCIError.connection(url.path);
     }
     
@@ -84,7 +84,7 @@ class HBCIDDVConnection : HBCIConnection {
             self.inputStream = inpStr;
             self.outputStream = outStr;
         } else {
-            logError("Unable to open connection to server \(host)");
+            logDebug("Unable to open connection to server \(host)");
             throw HBCIError.connection(host);
         }
     }
@@ -109,7 +109,7 @@ class HBCIDDVConnection : HBCIConnection {
             tries += 1;
         }
         if tries == 30 {
-            logError("Timeout");
+            logDebug("Timeout");
             inputStream.close();
             throw HBCIError.serverTimeout(host);
         }

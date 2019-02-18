@@ -65,73 +65,73 @@ open class HBCISepaStandingOrderEditOrder: HBCIAbstractStandingOrderOrder {
             return nil;
         }
         guard let minPreDays = elem.elementValueForPath("minpretime") as? Int else {
-            logError("SepaStandingOrderEditParameter: mandatory parameter minpretime missing");
-            logError(seg.description);
+            logDebug("SepaStandingOrderEditParameter: mandatory parameter minpretime missing");
+            logDebug(seg.description);
             return nil;
         }
         guard let maxPreDays = elem.elementValueForPath("maxpretime") as? Int else {
-            logError("SepaStandingOrderEditParameter: mandatory parameter maxpretime missing");
-            logError(seg.description);
+            logDebug("SepaStandingOrderEditParameter: mandatory parameter maxpretime missing");
+            logDebug(seg.description);
             return nil;
         }
         guard let maxTermChanges = elem.elementValueForPath("numtermchanges") as? Int else {
-            logError("SepaStandingOrderEditParameter: mandatory parameter numtermchanges missing");
-            logError(seg.description);
+            logDebug("SepaStandingOrderEditParameter: mandatory parameter numtermchanges missing");
+            logDebug(seg.description);
             return nil;
         }
         guard let credAcct_c = elem.elementValueForPath("recktoeditable") as? Bool else {
-            logError("SepaStandingOrderEditParameter: mandatory parameter recktoeditable missing");
-            logError(seg.description);
+            logDebug("SepaStandingOrderEditParameter: mandatory parameter recktoeditable missing");
+            logDebug(seg.description);
             return nil;
         }
         guard let cred_c = elem.elementValueForPath("recnameeditable") as? Bool else {
-            logError("SepaStandingOrderEditParameter: mandatory parameter recnameeditable missing");
-            logError(seg.description);
+            logDebug("SepaStandingOrderEditParameter: mandatory parameter recnameeditable missing");
+            logDebug(seg.description);
             return nil;
         }
         guard let value_c = elem.elementValueForPath("valueeditable") as? Bool else {
-            logError("SepaStandingOrderEditParameter: mandatory parameter valueeditable missing");
-            logError(seg.description);
+            logDebug("SepaStandingOrderEditParameter: mandatory parameter valueeditable missing");
+            logDebug(seg.description);
             return nil;
         }
         guard let usage_c = elem.elementValueForPath("usageeditable") as? Bool else {
-            logError("SepaStandingOrderEditParameter: mandatory parameter usageeditable missing");
-            logError(seg.description);
+            logDebug("SepaStandingOrderEditParameter: mandatory parameter usageeditable missing");
+            logDebug(seg.description);
             return nil;
         }
         guard let firstExec_c = elem.elementValueForPath("firstexeceditable") as? Bool else {
-            logError("SepaStandingOrderEditParameter: mandatory parameter firstexeceditable missing");
-            logError(seg.description);
+            logDebug("SepaStandingOrderEditParameter: mandatory parameter firstexeceditable missing");
+            logDebug(seg.description);
             return nil;
         }
         guard let timeUnit_c = elem.elementValueForPath("timeuniteditable") as? Bool else {
-            logError("SepaStandingOrderEditParameter: mandatory parameter timeuniteditable missing");
-            logError(seg.description);
+            logDebug("SepaStandingOrderEditParameter: mandatory parameter timeuniteditable missing");
+            logDebug(seg.description);
             return nil;
         }
         guard let cycle_c = elem.elementValueForPath("turnuseditable") as? Bool else {
-            logError("SepaStandingOrderEditParameter: mandatory parameter turnuseditable missing");
-            logError(seg.description);
+            logDebug("SepaStandingOrderEditParameter: mandatory parameter turnuseditable missing");
+            logDebug(seg.description);
             return nil;
         }
         guard let execDay_c = elem.elementValueForPath("execdayeditable") as? Bool else {
-            logError("SepaStandingOrderEditParameter: mandatory parameter execdayeditable missing");
-            logError(seg.description);
+            logDebug("SepaStandingOrderEditParameter: mandatory parameter execdayeditable missing");
+            logDebug(seg.description);
             return nil;
         }
         guard let lastExec_c = elem.elementValueForPath("lastexeceditable") as? Bool else {
-            logError("SepaStandingOrderEditParameter: mandatory parameter lastexeceditable missing");
-            logError(seg.description);
+            logDebug("SepaStandingOrderEditParameter: mandatory parameter lastexeceditable missing");
+            logDebug(seg.description);
             return nil;
         }
         guard let cycleMonths = elem.elementValueForPath("turnusmonths") as? String else {
-            logError("SepaStandingOrderEditParameter: mandatory parameter turnusmonths missing");
-            logError(seg.description);
+            logDebug("SepaStandingOrderEditParameter: mandatory parameter turnusmonths missing");
+            logDebug(seg.description);
             return nil;
         }
         guard let daysPerMonth = elem.elementValueForPath("dayspermonth") as? String else {
-            logError("SepaStandingOrderEditParameter: mandatory parameter dayspermonth missing");
-            logError(seg.description);
+            logDebug("SepaStandingOrderEditParameter: mandatory parameter dayspermonth missing");
+            logDebug(seg.description);
             return nil;
         }
         let cycleWeeks = elem.elementValueForPath("turnusweeks") as? String;

@@ -38,7 +38,7 @@ open class HBCISepaStandingOrderDeleteOrder: HBCIOrder {
         
         // check if order is supported
         if !user.parameters.isOrderSupportedForAccount(self, number: standingOrder.account.number, subNumber: standingOrder.account.subNumber) {
-            logError(self.name + " is not supported for account " + standingOrder.account.number);
+            logDebug(self.name + " is not supported for account " + standingOrder.account.number);
             return false;
         }
         
@@ -60,14 +60,14 @@ open class HBCISepaStandingOrderDeleteOrder: HBCIOrder {
                         msg.addOrder(self);
                         return true;
                     } else {
-                        logError("Could not set values for Sepa Standing Order");
+                        logDebug("Could not set values for Sepa Standing Order");
                     }
                 } else {
                     if standingOrder.account.iban == nil {
-                        logError("IBAN is missing for SEPA Standing Order");
+                        logDebug("IBAN is missing for SEPA Standing Order");
                     }
                     if standingOrder.account.bic == nil {
-                        logError("BIC is missing for SEPA Standing Order");
+                        logDebug("BIC is missing for SEPA Standing Order");
                     }
                 }
             }
@@ -80,23 +80,23 @@ open class HBCISepaStandingOrderDeleteOrder: HBCIOrder {
             return nil;
         }
         guard let minPreDays = elem.elementValueForPath("minpretime") as? Int else {
-            logError("SepaStandingOrderDeleteParameter: mandatory parameter minpretime missing");
-            logError(seg.description);
+            logDebug("SepaStandingOrderDeleteParameter: mandatory parameter minpretime missing");
+            logDebug(seg.description);
             return nil;
         }
         guard let maxPreDays = elem.elementValueForPath("maxpretime") as? Int else {
-            logError("SepaStandingOrderDeleteParameter: mandatory parameter maxpretime missing");
-            logError(seg.description);
+            logDebug("SepaStandingOrderDeleteParameter: mandatory parameter maxpretime missing");
+            logDebug(seg.description);
             return nil;
         }
         guard let supportsTerminated = elem.elementValueForPath("cantermdel") as? Bool else {
-            logError("SepaStandingOrderDeleteParameter: mandatory parameter cantermdel missing");
-            logError(seg.description);
+            logDebug("SepaStandingOrderDeleteParameter: mandatory parameter cantermdel missing");
+            logDebug(seg.description);
             return nil;
         }
         guard let requiresOrderData = elem.elementValueForPath("orderdata_required") as? Bool else {
-            logError("SepaStandingOrderDeleteParameter: mandatory parameter orderdata_required missing");
-            logError(seg.description);
+            logDebug("SepaStandingOrderDeleteParameter: mandatory parameter orderdata_required missing");
+            logDebug(seg.description);
             return nil;
             
         }

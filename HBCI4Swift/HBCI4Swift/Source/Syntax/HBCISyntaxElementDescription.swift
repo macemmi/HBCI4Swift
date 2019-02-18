@@ -57,7 +57,7 @@ class HBCISyntaxElementDescription: CustomStringConvertible, CustomDebugStringCo
                                 
                                 if child == nil {
                                     // no reference found
-                                    logError("Type \(type) not found in syntax");
+                                    logDebug("Type \(type) not found in syntax");
                                     throw HBCIError.syntaxFileError;
                                 }
                             }
@@ -70,13 +70,13 @@ class HBCISyntaxElementDescription: CustomStringConvertible, CustomDebugStringCo
                     } else if childElem.name == "value" {
                         // handle values
                         if(!parseValueForElement(childElem)) {
-                            logError("Syntax file error: value element \(childElem) could not be parsed");
+                            logDebug("Syntax file error: value element \(childElem) could not be parsed");
                         }
                     } else if childElem.name == "default" {
                         // do nothing. Handled in HBCIMessageDescription
                     } else {
                         // invalid
-                        logError("Syntax file error: invalid child element \(childElem)");
+                        logDebug("Syntax file error: invalid child element \(childElem)");
                         throw HBCIError.syntaxFileError;
                     }
                 }

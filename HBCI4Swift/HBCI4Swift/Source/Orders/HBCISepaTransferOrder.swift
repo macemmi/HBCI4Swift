@@ -20,12 +20,12 @@ open class HBCISepaTransferOrder : HBCIAbstractSepaTransferOrder {
     open override func enqueue() ->Bool {
 
         if transfer.date != nil {
-            logError("SEPA Transfer: date is not allowed");
+            logDebug("SEPA Transfer: date is not allowed");
             return false;
         }
         
         if transfer.items.count > 1 {
-            logError("SEPA Transfer: multiple transfers are not allowed");
+            logDebug("SEPA Transfer: multiple transfers are not allowed");
             return false;
         }
         

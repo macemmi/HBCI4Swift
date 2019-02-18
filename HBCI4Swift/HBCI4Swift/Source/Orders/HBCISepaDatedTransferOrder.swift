@@ -25,7 +25,7 @@ open class HBCISepaDatedTransferOrder : HBCIAbstractSepaTransferOrder {
     open override func enqueue() ->Bool {
 
         if transfer.date == nil {
-            logError("SEPA Dated Transfer: date is missing");
+            logDebug("SEPA Dated Transfer: date is missing");
             return false;
         }
         return super.enqueue();
@@ -36,13 +36,13 @@ open class HBCISepaDatedTransferOrder : HBCIAbstractSepaTransferOrder {
             return nil;
         }
         guard let minPreDays = elem.elementValueForPath("minpretime") as? Int else {
-            logError("SepaDatedTransferParameters: mandatory parameter minpretime missing");
-            logError(seg.description);
+            logDebug("SepaDatedTransferParameters: mandatory parameter minpretime missing");
+            logDebug(seg.description);
             return nil;
         }
         guard let maxPreDays = elem.elementValueForPath("maxpretime") as? Int else {
-            logError("SepaDatedTransferParameters: mandatory parameter maxpretime missing");
-            logError(seg.description);
+            logDebug("SepaDatedTransferParameters: mandatory parameter maxpretime missing");
+            logDebug(seg.description);
             return nil;
         }
         return HBCISepaDatedTransferPar(minPreDays: minPreDays, maxPreDays: maxPreDays);

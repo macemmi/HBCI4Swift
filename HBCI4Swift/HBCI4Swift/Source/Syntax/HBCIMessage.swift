@@ -29,7 +29,7 @@ open class HBCIMessage: HBCISyntaxElement {
                 return num;
             }
         }
-        logError("Segment number (SegHead.seq) not found in segment \(self.name)");
+        logDebug("Segment number (SegHead.seq) not found in segment \(self.name)");
         return nil;
     }
     

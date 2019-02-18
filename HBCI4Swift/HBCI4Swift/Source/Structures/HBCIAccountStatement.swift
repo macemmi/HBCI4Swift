@@ -46,8 +46,8 @@ open class HBCIAccountStatement {
         self.booked = segment.elementValueForPath("booked") as? Data;
         
         if self.format == nil || self.startDate == nil || self.endDate == nil || self.booked == nil {
-            logError("AccountStatement: mandatory parameter is missing");
-            logError(segment.description);
+            logDebug("AccountStatement: mandatory parameter is missing");
+            logDebug(segment.description);
             return nil;
         }
         

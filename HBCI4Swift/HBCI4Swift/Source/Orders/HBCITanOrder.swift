@@ -47,11 +47,11 @@ class HBCITanOrder : HBCIOrder {
             if segment.setElementValues(values) {
                 msg.addOrder(self);
             } else {
-                logError("Values could not be set for TAN order");
+                logDebug("Values could not be set for TAN order");
                 return false;
             }
         } else {
-            logError("Could not create TAN order - missing process info");
+            logDebug("Could not create TAN order - missing process info");
             return false;
         }
         return true;

@@ -32,7 +32,7 @@ open class HBCISecurityMethodDDV : HBCISecurityMethod {
         if let seg = msg.elementForPath("SigHead") as? HBCISegment {
             version = seg.version;
         } else {
-            logError("SigHead segment not found");
+            logDebug("SigHead segment not found");
             return false;
         }
         
@@ -40,7 +40,7 @@ open class HBCISecurityMethodDDV : HBCISecurityMethod {
         if card != nil {
             if card.cardID == nil {
                 if !card.getCardID() {
-                    logError("Card ID could not be determined");
+                    logDebug("Card ID could not be determined");
                     return false;
                 }
             }
@@ -48,7 +48,7 @@ open class HBCISecurityMethodDDV : HBCISecurityMethod {
             if sigKeyNumber == nil {
                 let keys = card.getKeyData();
                 if keys.count < 2 {
-                    logError("Card keys could not be determined");
+                    logDebug("Card keys could not be determined");
                     return false;
                 }
                 let sigKeys = keys[0];
@@ -62,7 +62,7 @@ open class HBCISecurityMethodDDV : HBCISecurityMethod {
             
             
         } else {
-            logError("No chipcard assigned to DDV security method");
+            logDebug("No chipcard assigned to DDV security method");
             return false;
         }
         
@@ -71,7 +71,7 @@ open class HBCISecurityMethodDDV : HBCISecurityMethod {
         sigid = sigid + 1;
         
         if !card.writeSignatureId(sigid) {
-            logError("Unable to increment signature id");
+            logDebug("Unable to increment signature id");
             return false;
         }
         
@@ -92,7 +92,7 @@ open class HBCISecurityMethodDDV : HBCISecurityMethod {
         }
         
         if !msg.setElementValues(values_head) {
-            logError("SigHead values could not be set");
+            logDebug("SigHead values could not be set");
             return false;
         }
         
@@ -103,7 +103,7 @@ open class HBCISecurityMethodDDV : HBCISecurityMethod {
         // sign hash
         let signedHash = card.sign(hash);
         if signedHash == nil {
-            logError("Message hash could not be signed");
+            logDebug("Message hash could not be signed");
             return false;
         }
         
@@ -117,7 +117,7 @@ open class HBCISecurityMethodDDV : HBCISecurityMethod {
         if let seg = msg.elementForPath("CryptHead") as? HBCISegment {
             version = seg.version;
         } else {
-            logError("CryptHead segment not found");
+            logDebug("CryptHead segment not found");
             return false;
         }
 
@@ -150,7 +150,7 @@ open class HBCISecurityMethodDDV : HBCISecurityMethod {
         
         let rv = CCCrypt(UInt32(kCCDecrypt), UInt32(kCCAlgorithm3DES), UInt32(0), key.bytes, 24, nil, encData.bytes, encData.length, &decrypted, encData.length, &plainSize);
         if Int(rv) != kCCSuccess {
-            logError("Decryption failed. Status: \(rv)");
+            logDebug("Decryption failed. Status: \(rv)");
             return;
         }
         
@@ -187,7 +187,7 @@ open class HBCISecurityMethodDDV : HBCISecurityMethod {
                     
                     let rv = CCCrypt(UInt32(kCCEncrypt), UInt32(kCCAlgorithm3DES), UInt32(0), key.bytes, kCCKeySize3DES, iv, paddedData.bytes, paddedData.length, &encrypted, bufSize, &encSize);
                     if Int(rv) != kCCSuccess {
-                        logError("Encryption failed. Status: \(rv)");
+                        logDebug("Encryption failed. Status: \(rv)");
                         return nil;
                     }
                     
@@ -213,13 +213,13 @@ open class HBCISecurityMethodDDV : HBCISecurityMethod {
                             }
                         }
                     } else {
-                        logError("SyntaxFile error: Crypted message not found");
+                        logDebug("SyntaxFile error: Crypted message not found");
                     }
                 } else {
-                    logError("Encryption keys could not be determined from chipcard");
+                    logDebug("Encryption keys could not be determined from chipcard");
                 }
             } else {
-                logError("Dialog ID is not defined");
+                logDebug("Dialog ID is not defined");
             }
         }
         return nil;
@@ -238,7 +238,7 @@ open class HBCISecurityMethodDDV : HBCISecurityMethod {
                   
                     let rv = CCCrypt(UInt32(kCCDecrypt), UInt32(kCCAlgorithm3DES), UInt32(0), key.bytes, 24, nil, cryptedData.bytes, cryptedData.length, &decrypted, cryptedData.length+8, &plainSize);
                     if Int(rv) != kCCSuccess {
-                        logError("Decryption failed. Status: \(rv)");
+                        logDebug("Decryption failed. Status: \(rv)");
                         return nil;
                     }
                     
@@ -246,15 +246,15 @@ open class HBCISecurityMethodDDV : HBCISecurityMethod {
                     
                     let result = HBCIResultMessage(syntax: dialog.syntax);
                     if !result.parse(msgData) {
-                        logError("Result Message could not be parsed");
-                        logError(String(data: msgData, encoding: String.Encoding.isoLatin1));
+                        logDebug("Result Message could not be parsed");
+                        logDebug(String(data: msgData, encoding: String.Encoding.isoLatin1));
                     }
                     return result;
                 } else {
-                    logError("Could not decrypt key");
+                    logDebug("Could not decrypt key");
                 }
             } else {
-                logError("Encryption key not found in message");
+                logDebug("Encryption key not found in message");
             }
         } else {
             // message is not encrypted

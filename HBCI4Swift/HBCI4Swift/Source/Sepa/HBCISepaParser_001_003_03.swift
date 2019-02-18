@@ -56,7 +56,7 @@ class HBCISepaParser_001_003_03 : HBCISepaParser, HBCISepaParserCredit {
                 }
             }
         } catch let err as NSError {
-            logError(err.description);
+            logDebug(err.description);
             return nil;
         }
         return transfer;

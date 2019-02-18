@@ -18,11 +18,11 @@ class HBCISepaParserFactory {
                 case "03": return HBCISepaParser_001_003_03(format: format);
                     
                 default:
-                    logError("SEPA Credit variant \(format.variant) version \(format.version) is not supported");
+                    logDebug("SEPA Credit variant \(format.variant) version \(format.version) is not supported");
                     return nil;
                 }
             default:
-                logError("SEPA Credit variant \(format.variant) is not supported");
+                logDebug("SEPA Credit variant \(format.variant) is not supported");
                 return nil;
             }
             
