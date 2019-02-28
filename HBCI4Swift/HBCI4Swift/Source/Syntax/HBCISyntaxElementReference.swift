@@ -35,7 +35,7 @@ class HBCISyntaxElementReference {
         } else if let name = element.valueForAttribute("type") {
             self.name = name;
         } else {
-            logDebug("Missing attribute 'name' in element \(element.description)");
+            logInfo("Missing attribute 'name' in element \(element.description)");
             self.name = "<unknown>";
             throw HBCIError.syntaxFileError;
         }

@@ -21,13 +21,13 @@ class HBCISegmentVersions {
         self.identifier = element.valueForAttribute("id");
         if self.identifier == nil {
             // error
-            logDebug("Syntax file error: attribute ID is missing for element \(element)");
+            logInfo("Syntax file error: attribute ID is missing for element \(element)");
             throw HBCIError.syntaxFileError;
         }
         self.code = element.valueForAttribute("code");
         if self.code == nil {
             // error
-            logDebug("Syntax file error: attribute CODE is missing for element \(element)");
+            logInfo("Syntax file error: attribute CODE is missing for element \(element)");
             throw HBCIError.syntaxFileError;
         }
         
@@ -47,11 +47,11 @@ class HBCISegmentVersions {
                     // next version
                     continue;
                 } else {
-                    logDebug("Syntax file error: ID \(versionString) cannot be converted to a number");
+                    logInfo("Syntax file error: ID \(versionString) cannot be converted to a number");
                     throw HBCIError.syntaxFileError;
                 }
             } else {
-                logDebug("Syntax file error: attribute ID is missing for element \(segv)");
+                logInfo("Syntax file error: attribute ID is missing for element \(segv)");
                 throw HBCIError.syntaxFileError;
             }
         }
@@ -62,7 +62,7 @@ class HBCISegmentVersions {
             self.versionNumbers.sort(by: {$0 < $1})
         } else {
             // error
-            logDebug("Syntax file error: segment \(element) has no versions");
+            logInfo("Syntax file error: segment \(element) has no versions");
             throw HBCIError.syntaxFileError;
         }
 
@@ -80,7 +80,7 @@ class HBCISegmentVersions {
                 }
             }
             // error occured
-            logDebug("Syntax file error: value element \(elem) could not be parsed");
+            logInfo("Syntax file error: value element \(elem) could not be parsed");
             throw HBCIError.syntaxFileError;
         }
     }

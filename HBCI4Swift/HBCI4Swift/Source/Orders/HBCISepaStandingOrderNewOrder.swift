@@ -36,7 +36,7 @@ open class HBCISepaStandingOrderNewOrder : HBCIOrder {
         
         // check if order is supported
         if !user.parameters.isOrderSupportedForAccount(self, number: standingOrder.account.number, subNumber: standingOrder.account.subNumber) {
-            logDebug(self.name + " is not supported for account " + standingOrder.account.number);
+            logInfo(self.name + " is not supported for account " + standingOrder.account.number);
             return false;
         }
         
@@ -60,14 +60,14 @@ open class HBCISepaStandingOrderNewOrder : HBCIOrder {
                         msg.addOrder(self);
                         return true;
                     } else {
-                        logDebug("Could not set values for Sepa Standing Order");
+                        logInfo("Could not set values for Sepa Standing Order");
                     }
                 } else {
                     if standingOrder.account.iban == nil {
-                        logDebug("IBAN is missing for SEPA Standing Order");
+                        logInfo("IBAN is missing for SEPA Standing Order");
                     }
                     if standingOrder.account.bic == nil {
-                        logDebug("BIC is missing for SEPA Standing Order");
+                        logInfo("BIC is missing for SEPA Standing Order");
                     }
                 }
             }
@@ -88,28 +88,28 @@ open class HBCISepaStandingOrderNewOrder : HBCIOrder {
             return nil;
         }
         guard let maxUsage = elem.elementValueForPath("maxusage") as? Int else {
-            logDebug("SepaStandingOrderNewParameter: mandatory parameter maxusage missing");
-            logDebug(seg.description);
+            logInfo("SepaStandingOrderNewParameter: mandatory parameter maxusage missing");
+            logInfo(seg.description);
             return nil;
         }
         guard let minPreDays = elem.elementValueForPath("minpretime") as? Int else {
-            logDebug("SepaStandingOrderNewParameter: mandatory parameter minpretime missing");
-            logDebug(seg.description);
+            logInfo("SepaStandingOrderNewParameter: mandatory parameter minpretime missing");
+            logInfo(seg.description);
             return nil;
         }
         guard let maxPreDays = elem.elementValueForPath("maxpretime") as? Int else {
-            logDebug("SepaStandingOrderNewParameter: mandatory parameter maxpretime missing");
-            logDebug(seg.description);
+            logInfo("SepaStandingOrderNewParameter: mandatory parameter maxpretime missing");
+            logInfo(seg.description);
             return nil;
         }
         guard let cm = elem.elementValueForPath("turnusmonths") as? String else {
-            logDebug("SepaStandingOrderNewParameter: mandatory parameter turnusmonths missing");
-            logDebug(seg.description);
+            logInfo("SepaStandingOrderNewParameter: mandatory parameter turnusmonths missing");
+            logInfo(seg.description);
             return nil;
         }
         guard let dpm = elem.elementValueForPath("dayspermonth") as? String else {
-            logDebug("SepaStandingOrderNewParameter: mandatory parameter dayspermonth missing");
-            logDebug(seg.description);
+            logInfo("SepaStandingOrderNewParameter: mandatory parameter dayspermonth missing");
+            logInfo(seg.description);
             return nil;
         }
         let cw = elem.elementValueForPath("turnusweeks") as? String;

@@ -121,10 +121,10 @@ open class HBCIParameters {
             }
             catch is HBCIError {
                 if let segmentString = NSString(data: segData, encoding: String.Encoding.isoLatin1.rawValue) {
-                    logDebug("Parse error: segment \(segmentString) could not be parsed");
+                    logInfo("Parse error: segment \(segmentString) could not be parsed");
                     throw HBCIError.parseError;
                 } else {
-                    logDebug("Parse error: segment (no conversion possible) could not be parsed");
+                    logInfo("Parse error: segment (no conversion possible) could not be parsed");
                     throw HBCIError.parseError;
                 }
             }
@@ -181,7 +181,7 @@ open class HBCIParameters {
             
             return segVersions.segmentWithVersion(supportedVersions.first!);
         }
-        logDebug("Segment \(name) is not supported by HBCI4Swift");
+        logInfo("Segment \(name) is not supported by HBCI4Swift");
         return nil;
     }
     
@@ -300,7 +300,7 @@ open class HBCIParameters {
         }
         
         if !found {
-            logDebug("No account information record for account \(number) found");
+            logInfo("No account information record for account \(number) found");
         }
         return orderCodes;
 

@@ -26,7 +26,7 @@ open class HBCIAbstractSepaTransferOrder : HBCIOrder {
         
         // check if order is supported
         if !user.parameters.isOrderSupportedForAccount(self, number: transfer.account.number, subNumber: transfer.account.subNumber) {
-            logDebug(self.name + " is not supported for account " + transfer.account.number);
+            logInfo(self.name + " is not supported for account " + transfer.account.number);
             return false;
         }
         
@@ -44,14 +44,14 @@ open class HBCIAbstractSepaTransferOrder : HBCIOrder {
                         msg.addOrder(self);
                         return true;
                     } else {
-                        logDebug("Could not set values for Sepa Transfer");
+                        logInfo("Could not set values for Sepa Transfer");
                     }
                 } else {
                     if transfer.account.iban == nil {
-                        logDebug("IBAN is missing for SEPA transfer");
+                        logInfo("IBAN is missing for SEPA transfer");
                     }
                     if transfer.account.bic == nil {
-                        logDebug("BIC is missing for SEPA transfer");
+                        logInfo("BIC is missing for SEPA transfer");
                     }
                 }
             }

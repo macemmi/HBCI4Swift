@@ -25,7 +25,7 @@ open class HBCIBalanceOrder : HBCIOrder {
     open func enqueue() ->Bool {
         // check if order is supported
         if !user.parameters.isOrderSupportedForAccount(self, number: account.number, subNumber: account.subNumber) {
-            logDebug(self.name + " is not supported for account " + account.number);
+            logInfo(self.name + " is not supported for account " + account.number);
             return false;
         }
 
@@ -34,17 +34,17 @@ open class HBCIBalanceOrder : HBCIOrder {
         if segment.version >= 7 {
             // we have the SEPA version
             if account.iban == nil {
-                logDebug("Balance order has no IBAN");
+                logInfo("Balance order has no IBAN");
                 return false;
             }
             if account.bic == nil {
-                logDebug("Balance order has no BIC");
+                logInfo("Balance order has no BIC");
                 return false;
             }
             
             let values:Dictionary<String,Any> = ["KTV.bic":account.bic!, "KTV.iban":account.iban!, "allaccounts":false];
             if !segment.setElementValues(values) {
-                logDebug("Balance Order values could not be set");
+                logInfo("Balance Order values could not be set");
                 return false;
             }
             
@@ -57,7 +57,7 @@ open class HBCIBalanceOrder : HBCIOrder {
                 values["KTV.subnumber"] = account.subNumber!
             }
             if !segment.setElementValues(values) {
-                logDebug("Balance Order values could not be set");
+                logInfo("Balance Order values could not be set");
                 return false;
             }
 

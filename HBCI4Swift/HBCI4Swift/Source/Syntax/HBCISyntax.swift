@@ -53,13 +53,13 @@ class HBCISyntax {
             }
         }
         catch let err as NSError {
-            logDebug("HBCI Syntax file error: \(err.localizedDescription)");
-            logDebug("HBCI syntax file issue at path \(path)");
+            logInfo("HBCI Syntax file error: \(err.localizedDescription)");
+            logInfo("HBCI syntax file issue at path \(path)");
             throw HBCIError.syntaxFileError;
         }
 
         if xmlDoc == nil {
-            logDebug("HBCI syntax file not found (xmlDoc=nil) at path \(path)");
+            logInfo("HBCI syntax file not found (xmlDoc=nil) at path \(path)");
             throw HBCIError.syntaxFileError;
         } else {
             document = xmlDoc!;
@@ -80,19 +80,19 @@ class HBCISyntax {
                         self.degs[identifier] = elem;
                     } else {
                         // syntax error
-                        logDebug("Syntax file error: invalid DEGdef element found");
+                        logInfo("Syntax file error: invalid DEGdef element found");
                         throw HBCIError.syntaxFileError;
                     }
                 }
                 return;
             } else {
                 // error
-                logDebug("Syntax file error: DEGs element not found");
+                logInfo("Syntax file error: DEGs element not found");
                 throw HBCIError.syntaxFileError;
             }
         } else {
             // error
-            logDebug("Synax file error: root element not found");
+            logInfo("Synax file error: root element not found");
             throw HBCIError.syntaxFileError;
         }
     }
@@ -108,12 +108,12 @@ class HBCISyntax {
                 return;
             } else {
                 // error
-                logDebug("Syntax file error: SEGs element not found");
+                logInfo("Syntax file error: SEGs element not found");
                 throw HBCIError.syntaxFileError;
             }
         } else {
             // error
-            logDebug("Synax file error: root element not found");
+            logInfo("Synax file error: root element not found");
             throw HBCIError.syntaxFileError;
         }
     }
@@ -131,12 +131,12 @@ class HBCISyntax {
                 return;
             } else {
                 // error
-                logDebug("Syntax file error: MSGs element not found");
+                logInfo("Syntax file error: MSGs element not found");
                 throw HBCIError.syntaxFileError;
             }
         } else {
             // error
-            logDebug("Synax file error: root element not found");
+            logInfo("Synax file error: root element not found");
             throw HBCIError.syntaxFileError;
         }
     }
@@ -159,10 +159,10 @@ class HBCISyntax {
                     }
                 }
             }
-            logDebug("Parse error: segment code or segment version could not be determined");
+            logInfo("Parse error: segment code or segment version could not be determined");
             throw HBCIError.parseError;
         } else {
-            logDebug("Syntax file error: segment SegHead is missing");
+            logInfo("Syntax file error: segment SegHead is missing");
             throw HBCIError.syntaxFileError;
         }
     }
@@ -185,8 +185,8 @@ class HBCISyntax {
                 
                     if supportedVersions.count == 0 {
                         // this process is not supported by the bank
-                        logDebug("Process \(segName) is not supported");
-                        logDebug(user.parameters.bpSegments.description);
+                        logInfo("Process \(segName) is not supported");
+                        logInfo(user.parameters.bpSegments.description);
                         return nil;
                     }
                     // now sort the versions - we take the latest supported version
@@ -200,7 +200,7 @@ class HBCISyntax {
                         }
                     }
                 } else {
-                    logDebug("Segment \(segName) is not supported by HBCI4Swift");
+                    logInfo("Segment \(segName) is not supported by HBCI4Swift");
                 }
             }
         }

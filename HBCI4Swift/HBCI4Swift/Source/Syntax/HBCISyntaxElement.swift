@@ -73,13 +73,13 @@ open class HBCISyntaxElement {
                             return true;
                         }
                     }
-                    logDebug("Value cannot be set for \(name) (no data element)");
+                    logInfo("Value cannot be set for \(name) (no data element)");
                     return false;
                 }
             }
         }
         
-        logDebug("Child element \(name) in \(self.name) not found");
+        logInfo("Child element \(name) in \(self.name) not found");
         return false;
     }
     
@@ -108,13 +108,13 @@ open class HBCISyntaxElement {
                     if newComps.count > 0 {
                         return elem.elementValueForPath(newComps);
                     } else {
-                        logDebug("Value cannot be read from \(name) (no data element)");
+                        logInfo("Value cannot be read from \(name) (no data element)");
                         return nil;
                     }
                 }
             }
         }
-        logDebug("Child element \(name) in \(self.name) not found");
+        logInfo("Child element \(name) in \(self.name) not found");
         return nil;
     }
     */
@@ -133,7 +133,7 @@ open class HBCISyntaxElement {
                     if newPath != nil {
                         return elem.elementValueForPath(newPath!);
                     } else {
-                        logDebug("Value cannot be read from \(name) (no data element)");
+                        logInfo("Value cannot be read from \(name) (no data element)");
                         return nil;
                     }
                 }
@@ -148,7 +148,7 @@ open class HBCISyntaxElement {
                 }
             }
         }
-        logDebug("Child element \(name) in \(self.name) not found");
+        logInfo("Child element \(name) in \(self.name) not found");
         return nil;
     }
     
@@ -170,7 +170,7 @@ open class HBCISyntaxElement {
                         let res = elem.elementValuesForPath(newPath!);
                         result += res;
                     } else {
-                        logDebug("Get element value: newPath = nil but \(name) is no data element");
+                        logInfo("Get element value: newPath = nil but \(name) is no data element");
                     }
                 }
             }
@@ -302,10 +302,10 @@ open class HBCISyntaxElement {
             if !(ref.elemDescr === childElem.descr) || elemIdx >= self.children.count {
                 // we have a different element
                 if childCount < ref.minnum {
-                    logDebug("Element \(self.name): child element \(ref.name) occured \(childCount) times but must occur at least \(ref.minnum) times");
+                    logInfo("Element \(self.name): child element \(ref.name) occured \(childCount) times but must occur at least \(ref.minnum) times");
                 }
                 if childCount > ref.maxnum {
-                    logDebug("Element \(self.name): child element \(ref.name) occured \(childCount) times but must occur at most \(ref.maxnum) times");
+                    logInfo("Element \(self.name): child element \(ref.name) occured \(childCount) times but must occur at most \(ref.maxnum) times");
                 }
                 if elemIdx < self.children.count {
                     childCount = 0;
@@ -325,7 +325,7 @@ open class HBCISyntaxElement {
             if ref.name == name {
                 // now check if it is a multi element
                 if ref.maxnum <= 1 {
-                    logDebug("Element \(name) could not be added - only one instance is allowed");
+                    logInfo("Element \(name) could not be added - only one instance is allowed");
                     return nil;
                 }
                 reference = ref;
@@ -333,7 +333,7 @@ open class HBCISyntaxElement {
             }
         }
         if reference == nil {
-            logDebug("Reference for \(name) could not be found");
+            logInfo("Reference for \(name) could not be found");
             return nil;
         }
         

@@ -101,6 +101,16 @@ open class HBCIResultMessage {
         return idx;
     }
     
+    var description: String {
+        var result = "";
+        for segment in segments {
+            result += segment.description;
+            result += "\n";
+        }
+        return result;
+    }
+
+    
     func parse(_ msgData:Data) ->Bool {
         // first extract binary data
         let content = (msgData as NSData).bytes.bindMemory(to: CChar.self, capacity: msgData.count);
@@ -131,7 +141,7 @@ open class HBCIResultMessage {
                         p = p.advanced(by: tag_size+bin_size);
                     } else {
                         // issue during conversion
-                        logDebug("tag \(tag) cannot be converted to Latin1");
+                        logInfo("tag \(tag) cannot be converted to Latin1");
                         return false;
                     }
                     continue;
@@ -179,9 +189,9 @@ open class HBCIResultMessage {
             }
             catch {
                 if let segmentString = NSString(data: segData, encoding: String.Encoding.isoLatin1.rawValue) {
-                    logDebug("Parse error: segment \(segmentString) could not be parsed");
+                    logInfo("Parse error: segment \(segmentString) could not be parsed");
                 } else {
-                    logDebug("Parse error: segment (no conversion possible) could not be parsed");
+                    logInfo("Parse error: segment (no conversion possible) could not be parsed");
                 }
                 return false;
             }
@@ -209,7 +219,7 @@ open class HBCIResultMessage {
                 }
             }
         }
-        logDebug("Segment with name \(name ?? "<nil>") not found");
+        logInfo("Segment with name \(name ?? "<nil>") not found");
         return nil;
     }
     

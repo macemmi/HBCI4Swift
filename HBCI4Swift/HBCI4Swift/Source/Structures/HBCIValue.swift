@@ -24,8 +24,8 @@ public struct HBCIValue {
                 self.value = cd == "C" ? value:NSDecimalNumber.zero.subtracting(value);
                 self.currency = curr;
         } else {
-            logDebug("Value could not be extracted");
-            logDebug(element.description);
+            logInfo("Value could not be extracted");
+            logInfo(element.description);
             return nil;
         }
     }

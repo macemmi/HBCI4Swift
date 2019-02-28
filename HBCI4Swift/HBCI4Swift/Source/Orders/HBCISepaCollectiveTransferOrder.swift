@@ -27,7 +27,7 @@ open class HBCISepaCollectiveTransferOrder : HBCIAbstractSepaTransferOrder {
     open override func enqueue() ->Bool {
         
         if transfer.date != nil {
-            logDebug("SEPA Transfer: date is not allowed");
+            logInfo("SEPA Transfer: date is not allowed");
             return false;
         }
         return super.enqueue();
@@ -38,18 +38,18 @@ open class HBCISepaCollectiveTransferOrder : HBCIAbstractSepaTransferOrder {
             return nil;
         }
         guard let maxNum = elem.elementValueForPath("maxnum") as? Int else {
-            logDebug("SepaCollectiveTransferParameters: mandatory parameter maxnum missing");
-            logDebug(seg.description);
+            logInfo("SepaCollectiveTransferParameters: mandatory parameter maxnum missing");
+            logInfo(seg.description);
             return nil;
         }
         guard let needsTotal = elem.elementValueForPath("needtotal") as? Bool else {
-            logDebug("SepaCollectiveTransferParameters: mandatory parameter needtotal missing");
-            logDebug(seg.description);
+            logInfo("SepaCollectiveTransferParameters: mandatory parameter needtotal missing");
+            logInfo(seg.description);
             return nil;
         }
         guard let sta = elem.elementValueForPath("cansingletransfer") as? Bool else {
-            logDebug("SepaCollectiveTransferParameters: mandatory parameter cansingletransfer missing");
-            logDebug(seg.description);
+            logInfo("SepaCollectiveTransferParameters: mandatory parameter cansingletransfer missing");
+            logInfo(seg.description);
             return nil;
         }
         return HBCISepaCollectiveTransferPar(maxNum: maxNum, needsTotal: needsTotal, singleTransferAllowed: sta);

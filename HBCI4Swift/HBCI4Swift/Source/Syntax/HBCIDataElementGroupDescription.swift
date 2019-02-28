@@ -47,7 +47,7 @@ class HBCIDataElementGroupDescription: HBCISyntaxElementDescription {
                     continue; // check next
                 } else {
                     // error: non-optional element but end of DEG
-                    logDebug("Parse error: non-optional element \(ref.name) is missing at the end of data element group");
+                    logInfo("Parse error: non-optional element \(ref.name) is missing at the end of data element group");
                     return nil;
                 }
             }
@@ -58,7 +58,7 @@ class HBCIDataElementGroupDescription: HBCISyntaxElementDescription {
                 if let descr = ref.elemDescr as? HBCIDataElementGroupDescription {
                     parsedElem = descr.parseDEG(p, length: resLength, binaries: binaries, optional: ref.minnum == 0 || optional);
                 } else {
-                    logDebug("Unexpected HBCI syntax error");
+                    logInfo("Unexpected HBCI syntax error");
                     return nil;
                 }
             } else {
@@ -70,7 +70,7 @@ class HBCIDataElementGroupDescription: HBCISyntaxElementDescription {
                     // check if element was optional
                     if ref.minnum < num && !optional {
                         // error: minimal occurence
-                        logDebug("Parse error: element \(element.name) is empty but not optional");
+                        logInfo("Parse error: element \(element.name) is empty but not optional");
                         return nil;
                     } else {
                         num = 0;
@@ -81,7 +81,7 @@ class HBCIDataElementGroupDescription: HBCISyntaxElementDescription {
                     if ref.name != nil {
                         element.name = ref.name;
                     } else {
-                        logDebug("Parse error: reference without name");
+                        logInfo("Parse error: reference without name");
                         return nil;
                     }
                     deg.children.append(element);
@@ -134,7 +134,7 @@ class HBCIDataElementGroupDescription: HBCISyntaxElementDescription {
                     continue; // check next
                 } else {
                     // error: non-optional element but end of DEG
-                    logDebug("Parse error: non-optional element \(ref.name) is missing at the end of data element group");
+                    logInfo("Parse error: non-optional element \(ref.name) is missing at the end of data element group");
                     return nil;
                 }
             }
@@ -143,7 +143,7 @@ class HBCIDataElementGroupDescription: HBCISyntaxElementDescription {
                 // empty element - check if element was optional
                 if ref.minnum < num {
                     // error: minimal occurence
-                    logDebug("Parse error: element \(ref.name) is empty but not optional");
+                    logInfo("Parse error: element \(ref.name) is empty but not optional");
                     return nil;
                 } else {
                     num = 0;
@@ -158,7 +158,7 @@ class HBCIDataElementGroupDescription: HBCISyntaxElementDescription {
                     if ref.name != nil {
                         element.name = ref.name;
                     } else {
-                        logDebug("Parse error: reference without name");
+                        logInfo("Parse error: reference without name");
                         return nil;
                     }
                     deg.children.append(element);
@@ -167,7 +167,7 @@ class HBCIDataElementGroupDescription: HBCISyntaxElementDescription {
                         // check if element was optional
                         if ref.minnum < num {
                             // error: minimal occurence
-                            logDebug("Parse error: element \(element.name) is empty but not optional");
+                            logInfo("Parse error: element \(element.name) is empty but not optional");
                             return nil;
                         } else {
                             num = 0;

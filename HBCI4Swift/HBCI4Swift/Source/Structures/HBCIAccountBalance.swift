@@ -25,8 +25,8 @@ public struct HBCIAccountBalance {
             self.currency = value.currency;
             self.postingDate = date;
         } else {
-            logDebug("Balance could not be extracted");
-            logDebug(element.description);
+            logInfo("Balance could not be extracted");
+            logInfo(element.description);
             return nil;
         }
     }

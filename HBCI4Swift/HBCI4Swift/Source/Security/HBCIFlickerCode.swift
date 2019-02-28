@@ -269,7 +269,7 @@ open class HBCIFlickerCode {
                 try parse(code, version: .hhd13);
             }
             catch {
-                logDebug("Could not parse flicker string " + code);
+                logInfo("Could not parse flicker string " + code);
                 throw HBCIError.parseError;
             }
         }
@@ -413,7 +413,7 @@ open class HBCIFlickerCode {
             if let x = Int(String(char), radix: 16) {
                 luhn += index % 2 == 0 ? x : quersumme(2*x);
             } else {
-                logDebug("\(char) cannot be parsed as Hex");
+                logInfo("\(char) cannot be parsed as Hex");
                 throw HBCIError.parseError;
             }
         }
@@ -437,7 +437,7 @@ open class HBCIFlickerCode {
             if let x = Int(String(scalar), radix:  16) {
                 xorsum ^= x;
             } else {
-                logDebug("\(scalar) cannot be parsed as Hex");
+                logInfo("\(scalar) cannot be parsed as Hex");
                 throw HBCIError.parseError;
             }
         }

@@ -43,19 +43,19 @@ open class HBCISepaTransfer {
         if validate {
             // validate item
             if item.remoteIban.count == 0 {
-                logDebug("Remote IBAN not specified");
+                logInfo("Remote IBAN not specified");
                 return false;
             }
             if item.remoteBic.count == 0 {
-                logDebug("Remote BIC not specified");
+                logInfo("Remote BIC not specified");
                 return false;
             }
             if item.remoteName.count == 0 {
-                logDebug("Remote Name not specified");
+                logInfo("Remote Name not specified");
                 return false;
             }
             if item.value.compare(NSDecimalNumber.zero) != ComparisonResult.orderedDescending {
-                logDebug("Transfer value must be positive");
+                logInfo("Transfer value must be positive");
                 return false;
             }            
         }
@@ -66,17 +66,17 @@ open class HBCISepaTransfer {
     
     open func validate() ->Bool {
         if items.count == 0 {
-            logDebug("SEPA Transfer: no transfer items");
+            logInfo("SEPA Transfer: no transfer items");
             return false;
         }
         
         if account.iban == nil {
-            logDebug("SEPA Transfer: missing IBAN");
+            logInfo("SEPA Transfer: missing IBAN");
             return false;
         }
         
         if account.bic == nil {
-            logDebug("SEPA Transfer: missing BIC");
+            logInfo("SEPA Transfer: missing BIC");
         }
         
         return true;

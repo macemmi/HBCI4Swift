@@ -27,7 +27,7 @@ open class HBCIAbstractStandingOrderOrder: HBCIOrder {
         
         // check if order is supported
         if !user.parameters.isOrderSupportedForAccount(self, number: standingOrder.account.number, subNumber: standingOrder.account.subNumber) {
-            logDebug(self.name + " is not supported for account " + standingOrder.account.number);
+            logInfo(self.name + " is not supported for account " + standingOrder.account.number);
             return false;
         }
         
@@ -51,14 +51,14 @@ open class HBCIAbstractStandingOrderOrder: HBCIOrder {
                     if self.segment.setElementValues(values) {
                         return true;
                     } else {
-                        logDebug("Could not set values for Sepa Standing Order");
+                        logInfo("Could not set values for Sepa Standing Order");
                     }
                 } else {
                     if standingOrder.account.iban == nil {
-                        logDebug("IBAN is missing for SEPA Standing Order");
+                        logInfo("IBAN is missing for SEPA Standing Order");
                     }
                     if standingOrder.account.bic == nil {
-                        logDebug("BIC is missing for SEPA Standing Order");
+                        logInfo("BIC is missing for SEPA Standing Order");
                     }
                 }
             }

@@ -51,7 +51,7 @@ class HBCISegmentDescription: HBCISyntaxElementDescription {
                     continue; // check next
                 } else {
                     // error: non-optional element but end of SEG
-                    logDebug("Parse error: non-optional element is missing at the end of data element group");
+                    logInfo("Parse error: non-optional element is missing at the end of data element group");
                     return nil;
                 }
             }
@@ -60,7 +60,7 @@ class HBCISegmentDescription: HBCISyntaxElementDescription {
                 // empty element - check if element was optional
                 if ref.minnum < num {
                     // error: minimal occurence
-                    logDebug("Parse error: element \(ref.name) is empty but not optional");
+                    logInfo("Parse error: element \(ref.name) is empty but not optional");
                     return nil;
                 } else {
                     num = 0;
@@ -75,7 +75,7 @@ class HBCISegmentDescription: HBCISyntaxElementDescription {
                     if ref.name != nil {
                         element.name = ref.name;
                     } else {
-                        logDebug("Parse error: reference without name");
+                        logInfo("Parse error: reference without name");
                         return nil;
                     }
                     seg.children.append(element);
@@ -84,7 +84,7 @@ class HBCISegmentDescription: HBCISyntaxElementDescription {
                         // check if element was optional
                         if ref.minnum < num {
                             // error: minimal occurence
-                            logDebug("Parse error: element \(ref.name) is empty but not optional");
+                            logInfo("Parse error: element \(ref.name) is empty but not optional");
                             return nil;
                         } else {
                             num = 0;

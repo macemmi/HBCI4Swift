@@ -111,7 +111,7 @@ extension String {
             }
             return String(cString: res, encoding: String.Encoding.isoLatin1);
         } else {
-            logDebug("String "+self+" could not be converted to ISOLatin1");
+            logInfo("String "+self+" could not be converted to ISOLatin1");
             return nil;
         }
     }

@@ -36,7 +36,7 @@ open class HBCIAccountStatementOrder: HBCIOrder {
     open func enqueue() ->Bool {
         // check if order is supported
         if !user.parameters.isOrderSupportedForAccount(self, number: account.number, subNumber: account.subNumber) {
-            logDebug(self.name + " is not supported for account " + account.number);
+            logInfo(self.name + " is not supported for account " + account.number);
             return false;
         }
         
@@ -47,7 +47,7 @@ open class HBCIAccountStatementOrder: HBCIOrder {
         if segment.version >= 7 {
             // we have the SEPA version
             if account.iban == nil || account.bic == nil {
-                logDebug("Account has no IBAN or BIC information");
+                logInfo("Account has no IBAN or BIC information");
                 return false;
             }
             
@@ -70,7 +70,7 @@ open class HBCIAccountStatementOrder: HBCIOrder {
         }
         
         if !segment.setElementValues(values) {
-            logDebug("AccountStatementOrder values could not be set");
+            logInfo("AccountStatementOrder values could not be set");
             return false;
         }
         
@@ -95,18 +95,18 @@ open class HBCIAccountStatementOrder: HBCIOrder {
             return nil;
         }
         guard let supportsNumber = elem.elementValueForPath("canindex") as? Bool else {
-            logDebug("AccountStatementParameters: mandatory parameter canindex missing");
-            logDebug(seg.description);
+            logInfo("AccountStatementParameters: mandatory parameter canindex missing");
+            logInfo(seg.description);
             return nil;
         }
         guard let needsReceipt = elem.elementValueForPath("needreceipt") as? Bool else {
-            logDebug("AccountStatementParameters: mandatory parameter needreceipt missing");
-            logDebug(seg.description);
+            logInfo("AccountStatementParameters: mandatory parameter needreceipt missing");
+            logInfo(seg.description);
             return nil;
         }
         guard let supportsLimit = elem.elementValueForPath("canmaxentries") as? Bool else {
-            logDebug("AccountStatementParameters: mandatory parameter supportsLimit missing");
-            logDebug(seg.description);
+            logInfo("AccountStatementParameters: mandatory parameter supportsLimit missing");
+            logInfo(seg.description);
             return nil;
         }
         var formats = Array<HBCIAccountStatementFormat>();

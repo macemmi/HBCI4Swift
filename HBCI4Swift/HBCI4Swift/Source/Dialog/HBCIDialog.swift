@@ -28,7 +28,7 @@ open class HBCIDialog {
         self.hbciVersion = user.hbciVersion;
         
         if user.securityMethod == nil {
-            logDebug("Security method for user not defined");
+            logInfo("Security method for user not defined");
             throw HBCIError.missingData("SecurityMethod");
         }
 
@@ -42,7 +42,7 @@ open class HBCIDialog {
                 self.connection = HBCIPinTanConnection(url: url);
                 return;
             } else {
-                logDebug("Could not create URL from \(user.bankURL)");
+                logInfo("Could not create URL from \(user.bankURL)");
                 throw HBCIError.badURL(user.bankURL);
             }
         }
@@ -64,38 +64,42 @@ open class HBCIDialog {
     
     func sendMessage(_ msg:HBCIMessage) throws ->HBCIResultMessage? {
         if !msg.enumerateSegments() {
-            logDebug(msg.description);
+            logInfo(msg.description);
             return nil;
         }
         
         if !user.securityMethod.signMessage(msg) {
-            logDebug(msg.description);
+            logInfo(msg.description);
             return nil;
         }
         if !msg.finalize() {
-            logDebug(msg.description);
+            logInfo(msg.description);
             return nil;
         }
         if !msg.validate() {
-            logDebug(msg.description);
+            logInfo(msg.description);
             return nil;
         }
         
-        //print(msg.description)
+        logDebug("Message payload:");
+        logDebug(msg.description);
         
         if let msg_crypted = user.securityMethod.encryptMessage(msg, dialog: self) {
             
             if !msg_crypted.validate() {
-                logDebug(msg_crypted.description);
+                logInfo(msg_crypted.description);
                 return nil;
             }
             
             let msgData = msg_crypted.messageData();
-            //print(msg_crypted.messageString());
+            logDebug("Encrypted message:");
+            logDebug(msg.messageString());
             
             // send message to bank
             do {
                 let result = try self.connection.sendMessage(msgData);
+                logDebug("Message received:");
+                logDebug(String(data: result, encoding: String.Encoding.isoLatin1));
                 
                 let resultMsg_crypted = HBCIResultMessage(syntax: self.syntax);
                 if resultMsg_crypted.parse(result) {
@@ -105,25 +109,27 @@ open class HBCIDialog {
                     self.messageNum += 1;
                     if let value = user.securityMethod.decryptMessage(resultMsg_crypted, dialog: self) {
                         if value.checkResponses() {
+                            logDebug("Result Message:");
+                            logDebug(value.description);
                             return value
                         } else {
                             logError("Error message from bank");
-                            logDebug(String(data:result, encoding:String.Encoding.isoLatin1));
-                            logDebug(String(data: result, encoding: String.Encoding.isoLatin1));
-                            logDebug("Message sent: " + msg.messageString());
+                            logInfo(String(data:result, encoding:String.Encoding.isoLatin1));
+                            logInfo(String(data: result, encoding: String.Encoding.isoLatin1));
+                            logInfo("Message sent: " + msg.messageString());
                             return value;
                         }
                     }
-                    logDebug("Message could not be decrypted");
-                    logDebug(String(data: result, encoding: String.Encoding.isoLatin1));
+                    logInfo("Message could not be decrypted");
+                    logInfo(String(data: result, encoding: String.Encoding.isoLatin1));
                     return nil;
                 } else {
-                    logDebug("Message could not be parsed");
-                    logDebug(String(data: result, encoding: String.Encoding.isoLatin1));
+                    logInfo("Message could not be parsed");
+                    logInfo(String(data: result, encoding: String.Encoding.isoLatin1));
                     return nil;
                 }
             } catch {
-                logDebug("Message sent: " + msg.messageString());
+                logInfo("Message sent: " + msg.messageString());
             }
         }
         return nil;
@@ -131,7 +137,7 @@ open class HBCIDialog {
 
     open func dialogInit() throws ->HBCIResultMessage? {
         if user.sysId == nil {
-            logDebug("Dialog Init failed: missing sysId");
+            logInfo("Dialog Init failed: missing sysId");
             return nil;
         }
         
@@ -154,7 +160,6 @@ open class HBCIDialog {
         
         if let result = try sendMessage("DialogInit", values: values) {
             if result.isOk() {
-                result.updateParameterForUser(self.user);
                 return result;
             }
         }
@@ -204,7 +209,7 @@ open class HBCIDialog {
                     if seg.name == "SyncRes" {
                         user.sysId = seg.elementValueForPath("sysid") as? String;
                         if user.sysId == nil {
-                            logDebug("SysID could not be found");
+                            logInfo("SysID could not be found");
                         }
                     }
                 }
@@ -230,7 +235,7 @@ open class HBCIDialog {
             
             if supportedVersions.count == 0 {
                 // this process is not supported by the bank
-                logDebug("Process \(segName) is not supported");
+                logInfo("Process \(segName) is not supported");
                 return nil;
             }
             // now sort the versions - we take the latest supported version
@@ -243,7 +248,7 @@ open class HBCIDialog {
                 }
             }
         } else {
-            logDebug("Segment \(segName) is not supported by HBCI4Swift");
+            logInfo("Segment \(segName) is not supported by HBCI4Swift");
         }
         return nil;
     }
@@ -267,7 +272,7 @@ open class HBCIDialog {
                     
                     if supportedVersions.count == 0 {
                         // this process is not supported by the bank
-                        logDebug("Process \(segName) is not supported");
+                        logInfo("Process \(segName) is not supported");
                         return nil;
                     }
                     // now sort the versions - we take the latest supported version
@@ -281,7 +286,7 @@ open class HBCIDialog {
                         }
                     }
                 } else {
-                    logDebug("Segment \(segName) is not supported by HBCI4Swift");
+                    logInfo("Segment \(segName) is not supported by HBCI4Swift");
                 }
             }
         }

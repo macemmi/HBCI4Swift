@@ -28,7 +28,7 @@ class HBCITanProcess_2 {
                         return try code.render();
                     }
                     catch {
-                        logDebug("Unable to parse flicker code \(trimmed)");
+                        logInfo("Unable to parse flicker code \(trimmed)");
                         return nil;
                     }
                 }                
@@ -90,12 +90,12 @@ class HBCITanProcess_2 {
                 do {
                     if !(try msg.sendNoTan()) { return false };
                 } catch {
-                    logDebug("Error sending first TAN step message");
+                    logInfo("Error sending first TAN step message");
                     return false;
                 }
                 // check if we have a valid reference
                 if tanOrder.orderRef == nil {
-                    logDebug("TAN order reference could not be determined");
+                    logInfo("TAN order reference could not be determined");
                     return false;
                 }
                 
@@ -133,7 +133,7 @@ class HBCITanProcess_2 {
                             }
                         } catch {
                             // order could not be sent
-                            logDebug("Error sending second TAN step message");
+                            logInfo("Error sending second TAN step message");
                         }
                     }
                 }

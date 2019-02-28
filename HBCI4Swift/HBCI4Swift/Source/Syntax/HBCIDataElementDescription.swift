@@ -41,11 +41,11 @@ class HBCIDataElementDescription: HBCISyntaxElementDescription {
         
         if let type = self.type {
             if(!setDataType(type)) {
-                logDebug("Syntax file error: unknown data type \(self.type!)");
+                logInfo("Syntax file error: unknown data type \(self.type!)");
                 throw HBCIError.syntaxFileError;
             }
         } else {
-            logDebug("Syntax file error: Data Element has no type");
+            logInfo("Syntax file error: Data Element has no type");
             throw HBCIError.syntaxFileError;
         }
         
@@ -142,7 +142,7 @@ class HBCIDataElementDescription: HBCISyntaxElementDescription {
                             // formatter returns a NSDecimalNumber
                             de.value = (value as! NSDecimalNumber).rounding(accordingToBehavior: _numberHandler);
                         } else {
-                            logDebug("Parse error: string \(sValue) cannot be converted to a number");
+                            logInfo("Parse error: string \(sValue) cannot be converted to a number");
                             return nil;
                         }
                         
@@ -151,14 +151,14 @@ class HBCIDataElementDescription: HBCISyntaxElementDescription {
                         if let date = _dateFormatter.date(from: sValue) {
                             de.value = date;
                         } else {
-                            logDebug("Parse error: string \(sValue) cannot be converted to a date");
+                            logInfo("Parse error: string \(sValue) cannot be converted to a date");
                             return nil;
                         }
                     case .time:
                         if let time = _timeFormatter.date(from: sValue) {
                             de.value = time;
                         } else {
-                            logDebug("Parse error: string \(sValue) cannot be converted to a time");
+                            logInfo("Parse error: string \(sValue) cannot be converted to a time");
                             return nil;
                         }
                     case .binary:
@@ -169,7 +169,7 @@ class HBCIDataElementDescription: HBCISyntaxElementDescription {
                                 de.value = binaries[idx];
                             }
                         } else {
-                            logDebug("Invalid binary tag: \(sValue)");
+                            logInfo("Invalid binary tag: \(sValue)");
                             return nil;
                         }
                     case .numeric:
@@ -180,7 +180,7 @@ class HBCIDataElementDescription: HBCISyntaxElementDescription {
                     }
                 }
             } else {
-                logDebug("Parse error: data cannot be converted to String");
+                logInfo("Parse error: data cannot be converted to String");
                 return nil;
             }
         } 

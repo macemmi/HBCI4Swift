@@ -103,7 +103,7 @@ class HBCIMT94xParser {
                 }
             }
         } catch let err as NSError {
-            logDebug("MT94xParse error: "+err.description);
+            logInfo("MT94xParse error: "+err.description);
             throw HBCIError.parseError;
         }
         return tags;
@@ -122,7 +122,7 @@ class HBCIMT94xParser {
                 let fieldTag = tag86String.substring(with: NSRange(location: range1.location+1, length: 2));
                 let fieldNum = Int(fieldTag);
                 if fieldNum == nil {
-                    logDebug("MT94xParse error: field tag \(fieldTag) is not a number");
+                    logInfo("MT94xParse error: field tag \(fieldTag) is not a number");
                     throw HBCIError.parseError;
                 }
 
@@ -139,7 +139,7 @@ class HBCIMT94xParser {
                 range1 = range2;
             }
         } catch let err as NSError {
-            logDebug("MT94xParse error: "+err.description);
+            logInfo("MT94xParse error: "+err.description);
             throw HBCIError.parseError;
         }
         return fields;
@@ -170,7 +170,7 @@ class HBCIMT94xParser {
         if item.valutaDate == nil {
             item.valutaDate = checkSpecialDate(valutaDateString as NSString);
             if item.valutaDate == nil {
-                logDebug("MT94xParse error: could not determine valuta date from "+valutaDateString);
+                logInfo("MT94xParse error: could not determine valuta date from "+valutaDateString);
                 throw HBCIError.parseError;
             }
         }
@@ -187,7 +187,7 @@ class HBCIMT94xParser {
                 let postingMonth = Int(postingDateString.substringToIndex(2));
                 
                 if valutaMonth == nil || postingMonth == nil {
-                    logDebug("MT94xParse error: could not extract month from dates "+valutaDateString+"/"+postingDateString);
+                    logInfo("MT94xParse error: could not extract month from dates "+valutaDateString+"/"+postingDateString);
                     throw HBCIError.parseError;
                 }
                 
@@ -204,7 +204,7 @@ class HBCIMT94xParser {
                         }
                         postingDateString = String(format: "%0.2d", year)+postingDateString;
                     } else {
-                        logDebug("MT94xParse error: could not extract year from valuta date string "+valutaDateString);
+                        logInfo("MT94xParse error: could not extract year from valuta date string "+valutaDateString);
                         throw HBCIError.parseError;
                     }
                 } else {
@@ -215,7 +215,7 @@ class HBCIMT94xParser {
                 if item.date == nil {
                     item.date = checkSpecialDate(postingDateString as NSString);
                     if item.date == nil {
-                        logDebug("MT94xParse error: could not determine posting date from "+postingDateString);
+                        logInfo("MT94xParse error: could not determine posting date from "+postingDateString);
                         throw HBCIError.parseError;
                     }
                 }
@@ -241,13 +241,13 @@ class HBCIMT94xParser {
             
             range = tagValue.range(of: "N", options: NSString.CompareOptions(), range: NSRange(location: location, length: tagValue.length-location));
             if range.location == NSNotFound {
-                logDebug("MT94xParse error: could not find N in tag61 (reststring: "+tagValue.substring(from: location));
+                logInfo("MT94xParse error: could not find N in tag61 (reststring: "+tagValue.substring(from: location));
                 throw HBCIError.parseError;
             }
             let valueString = tagValue.substring(with: NSRange(location: location, length: range.location-location));
             item.value = HBCIUtils.numberFormatter().number(from: valueString) as? NSDecimalNumber;
             if item.value == nil {
-                logDebug("MT94xParse error: could not parse value from "+valueString);
+                logInfo("MT94xParse error: could not parse value from "+valueString);
                 throw HBCIError.parseError;
             }
             
@@ -336,7 +336,7 @@ class HBCIMT94xParser {
             }
         }
         catch {
-            logDebug("MT94xParse error: not able to get field86 tags from "+fieldString);
+            logInfo("MT94xParse error: not able to get field86 tags from "+fieldString);
             throw HBCIError.parseError;
         }
     }
@@ -346,7 +346,7 @@ class HBCIMT94xParser {
         let dateString = s.substring(with: NSRange(location: 1, length: 6));
         let postingDate = HBCIUtils.dateFormatter().date(from: dateString);
         if postingDate == nil {
-            logDebug("MT94xParse error: cannot parse posting date from "+dateString);
+            logInfo("MT94xParse error: cannot parse posting date from "+dateString);
             return nil;
         }
         let currency = s.substring(with: NSRange(location: 7, length: 3));
@@ -360,7 +360,7 @@ class HBCIMT94xParser {
             value = HBCIUtils.round(value);
             return HBCIAccountBalance(value: value, date: postingDate!, currency: currency);
         } else {
-            logDebug("MT94xParse error: cannot parse value from "+valueString);
+            logInfo("MT94xParse error: cannot parse value from "+valueString);
             return nil;
         }
     }
@@ -416,12 +416,12 @@ class HBCIMT94xParser {
         if tag.tag == "20" {
             statement.orderRef = tag.value as String;
         } else {
-            logDebug("MT94xParse error: tag20 field is missing in MT94x entry "+rawStatementString);
+            logInfo("MT94xParse error: tag20 field is missing in MT94x entry "+rawStatementString);
             // we will nevertheless go on
         }
         
         if idx >= tags.count {
-            logDebug(missingTagsString);
+            logInfo(missingTagsString);
             throw HBCIError.parseError;
         }
         tag = tags[idx]; idx += 1;
@@ -429,11 +429,11 @@ class HBCIMT94xParser {
         if tag.tag == "21" {
             statement.statementRef = tag.value as String;
             if idx >= tags.count {
-                logDebug(missingTagsString);
+                logInfo(missingTagsString);
                 throw HBCIError.parseError;
             }
             if idx >= tags.count {
-                logDebug(missingTagsString);
+                logInfo(missingTagsString);
                 throw HBCIError.parseError;
             }
             tag = tags[idx]; idx += 1;
@@ -443,36 +443,36 @@ class HBCIMT94xParser {
             statement.accountName = tag.value as String;
             parseAccountName(tag.value, statement: statement);
         } else {
-            logDebug("MT94xParse error: tag25 is missing in MT94x entry "+rawStatementString);
+            logInfo("MT94xParse error: tag25 is missing in MT94x entry "+rawStatementString);
             // we will nevertheless go on
         }
         
         // statement number
         if idx >= tags.count {
-            logDebug(missingTagsString);
+            logInfo(missingTagsString);
             throw HBCIError.parseError;
         }
         tag = tags[idx]; idx += 1;
         if tag.tag == "28C" {
             statement.statementNumber = tag.value as String;
         } else {
-            logDebug("MT94xParse error: tag28C is missing in MT94x entry "+rawStatementString);
+            logInfo("MT94xParse error: tag28C is missing in MT94x entry "+rawStatementString);
             // we will nevertheless go on
         }
         
         if idx >= tags.count {
-            logDebug(missingTagsString);
+            logInfo(missingTagsString);
             throw HBCIError.parseError;
         }
         tag = tags[idx]; idx += 1;
         if tag.tag == "60F" || tag.tag == "60M" {
             statement.startBalance = parseBalance(tag.value);
             if statement.startBalance == nil {
-                logDebug("MT94xParse error: cannot parse start balance in MT94x entry "+rawStatementString);
+                logInfo("MT94xParse error: cannot parse start balance in MT94x entry "+rawStatementString);
                 throw HBCIError.parseError;
             }
         } else {
-            logDebug("MT94xParse error: start balance is missing in MT94x entry "+rawStatementString);
+            logInfo("MT94xParse error: start balance is missing in MT94x entry "+rawStatementString);
             throw HBCIError.parseError;
         }
         
@@ -489,12 +489,12 @@ class HBCIMT94xParser {
                 try parseTag61ForItem(item, tagValue: tag.value);
             }
             catch {
-                logDebug("MT94xParseError: cannot parse tag61 from "+(tag.value as String));
+                logInfo("MT94xParseError: cannot parse tag61 from "+(tag.value as String));
                 throw HBCIError.parseError;
             }
             
             if idx >= tags.count {
-                logDebug(missingTagsString);
+                logInfo(missingTagsString);
                 throw HBCIError.parseError;
             }
             tag = tags[idx]; idx += 1;
@@ -503,11 +503,11 @@ class HBCIMT94xParser {
                     try parseTag86ForItem(item, tagValue: tag.value);
                 }
                 catch {
-                    logDebug("MT94xParseError: cannot parse tag86 from "+(tag.value as String));
+                    logInfo("MT94xParseError: cannot parse tag86 from "+(tag.value as String));
                     throw HBCIError.parseError;
                 }
                 if idx >= tags.count {
-                    logDebug(missingTagsString);
+                    logInfo(missingTagsString);
                     throw HBCIError.parseError;
                 }
                 tag = tags[idx]; idx += 1;
@@ -519,11 +519,11 @@ class HBCIMT94xParser {
         if tag.tag == "62F" || tag.tag == "62M" {
             statement.endBalance = parseBalance(tag.value);
             if statement.startBalance == nil {
-                logDebug("MT94xParse error: cannot parse end balance in MT94x entry "+rawStatementString);
+                logInfo("MT94xParse error: cannot parse end balance in MT94x entry "+rawStatementString);
                 // we will nevertheless go on                
             }
         } else {
-            logDebug("MT94xParse error: end balance is missing in MT94x entry "+rawStatementString);
+            logInfo("MT94xParse error: end balance is missing in MT94x entry "+rawStatementString);
             // we will nevertheless go on
         }
         
@@ -554,7 +554,7 @@ class HBCIMT94xParser {
                 trimmed = trimmed.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) as NSString;
                 let ending = trimmed.substring(from: trimmed.length-3);
                 if ending != "\r\n-" {
-                    logDebug("MT94xParse error: cannot parse MT94x statement: "+(trimmed as String));
+                    logInfo("MT94xParse error: cannot parse MT94x statement: "+(trimmed as String));
                     throw HBCIError.parseError;
                 }
                 trimmed = trimmed.substring(to: trimmed.length-3) as NSString;
@@ -563,7 +563,7 @@ class HBCIMT94xParser {
                     statements.append(statement);
                 }
                 catch {
-                    logDebug("MT94xParse error: cannot parse MT94x statement: "+(trimmed as String));
+                    logInfo("MT94xParse error: cannot parse MT94x statement: "+(trimmed as String));
                     throw HBCIError.parseError;
                 }
             }

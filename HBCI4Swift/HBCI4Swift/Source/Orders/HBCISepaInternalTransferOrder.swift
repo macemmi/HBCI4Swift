@@ -26,7 +26,7 @@ open class HBCISepaInternalTransferOrder : HBCIAbstractSepaTransferOrder {
     open override func enqueue() ->Bool {
 
         if transfer.date != nil {
-            logDebug("SEPA Transfer: date is not allowed");
+            logInfo("SEPA Transfer: date is not allowed");
             return false;
         }
         
