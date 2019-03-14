@@ -61,14 +61,17 @@ class HBCITanProcess_2 {
             if let tanOrder = HBCITanOrder(message: msg) {
                 tanOrder.process = "4";
                 
-                var zkaName:String?
-                var flicker:String?
+                var hhdudString:String?
+                var tanMethodID = "";
+                var challengeType:HBCIChallengeType = .none;
                 
                 // do we need tan medium information?
                 let parameters = dialog.user.parameters;
                 if let processInfos = parameters.tanProcessInfos, let secfunc = dialog.user.tanMethod {
+                    logDebug("we work with secfunc \(secfunc)");
+                    
                     for tanMethod in processInfos.tanMethods {
-                        if tanMethod.identifier == secfunc {
+                        if tanMethod.secfunc == secfunc {
                             // check parameters for the selected Tan Method
                             let needMedia = tanMethod.needTanMedia ?? "0";
                             let numMedia = tanMethod.numActiveMedia ?? 0;
@@ -76,10 +79,21 @@ class HBCITanProcess_2 {
                                 tanOrder.tanMediumName = dialog.user.tanMediumName;
                             }
                             
-                            zkaName = tanMethod.zkaMethodName;
+                            tanMethodID = tanMethod.identifier;
                         }
                     }
+                    if tanMethodID == "" {
+                        logInfo("No tan method found for secfunc \(secfunc)");
+                    }
+                } else {
+                    if parameters.tanProcessInfos == nil {
+                        logInfo("No TAN process parameters available");
+                    }
+                    if dialog.user.tanMethod == nil {
+                        logInfo("No TAN method specified");
+                    }
                 }
+                logDebug("tanMethodID is \(tanMethodID)");
                 
                 // now add Tan order to the same message
                 if !tanOrder.enqueue() {
@@ -100,18 +114,28 @@ class HBCITanProcess_2 {
                 }
                 
                 // now we need the TAN -> callback
-                if let zkaName = zkaName {
-                    if zkaName.substringToIndex(3) == "HHD" {
-                        if tanOrder.challenge_hhd_uc == nil {
-                            logWarning("ZKA method name is \(zkaName) but no HHD challenge - we nevertheless go on");
-                            flicker = parseFlickerCode(tanOrder.challenge, hhduc: nil);
-                        }
+                if tanMethodID.prefix(3) == "HHD" && tanMethodID.suffix(3) == "OPT" {
+                    challengeType = .flicker;
+                    if tanOrder.challenge_hhd_uc == nil {
+                        logWarning("TAN method is \(tanMethodID) but no HHD challenge - we nevertheless go on");
+                    }
+                    if let hhduc = tanOrder.challenge_hhd_uc {
+                        hhdudString = parseFlickerCode(tanOrder.challenge, hhduc: hhduc);
                     }
                 }
-                if let hhduc = tanOrder.challenge_hhd_uc {
-                    flicker = parseFlickerCode(tanOrder.challenge, hhduc: hhduc);
+                if tanMethodID.prefix(2) == "MS" {
+                    challengeType = .photo;
+                    if let hhduc = tanOrder.challenge_hhd_uc {
+                        hhdudString = hhduc.base64EncodedString();
+                        if hhdudString == nil {
+                            logInfo("TanMethod is \(tanMethodID) but hhducString data is empty!");
+                        }
+                    } else {
+                        logInfo("TanMethod is \(tanMethodID) but HHDUC is empty!");
+                    }
                 }
-                let tan = try HBCIDialog.callback!.getTan(dialog.user, challenge: tanOrder.challenge, challenge_hdd_uc: flicker);
+                
+                let tan = try HBCIDialog.callback!.getTan(dialog.user, challenge: tanOrder.challenge, challenge_hhd_uc: hhdudString, type: challengeType);
                     
                 if let tanMsg = HBCICustomMessage.newInstance(dialog) {
                     if let tanOrder2 = HBCITanOrder(message: tanMsg) {
