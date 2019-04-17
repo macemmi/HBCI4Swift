@@ -142,6 +142,9 @@ open class HBCIParameters {
                     result.append(method);
                 }
             }
+            if result.count == 0 {
+                logError("Keine unterstützten TAN-Methoden gefunden");
+            }
         }
         return result;
     }
@@ -174,7 +177,9 @@ open class HBCIParameters {
             
             if supportedVersions.count == 0 {
                 // this process is not supported by the bank
-                return nil;
+                // we nevertheless go on - this sometimes works
+                logDebug("Segment " + name + " is not supported by bank");
+                supportedVersions = segVersions.versionNumbers;
             }
             // now sort the versions - we take the latest supported version
             supportedVersions.sort(by: >);

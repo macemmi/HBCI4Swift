@@ -155,6 +155,7 @@ class HBCISyntax {
                                 }
                             }
                         }
+                        logDebug("Segment code \(code) with version \(version) is not supported");
                         return nil;  // code and/or version are not supported, just continue
                     }
                 }

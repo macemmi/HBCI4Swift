@@ -83,6 +83,7 @@ func checkForDataTag(_ pointer:UnsafePointer<CChar>) ->(dataLength:Int, tagLengt
 }
 
 open class HBCIResultMessage {
+    open var hbciParameterUpdated = false;
     let syntax:HBCISyntax;
     var binaries = Array<Data>();
     var segmentData = Array<Data>();
@@ -110,8 +111,9 @@ open class HBCIResultMessage {
         return result;
     }
 
-    
-    func parse(_ msgData:Data) ->Bool {
+    func extractSegmentData(_ msgData:Data) ->Array<Data>? {
+        var segmentData = Array<Data>();
+
         // first extract binary data
         let content = (msgData as NSData).bytes.bindMemory(to: CChar.self, capacity: msgData.count);
         var target = [CChar](repeating: 0, count: msgData.count);
@@ -142,7 +144,7 @@ open class HBCIResultMessage {
                     } else {
                         // issue during conversion
                         logInfo("tag \(tag) cannot be converted to Latin1");
-                        return false;
+                        return nil;
                     }
                     continue;
                 }
@@ -168,7 +170,7 @@ open class HBCIResultMessage {
             if p.pointee == HBCIChar.quote.rawValue && !isEscaped(p) {
                 // now we have a segment in segContent
                 let data = Data(bytes: segContent, count: segSize);
-                self.segmentData.append(data);
+                segmentData.append(data);
                 
                 // we convert to String as well for debugging
                 if let s = NSString(data: data, encoding: String.Encoding.isoLatin1.rawValue) {
@@ -179,9 +181,21 @@ open class HBCIResultMessage {
             i += 1;
             p = p.advanced(by: 1);
         }
+        return segmentData;
+    }
+    
+    func parse(_ msgData:Data) ->Bool {
+        if let segmentData = extractSegmentData(msgData) {
+            self.segmentData = segmentData;
+        }
         
         // now we have all segment strings and we can start to parse each segment
         for segData in self.segmentData {
+            // we convert to String as well for debugging
+            if let s = NSString(data: segData, encoding: String.Encoding.isoLatin1.rawValue) {
+                self.segmentStrings.append(s);
+            }
+
             do {
                 if let segment = try self.syntax.parseSegment(segData, binaries: self.binaries) {
                     self.segments.append(segment);
@@ -273,7 +287,8 @@ open class HBCIResultMessage {
         
     func updateParameterForUser(_ user:HBCIUser) {
         // find BPD version
-        var updateParameters = false;
+        var updateBankParameters = false;
+        var updateUserParameters = false;
         
         for seg in segments {
             if seg.name == "BPA" {
@@ -281,7 +296,7 @@ open class HBCIResultMessage {
                     if version > user.parameters.bpdVersion {
                         user.parameters.bpdVersion = version;
                         user.bankName = seg.elementValueForPath("kiname") as? String;
-                        updateParameters = true;
+                        updateBankParameters = true;
                     }
                 }
             }
@@ -289,24 +304,100 @@ open class HBCIResultMessage {
                 if let version = valueForPath("UPA.version") as? Int {
                     if version > user.parameters.updVersion {
                         user.parameters.updVersion = version;
-                        updateParameters = true;
+                        updateUserParameters = true;
                     }
                 }
             }
         }
         
-        // always update if both versions are 0
-        if user.parameters.bpdVersion == 0 && user.parameters.updVersion == 0 {
-            updateParameters = true;
+        if user.parameters.bpdVersion == 0 {
+            updateBankParameters = true;
         }
         
-        if updateParameters == false {
+        if user.parameters.updVersion == 0 {
+            updateUserParameters = true;
+        }
+        
+        if updateBankParameters == false && updateUserParameters == false {
             return;
         }
         
+        var oldSegments = [Data]();
+        
+        if let bpData = user.parameters.bpData {
+            if let oldSegs = extractSegmentData(bpData) {
+                oldSegments = oldSegs;
+            }
+        }
+        
+        var addedSegments = [Data]();
+        
+        for data in self.segmentData {
+            if let code = NSString(bytes: (data as NSData).bytes, length: 5, encoding: String.Encoding.isoLatin1.rawValue) {
+                let bankSegment = code == "HIUPA" || code == "HIBPA" || (code.hasPrefix("HI") && code.hasSuffix("S"));
+                let userSegment = code == "HIUPD";
+                
+                // special case for HIRMS - supported TAN methods are stored in parameter 3920
+                if code == "HIRMS" {
+                    guard let s = NSString(data: data, encoding: String.Encoding.isoLatin1.rawValue) else {
+                        continue;
+                    }
+                    if s.range(of: "3920").location == NSNotFound {
+                        continue;
+                    }
+                }
+                
+                if (bankSegment && updateBankParameters) || (userSegment && updateUserParameters) {
+                    // code is a valid segment code - remove it from the list of old segments
+                    var idx = 0;
+                    for oldData in oldSegments {
+                        if let _code = NSString(bytes: (oldData as NSData).bytes, length: 5, encoding: String.Encoding.isoLatin1.rawValue) {
+                            if code == _code {
+                                oldSegments.remove(at: idx);
+                                continue;
+                            }
+                        }
+                        idx += 1;
+                    }
+                    addedSegments.append(data);
+                }
+            }
+            if let code = NSString(bytes: (data as NSData).bytes, length: 6, encoding: String.Encoding.isoLatin1.rawValue) {
+                let bankSegment = code == "DIPINS" || (code.hasPrefix("HI") && code.hasSuffix("S"));
+                if (bankSegment && updateBankParameters) {
+                    // code is a valid segment code - remove it from the list of old segments
+                    var idx = 0;
+                    for oldData in oldSegments {
+                        if let _code = NSString(bytes: (oldData as NSData).bytes, length: 6, encoding: String.Encoding.isoLatin1.rawValue) {
+                            if code == _code {
+                                oldSegments.remove(at: idx);
+                                continue;
+                            }
+                        }
+                        idx += 1;
+                    }
+                    addedSegments.append(data);
+                }
+            }
+        }
+        
+        var newData = Data();
+        
+        for data in oldSegments {
+            newData.append(data);
+        }
+        for data in addedSegments {
+            newData.append(data);
+        }
+        
         // now we update user and bank parameters
-        user.parameters = HBCIParameters(segments: segments, syntax: syntax);
-        user.parameters.bpData = extractBPData();
+        do {
+            user.parameters = try HBCIParameters(data: newData, syntax: syntax);
+            self.hbciParameterUpdated = true;
+        }
+        catch {
+            logInfo("Could not process HBCI parameters");
+        }
     }
     
     func segmentWithReference(_ number:Int, orderName:String) ->HBCISegment? {

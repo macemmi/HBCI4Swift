@@ -160,6 +160,7 @@ open class HBCIDialog {
         
         if let result = try sendMessage("DialogInit", values: values) {
             if result.isOk() {
+                result.updateParameterForUser(self.user);
                 return result;
             }
         }
