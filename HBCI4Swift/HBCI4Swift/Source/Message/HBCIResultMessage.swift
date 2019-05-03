@@ -469,13 +469,13 @@ open class HBCIResultMessage {
         var success = true;
         for response in responsesForMessage() {
             if Int(response.code) >= 9000 {
-                logError("Message from bank: "+response.description);
+                logError("Banknachricht: "+response.description);
                 success = false;
             }
         }
         for response in responsesForSegments() {
             if Int(response.code) >= 9000 || (!success && Int(response.code) >= 3000) {
-                logError("Message from bank: "+response.description);
+                logError("Banknachricht: "+response.description);
                 success = false;
             }
         }

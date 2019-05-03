@@ -89,8 +89,10 @@ open class HBCICustomMessage : HBCIMessage {
             
             if supportedVersions.count == 0 {
                 // this process is not supported by the bank
-                logInfo("Process \(segName) is not supported");
-                return nil;
+                logInfo("Process \(segName) is not supported, no parameter information found");
+                // In some cases the bank does not send any Parameter but the process is still supported
+                // let's just try it out
+                supportedVersions = segVersions.versionNumbers;
             }
             // now sort the versions - we take the latest supported version
             supportedVersions.sort(by: >);
@@ -149,10 +151,10 @@ open class HBCICustomMessage : HBCIMessage {
                 self.success = true;
                 for response in responses {
                     if Int(response.code) >= 9000 {
-                        logError("Message from Bank: "+response.description);
+                        logError("Banknachricht: "+response.description);
                         self.success = false;
                     } else {
-                        logInfo("Message from Bank: "+response.description);
+                        logInfo("Banknachricht: "+response.description);
                     }
                 }
                 

@@ -71,6 +71,13 @@ class HBCIMT94xParser {
         self.mt94xString = mt94xString;
     }
     
+    func removeWhitespace(_ source:String) -> String {
+        var res = source.replacingOccurrences(of: " ", with: "");
+        res = source.replacingOccurrences(of: "\r", with: "");
+        res = source.replacingOccurrences(of: "\n", with: "");
+        return res;
+    }
+    
     func getTagsFromString(_ mtString:NSString) throws ->Array<HBCIMT94xTag> {
         let pattern = "\r\n:21:|\r\n:25:|\r\n:28C:|\r\n:60F:|\r\n:60M:|\r\n:61:|\r\n:86:|\r\n:62F:|\r\n:62M:|\r\n:64:|\r\n:65:";
         var nextTagRange, valueRange, residualRange: NSRange;
@@ -303,27 +310,37 @@ class HBCIMT94xParser {
             for field in fields {
                 let fieldNum = field.field;
                 switch fieldNum {
-                case 0: item.transactionText = field.value;
-                case 10: item.primaNota = field.value;
+                case 0: item.transactionText = removeWhitespace(field.value);
+                case 10: item.primaNota = removeWhitespace(field.value);
                 case 30:
                     if (item.isSEPA!) {
-                        item.remoteBIC = field.value.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines);
+                        let remoteBIC = removeWhitespace(field.value);
+                        if remoteBIC.count > 11 {
+                            logInfo("MT94xParse error: remoteBIC too long: "+remoteBIC);
+                            throw HBCIError.parseError;
+                        }
+                        item.remoteBIC = remoteBIC;
                     } else {
-                        item.remoteBankCode = field.value.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines);
+                        item.remoteBankCode = removeWhitespace(field.value);
                     }
                 case 20: purpose += field.value;
                 case 31:
                     if item.isSEPA! {
-                        item.remoteIBAN = field.value.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines);
+                        let remoteIBAN = removeWhitespace(field.value);
+                        if remoteIBAN.count > 34 {
+                            logInfo("MT94xParse error: remoteIBAN too long: "+remoteIBAN);
+                            throw HBCIError.parseError;
+                        }
+                        item.remoteIBAN = remoteIBAN;
                     } else {
-                        item.remoteAccountNumber = field.value.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines);
+                        item.remoteAccountNumber = removeWhitespace(field.value);
                     }
-                case 32: item.remoteName = field.value.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines);
+                case 32: item.remoteName = removeWhitespace(field.value);
                 case 33:
                     if item.remoteName != nil {
-                        item.remoteName! += field.value.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines);
+                        item.remoteName! += removeWhitespace(field.value);
                     } else {
-                        item.remoteName = field.value.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines);
+                        item.remoteName = removeWhitespace(field.value);
                     }
                 default:
                     if (fieldNum >= 20 && fieldNum <= 29) || (fieldNum >= 60 && fieldNum <= 63) {

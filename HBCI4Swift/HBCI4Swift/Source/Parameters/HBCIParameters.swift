@@ -143,8 +143,11 @@ open class HBCIParameters {
                 }
             }
             if result.count == 0 {
-                logError("Keine unterstützten TAN-Methoden gefunden");
+                logInfo("No supported TAN methods found - we return all methods we have infos for...");
+                result = tpi.tanMethods;
             }
+        } else {
+            logError("Keine unterstützten TAN-Methoden gefunden");
         }
         return result;
     }
@@ -178,7 +181,7 @@ open class HBCIParameters {
             if supportedVersions.count == 0 {
                 // this process is not supported by the bank
                 // we nevertheless go on - this sometimes works
-                logDebug("Segment " + name + " is not supported by bank");
+                logInfo("Segment " + name + " has no version information from bank - we nevertheless continue...");
                 supportedVersions = segVersions.versionNumbers;
             }
             // now sort the versions - we take the latest supported version
@@ -227,14 +230,18 @@ open class HBCIParameters {
                         if let ptInfos = self.pinTanInfos {
                             if ptInfos.supportedSegs[code] == nil {
                                 // this is not supported via PIN/TAN
+                                logInfo("Segment code \(code) is not supported with PIN/TAN");
                                 return false;
                             }
                         }
                         return true;
                     }
                 }
+                logInfo("Segment code \(segmentCode) is not supported for account \(accountNumber ?? "") subNumber \(accountSubNumber ?? "")");
+                return false;
             }
         }
+        logInfo("No account information found for account \(accountNumber ?? "") subNumber \(accountSubNumber ?? "")");
         return false;
     }
     

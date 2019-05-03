@@ -113,7 +113,7 @@ open class HBCIDialog {
                             logDebug(value.description);
                             return value
                         } else {
-                            logError("Error message from bank");
+                            logError("Banknachricht");
                             logInfo(String(data:result, encoding:String.Encoding.isoLatin1));
                             logInfo(String(data: result, encoding: String.Encoding.isoLatin1));
                             logInfo("Message sent: " + msg.messageString());
@@ -219,88 +219,5 @@ open class HBCIDialog {
         }
         return nil;
     }
-    
-    func segmentWithName(_ segName:String) ->HBCISegment? {
-        if let segVersions = self.syntax.segs[segName] {
-            // now find the right segment version
-            // check which segment versions are supported by the bank
-            var supportedVersions = Array<Int>();
-            for seg in user.parameters.bpSegments {
-                if seg.name == segName+"Par" {
-                    // check if this version is also supported by us
-                    if segVersions.isVersionSupported(seg.version) {
-                        supportedVersions.append(seg.version);
-                    }
-                }
-            }
-            
-            if supportedVersions.count == 0 {
-                // this process is not supported by the bank
-                logInfo("Process \(segName) is not supported");
-                return nil;
-            }
-            // now sort the versions - we take the latest supported version
-            supportedVersions.sort(by: >);
-            
-            if let sd = segVersions.segmentWithVersion(supportedVersions.first!) {
-                if let segment = sd.compose() as? HBCISegment {
-                    segment.name = segName;
-                    return segment;
-                }
-            }
-        } else {
-            logInfo("Segment \(segName) is not supported by HBCI4Swift");
-        }
-        return nil;
-    }
-    
-    
-    func customMessageForSegment(_ segName:String) ->HBCIMessage? {
-        if let md = self.syntax.msgs["CustomMessage"] {
-            if let msg = md.compose() as? HBCIMessage {
-                if let segVersions = self.syntax.segs[segName] {
-                    // now find the right segment version
-                    // check which segment versions are supported by the bank
-                    var supportedVersions = Array<Int>();
-                    for seg in user.parameters.bpSegments {
-                        if seg.name == segName+"Par" {
-                            // check if this version is also supported by us
-                            if segVersions.isVersionSupported(seg.version) {
-                                supportedVersions.append(seg.version);
-                            }
-                        }
-                    }
-                    
-                    if supportedVersions.count == 0 {
-                        // this process is not supported by the bank
-                        logInfo("Process \(segName) is not supported");
-                        return nil;
-                    }
-                    // now sort the versions - we take the latest supported version
-                    supportedVersions.sort(by: >);
-                    
-                    if let sd = segVersions.segmentWithVersion(supportedVersions.first!) {
-                        if let segment = sd.compose() {
-                            segment.name = segName;
-                            msg.children.insert(segment, at: 2);
-                            return msg;
-                        }
-                    }
-                } else {
-                    logInfo("Segment \(segName) is not supported by HBCI4Swift");
-                }
-            }
-        }
-        return nil;
-    }
-
-    func sendCustomMessage(_ message:HBCICustomMessage) throws ->Bool {
-        if let _ = try sendMessage(message) {
-            return true;
-        }
-        return false;
-    }
-        
-    
     
 }

@@ -1265,6 +1265,18 @@
                 &GVP2;
                 <DEG type="ParTAN1" name="ParTAN"/>                
             </SEGVersion>
+            <SEGVersion id="2">
+                &GVP2;
+                <DEG type="ParTAN2" name="ParTAN"/>                
+            </SEGVersion>
+            <SEGVersion id="3">
+                &GVP2;
+                <DEG type="ParTAN3" name="ParTAN"/>                
+            </SEGVersion>
+            <SEGVersion id="4">
+                &GVP2;
+                <DEG type="ParTAN4" name="ParTAN"/>                
+            </SEGVersion>
             <SEGVersion id="5">
                 &GVP2;
                 <DEG type="ParTAN5" name="ParTAN"/>

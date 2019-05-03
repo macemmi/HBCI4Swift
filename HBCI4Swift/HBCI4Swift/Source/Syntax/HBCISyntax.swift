@@ -186,9 +186,10 @@ class HBCISyntax {
                 
                     if supportedVersions.count == 0 {
                         // this process is not supported by the bank
-                        logInfo("Process \(segName) is not supported");
-                        logInfo(user.parameters.bpSegments.description);
-                        return nil;
+                        logInfo("Process \(segName) is not supported for custom message");
+                        // In some cases the bank does not send any Parameter but the process is still supported
+                        // let's just try it out
+                        supportedVersions = segVersions.versionNumbers;
                     }
                     // now sort the versions - we take the latest supported version
                     supportedVersions.sort(by: >);
