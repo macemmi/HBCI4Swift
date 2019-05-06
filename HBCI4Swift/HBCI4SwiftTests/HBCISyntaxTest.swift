@@ -125,32 +125,32 @@ class HBCISyntaxTest: XCTestCase {
     
     func testSecProfile() {
         let toParse = "PIN:1:2:3+";
-        parseDEG("SecProfile", toParse: toParse);
+        _ = parseDEG("SecProfile", toParse: toParse);
     }
     
     func testSegHead() {
         let toParse = "HNHBK:1:3+000000001881+220+1111139025+1+1111139025:1'";
-        parseDEG("SegHead", toParse: toParse);
+        _ = parseDEG("SegHead", toParse: toParse);
     }
     
     func testParPinTan() {
         let toParse = "5:6:6:BENUTZER:KUNDEN:HKUEB:J:HKSUB:J:HKKAZ:N:HKSLA:J:HKTUE:J:HKTUA:J:HKTUB:N:HKTUL:J:HKAOM:J:HKTAN:N'";
-        parseDEG("PinTanInfo", toParse: toParse);
+        _ = parseDEG("PinTanInfo", toParse: toParse);
     }
     
     func testSepaInfo() {
         let toParse = "N:N:J:sepade?:xsd?:pain.001.001.02.xsd:urn?:swift?:xsd?:$pain.008.002.01.xsd:urn?:iso?:std?:iso?:20022?:tech?:xsd?:pain.001.002.03.xsd:urn?:iso?:std?:iso?:20022?:tech?:xsd?:pain.001.003.03.xsd:urn?:iso?:std?:iso?:20022?:tech?:xsd?:pain.008.002.02.xsd:urn?:iso?:std?:iso?:20022?:tech?:xsd?:pain.008.003.02.xsd:urn?:swift?:xsd?:$pain.001.002.02.xsd'";
-        parseDEG("ParSepaInfo", toParse: toParse);
+        _ = parseDEG("ParSepaInfo", toParse: toParse);
     }
     
     func testMsgHead() {
         let toParse = "HNHBK:1:3+000000006876+300+111106756+1+111106756:1'";
-        parseSEG("MsgHead", version: 3, toParse: toParse);
+        _ = parseSEG("MsgHead", version: 3, toParse: toParse);
     }
     
     func testKInfo() {
         let toParse = "HIUPD:116:6:4+XXXXXXXXXX::280:20050550++XXXXXXXXXX+0+EUR+Muster, Alexander++Giro++HKSAK:1::::+HKISA:1::::+HKSSP:1::::+HKDAB:1::::+HKTUB:1::::+HKUEB:1::::+HKSUB:1::::+HKKAZ:1::::+HKSAL:1::::+HKKDM:1::::+HKPAE:1::::+HKTLA:1::::+HKTLF:1::::+HKTSP:1::::+HKTAZ:1::::+HKLSW:1::::+HKTAN:1::::+HKSPA:1::::+HKCCS:1::::+HKCCM:1::::+HKCSE:1::::+HKCSB:1::::+HKCSA:1::::+HKCSL:1::::+HKCDE:1::::+HKCDB:1::::+HKCDN:1::::+HKCDL:1::::+HKDSB:1::::+HKDSW:1::::+HKEKA:1::::+HKQTG:1::::+HKFRD:1::::+HKLWB:1::::+HKTAB:1::::+HKTAU:1::::+HKTSY:1::::+HKMTR:1::::+HKMTF:1::::+HKMTA:1::::+HKTML:1'";
-        parseSEG("KInfo", version: 6, toParse: toParse);
+        _ = parseSEG("KInfo", version: 6, toParse: toParse);
     }
     
     func testHitab() {

@@ -9,11 +9,11 @@
 import Foundation
 
 open class HBCIUser {
-    open let bankCode:String;
-    open let hbciVersion:String;
-    open let bankURL:String;
-    open let userId:String;
-    open let customerId:String;
+    public let bankCode:String;
+    public let hbciVersion:String;
+    public let bankURL:String;
+    public let userId:String;
+    public let customerId:String;
     
     internal var _securityMethod:HBCISecurityMethod!
     

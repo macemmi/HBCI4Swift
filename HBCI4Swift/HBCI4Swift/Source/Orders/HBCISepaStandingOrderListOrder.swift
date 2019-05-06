@@ -9,7 +9,7 @@
 import Foundation
 
 open class HBCISepaStandingOrderListOrder : HBCIOrder {
-    open let account:HBCIAccount;
+    public let account:HBCIAccount;
     open var standingOrders = [HBCIStandingOrder]();
     open var offset:String?
     

@@ -47,7 +47,7 @@ class HBCIDataElementGroupDescription: HBCISyntaxElementDescription {
                     continue; // check next
                 } else {
                     // error: non-optional element but end of DEG
-                    logInfo("Parse error: non-optional element \(ref.name) is missing at the end of data element group");
+                    logInfo("Parse error: non-optional element \(ref.name ?? "?") is missing at the end of data element group");
                     return nil;
                 }
             }

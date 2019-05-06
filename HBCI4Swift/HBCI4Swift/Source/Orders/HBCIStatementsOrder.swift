@@ -9,7 +9,7 @@
 import Foundation
 
 open class HBCIStatementsOrder: HBCIOrder {
-    open let account:HBCIAccount;
+    public let account:HBCIAccount;
     open var statements:Array<HBCIStatement>?
     open var dateFrom:Date?
     open var dateTo:Date?

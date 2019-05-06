@@ -20,11 +20,11 @@ class HBCISepaGeneratorFactory {
                     case "03": return HBCISepaGenerator_001_003_03(format: format);
                         
                     default:
-                        logInfo("SEPA Credit variant \(format.variant) version \(format.version) is not supported");
+                        logInfo("SEPA Credit variant \(format.variant ?? "?") version \(format.version ?? "?") is not supported");
                         return nil;
                 }
             default:
-                logInfo("SEPA Credit variant \(format.variant) is not supported");
+                logInfo("SEPA Credit variant \(format.variant ?? "?") is not supported");
                 return nil;
             }
             

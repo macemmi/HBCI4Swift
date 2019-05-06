@@ -20,7 +20,7 @@ open class HBCIDialog {
     var orders = Array<HBCIOrder>();
     
     // the callback handler
-    open static var callback:HBCICallback?
+    public static var callback:HBCICallback?
     
     public init(user:HBCIUser) throws {
         

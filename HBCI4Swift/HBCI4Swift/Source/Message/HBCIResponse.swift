@@ -9,8 +9,8 @@
 import Foundation
 
 open class HBCIMessageResponse {
-    open let code:String;
-    open let text:String;
+    public let code:String;
+    public let text:String;
     
     init?(element:HBCISyntaxElement) {
         guard let code = element.elementValueForPath("code") as? String else {

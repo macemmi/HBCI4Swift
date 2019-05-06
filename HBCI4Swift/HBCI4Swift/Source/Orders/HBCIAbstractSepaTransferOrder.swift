@@ -9,7 +9,7 @@
 import Foundation
 
 open class HBCIAbstractSepaTransferOrder : HBCIOrder {
-    open let transfer:HBCISepaTransfer;
+    public let transfer:HBCISepaTransfer;
     
     init?(name: String, message: HBCICustomMessage, transfer:HBCISepaTransfer) {
         self.transfer = transfer;

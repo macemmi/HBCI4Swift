@@ -9,7 +9,7 @@
 import Foundation
 
 open class HBCIBalanceOrder : HBCIOrder {
-    open let account:HBCIAccount;
+    public let account:HBCIAccount;
     open var bookedBalance:HBCIAccountBalance?
     open var pendingBalance:HBCIAccountBalance?
     

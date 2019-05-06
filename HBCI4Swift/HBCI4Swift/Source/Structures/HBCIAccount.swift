@@ -9,14 +9,14 @@
 import Foundation
 
 open class HBCIAccount {
-    open let number:String!
-    open let subNumber:String?
-    open let bankCode:String!
+    public let number:String!
+    public let subNumber:String?
+    public let bankCode:String!
     open var iban:String?
     open var bic:String?
     open var name:String?
-    open let owner:String!
-    open let currency:String!
+    public let owner:String!
+    public let currency:String!
     open var type:String?
     open var allowed = Array<String>();
     

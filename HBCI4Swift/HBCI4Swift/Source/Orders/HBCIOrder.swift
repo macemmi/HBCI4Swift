@@ -33,12 +33,12 @@ fileprivate func >= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 
 open class HBCIOrder {
-    open let user:HBCIUser;
+    public let user:HBCIUser;
+    public let name:String;
+    public let msg: HBCICustomMessage;
     open var success = false;
     open var needsTan = false;
     open var responses:Array<HBCIOrderResponse>?
-    open let name:String;
-    open let msg: HBCICustomMessage;
     open var segment:HBCISegment!
     open var resultSegments = Array<HBCISegment>();
     

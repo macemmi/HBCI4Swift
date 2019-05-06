@@ -302,10 +302,10 @@ open class HBCISyntaxElement {
             if !(ref.elemDescr === childElem.descr) || elemIdx >= self.children.count {
                 // we have a different element
                 if childCount < ref.minnum {
-                    logInfo("Element \(self.name): child element \(ref.name) occured \(childCount) times but must occur at least \(ref.minnum) times");
+                    logInfo("Element \(self.name): child element \(ref.name ?? "?") occured \(childCount) times but must occur at least \(ref.minnum) times");
                 }
                 if childCount > ref.maxnum {
-                    logInfo("Element \(self.name): child element \(ref.name) occured \(childCount) times but must occur at most \(ref.maxnum) times");
+                    logInfo("Element \(self.name): child element \(ref.name ?? "?") occured \(childCount) times but must occur at most \(ref.maxnum) times");
                 }
                 if elemIdx < self.children.count {
                     childCount = 0;

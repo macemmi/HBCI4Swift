@@ -16,7 +16,7 @@ typealias DWORD = UInt32
 
 
 open class HBCISmartcard {
-    open let readerName:String;
+    public let readerName:String;
     var version:UInt8 = 0;
     var _hCard:SCARDHANDLE?
     var _ioctl_verify:DWORD?

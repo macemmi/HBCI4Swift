@@ -9,7 +9,7 @@
 import Foundation
 
 open class HBCISepaInfoOrder : HBCIOrder {
-    open let accounts:Array<HBCIAccount>;
+    public let accounts:Array<HBCIAccount>;
     
     public init?(message: HBCICustomMessage, accounts:Array<HBCIAccount>) {
         self.accounts = accounts;

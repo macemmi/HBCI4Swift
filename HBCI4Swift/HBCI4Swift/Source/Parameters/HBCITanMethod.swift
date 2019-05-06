@@ -15,7 +15,7 @@ public enum TanProcess:String {
 }
 
 open class HBCITanMethod {
-    open let
+    public let
     identifier:String!,
     secfunc:String!,
     inputInfo:String!,

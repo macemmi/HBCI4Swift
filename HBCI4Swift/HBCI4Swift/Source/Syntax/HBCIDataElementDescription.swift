@@ -163,8 +163,7 @@ class HBCIDataElementDescription: HBCISyntaxElementDescription {
                         }
                     case .binary:
                         if sValue.hasPrefix("@") && sValue.hasSuffix("@") {
-                            let range = Range<String.Index>(sValue.index(sValue.startIndex, offsetBy: 1) ..< sValue.index(sValue.endIndex, offsetBy: -1));
-                            let idxString = sValue[range];
+                            let idxString = sValue[sValue.index(sValue.startIndex, offsetBy: 1) ..< sValue.index(sValue.endIndex, offsetBy: -1)];
                             if let idx = Int(idxString) {
                                 de.value = binaries[idx];
                             }

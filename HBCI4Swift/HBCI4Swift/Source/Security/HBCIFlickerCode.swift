@@ -193,7 +193,7 @@ open class HBCIFlickerCode {
                         throw HBCIError.parseError;
                     }
                     // 2 characters, Hex
-                    let byteString = s[Range(index ..< s.index(index, offsetBy: 2))];
+                    let byteString = s[index ..< s.index(index, offsetBy: 2)];
                     index = s.index(index, offsetBy: 2);
                     if let byte = Int(byteString, radix: 16) {
                         controlBytes.append(UInt8(byte));
@@ -210,7 +210,7 @@ open class HBCIFlickerCode {
             if s.distance(from: index, to: s.endIndex) < length {
                 throw HBCIError.parseError;
             }
-            self.data = String(s[Range(index ..< s.index(index, offsetBy: length))]);
+            self.data = String(s[index ..< s.index(index, offsetBy: length)]);
             return String(s.suffix(from: s.index(index, offsetBy: length)));
         }
         
@@ -291,7 +291,7 @@ open class HBCIFlickerCode {
             if cleaned.distance(from: r1.lowerBound, to: cleaned.endIndex) < 10 {
                 throw HBCIError.parseError;
             }
-            cleaned = String(cleaned[Range(cleaned.index(r1.lowerBound, offsetBy: 10) ..< r2.lowerBound)]);
+            cleaned = String(cleaned[cleaned.index(r1.lowerBound, offsetBy: 10) ..< r2.lowerBound]);
 
             // append "0" to make LC 3 digits, just like for HHD 1.4
             return "0" + cleaned;

@@ -23,10 +23,10 @@ func convertAccountStatementFormat(_ formatString:String?) ->HBCIAccountStatemen
 
 
 open class HBCIAccountStatement {
-    open let format:HBCIAccountStatementFormat!
-    open let startDate:Date!
-    open let endDate:Date!
-    open let booked:Data!
+    public let format:HBCIAccountStatementFormat!
+    public let startDate:Date!
+    public let endDate:Date!
+    public let booked:Data!
     open var closingInfo:String?
     open var conditionInfo:String?
     open var advertisement:String?

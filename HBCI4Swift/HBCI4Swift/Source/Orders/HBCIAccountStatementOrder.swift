@@ -17,7 +17,7 @@ public struct HBCIAccountStatementOrderPar {
 
 
 open class HBCIAccountStatementOrder: HBCIOrder {
-    open let account:HBCIAccount;
+    public let account:HBCIAccount;
     open var number:Int?
     open var year:Int?
     open var format:HBCIAccountStatementFormat?

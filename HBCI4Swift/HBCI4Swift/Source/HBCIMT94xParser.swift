@@ -121,12 +121,13 @@ class HBCIMT94xParser {
         var residualRange = NSRange(location: 0, length: tag86String.length);
 
         do {
-            let regex = try NSRegularExpression(pattern: "\\?[0-9][0-9]", options: NSRegularExpression.Options.caseInsensitive)
+            let regex = try NSRegularExpression(pattern: "\\?\\s?[0-9]\\s?[0-9]", options: NSRegularExpression.Options.caseInsensitive)
             var range1 = regex.rangeOfFirstMatch(in: tag86String as String, options: NSRegularExpression.MatchingOptions(), range: residualRange);
             while range1.location != NSNotFound {
                 residualRange.location = range1.location+range1.length;
                 residualRange.length = tag86String.length-residualRange.location;
-                let fieldTag = tag86String.substring(with: NSRange(location: range1.location+1, length: 2));
+                var fieldTag = tag86String.substring(with: NSRange(location: range1.location+1, length: range1.length-1));
+                fieldTag = removeWhitespace(fieldTag);
                 let fieldNum = Int(fieldTag);
                 if fieldNum == nil {
                     logInfo("MT94xParse error: field tag \(fieldTag) is not a number");
@@ -299,7 +300,7 @@ class HBCIMT94xParser {
         }
         
         // structured
-        let fieldString = tagValue.substring(from: location).replacingOccurrences(of: "\r", with: "");
+        let fieldString = tagValue.substring(from: location).replacingOccurrences(of: "\r", with: "").replacingOccurrences(of: "\n", with: "");
         item.isSEPA = item.transactionCode >= 100 && item.transactionCode <= 199;
         
         // get fields
@@ -310,40 +311,43 @@ class HBCIMT94xParser {
             for field in fields {
                 let fieldNum = field.field;
                 switch fieldNum {
-                case 0: item.transactionText = removeWhitespace(field.value);
-                case 10: item.primaNota = removeWhitespace(field.value);
+                case 0: item.transactionText = field.value;
+                case 10: item.primaNota = field.value;
                 case 30:
                     if (item.isSEPA!) {
-                        let remoteBIC = removeWhitespace(field.value);
+                        let remoteBIC = field.value;
                         if remoteBIC.count > 11 {
                             logInfo("MT94xParse error: remoteBIC too long: "+remoteBIC);
                             throw HBCIError.parseError;
                         }
                         item.remoteBIC = remoteBIC;
                     } else {
-                        item.remoteBankCode = removeWhitespace(field.value);
+                        item.remoteBankCode = field.value;
                     }
                 case 20: purpose += field.value;
                 case 31:
                     if item.isSEPA! {
-                        let remoteIBAN = removeWhitespace(field.value);
+                        let remoteIBAN = field.value;
                         if remoteIBAN.count > 34 {
                             logInfo("MT94xParse error: remoteIBAN too long: "+remoteIBAN);
                             throw HBCIError.parseError;
                         }
                         item.remoteIBAN = remoteIBAN;
                     } else {
-                        item.remoteAccountNumber = removeWhitespace(field.value);
+                        item.remoteAccountNumber = field.value;
                     }
-                case 32: item.remoteName = removeWhitespace(field.value);
+                case 32: item.remoteName = field.value;
                 case 33:
                     if item.remoteName != nil {
-                        item.remoteName! += removeWhitespace(field.value);
+                        item.remoteName! += field.value;
                     } else {
-                        item.remoteName = removeWhitespace(field.value);
+                        item.remoteName = field.value;
                     }
                 default:
                     if (fieldNum >= 20 && fieldNum <= 29) || (fieldNum >= 60 && fieldNum <= 63) {
+                        if purpose.count > 0 {
+                            purpose += "\n";
+                        }
                         purpose += field.value;
                     }
                 }

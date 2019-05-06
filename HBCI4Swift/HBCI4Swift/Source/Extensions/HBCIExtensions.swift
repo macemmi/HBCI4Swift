@@ -87,6 +87,7 @@ extension XMLElement {
 
 
 extension String {
+
     func substringToIndex(_ index:Int) ->String {
         return String(self[..<self.index(startIndex, offsetBy: index)]);
     }
@@ -96,8 +97,7 @@ extension String {
     }
     
     func substringWithRange(_ range:NSRange) ->String {
-        return String(self[Range(self.index(startIndex, offsetBy: range.location) ..< self.index(startIndex, offsetBy: range.location+range.length))]);
-        
+        return String(self[self.index(startIndex, offsetBy: range.location) ..< self.index(startIndex, offsetBy: range.location+range.length)]);
     }
     
     func escape() ->String? {

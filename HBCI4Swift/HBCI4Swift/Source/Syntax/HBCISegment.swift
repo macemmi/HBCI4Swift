@@ -9,8 +9,8 @@
 import Foundation
 
 open class HBCISegment: HBCISyntaxElement {
-    open let code:String;
-    open let version:Int;
+    public let code:String;
+    public let version:Int;
     
     override init(description: HBCISyntaxElementDescription) {
         let sd = description as! HBCISegmentDescription;

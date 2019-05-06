@@ -728,10 +728,11 @@
 				TargetAttributes = {
 					B19B35911AF1792A00F20B9A = {
 						CreatedOnToolsVersion = 6.3;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1010;
 					};
 					B19B359C1AF1792B00F20B9A = {
 						CreatedOnToolsVersion = 6.3;
+						LastSwiftMigration = 1010;
 					};
 					B1AF0FF71BC45A6D00365496 = {
 						CreatedOnToolsVersion = 7.0.1;
@@ -1145,8 +1146,7 @@
 				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -1177,8 +1177,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -1202,7 +1201,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "HBCI4SwiftTests/HBCI4SwiftTests-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -1221,7 +1220,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "HBCI4SwiftTests/HBCI4SwiftTests-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};

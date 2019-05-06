@@ -60,7 +60,7 @@ class HBCISegmentDescription: HBCISyntaxElementDescription {
                 // empty element - check if element was optional
                 if ref.minnum < num {
                     // error: minimal occurence
-                    logInfo("Parse error: element \(ref.name) is empty but not optional");
+                    logInfo("Parse error: element \(ref.name ?? "?") is empty but not optional");
                     return nil;
                 } else {
                     num = 0;
@@ -84,7 +84,7 @@ class HBCISegmentDescription: HBCISyntaxElementDescription {
                         // check if element was optional
                         if ref.minnum < num {
                             // error: minimal occurence
-                            logInfo("Parse error: element \(ref.name) is empty but not optional");
+                            logInfo("Parse error: element \(ref.name ?? "?") is empty but not optional");
                             return nil;
                         } else {
                             num = 0;
