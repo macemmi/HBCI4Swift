@@ -180,9 +180,8 @@ open class HBCIParameters {
             
             if supportedVersions.count == 0 {
                 // this process is not supported by the bank
-                // we nevertheless go on - this sometimes works
-                logInfo("Segment " + name + " has no version information from bank - we nevertheless continue...");
-                supportedVersions = segVersions.versionNumbers;
+                logInfo("Segment " + name + " has no version information from bank");
+                return nil;
             }
             // now sort the versions - we take the latest supported version
             supportedVersions.sort(by: >);
