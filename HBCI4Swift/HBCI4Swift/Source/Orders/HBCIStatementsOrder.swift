@@ -133,6 +133,18 @@ open class HBCIStatementsOrder: HBCIOrder {
                     }
                 }
             }
+            if let notbooked = seg.elementValueForPath("notbooked") as? Data {
+                if let mt94x = NSString(data: notbooked, encoding: String.Encoding.isoLatin1.rawValue) {
+                    let parser = HBCIMT942Parser(mt94xString: mt94x);
+                    do {
+                        let statements = try parser.parse();
+                        self.statements?.append(contentsOf: statements)
+                    }
+                    catch {
+                        // ignore errors here so that we can continue with next account
+                    }
+                }
+            }
         }
     }
     

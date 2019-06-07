@@ -60,7 +60,9 @@ open class HBCIStatement {
     open var endBalance:HBCIAccountBalance?
     open var valutaBalance:HBCIAccountBalance?
     open var futureValutaBalance:HBCIAccountBalance?
-    
+
+    open var isPreliminary:Bool?
+
     open var items = Array<HBCIStatementItem>();
     
     public init() {}

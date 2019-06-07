@@ -9,16 +9,16 @@
 import Foundation
 
 open class HBCIAccount {
-    public let number:String!
-    public let subNumber:String?
-    public let bankCode:String!
-    open var iban:String?
-    open var bic:String?
-    open var name:String?
-    public let owner:String!
-    public let currency:String!
-    open var type:String?
-    open var allowed = Array<String>();
+    public let  number:String!
+    public let  subNumber:String?
+    public let  bankCode:String!
+    open var    iban:String?
+    open var    bic:String?
+    open var    name:String?
+    public let  owner:String!
+    public let  currency:String!
+    open var    type:Int?
+    open var    allowed = Array<String>();
     
     public init(number:String, subNumber:String?, bankCode:String, owner:String, currency:String) {
         self.number = number;
@@ -43,7 +43,7 @@ open class HBCIAccount {
         self.currency = segment.elementValueForPath("cur") as? String;
         
         if segment.version >= 5 {
-            self.type = segment.elementValueForPath("acctype") as? String;
+            self.type = segment.elementValueForPath("acctype") as? Int;
         }
         
         if segment.version >= 6 {

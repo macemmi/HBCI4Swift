@@ -79,7 +79,7 @@ class HBCIMT94xParser {
     }
     
     func getTagsFromString(_ mtString:NSString) throws ->Array<HBCIMT94xTag> {
-        let pattern = "\r\n:21:|\r\n:25:|\r\n:28C:|\r\n:60F:|\r\n:60M:|\r\n:61:|\r\n:86:|\r\n:62F:|\r\n:62M:|\r\n:64:|\r\n:65:";
+        let pattern = "\r\n:21:|\r\n:25:|\r\n:28C:|\r\n:60F:|\r\n:60M:|\r\n:61:|\r\n:86:|\r\n:62F:|\r\n:62M:|\r\n:64:|\r\n:65:|\r\n:34F:|\r\n:13D:|\r\n:90D:|\r\n:90C:";
         var nextTagRange, valueRange, residualRange: NSRange;
         var finished:Bool = false;
         var tagString = "20";
@@ -431,6 +431,7 @@ class HBCIMT94xParser {
         let missingTagsString = "MT94xParse error: unexpected end of tags in data "+rawStatementString;
         
         let statement = HBCIStatement();
+        statement.isPreliminary = false;
 
         let tags = try getTagsFromString(rawStatement);
         var tag = tags[idx]; idx += 1;
@@ -568,11 +569,11 @@ class HBCIMT94xParser {
     
     func parse() throws ->Array<HBCIStatement> {
         var statements = Array<HBCIStatement>();
-        let rawStatements = self.mt94xString.components(separatedBy: "\r\n:20:") ;
+        let repairedStatements = repairStatements();
+        let rawStatements = repairedStatements.components(separatedBy: "\r\n:20:") ;
         for raw in rawStatements {
             if raw.count > 2 {
-                var trimmed = raw.replacingOccurrences(of: "@@", with: "\r\n") as NSString;
-                trimmed = trimmed.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) as NSString;
+                var trimmed = raw.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) as NSString;
                 let ending = trimmed.substring(from: trimmed.length-3);
                 if ending != "\r\n-" {
                     logInfo("MT94xParse error: cannot parse MT94x statement: "+(trimmed as String));
@@ -591,9 +592,153 @@ class HBCIMT94xParser {
         }
         return statements;
     }
+    
+    func repairStatements() -> NSString {
+        var result = self.mt94xString;
+        
+        if self.mt94xString.hasPrefix("@@") || self.mt94xString.hasSuffix("@@") {
+            // e.g. GLS Bank
+            result = self.mt94xString.replacingOccurrences(of: "@@@@", with: "\r\n-\r\n") as NSString;
+            if result.hasSuffix("@@") {
+                let len = result.length;
+                result = result.replacingCharacters(in: NSMakeRange(len-2, 2), with: "\r\n-") as NSString;
+            }
+            result = result.replacingOccurrences(of: "@@", with: "\r\n") as NSString;
+        }
+        return result;
+    }
 
-    
-    
-    
-    
+}
+
+
+class HBCIMT942Parser : HBCIMT94xParser {
+    override func parseStatement(_ rawStatement:NSString) throws ->HBCIStatement {
+        var idx = 0;
+        
+        let rawStatementString = rawStatement as String;
+        let missingTagsString = "MT94xParse error: unexpected end of tags in data "+rawStatementString;
+        
+        let statement = HBCIStatement();
+        statement.isPreliminary = true;
+        
+        let tags = try getTagsFromString(rawStatement);
+        var tag = tags[idx]; idx += 1;
+        if tag.tag == "20" {
+            statement.orderRef = tag.value as String;
+        } else {
+            logInfo("MT94xParse error: tag20 field is missing in MT94x entry "+rawStatementString);
+            // we will nevertheless go on
+        }
+        
+        if idx >= tags.count {
+            logInfo(missingTagsString);
+            throw HBCIError.parseError;
+        }
+        tag = tags[idx]; idx += 1;
+        // optional reference
+        if tag.tag == "21" {
+            statement.statementRef = tag.value as String;
+            if idx >= tags.count {
+                logInfo(missingTagsString);
+                throw HBCIError.parseError;
+            }
+            if idx >= tags.count {
+                logInfo(missingTagsString);
+                throw HBCIError.parseError;
+            }
+            tag = tags[idx]; idx += 1;
+        }
+        
+        if tag.tag == "25" {
+            statement.accountName = tag.value as String;
+            parseAccountName(tag.value, statement: statement);
+        } else {
+            logInfo("MT94xParse error: tag25 is missing in MT94x entry "+rawStatementString);
+            // we will nevertheless go on
+        }
+        
+        // statement number
+        if idx >= tags.count {
+            logInfo(missingTagsString);
+            throw HBCIError.parseError;
+        }
+        tag = tags[idx]; idx += 1;
+        if tag.tag == "28C" {
+            statement.statementNumber = tag.value as String;
+        } else {
+            logInfo("MT94xParse error: tag28C is missing in MT94x entry "+rawStatementString);
+            // we will nevertheless go on
+        }
+        
+        if idx >= tags.count {
+            logInfo(missingTagsString);
+            throw HBCIError.parseError;
+        }
+        
+        tag = tags[idx]; idx += 1;
+        if tag.tag == "34F" {
+            // we don't do anything with the minimum amounts
+        } else {
+            logInfo("MT94xParse error: tag34F is missing in MT942 entry "+rawStatementString);
+            throw HBCIError.parseError;
+        }
+        
+        if idx >= tags.count {
+            // in some cases banks send wrong MT94x data. If there are no statements the ending balance can be missing
+            return statement;
+        }
+
+        tag = tags[idx]; idx += 1;
+        if tag.tag == "34F" {
+            // we don't do anything with the minimum amounts
+            if idx >= tags.count {
+                logInfo(missingTagsString);
+                throw HBCIError.parseError;
+            }
+            
+            tag = tags[idx]; idx += 1;
+        }
+
+        // statement items
+        if idx >= tags.count {
+            // in some cases banks send wrong MT94x data. If there are no statements the ending balance can be missing
+            return statement;
+        }
+        
+        tag = tags[idx]; idx += 1;
+        while tag.tag == "61" {
+            //items
+            let item = HBCIStatementItem();
+            do {
+                try parseTag61ForItem(item, tagValue: tag.value);
+            }
+            catch {
+                logInfo("MT94xParseError: cannot parse tag61 from "+(tag.value as String));
+                throw HBCIError.parseError;
+            }
+            
+            if idx >= tags.count {
+                logInfo(missingTagsString);
+                throw HBCIError.parseError;
+            }
+            tag = tags[idx]; idx += 1;
+            if tag.tag == "86" {
+                do {
+                    try parseTag86ForItem(item, tagValue: tag.value);
+                }
+                catch {
+                    logInfo("MT94xParseError: cannot parse tag86 from "+(tag.value as String));
+                    throw HBCIError.parseError;
+                }
+                if idx >= tags.count {
+                    logInfo(missingTagsString);
+                    throw HBCIError.parseError;
+                }
+                tag = tags[idx]; idx += 1;
+            }
+            statement.items.append(item);
+        }
+        
+        return statement;
+    }
 }

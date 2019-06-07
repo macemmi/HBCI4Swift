@@ -61,7 +61,7 @@ class HBCITanProcess_2 {
             if let tanOrder = HBCITanOrder(message: msg) {
                 tanOrder.process = "4";
                 
-                var hhdudString:String?
+                var hhducString:String?
                 var tanMethodID = "";
                 var challengeType:HBCIChallengeType = .none;
                 
@@ -117,17 +117,25 @@ class HBCITanProcess_2 {
                 if tanMethodID.prefix(3) == "HHD" && tanMethodID.suffix(3) == "OPT" {
                     challengeType = .flicker;
                     if tanOrder.challenge_hhd_uc == nil {
-                        logWarning("TAN method is \(tanMethodID) but no HHD challenge - we nevertheless go on");
+                        logInfo("TAN method is \(tanMethodID) but no HHD challenge - we nevertheless go on");
                     }
-                    if let hhduc = tanOrder.challenge_hhd_uc {
-                        hhdudString = parseFlickerCode(tanOrder.challenge, hhduc: hhduc);
+                    // try to parse flicker code out of HHD_UC or challenge itself
+                    hhducString = parseFlickerCode(tanOrder.challenge, hhduc: tanOrder.challenge_hhd_uc);
+                    if hhducString == nil {
+                        logWarning("TAN method is \(tanMethodID) but no HHD challenge");
+                    }
+                    // check if HHDUC is part of the challenge string and if yes, remove it
+                    if let challenge = tanOrder.challenge, let index = challenge.range(of: "CHLGTEXT") {
+                        logDebug("Challenge contains HHDUC data - remove that: \(challenge)");
+                        let newIndex = challenge.index(index.lowerBound, offsetBy: 10);
+                        tanOrder.challenge = String(challenge.suffix(from: newIndex));
                     }
                 }
                 if tanMethodID.prefix(2) == "MS" {
                     challengeType = .photo;
                     if let hhduc = tanOrder.challenge_hhd_uc {
-                        hhdudString = hhduc.base64EncodedString();
-                        if hhdudString == nil {
+                        hhducString = hhduc.base64EncodedString();
+                        if hhducString == nil {
                             logInfo("TanMethod is \(tanMethodID) but hhducString data is empty!");
                         }
                     } else {
@@ -135,7 +143,7 @@ class HBCITanProcess_2 {
                     }
                 }
                 
-                let tan = try HBCIDialog.callback!.getTan(dialog.user, challenge: tanOrder.challenge, challenge_hhd_uc: hhdudString, type: challengeType);
+                let tan = try HBCIDialog.callback!.getTan(dialog.user, challenge: tanOrder.challenge, challenge_hhd_uc: hhducString, type: challengeType);
                     
                 if let tanMsg = HBCICustomMessage.newInstance(dialog) {
                     if let tanOrder2 = HBCITanOrder(message: tanMsg) {
