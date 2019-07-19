@@ -691,12 +691,8 @@ class HBCIMT942Parser : HBCIMT94xParser {
         tag = tags[idx]; idx += 1;
         if tag.tag == "34F" {
             // we don't do anything with the minimum amounts
-            if idx >= tags.count {
-                logInfo(missingTagsString);
-                throw HBCIError.parseError;
-            }
-            
-            tag = tags[idx]; idx += 1;
+        } else if tag.tag == "13D" {
+            // we don't do anything with creation date yet
         }
 
         // statement items
@@ -717,26 +713,26 @@ class HBCIMT942Parser : HBCIMT94xParser {
                 throw HBCIError.parseError;
             }
             
-            if idx >= tags.count {
-                logInfo(missingTagsString);
-                throw HBCIError.parseError;
-            }
-            tag = tags[idx]; idx += 1;
-            if tag.tag == "86" {
-                do {
-                    try parseTag86ForItem(item, tagValue: tag.value);
-                }
-                catch {
-                    logInfo("MT94xParseError: cannot parse tag86 from "+(tag.value as String));
-                    throw HBCIError.parseError;
-                }
-                if idx >= tags.count {
-                    logInfo(missingTagsString);
-                    throw HBCIError.parseError;
-                }
+            if idx < tags.count {
                 tag = tags[idx]; idx += 1;
+                if tag.tag == "86" {
+                    do {
+                        try parseTag86ForItem(item, tagValue: tag.value);
+                    }
+                    catch {
+                        logInfo("MT94xParseError: cannot parse tag86 from "+(tag.value as String));
+                        throw HBCIError.parseError;
+                    }
+                } else {
+                    idx -= 1;  // go back one step
+                }
             }
             statement.items.append(item);
+            if idx < tags.count {
+                tag = tags[idx]; idx += 1;
+            } else {
+                break;
+            }
         }
         
         return statement;
