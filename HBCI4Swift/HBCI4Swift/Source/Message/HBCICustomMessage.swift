@@ -64,13 +64,33 @@ open class HBCICustomMessage : HBCIMessage {
         return nil;
     }
     
-    open func addOrder(_ order:HBCIOrder) {
+    open func addOrder(_ order:HBCIOrder, afterSegmentCode:String? = nil) -> Bool {
         if let segment = order.segment {
             orders.append(order);
-            self.children.insert(segment, at: 2);
+            if let segmentCode = afterSegmentCode {
+                if !self.insertAfterSegmentCode(segment, segmentCode) {
+                    logInfo("Error adding segment after "+segmentCode);
+                    return false;
+                }
+            } else {
+                self.children.insert(segment, at: 2);
+            }
         } else {
             logInfo("Order comes without segment!");
+            return false;
         }
+        return true;
+    }
+    
+    func addTanOrder(_ order:HBCITanOrder) ->Bool {
+        guard let refOrder = orders.last else {
+            logInfo("No order in message");
+            return false;
+        }
+        if !order.finalize(refOrder) {
+            return false;
+        }
+        return addOrder(order, afterSegmentCode: refOrder.segment.code);
     }
     
     func segmentWithName(_ segName:String) ->HBCISegment? {

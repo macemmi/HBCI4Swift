@@ -33,6 +33,26 @@ open class HBCIMessage: HBCISyntaxElement {
         return nil;
     }
     
+    func insertAfterSegmentCode(_ seg:HBCISegment, _ code:String) ->Bool {
+        guard let segments = self.children as? [HBCISegment] else {
+            logInfo("Wrong message setup");
+            logInfo(self.debugDescription);
+            return false;
+        }
+        // look for reference segment
+        var idx = 1;
+        for segment in segments {
+            if segment.code == code {
+                self.children.insert(seg, at: idx);
+                return true;
+            }
+            idx = idx+1;
+        }
+        // if reference segment was not found insert at the end
+        self.children.insert(seg, at: idx);
+        return true;
+    }
+    
     override func elementDescription() -> String {
         return "MSG name: \(self.name)\n";
     }

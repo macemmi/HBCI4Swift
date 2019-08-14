@@ -153,6 +153,11 @@ class HBCISyntaxTest: XCTestCase {
         _ = parseSEG("KInfo", version: 6, toParse: toParse);
     }
     
+    func testKInfo2() {
+        let toParse = "HIUPD:6:6:3+151686901::280:49999570+DE24499995700151686901+VRK0360531775347611+1+EUR+Mustermann, Hans++KONTOKORRENTKONTO+T:99999999999,99:EUR+HKSAK:1+HKISA:1+HKSSP:1+HKCAZ:1+HKEKA:1+HKKAU:1+HKDDB:1+HKCDB:1+HKPSP:1+HKBML:1+HKBSL:1+HKDML:1+HKCML:1+HKDSL:1+HKCSL:1+HKDDL:1+HKCDL:1+HKPAE:1+HKTAU:1+HKANL:1+HKPNL:1+HKCVL:1+HKTML:1+HKTAB:1+HKFRD:1+HKCVB:1+HKDDU:1+HKCDU:1+HKPPD:1+HKBSA:1+HKDSA:1+HKCSA:1+HKCVA:1+HKDDN:1+HKCDN:1+HKUTA:1+HKBMB:1+HKBBS:1+HKDMB:1+HKCMB:1+HKDBS:1+HKCSB:1+HKCUB:1+HKKAA:1+HKPOF:1+HKQTG:1+HKSPA:1+HKDSB:1+HKCCM:1+HKCUM:1+HKCCS:1+HKCMU:1+HKCSU:1+HKDDE:1+HKCDE:1+HKANA:1+HKBME:1+HKBSE:1+HKDME:1+HKCME:1+HKDSE:1+HKCSE:1+HKCVE:1+HKDMC:1+HKDSC:1+HKDSW:1+HKTSY:1+HKTSP:1+HKTAZ:1+HKSAL:1+HKKIF:1+HKKAZ:1+HKKIA:1+HKFGK:1+HKINF:1+HKAUB:1+HKKAN:1+HKPRO:1+GKVDO:1+GKVPU:1+GKVPD:1+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++{\"umsltzt\"?:\"2019-08-13-00.00.00.000471\"}'";
+        _ = parseSEG("KInfo", version: 6, toParse: toParse);
+    }
+    
     func testHitab() {
         let toParse = "HITAB:5:3:3+1+G:1:1111113199000300111::::::::::VR-NetworldCard+M:1:::::::::::mobileTAN:***::::::::20150325'";
         if let segment = parseSEG("TANMediaListRes", version: 3, toParse: toParse) {

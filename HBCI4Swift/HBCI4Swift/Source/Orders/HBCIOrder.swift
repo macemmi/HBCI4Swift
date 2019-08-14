@@ -107,4 +107,16 @@ open class HBCIOrder {
         return (elem, seg);
     }
     
+    func hasResponseWithCode(_ code:String) ->Bool {
+        guard let responses = self.responses else {
+            return false;
+        }
+        for response in responses {
+            if response.code == code {
+                return true;
+            }
+        }
+        return false;
+    }
+    
 }

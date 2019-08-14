@@ -11,6 +11,8 @@ import Foundation
 
 
 open class HBCIDialog {
+    let product:String;
+    let version:String;
     var connection:HBCIConnection!
     var dialogId:String?
     var user:HBCIUser;
@@ -22,8 +24,9 @@ open class HBCIDialog {
     // the callback handler
     public static var callback:HBCICallback?
     
-    public init(user:HBCIUser) throws {
-        
+    public init(user:HBCIUser, product:String, version:String = "100") throws {
+        self.product = product;
+        self.version = version;
         self.user = user;
         self.hbciVersion = user.hbciVersion;
         
@@ -82,7 +85,7 @@ open class HBCIDialog {
         }
         
         logDebug("Message payload:");
-        logDebug(msg.description);
+        logDebug(msg.messageString());
         
         if let msg_crypted = user.securityMethod.encryptMessage(msg, dialog: self) {
             
@@ -93,7 +96,7 @@ open class HBCIDialog {
             
             let msgData = msg_crypted.messageData();
             logDebug("Encrypted message:");
-            logDebug(msg.messageString());
+            logDebug(msg_crypted.messageString());
             
             // send message to bank
             do {
@@ -142,15 +145,15 @@ open class HBCIDialog {
         }
         
         var values:Dictionary<String,Any> = ["Idn.KIK.country":"280",
-                                                   "Idn.KIK.blz":user.bankCode,
-                                                   "Idn.customerid":user.customerId,
-                                                   "Idn.sysid":user.sysId!,
-                                                   "Idn.sysStatus":"1",
-                                                   "ProcPrep.BPD":user.parameters.bpdVersion,
-                                                   "ProcPrep.UPD":user.parameters.updVersion,
-                                                   "ProcPrep.lang":"0",
-                                                   "ProcPrep.prodName":"PecuniaBanking",
-                                                   "ProcPrep.prodVersion":"100" ];
+                                               "Idn.KIK.blz":user.bankCode,
+                                               "Idn.customerid":user.customerId,
+                                               "Idn.sysid":user.sysId!,
+                                               "Idn.sysStatus":"1",
+                                               "ProcPrep.BPD":user.parameters.bpdVersion,
+                                               "ProcPrep.UPD":user.parameters.updVersion,
+                                               "ProcPrep.lang":"0",
+                                               "ProcPrep.prodName":product,
+                                               "ProcPrep.prodVersion":version ];
         
         if user.securityMethod is HBCISecurityMethodDDV {
             values["Idn.sysStatus"] = "0";
@@ -158,7 +161,19 @@ open class HBCIDialog {
         
         self.dialogId = "0";
         
-        if let result = try sendMessage("DialogInit", values: values) {
+        guard let msg = HBCIDialogInitMessage.newInstance(self) else {
+            logInfo("Dialog Init failed: message could not be created");
+            return nil;
+        }
+        if !msg.setElementValues(values) {
+            logInfo("Dialog Init failed: messages values could not be set)");
+            return nil;
+        }
+        guard try msg.send() else {
+            logInfo("Dialog Init failed: message could not be sent");
+            return nil;
+        }
+        if let result = msg.result {
             if result.isOk() {
                 result.updateParameterForUser(self.user);
                 return result;
@@ -197,8 +212,8 @@ open class HBCIDialog {
                                              "Sync.mode":0,
                                              "ProcPrep.UPD":"0",
                                              "ProcPrep.lang":"0",
-                                             "ProcPrep.prodName":"PecuniaBanking",
-                                             "ProcPrep.prodVersion":"100"];
+                                             "ProcPrep.prodName":product,
+                                             "ProcPrep.prodVersion":version];
         
         self.dialogId = "0";
         

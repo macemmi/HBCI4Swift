@@ -208,6 +208,9 @@ class HBCIDataElement: HBCISyntaxElement {
             // no value
             return "";
         }
+        if name == "data" {
+            return "<data>";
+        }
         
         if let s = toString() {
             if name == "pin" {

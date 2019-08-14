@@ -975,7 +975,7 @@
 
         
         <SEGdef id="ProcPrep" code="HKVVB">
-            <SEGVersion id="2">
+            <SEGVersion id="3">
                 <DEG type="SegHead" name="SegHead"/>
                 <DE name="BPD" type="Num" maxsize="3"/>
                 <DE name="UPD" type="Num" maxsize="3"/>
@@ -2082,6 +2082,7 @@
             <SEG type="MsgHead" name="MsgHead"/>
             <SEG type="Idn"/>
             <SEG type="ProcPrep"/>
+            <SEG type="TAN"/>
             <SEG type="MsgTail" name="MsgTail"/>
             
             <default path="MsgHead.dialogid">0</default>
@@ -2125,8 +2126,7 @@
             <default path="MsgHead.msgnum">1</default>
             <default path="MsgTail.msgnum">1</default>
         </MSGdef>
-
-                
+        
 
     </MSGs>
 </hbci>

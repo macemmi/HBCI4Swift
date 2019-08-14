@@ -12,11 +12,15 @@ open class HBCIAnonymousDialog {
     var connection:HBCIConnection?
     var dialogId:String?;
     let hbciVersion:String!
+    let product:String;
+    let version:String;
     var syntax:HBCISyntax!                  // todo: replace with let once Xcode bug is fixed
     var messageNum = 1;
     
-    public init(hbciVersion:String) throws {
+    public init(hbciVersion:String, product:String, version:String = "100") throws {
         self.hbciVersion = hbciVersion;
+        self.product = product;
+        self.version = version;
         let syntax = try HBCISyntax.syntaxWithVersion(hbciVersion)
         self.syntax = syntax
     }
@@ -46,6 +50,10 @@ open class HBCIAnonymousDialog {
 
                 // send message to bank
                 let result = try self.connection!.sendMessage(msgData);
+                
+                logDebug("Message received:");
+                logDebug(String(data: result, encoding: String.Encoding.isoLatin1));
+
                 let resultMsg = HBCIResultMessage(syntax: self.syntax);
                 if !resultMsg.parse(result) {
                     return nil;
@@ -60,8 +68,8 @@ open class HBCIAnonymousDialog {
     open func dialogWithURL(_ url:URL, bankCode:String) throws ->HBCIResultMessage? {
         self.connection = HBCIPinTanConnection(url: url);
         
-        let values:Dictionary<String,Any> = ["ProcPrep.BPD":"0", "ProcPrep.UPD":"0", "ProcPrep.lang":"0", "ProcPrep.prodName":"Pecunia",
-            "ProcPrep.prodVersion":"1.0", "Idn.KIK.country":"280", "Idn.KIK.blz":bankCode ];
+        let values:Dictionary<String,Any> = ["ProcPrep.BPD":"0", "ProcPrep.UPD":"0", "ProcPrep.lang":"0", "ProcPrep.prodName":product,
+                                             "ProcPrep.prodVersion":version, "Idn.KIK.country":"280", "Idn.KIK.blz":bankCode, "TAN.process":"4" ];
         
         if let resultMsg = try sendMessage("DialogInitAnon", values: values) {
             // get dialog id
