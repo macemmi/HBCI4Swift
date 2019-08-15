@@ -35,17 +35,14 @@ open class HBCIMessageResponse {
 }
 
 open class HBCIOrderResponse : HBCIMessageResponse {
-    open var reference:Int?
+    open var reference:Int
     open var parameters = Array<String>();
     
-    override init?(element: HBCISyntaxElement) {
+    init?(element: HBCISyntaxElement, reference:Int) {
+        self.reference = reference;
         super.init(element: element);
         if self.code == "" {
             return nil;
-        }
-        
-        if let ref = element.elementValueForPath("ref") as? String {
-            self.reference = Int(ref);
         }
         
         self.parameters = element.elementValuesForPath("parm") as! [String];

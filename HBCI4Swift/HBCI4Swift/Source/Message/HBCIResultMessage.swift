@@ -451,10 +451,10 @@ open class HBCIResultMessage {
             for segment in self.segments {
                 if segment.name == "RetSeg" {
                     // only segments with references
-                    if segment.elementValueForPath("SegHead.ref") as? Int  != nil {
+                    if let reference = segment.elementValueForPath("SegHead.ref") as? Int {
                         let values = segment.elementsForPath("RetVal");
                         for retVal in values {
-                            if let response = HBCIOrderResponse(element: retVal) {
+                            if let response = HBCIOrderResponse(element: retVal, reference: reference) {
                                 self.segmentResponses.append(response);
                             }
                         }
