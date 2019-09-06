@@ -423,6 +423,47 @@ open class HBCIResultMessage {
         return segs;
     }
     
+    func hasSegmentWithVersion(_ code:String, version: Int?) -> Bool {
+        for segment in self.segments {
+            if segment.code == code {
+                if let version = version {
+                    if version == segment.version {
+                        return true;
+                    }
+                } else {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    func isBankInPSD2Migration() ->Bool {
+        // if the bank sends HKTAN#6 and an oder version we assume it is in migration phase
+        var hasVersion6 = false;
+        var hasOldVersion = false;
+        for segment in self.segments {
+            if segment.code == "HITANS" {
+                if segment.version >= 6 {
+                    hasVersion6 = true;
+                }
+                if segment.version < 6 {
+                    hasOldVersion = true;
+                }
+            }
+        }
+        return hasVersion6 && hasOldVersion;
+    }
+ 
+    func hasResponseWithCode(_ code:String) -> Bool {
+        for response in responsesForMessage() {
+            if response.code == code {
+                return true;
+            }
+         }
+        return false;
+    }
+    
     open func bankMessages() ->Array<HBCIBankMessage> {
         var messages = Array<HBCIBankMessage>();
         

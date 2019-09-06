@@ -116,16 +116,18 @@ open class HBCIDialog {
                             logDebug(value.description);
                             return value
                         } else {
-                            logError("Banknachricht");
+                            logInfo("Message received:");
                             logInfo(String(data:result, encoding:String.Encoding.isoLatin1));
-                            logInfo(String(data: result, encoding: String.Encoding.isoLatin1));
-                            logInfo("Message sent: " + msg.messageString());
+                            logInfo("Message sent:");
+                            logInfo(msg.messageString());
                             return value;
                         }
                     }
                     logInfo("Message could not be decrypted");
                     logInfo(String(data: result, encoding: String.Encoding.isoLatin1));
-                    return nil;
+                    
+                    // return unencrypted result at least to be able to check for responses
+                    return resultMsg_crypted;
                 } else {
                     logInfo("Message could not be parsed");
                     logInfo(String(data: result, encoding: String.Encoding.isoLatin1));
@@ -136,6 +138,28 @@ open class HBCIDialog {
             }
         }
         return nil;
+    }
+    
+    func checkBPD_for_PSD2(_ resultMsg: HBCIResultMessage) {
+        if resultMsg.isBankInPSD2Migration() {
+            //  now we are in PSD2 migration phase - start anonymous dialog to get "real" BPD/HIPINS
+            do {
+                let dialog = try HBCIAnonymousDialog(hbciVersion: hbciVersion, product: product);
+                if let url = URL(string: user.bankURL) {
+                    if let result = try dialog.dialogWithURL(url, bankCode: user.bankCode) {
+                        user.parameters.bpdVersion = 0; // make sure parameters are updated
+                        result.updateParameterForUser(user);
+                    } else {
+                        logInfo("Anonymous dialog failed with no result");
+                    }
+                } else {
+                    logInfo("Unable to create URL from string " + user.bankURL);
+                }
+            }
+            catch {
+                logInfo("Anonymous dialog failed with exception");
+            }
+        }
     }
 
     open func dialogInit() throws ->HBCIResultMessage? {
@@ -176,6 +200,7 @@ open class HBCIDialog {
         if let result = msg.result {
             if result.isOk() {
                 result.updateParameterForUser(self.user);
+                checkBPD_for_PSD2(result);
                 return result;
             }
         }
@@ -217,9 +242,24 @@ open class HBCIDialog {
         
         self.dialogId = "0";
         
-        if let result = try sendMessage("Synchronize", values: values) {
+        if var result = try sendMessage("Synchronize", values: values) {
+            if !result.isOk() {
+                // DIBA cannot handle tan method 999... hope we can get rid of this soon...
+                if result.hasResponseWithCode("9010") {
+                    user.tanMethod = "900";
+                    self.dialogId = "0";
+                    messageNum = 1;
+                    if let result2 = try sendMessage("Synchronize", values: values) {
+                        result = result2;
+                    } else {
+                        return nil;
+                    }
+                }
+            }
+            
             if result.isOk() {
                 result.updateParameterForUser(self.user);
+                checkBPD_for_PSD2(result);
                 
                 for seg in result.segments {
                     if seg.name == "SyncRes" {
