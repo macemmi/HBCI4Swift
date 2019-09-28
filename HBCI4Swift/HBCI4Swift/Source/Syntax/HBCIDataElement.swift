@@ -8,6 +8,24 @@
 
 import Foundation
 
+public func anonymize(_ s:String) ->String {
+    if s.count == 0 {
+        return s;
+    }
+    var result = s.substringToIndex(1);
+    
+    let len = s.count / 2;
+    if len == 0 {
+        return s;
+    }
+    
+    for _ in 1..<len {
+        result += "*";
+    }
+    result += s.substringFromIndex(len);
+    return result;
+}
+
 class HBCIDataElement: HBCISyntaxElement {
     var _isEmpty: Bool = true;
     var value: Any?
@@ -183,24 +201,6 @@ class HBCIDataElement: HBCISyntaxElement {
                 }
             }
         }
-    }
-    
-    func anonymize(_ s:String) ->String {
-        if s.count == 0 {
-            return s;
-        }
-        var result = s.substringToIndex(1);
-        
-        let len = s.count / 2;
-        if len == 0 {
-            return s;
-        }
-        
-        for _ in 1..<len {
-            result += "*";
-        }
-        result += s.substringFromIndex(len);
-        return result;
     }
     
     override func messageString() -> String {

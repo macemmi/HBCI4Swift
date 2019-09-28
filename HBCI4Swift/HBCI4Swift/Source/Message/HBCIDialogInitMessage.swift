@@ -43,9 +43,14 @@ class HBCIDialogInitMessage : HBCICustomMessage {
 
     
     override func send() throws ->Bool {
+        
+        if dialog.user.securityMethod is HBCISecurityMethodDDV {
+            return try sendNoTan();
+        }
 
         // check if TAN#6 is supported by the bank - if yes, we need a TAN
         var needsTan = false;
+        
         let parameters = self.dialog.user.parameters;
         guard let sd = parameters.supportedSegmentVersion("TAN") else {
             return false;

@@ -110,14 +110,26 @@ class HBCITanProcess_2 {
                 
                 // check if we have a valid reference
                 if tanOrder.orderRef == nil {
-                    logInfo("TAN order reference could not be determined");
-                    return false;
+                    // check if we have a HITAN segment at all...
+                    if msg.result?.segmentsWithName("TAN") != nil {
+                        logInfo("TAN order reference could not be determined");
+                        return false;
+                    } else {
+                        return true;
+                    }
                 }
 
                 // check if we need to have a TAN
                 if tanOrder.hasResponseWithCode("3076") {
                     // if that response is sent back, we don't need a TAN
                     logInfo("Response 3076 found - no TAN needed");
+                    order.updateResult(msg.result!);
+                    return true;
+                }
+                
+                if tanOrder.challenge == "nochallenge" {
+                    // if that response is sent back, we don't need a TAN
+                    logInfo("Value 'nochallenge' found - no TAN needed");
                     order.updateResult(msg.result!);
                     return true;
                 }
@@ -237,14 +249,26 @@ class HBCITanProcess_2 {
             
             // check if we have a valid reference
             if tanOrder.orderRef == nil {
-                logInfo("TAN order reference could not be determined");
-                return false;
+                // check if we have a HITAN segment at all...
+                if let segments = msg.result?.segmentsWithName("TAN"), segments.count > 0 {
+                    logInfo("TAN order reference could not be determined");
+                    return false;
+                } else {
+                    return true;
+                }
             }
-            
+
             // check if we need to have a TAN
             if tanOrder.hasResponseWithCode("3076") {
                 // if that response is sent back, we don't need a TAN
                 logInfo("Response 3076 found - no TAN needed");
+                order?.updateResult(msg.result!);
+                return true;
+            }
+            
+            if tanOrder.challenge == "nochallenge" {
+                // if that response is sent back, we don't need a TAN
+                logInfo("Value 'nochallenge' found - no TAN needed");
                 order?.updateResult(msg.result!);
                 return true;
             }

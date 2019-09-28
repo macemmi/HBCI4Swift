@@ -21,15 +21,18 @@ open class HBCIUser {
     open var tanMethod:String?
     open var tanMediumName:String?
     open var pin:String?
-    open var parameters = HBCIParameters();
+    open var parameters:HBCIParameters;
     open var bankName:String?
     
-    public init(userId:String, customerId:String, bankCode:String, hbciVersion:String, bankURLString:String) {
+    public init(userId:String, customerId:String, bankCode:String, hbciVersion:String, bankURLString:String) throws {
         self.userId = userId;
         self.customerId = customerId;
         self.bankCode = bankCode;
         self.hbciVersion = hbciVersion;
         self.bankURL = bankURLString;
+        
+        let syntax = try HBCISyntax.syntaxWithVersion(hbciVersion);
+        self.parameters = HBCIParameters(syntax);
     }
     
     open func setSecurityMethod(_ method:HBCISecurityMethod) {
@@ -52,6 +55,12 @@ open class HBCIUser {
             if method is HBCISecurityMethodDDV {
                 self.sysId = "0";
             }
+        }
+    }
+    
+    open var anonymizedId:String {
+        get {
+            return anonymize(userId);
         }
     }
     

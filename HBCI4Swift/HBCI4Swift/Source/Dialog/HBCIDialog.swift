@@ -125,7 +125,9 @@ open class HBCIDialog {
                     }
                     logInfo("Message could not be decrypted");
                     logInfo(String(data: result, encoding: String.Encoding.isoLatin1));
-                    
+                    logInfo("Message sent:");
+                    logInfo(msg.messageString());
+
                     // return unencrypted result at least to be able to check for responses
                     return resultMsg_crypted;
                 } else {
@@ -147,8 +149,12 @@ open class HBCIDialog {
                 let dialog = try HBCIAnonymousDialog(hbciVersion: hbciVersion, product: product);
                 if let url = URL(string: user.bankURL) {
                     if let result = try dialog.dialogWithURL(url, bankCode: user.bankCode) {
-                        user.parameters.bpdVersion = 0; // make sure parameters are updated
-                        result.updateParameterForUser(user);
+                        if result.isOk() {
+                            user.parameters.bpdVersion = 0; // make sure parameters are updated
+                            result.updateParameterForUser(user);
+                        } else {
+                            logInfo("Anonymous dialog failed or is not supported");
+                        }
                     } else {
                         logInfo("Anonymous dialog failed with no result");
                     }
@@ -216,16 +222,71 @@ open class HBCIDialog {
             do {
                 if let result = try sendMessage("DialogEnd", values: values) {
                     self.connection.close();
+                    self.messageNum = 1;
                     return result;
                 }
             } catch { };
         }
         self.connection.close();
+        self.messageNum = 1;
         return nil;
     }
     
-    open func syncInit() throws ->HBCIResultMessage? {
+    open func getBankTanMethods() -> [HBCITanMethod]? {
+        // start anonymous dialog
+        do {
+            let dialog = try HBCIAnonymousDialog(hbciVersion: hbciVersion, product: product);
+            if let url = URL(string: user.bankURL) {
+                if let result = try dialog.dialogWithURL(url, bankCode: user.bankCode) {
+                    if result.isOk() {
+                        user.parameters.bpdVersion = 0; // make sure parameters are updated
+                        result.updateParameterForUser(user);
+                        return user.parameters.getAllTanMethods();
+                    }
+                } else {
+                    logInfo("Anonymous dialog failed with no result");
+                }
+            } else {
+                logInfo("Unable to create URL from string " + user.bankURL);
+            }
+        }
+        catch {
+            logInfo("Anonymous dialog failed with exception");
+        }
+        return nil;
+    }
+    
+    /*
+    open func getTanMethods() throws ->HBCIResultMessage? {
         user.tanMethod = "999";
+        user.sysId = "0";
+        
+        let values:Dictionary<String,Any> = ["Idn.KIK.country":"280",
+                                             "Idn.KIK.blz":user.bankCode,
+                                             "Idn.customerid":user.customerId,
+                                             "Idn.sysid":"0",
+                                             "Idn.sysStatus":"1",
+                                             "ProcPrep.BPD":"0",
+                                             "ProcPrep.UPD":"0",
+                                             "ProcPrep.lang":"0",
+                                             "ProcPrep.prodName":product,
+                                             "ProcPrep.prodVersion":version];
+        
+        self.dialogId = "0";
+
+        if let result = try sendMessage("DialogInit", values: values) {
+            if result.isOk() {
+                result.updateParameterForUser(self.user);
+                checkBPD_for_PSD2(result);
+                return result;
+            }
+        }
+        return nil;
+    }
+    */
+    
+    open func syncInitWithTan(_ tanMethod:String) throws -> HBCIResultMessage? {
+        user.tanMethod = tanMethod;
         user.sysId = "0";
         
         let values:Dictionary<String,Any> = ["Idn.KIK.country":"280",
@@ -242,21 +303,20 @@ open class HBCIDialog {
         
         self.dialogId = "0";
         
-        if var result = try sendMessage("Synchronize", values: values) {
-            if !result.isOk() {
-                // DIBA cannot handle tan method 999... hope we can get rid of this soon...
-                if result.hasResponseWithCode("9010") {
-                    user.tanMethod = "900";
-                    self.dialogId = "0";
-                    messageNum = 1;
-                    if let result2 = try sendMessage("Synchronize", values: values) {
-                        result = result2;
-                    } else {
-                        return nil;
-                    }
-                }
-            }
-            
+        guard let msg = HBCISynchronizeMessage.newInstance(self) else {
+            logInfo("Dialog Init failed: message could not be created");
+            return nil;
+        }
+        if !msg.setElementValues(values) {
+            logInfo("Dialog Init failed: messages values could not be set)");
+            return nil;
+        }
+        guard try msg.send() else {
+            logInfo("Dialog Init failed: message could not be sent");
+            self.messageNum = 1;
+            return nil;
+        }
+        if let result = msg.result {
             if result.isOk() {
                 result.updateParameterForUser(self.user);
                 checkBPD_for_PSD2(result);
@@ -269,6 +329,124 @@ open class HBCIDialog {
                         }
                     }
                 }
+                return result;
+            }
+        }
+        
+        self.messageNum = 1;
+        return nil;
+    }
+    
+    open func syncInit(_ tanMethod:String = "999") throws ->HBCIResultMessage? {
+        user.tanMethod = tanMethod;
+        user.sysId = "0";
+        
+        let values:Dictionary<String,Any> = ["Idn.KIK.country":"280",
+                                             "Idn.KIK.blz":user.bankCode,
+                                             "Idn.customerid":user.customerId,
+                                             "Idn.sysid":"0",
+                                             "Idn.sysStatus":"1",
+                                             "ProcPrep.BPD":"0",
+                                             "Sync.mode":0,
+                                             "ProcPrep.UPD":"0",
+                                             "ProcPrep.lang":"0",
+                                             "ProcPrep.prodName":product,
+                                             "ProcPrep.prodVersion":version];
+        
+        self.dialogId = "0";
+        
+        /*
+        guard let msg = HBCISynchronizeMessage.newInstance(self) else {
+            logInfo("Dialog Init failed: message could not be created");
+            return nil;
+        }
+        if !msg.setElementValues(values) {
+            logInfo("Dialog Init failed: messages values could not be set)");
+            return nil;
+        }
+        guard try msg.send() else {
+            logInfo("Dialog Init failed: message could not be sent");
+            return nil;
+        }
+        if let result = msg.result {
+            if result.isOk() {
+                result.updateParameterForUser(self.user);
+                checkBPD_for_PSD2(result);
+                
+                for seg in result.segments {
+                    if seg.name == "SyncRes" {
+                        user.sysId = seg.elementValueForPath("sysid") as? String;
+                        if user.sysId == nil {
+                            logInfo("SysID could not be found");
+                        }
+                    }
+                }
+                return result;
+            }
+        }
+        */
+
+        if let result = try sendMessage("Synchronize", values: values) {
+            if result.isOk() {
+                result.updateParameterForUser(self.user);
+                checkBPD_for_PSD2(result);
+                
+                for seg in result.segments {
+                    if seg.name == "SyncRes" {
+                        user.sysId = seg.elementValueForPath("sysid") as? String;
+                        if user.sysId == nil {
+                            logInfo("SysID could not be found");
+                        }
+                    }
+                }
+            } else {
+                self.messageNum = 1;
+            }
+            return result;
+        }
+        self.messageNum = 1;
+        return nil;
+    }
+    
+    open func tanMediaInit() throws ->HBCIResultMessage? {
+        if user.sysId == nil {
+            logInfo("TanMediaDialog Init failed: missing sysId");
+            return nil;
+        }
+        
+        var values:Dictionary<String,Any> = ["Idn.KIK.country":"280",
+                                             "Idn.KIK.blz":user.bankCode,
+                                             "Idn.customerid":user.customerId,
+                                             "Idn.sysid":user.sysId!,
+                                             "Idn.sysStatus":"1",
+                                             "ProcPrep.BPD":user.parameters.bpdVersion,
+                                             "ProcPrep.UPD":user.parameters.updVersion,
+                                             "ProcPrep.lang":"0",
+                                             "ProcPrep.prodName":product,
+                                             "ProcPrep.prodVersion":version ];
+        
+        if user.securityMethod is HBCISecurityMethodDDV {
+            values["Idn.sysStatus"] = "0";
+        }
+        
+        self.dialogId = "0";
+        
+        guard let msg = HBCITanMediaDialogInitMessage.newInstance(self) else {
+            logInfo("TanMediaDialog Init failed: message could not be created");
+            return nil;
+        }
+        if !msg.setElementValues(values) {
+            logInfo("TanMediaDialog Init failed: messages values could not be set)");
+            return nil;
+        }
+        guard try msg.send() else {
+            logInfo("TanMediaDialog Init failed: message could not be sent");
+            return nil;
+        }
+        if let result = msg.result {
+            if result.isOk() {
+                result.updateParameterForUser(self.user);
+                checkBPD_for_PSD2(result);
                 return result;
             }
         }

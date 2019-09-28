@@ -82,7 +82,9 @@ open class HBCIAnonymousDialog {
                 
                 do {
                     // don't care if end dialog message fails or not
-                    _ = try sendMessage("DialogEndAnon", values: values as Dictionary<String, Any>);
+                    if resultMsg.isOk() {
+                        _ = try sendMessage("DialogEndAnon", values: values as Dictionary<String, Any>);
+                    }
                 } catch { };
             }
             return resultMsg;            

@@ -423,6 +423,16 @@ open class HBCIResultMessage {
         return segs;
     }
     
+    func segmentsWithName(_ name:String) ->Array<HBCISegment> {
+        var segs = Array<HBCISegment>();
+        for segment in self.segments {
+            if segment.name == name + "Res" {
+                segs.append(segment);
+            }
+        }
+        return segs;
+    }
+    
     func hasSegmentWithVersion(_ code:String, version: Int?) -> Bool {
         for segment in self.segments {
             if segment.code == code {
@@ -440,6 +450,7 @@ open class HBCIResultMessage {
     
     func isBankInPSD2Migration() ->Bool {
         // if the bank sends HKTAN#6 and an oder version we assume it is in migration phase
+        // we currently set this always to true if a HKTAN#6 is found as the HIPINS segment in a personal dialog is not always reliable
         var hasVersion6 = false;
         var hasOldVersion = false;
         for segment in self.segments {
@@ -452,7 +463,7 @@ open class HBCIResultMessage {
                 }
             }
         }
-        return hasVersion6 && hasOldVersion;
+        return hasVersion6;
     }
  
     func hasResponseWithCode(_ code:String) -> Bool {

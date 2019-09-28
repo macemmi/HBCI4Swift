@@ -158,7 +158,7 @@ class HBCIMT94xParser {
         // special check for February - here banks often send 30. February
         if dateString.substring(with: NSMakeRange(2, 2)) == "02" {
             let day = dateString.substring(with: NSMakeRange(4, 2));
-            if day == "30" || day == "31" {
+            if day == "29" || day == "30" || day == "31" {
                 // take first of March and subract 1 day to come to the right day
                 let march = dateString.substring(to: 2) + "0301";
                 if let date = HBCIUtils.dateFormatter().date(from: march) {
@@ -604,6 +604,10 @@ class HBCIMT94xParser {
                 result = result.replacingCharacters(in: NSMakeRange(len-2, 2), with: "\r\n-") as NSString;
             }
             result = result.replacingOccurrences(of: "@@", with: "\r\n") as NSString;
+        }
+        let ending = result.substring(from: result.length-3);
+        if ending.hasSuffix("\r\n") {
+            result = result.appending("-") as NSString;
         }
         return result;
     }

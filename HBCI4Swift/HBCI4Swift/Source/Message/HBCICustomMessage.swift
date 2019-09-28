@@ -136,6 +136,10 @@ open class HBCICustomMessage : HBCIMessage {
             return false;
         }
         
+        if dialog.user.securityMethod is HBCISecurityMethodDDV {
+            return try sendNoTan();
+        }
+        
         // first check if there is one order which needs a TAN - then there can be only one order
         var needsTan = false;
         for order in orders {
@@ -155,7 +159,7 @@ open class HBCICustomMessage : HBCIMessage {
             }
             // if order needs TAN transfer to TAN message processor
             let process = HBCITanProcess_2(dialog: self.dialog);
-            return try process.processOrder(orders.last!)
+            return try process.processMessage(self, orders.last!)
 
         }
         

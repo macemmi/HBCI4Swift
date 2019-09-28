@@ -89,6 +89,8 @@ class HBCISepaGenerator {
             try document.validate();
         } catch let error as NSError {
             logInfo("SEPA document error: " + error.description);
+            logInfo("Schema validation location: " + (schemaLocationAttrNode.stringValue ?? "<none>"));
+            logInfo("Schema validation location old: " + (oldLocation ?? "none"));
             schemaLocationAttrNode.stringValue = oldLocation;
             return false;
         }

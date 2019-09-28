@@ -21,6 +21,14 @@ open class HBCIStatementsOrder: HBCIOrder {
     public init?(message: HBCICustomMessage, account:HBCIAccount) {
         self.account = account;
         super.init(name: "Statements", message: message);
+        
+        let parameters = self.user.parameters;
+        if let sd = parameters.supportedSegmentVersion("TAN") {
+            if sd.version >= 6 {
+                self.needsTan = true;  // Some banks don't manage to send correct HIPINS
+            }
+       }
+ 
         if self.segment == nil {
             return nil;
         }
@@ -44,7 +52,8 @@ open class HBCIStatementsOrder: HBCIOrder {
                 return false;
             }
             
-            values = ["KTV.bic":account.bic!, "KTV.iban":account.iban!, "allaccounts":false];
+            values = ["KTV.bic":account.bic!, "KTV.iban":account.iban!, "KTV.number":account.number, "KTV.KIK.country":"280", "KTV.KIK.blz":account.bankCode, "allaccounts":false];
+            logDebug("IBAN: \(account.iban!)");
         } else {
             values = ["KTV.number":account.number, "KTV.KIK.country":"280", "KTV.KIK.blz":account.bankCode, "allaccounts":false];
             if account.subNumber != nil {
@@ -67,9 +76,7 @@ open class HBCIStatementsOrder: HBCIOrder {
         }
         
         // add to message
-        msg.addOrder(self);
-        
-        return true;
+        return msg.addOrder(self);
     }
     
     func getOutstandingPart(_ offset:String) ->NSString? {

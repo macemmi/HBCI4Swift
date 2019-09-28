@@ -116,9 +116,11 @@ class HBCIDataElementDescription: HBCISyntaxElementDescription {
                 // end detected
                 break;
             }
-            escaped = false;
+            //escaped = false;
             if c == HBCIChar_qmark && !escaped {
                 escaped = true;
+            } else {
+                escaped = false;
             }
             
             if escaped {
@@ -127,7 +129,6 @@ class HBCIDataElementDescription: HBCISyntaxElementDescription {
             } else {
                 target[tidx] = bytes[sidx];
                 tidx += 1; sidx += 1;
-                escaped = false;
             }
         }
         

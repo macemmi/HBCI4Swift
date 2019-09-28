@@ -25,7 +25,7 @@ open class HBCITanMediaOrder : HBCIOrder {
     open func enqueue() ->Bool {
         // check if order is supported
         if !user.parameters.isOrderSupported(self) {
-            logInfo(self.name + " is not supported for user " + user.userId);
+            logInfo(self.name + " is not supported for user " + user.anonymizedId);
             return false;
         }
         

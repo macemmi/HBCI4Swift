@@ -50,16 +50,18 @@ open class HBCIOrder {
             self.segment = seg;
             
             // check if TAN is needed
-            if let ptInfo = self.user.parameters.pinTanInfos {
-                if let tan_needed = ptInfo.supportedSegs[seg.code] {
-                    self.needsTan = tan_needed;
+            if name != "TAN" {
+                if let ptInfo = self.user.parameters.pinTanInfos {
+                    if let tan_needed = ptInfo.supportedSegs[seg.code] {
+                        self.needsTan = tan_needed;
+                    } else {
+                        logInfo(name + " is not supported!");
+                        return nil;
+                    }
                 } else {
-                    logInfo(name + " is not supported!");
+                    logInfo("Missing PIN/TAN information for user \(self.user.anonymizedId)");
                     return nil;
                 }
-            } else {
-                logInfo("Missing PIN/TAN information for user \(self.user.userId)");
-                return nil;
             }
         } else {
             return nil;

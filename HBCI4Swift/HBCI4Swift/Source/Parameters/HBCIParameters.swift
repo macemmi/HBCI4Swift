@@ -17,9 +17,11 @@ open class HBCIParameters {
     var bpSegments = Array<HBCISegment>();
     var tanProcessInfos:HBCITanProcessInformation?
     var supportedTanMethods = Array<String>();
-    var syntax:HBCISyntax!
+    var syntax:HBCISyntax
     
-    init() {}
+    init(_ syntax: HBCISyntax) {
+        self.syntax = syntax;
+    }
     
     open func data() ->Data? {
         return bpData;
@@ -48,10 +50,14 @@ open class HBCIParameters {
                 for element in elements {
                     if let code = element.elementValueForPath("code") as? String {
                         if code == "3920" {
+                            logDebug("return code 3920 found - process TAN methods...");
                             let values = element.elementValuesForPath("parm");
                             for value in values {
                                 if let secfunc = value as? String {
-                                    self.supportedTanMethods.append(secfunc);
+                                    if !self.supportedTanMethods.contains(secfunc) {
+                                        logDebug("add TAN method "+secfunc);
+                                        self.supportedTanMethods.append(secfunc);
+                                    }
                                 }
                             }
                         }
@@ -152,6 +158,15 @@ open class HBCIParameters {
         return result;
     }
     
+    open func getAllTanMethods() ->Array<HBCITanMethod> {
+        if let tpi = self.tanProcessInfos {
+            return tpi.tanMethods;
+        } else {
+            logError("Keine unterstützten TAN-Methoden gefunden");
+        }
+        return [HBCITanMethod]();
+    }
+    
     open func supportedVersionsForOrder(_ name:String) ->Array<Int> {
         var versions = Array<Int>();
         
@@ -165,6 +180,7 @@ open class HBCIParameters {
     }
     
     func supportedSegmentVersion(_ name:String) ->HBCISegmentDescription? {
+        logDebug("Start supportedSegmentVersion for segment: "+name);
         if let segVersions = syntax.segs[name] {
             // now find the right segment version
             // check which segment versions are supported by the bank
@@ -183,36 +199,46 @@ open class HBCIParameters {
                 // we nevertheless go on - this sometimes works
                 logInfo("Segment " + name + " has no version information from bank - we nevertheless continue...");
                 supportedVersions = segVersions.versionNumbers;
+                //logDebug(supportedVersions.description);
             }
             // now sort the versions - we take the latest supported version
             supportedVersions.sort(by: >);
             
-            return segVersions.segmentWithVersion(supportedVersions.first!);
+            if supportedVersions.count == 0 {
+                logDebug("No supported versions");
+                return nil;
+            }
+            if let firstVersion = supportedVersions.first {
+                return segVersions.segmentWithVersion(firstVersion);
+            } else {
+                logDebug("firstVersion is nil!");
+                return nil;
+            }
+            //return segVersions.segmentWithVersion(supportedVersions.first!);
         }
         logInfo("Segment \(name) is not supported by HBCI4Swift");
         return nil;
     }
     
-    open func isSegmentCodeSupported(_ segmentCode:String, accountNumber:String? = nil, accountSubNumber:String? = nil) ->Bool {
+    open func isSegmentCodeSupported(_ segmentCode:String, accountNumber:String, accountSubNumber:String? = nil) ->Bool {
+        
         for seg in bpSegments {
             if seg.name == "KInfo" {
                 // if account is defined, we check that the account matches
-                if let number = accountNumber {
-                    if let accountNumber = seg.elementValueForPath("KTV.number") as? String {
-                        if accountNumber != number {
+                if let number = seg.elementValueForPath("KTV.number") as? String {
+                    if accountNumber != number {
+                        continue;
+                    }
+                } else {
+                    continue;
+                }
+                if let subNumber = accountSubNumber {
+                    if let subnumber = seg.elementValueForPath("KTV.subnumber") as? String {
+                        if subNumber != subnumber {
                             continue;
                         }
                     } else {
                         continue;
-                    }
-                    if let subNumber = accountSubNumber {
-                        if let subnumber = seg.elementValueForPath("KTV.subnumber") as? String {
-                            if subNumber != subnumber {
-                                continue;
-                            }
-                        } else {
-                            continue;
-                        }
                     }
                 }
                 
@@ -237,11 +263,11 @@ open class HBCIParameters {
                         return true;
                     }
                 }
-                logInfo("Segment code \(segmentCode) is not supported for account \(accountNumber ?? "") subNumber \(accountSubNumber ?? "")");
+                logInfo("Segment code \(segmentCode) is not supported for account \(accountNumber) subNumber \(accountSubNumber ?? "")");
                 return false;
             }
         }
-        logInfo("No account information found for account \(accountNumber ?? "") subNumber \(accountSubNumber ?? "")");
+        logInfo("No account information found for account \(accountNumber) subNumber \(accountSubNumber ?? "")");
         return false;
     }
     
@@ -250,11 +276,19 @@ open class HBCIParameters {
             return false;
         }
         
-        return isSegmentCodeSupported(sd.code);
+        // now check if job is supported in pinTanInfos
+        if let ptInfos = self.pinTanInfos {
+            if ptInfos.supportedSegs[sd.code] == nil {
+                // this is not supported via PIN/TAN
+                logInfo("Segment code \(sd.code) is not supported with PIN/TAN");
+                return false;
+            }
+        }
+        return true;
     }
     
     open func isOrderSupported(_ order:HBCIOrder) ->Bool {
-        return isSegmentCodeSupported(order.segment.code);
+        return isOrderSupported(order.segment.name);
     }
     
     open func isOrderSupportedForAccount(_ order:HBCIOrder, number:String, subNumber:String? = nil) ->Bool {

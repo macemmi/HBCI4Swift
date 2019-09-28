@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		0165FAA11C5CAAFC0076AC81 /* HBCISyntaxTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0165FAA01C5CAAFC0076AC81 /* HBCISyntaxTest.swift */; };
 		0165FAA31C5CC76C0076AC81 /* HBCIFlickerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0165FAA21C5CC76C0076AC81 /* HBCIFlickerTest.swift */; };
+		B1158B8C232D428D0032D5F1 /* HBCITanMediaDialogInitMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1158B8B232D428D0032D5F1 /* HBCITanMediaDialogInitMessage.swift */; };
+		B1158B8D232D428D0032D5F1 /* HBCITanMediaDialogInitMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1158B8B232D428D0032D5F1 /* HBCITanMediaDialogInitMessage.swift */; };
+		B1158B95232D87AF0032D5F1 /* HBCISynchronizeMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1158B94232D87AF0032D5F1 /* HBCISynchronizeMessage.swift */; };
+		B1158B96232D87AF0032D5F1 /* HBCISynchronizeMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1158B94232D87AF0032D5F1 /* HBCISynchronizeMessage.swift */; };
 		B14184331AF5610000F9B6FA /* HBCISepaInfoOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14184321AF5610000F9B6FA /* HBCISepaInfoOrder.swift */; };
 		B14184341AF5610000F9B6FA /* HBCISepaInfoOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14184321AF5610000F9B6FA /* HBCISepaInfoOrder.swift */; };
 		B14184371B0634B300F9B6FA /* HBCISepaDatedTransferOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14184361B0634B300F9B6FA /* HBCISepaDatedTransferOrder.swift */; };
@@ -206,6 +210,8 @@
 /* Begin PBXFileReference section */
 		0165FAA01C5CAAFC0076AC81 /* HBCISyntaxTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISyntaxTest.swift; sourceTree = "<group>"; };
 		0165FAA21C5CC76C0076AC81 /* HBCIFlickerTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIFlickerTest.swift; sourceTree = "<group>"; };
+		B1158B8B232D428D0032D5F1 /* HBCITanMediaDialogInitMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCITanMediaDialogInitMessage.swift; sourceTree = "<group>"; };
+		B1158B94232D87AF0032D5F1 /* HBCISynchronizeMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCISynchronizeMessage.swift; sourceTree = "<group>"; };
 		B14184321AF5610000F9B6FA /* HBCISepaInfoOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = HBCISepaInfoOrder.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B14184361B0634B300F9B6FA /* HBCISepaDatedTransferOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaDatedTransferOrder.swift; sourceTree = "<group>"; };
 		B14184391B06902500F9B6FA /* HBCISepaInternalTransferOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaInternalTransferOrder.swift; sourceTree = "<group>"; };
@@ -571,6 +577,8 @@
 				B19B35FF1AF28BB900F20B9A /* HBCICustomMessage.swift */,
 				B19B36001AF28BB900F20B9A /* HBCIResponse.swift */,
 				B1AC507B22F22B1A00826F1F /* HBCIDialogInitMessage.swift */,
+				B1158B8B232D428D0032D5F1 /* HBCITanMediaDialogInitMessage.swift */,
+				B1158B94232D87AF0032D5F1 /* HBCISynchronizeMessage.swift */,
 			);
 			name = Message;
 			path = Source/Message;
@@ -859,6 +867,7 @@
 				B174E8A41CA88D1F004FD3F0 /* HBCISepaStandingOrderDeleteOrder.swift in Sources */,
 				B14184551B0FD9A200F9B6FA /* HBCISepaParserFactory.swift in Sources */,
 				B163F0E31CCAC51B001E1009 /* HBCISyntaxExtension.swift in Sources */,
+				B1158B8C232D428D0032D5F1 /* HBCITanMediaDialogInitMessage.swift in Sources */,
 				B19B36491AF28C1800F20B9A /* HBCITanProcess_2.swift in Sources */,
 				B14184491B07E34E00F9B6FA /* HBCISepaStandingOrderListOrder.swift in Sources */,
 				B19B35CB1AF28AC500F20B9A /* HBCIDataElementDescription.swift in Sources */,
@@ -879,6 +888,7 @@
 				B19B35D31AF28AC500F20B9A /* HBCISegmentVersions.swift in Sources */,
 				B19B35DB1AF28AC500F20B9A /* HBCISegment.swift in Sources */,
 				B19B35DD1AF28AC500F20B9A /* HBCIMessage.swift in Sources */,
+				B1158B95232D87AF0032D5F1 /* HBCISynchronizeMessage.swift in Sources */,
 				B19B36171AF28BCE00F20B9A /* HBCITanMediaOrder.swift in Sources */,
 				B174E8A81CAB0E34004FD3F0 /* HBCIStandingOrderEditOrder.swift in Sources */,
 				B155FA221B598CFC00C122E1 /* HBCISecurityMethodPinTan.swift in Sources */,
@@ -907,6 +917,7 @@
 				B14184471B07A0A000F9B6FA /* HBCISepaStandingOrderNewOrder.swift in Sources */,
 				B15B73001B559CA6008D2E55 /* HBCISmartcardDDV.swift in Sources */,
 				B19B35E31AF28B1500F20B9A /* HBCIAnonymousDialog.swift in Sources */,
+				B1158B8D232D428D0032D5F1 /* HBCITanMediaDialogInitMessage.swift in Sources */,
 				B16A22401B7A811D005E84FC /* RIPEMD160.swift in Sources */,
 				B19B364C1AF28C1800F20B9A /* HBCISigningOption.swift in Sources */,
 				B14184441B07281800F9B6FA /* HBCIStandingOrder.swift in Sources */,
@@ -972,6 +983,7 @@
 				B19B35CA1AF28AC500F20B9A /* HBCISyntaxElementDescription.swift in Sources */,
 				B155FA231B598CFC00C122E1 /* HBCISecurityMethodPinTan.swift in Sources */,
 				B19B362C1AF28BF900F20B9A /* HBCIUser.swift in Sources */,
+				B1158B96232D87AF0032D5F1 /* HBCISynchronizeMessage.swift in Sources */,
 				B14184591B0FDACD00F9B6FA /* HBCISepaParser_001_003_03.swift in Sources */,
 				B19B35F21AF28B4900F20B9A /* HBCISepaGenerator_001_003_03.swift in Sources */,
 				B19B35D21AF28AC500F20B9A /* HBCIMessageDescription.swift in Sources */,
