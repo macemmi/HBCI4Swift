@@ -12,7 +12,8 @@ import Foundation
 open class HBCISmartcardDDV : HBCISmartcard {
     var cardType:CardType;
     var cardID:NSData?
-    var cardNumber:NSString?
+    
+    open var cardNumber:NSString?
     
     public enum CardType {
         case cardtype_UNKNOWN, cardtype_DDV0, cardtype_DDV1, cardtype_RSA

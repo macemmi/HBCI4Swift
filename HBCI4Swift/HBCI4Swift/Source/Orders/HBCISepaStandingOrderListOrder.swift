@@ -16,6 +16,9 @@ open class HBCISepaStandingOrderListOrder : HBCIOrder {
     public init?(message: HBCICustomMessage, account:HBCIAccount) {
         self.account = account;
         super.init(name: "SepaStandingOrderList", message: message);
+        
+        adjustNeedsTanForPSD2();
+
         if self.segment == nil {
             return nil;
         }
@@ -37,8 +40,7 @@ open class HBCISepaStandingOrderListOrder : HBCIOrder {
                 }
                 if self.segment.setElementValues(values) {
                     // add to dialog
-                    msg.addOrder(self);
-                    return true;
+                    return msg.addOrder(self);
                 } else {
                     logInfo("Could not set values for StandingOrderList");
                 }

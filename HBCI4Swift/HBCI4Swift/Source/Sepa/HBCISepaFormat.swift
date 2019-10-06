@@ -86,7 +86,7 @@ class HBCISepaFormat {
     
     var validationSchemaLocation:String {
         get {
-            var path = Bundle.main.bundlePath;
+            var path = Bundle.main.bundlePath.replacingOccurrences(of: " ", with:"%20");
             path = path + "/Contents/Frameworks/HBCI4Swift.framework/Resources/pain.";
             return urns[formatString]! + " " + path + formatString + ".xsd";
         }

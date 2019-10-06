@@ -44,8 +44,7 @@ open class HBCITanMediaOrder : HBCIOrder {
             logInfo("TAN media type is not provided");
             return false;
         }
-        msg.addOrder(self);
-        return true;
+        return msg.addOrder(self);
     }
     
     override open func updateResult(_ result:HBCIResultMessage) {

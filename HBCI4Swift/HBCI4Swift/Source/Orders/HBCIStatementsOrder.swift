@@ -17,18 +17,14 @@ open class HBCIStatementsOrder: HBCIOrder {
     var offset:String?
     var mt94xString:NSString?
     var isPartial = false;
+    var partNumber = 1;
 
     public init?(message: HBCICustomMessage, account:HBCIAccount) {
         self.account = account;
         super.init(name: "Statements", message: message);
         
-        let parameters = self.user.parameters;
-        if let sd = parameters.supportedSegmentVersion("TAN") {
-            if sd.version >= 6 {
-                self.needsTan = true;  // Some banks don't manage to send correct HIPINS
-            }
-       }
- 
+        adjustNeedsTanForPSD2();
+
         if self.segment == nil {
             return nil;
         }
@@ -53,7 +49,6 @@ open class HBCIStatementsOrder: HBCIOrder {
             }
             
             values = ["KTV.bic":account.bic!, "KTV.iban":account.iban!, "KTV.number":account.number, "KTV.KIK.country":"280", "KTV.KIK.blz":account.bankCode, "allaccounts":false];
-            logDebug("IBAN: \(account.iban!)");
         } else {
             values = ["KTV.number":account.number, "KTV.KIK.country":"280", "KTV.KIK.blz":account.bankCode, "allaccounts":false];
             if account.subNumber != nil {
@@ -87,6 +82,7 @@ open class HBCIStatementsOrder: HBCIOrder {
                     order.dateTo = self.dateTo;
                     order.offset = offset;
                     order.isPartial = true;
+                    order.partNumber = self.partNumber + 1;
                     if !order.enqueue() { return nil; }
                     
                     _ = try msg.send();
@@ -118,9 +114,12 @@ open class HBCIStatementsOrder: HBCIOrder {
                 if var mt94x = NSString(data: booked, encoding: String.Encoding.isoLatin1.rawValue) {
                     
                     // check whether result is incomplete
-                    for response in result.segmentResponses {
-                        if response.code == "3040" && response.parameters.count > 0 {
-                            if let part2 = getOutstandingPart(response.parameters[0]) {
+                    if let offset = self.offset {
+                        if partNumber >= 100 {
+                            // we stop here - too many statement parts
+                            logInfo("Too many statement parts but we still get response 3040 - we stop here")
+                        } else {
+                            if let part2 = getOutstandingPart(offset) {
                                 mt94x = mt94x.appendingFormat(part2);
                             }
                         }

@@ -17,6 +17,9 @@ open class HBCIBalanceOrder : HBCIOrder {
     public init?(message: HBCICustomMessage, account:HBCIAccount) {
         self.account = account;
         super.init(name: "AccountBalance", message: message);
+
+        adjustNeedsTanForPSD2();
+
         if self.segment == nil {
             return nil;
         }
@@ -49,7 +52,7 @@ open class HBCIBalanceOrder : HBCIOrder {
             }
             
             // add to message
-            msg.addOrder(self);
+            return msg.addOrder(self);
         } else {
             // we have the old version
             var values:Dictionary<String,Any> = ["KTV.number":account.number, "KTV.KIK.country":"280", "KTV.KIK.blz":account.bankCode, "allaccounts":false];
@@ -62,9 +65,8 @@ open class HBCIBalanceOrder : HBCIOrder {
             }
 
             // add to message
-            msg.addOrder(self);
+            return msg.addOrder(self);
         }
-        return true;
     }
     
     override open func updateResult(_ result:HBCIResultMessage) {

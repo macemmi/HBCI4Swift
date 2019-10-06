@@ -57,8 +57,7 @@ open class HBCISepaStandingOrderDeleteOrder: HBCIOrder {
                     }
                     if self.segment.setElementValues(values) {
                         // add to dialog
-                        msg.addOrder(self);
-                        return true;
+                        return msg.addOrder(self);
                     } else {
                         logInfo("Could not set values for Sepa Standing Order");
                     }

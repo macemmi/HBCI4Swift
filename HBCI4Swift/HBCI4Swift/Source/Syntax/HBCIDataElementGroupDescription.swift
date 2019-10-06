@@ -68,32 +68,31 @@ class HBCIDataElementGroupDescription: HBCISyntaxElementDescription {
             if let element = parsedElem {
                 if element.isEmpty {
                     // check if element was optional
-                    if ref.minnum < num && !optional {
+                    if ref.minnum > num && !optional {
                         // error: minimal occurence
                         logInfo("Parse error: element \(element.name) is empty but not optional");
                         return nil;
-                    } else {
-                        num = 0;
-                        refIdx += 1;
-                    }
-                } else {
-                    // element is not empty
-                    if ref.name != nil {
-                        element.name = ref.name;
-                    } else {
-                        logInfo("Parse error: reference without name");
-                        return nil;
-                    }
-                    deg.children.append(element);
-                    
-                    num += 1;
-                    if num == ref.maxnum {
-                        // new object
-                        num = 0;
-                        refIdx += 1;
                     }
                 }
                 
+                if ref.name != nil {
+                    element.name = ref.name;
+                } else {
+                    logInfo("Parse error: reference without name");
+                    return nil;
+                }
+                
+                if !element.isEmpty {
+                    deg.children.append(element);
+                }
+                
+                num += 1;
+                if num == ref.maxnum {
+                    // new object
+                    num = 0;
+                    refIdx += 1;
+                }
+
                 p = p.advanced(by: element.length);
                 delimiter = p.pointee;
                 p = p.advanced(by: 1); // consume delimiter

@@ -121,4 +121,17 @@ open class HBCIOrder {
         return false;
     }
     
+    func adjustNeedsTanForPSD2() {
+        // some banks do not send reliable HIPINS information
+        // we need to adjust the needTan flag
+        // we currently set it whenever we have HKTAN#6
+        let parameters = self.user.parameters;
+        if let sd = parameters.supportedSegmentVersion("TAN") {
+            if sd.version >= 6 {
+                self.needsTan = true;  // Some banks don't manage to send correct HIPINS
+            }
+        }
+
+    }
+    
 }

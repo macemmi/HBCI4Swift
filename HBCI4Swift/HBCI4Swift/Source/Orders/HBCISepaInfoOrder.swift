@@ -53,9 +53,7 @@ open class HBCISepaInfoOrder : HBCIOrder {
             idx += 1;
         }
         // add to message
-        msg.addOrder(self);
-
-        return true;
+        return msg.addOrder(self);
     }
     
     override open func updateResult(_ result:HBCIResultMessage) {

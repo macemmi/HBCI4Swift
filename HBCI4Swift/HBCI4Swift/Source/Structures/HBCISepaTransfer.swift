@@ -77,6 +77,7 @@ open class HBCISepaTransfer {
         
         if account.bic == nil {
             logInfo("SEPA Transfer: missing BIC");
+            return false;
         }
         
         return true;

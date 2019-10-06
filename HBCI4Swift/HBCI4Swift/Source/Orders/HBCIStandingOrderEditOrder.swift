@@ -45,8 +45,7 @@ open class HBCISepaStandingOrderEditOrder: HBCIAbstractStandingOrderOrder {
             if let id = self.orderId {
                 if(!self.segment.setElementValue(id, path: "orderid")) { return false };
             }
-            msg.addOrder(self);
-            return true;
+            return msg.addOrder(self);
         }
         return false;
     }

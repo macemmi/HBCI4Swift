@@ -28,6 +28,9 @@ open class HBCIAccountStatementOrder: HBCIOrder {
     public init?(message: HBCICustomMessage, account:HBCIAccount) {
         self.account = account;
         super.init(name: "AccountStatement", message: message);
+
+        adjustNeedsTanForPSD2();
+
         if self.segment == nil {
             return nil;
         }
@@ -75,9 +78,7 @@ open class HBCIAccountStatementOrder: HBCIOrder {
         }
         
         // add to message
-        msg.addOrder(self);
-        
-        return true;
+        return msg.addOrder(self);
     }
 
     override open func updateResult(_ result:HBCIResultMessage) {
