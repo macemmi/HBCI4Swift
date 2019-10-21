@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum HBCIError : Error {
+public enum HBCIError : Error, Equatable {
     case badURL(String)
     case connection(String)
     case serverTimeout(String)
@@ -17,6 +17,7 @@ public enum HBCIError : Error {
     case syntaxFileError
     case parseError
     case userAbort
+    case PINError
     
 }
 

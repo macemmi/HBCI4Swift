@@ -111,7 +111,7 @@ open class HBCIDialog {
                     }
                     self.messageNum += 1;
                     if let value = user.securityMethod.decryptMessage(resultMsg_crypted, dialog: self) {
-                        if value.checkResponses() {
+                        if try value.checkResponses() {
                             logDebug("Result Message:");
                             logDebug(value.description);
                             return value
@@ -129,6 +129,7 @@ open class HBCIDialog {
                     logInfo(msg.messageString());
 
                     // return unencrypted result at least to be able to check for responses
+                    let _ = try resultMsg_crypted.checkResponses();
                     return resultMsg_crypted;
                 } else {
                     logInfo("Message could not be parsed");
@@ -137,6 +138,7 @@ open class HBCIDialog {
                 }
             } catch {
                 logInfo("Message sent: " + msg.messageString());
+                throw error;
             }
         }
         return nil;

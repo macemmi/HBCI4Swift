@@ -365,6 +365,17 @@ open class HBCIParameters {
         return orderNames;
     }
     
+    open func maxStatementDays() ->Int? {
+        for seg in bpSegments {
+            if seg.name == "StatementsPar" {
+                if let maxdays = seg.elementValueForPath("StatementsPar.timerange") as? Int {
+                    return maxdays;
+                }
+            }
+        }
+        return nil;
+    }
+    
     func parametersForJob(_ jobName:String) ->HBCISegment? {
         let parSegName = jobName + "Par";
         for seg in bpSegments {

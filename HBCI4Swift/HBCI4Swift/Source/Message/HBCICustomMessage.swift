@@ -167,29 +167,27 @@ open class HBCICustomMessage : HBCIMessage {
     }
 
     func sendNoTan() throws ->Bool {
-        do {
-            if let result = try self.dialog.sendMessage(self) {
-                self.result = result;
-                
-                let responses = result.responsesForMessage();
-                self.success = true;
-                for response in responses {
-                    if Int(response.code) >= 9000 {
-                        logError("Banknachricht: "+response.description);
-                        self.success = false;
-                    } else {
-                        logInfo("Banknachricht: "+response.description);
-                    }
-                }
-                
-                if self.success {
-                    for order in orders {
-                        order.updateResult(result);
-                    }
-                    return true;
+        if let result = try self.dialog.sendMessage(self) {
+            self.result = result;
+            
+            let responses = result.responsesForMessage();
+            self.success = true;
+            for response in responses {
+                if Int(response.code) >= 9000 {
+                    logError("Banknachricht: "+response.description);
+                    self.success = false;
+                } else {
+                    logInfo("Banknachricht: "+response.description);
                 }
             }
-        } catch { }
+            
+            if self.success {
+                for order in orders {
+                    order.updateResult(result);
+                }
+                return true;
+            }
+        }
         return false;
     }
     

@@ -517,18 +517,24 @@ open class HBCIResultMessage {
         return self.segmentResponses;
     }
     
-    func checkResponses() ->Bool {
+    func checkResponses() throws ->Bool {
         var success = true;
         for response in responsesForMessage() {
             if Int(response.code) >= 9000 {
                 logError("Banknachricht: "+response.description);
                 success = false;
+                if response.description.contains("PIN") {
+                    throw HBCIError.PINError;
+                }
             }
         }
         for response in responsesForSegments() {
             if Int(response.code) >= 9000 || (!success && Int(response.code) >= 3000) {
                 logError("Banknachricht: "+response.description);
                 success = false;
+                if response.description.contains("PIN") {
+                    throw HBCIError.PINError;
+                }
             }
         }
         return success;

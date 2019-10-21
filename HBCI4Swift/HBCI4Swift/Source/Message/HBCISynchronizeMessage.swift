@@ -34,11 +34,6 @@ class HBCISynchronizeMessage : HBCIDialogInitMessage {
             if !segment.setElementValue("HKSYN", path: "ordersegcode") {
                 return false;
             }
-            if order.tanMediumName == nil {
-                if !segment.setElementValue("dummy", path: "tanmedia") {
-                    return false;
-                }
-            }
             return addOrder(order, afterSegmentCode: "HKVVB");
         } else {
             logInfo("Order comes without segment!");

@@ -23,7 +23,7 @@ open class HBCIStatementsOrder: HBCIOrder {
         self.account = account;
         super.init(name: "Statements", message: message);
         
-        adjustNeedsTanForPSD2();
+        //adjustNeedsTanForPSD2();
 
         if self.segment == nil {
             return nil;
@@ -56,7 +56,14 @@ open class HBCIStatementsOrder: HBCIOrder {
             }
         }
         
-        if let date = dateFrom {
+        if var date = dateFrom {
+            if let maxdays = user.parameters.maxStatementDays() {
+                let currentDate = Date();
+                let minDate = currentDate.addingTimeInterval((Double)((maxdays-1) * 24 * 3600 * -1));
+                if minDate > date {
+                    date = minDate;
+                }
+            }            
             values["startdate"] = date;
         }
         if let date = dateTo {
