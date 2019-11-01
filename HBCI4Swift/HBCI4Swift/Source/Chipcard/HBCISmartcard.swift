@@ -141,7 +141,7 @@ open class HBCISmartcard {
         var recBuffer = [UInt8](repeating:0, count:Int(MAX_BUFFER_SIZE));
         var pin_verify = PIN_VERIFY_STRUCTURE();
         
-        var command:[UInt8] = [ APDU_CLA_STD, APDU_INS_VERIFY, 0x00, 0x81, 0x08, 0x25, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff ];
+        let command:[UInt8] = [ APDU_CLA_STD, APDU_INS_VERIFY, 0x00, 0x81, 0x08, 0x25, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff ];
         
         pin_verify.bTimerOut = 15;
         pin_verify.bTimerOut2 = 5;

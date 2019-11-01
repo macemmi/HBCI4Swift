@@ -758,10 +758,11 @@
 			};
 			buildConfigurationList = B19B358C1AF1792A00F20B9A /* Build configuration list for PBXProject "HBCI4Swift" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = B19B35881AF1792A00F20B9A;
 			productRefGroup = B19B35931AF1792A00F20B9A /* Products */;
