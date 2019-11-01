@@ -32,9 +32,19 @@ open class HBCISepaCollectiveTransferOrder : HBCIAbstractSepaTransferOrder {
         }
         return super.enqueue();
     }
+    
+    override func enrich(_ values: inout Dictionary<String,Any>) {
+        if let parameters = HBCISepaCollectiveTransferOrder.getParameters(self.user) {
+            if parameters.needsTotal {
+                values["Total.value"] = self.transfer.total();
+                values["Total.curr"] = self.transfer.items[0].currency;
+            }            
+        }
+    }
 
     open class func getParameters(_ user:HBCIUser) ->HBCISepaCollectiveTransferPar? {
         guard let (elem, seg) = self.getParameterElement(user, orderName: "SepaCollectiveTransfer") else {
+            logInfo("SepaCollectiveTransferParameters not found!");
             return nil;
         }
         guard let maxNum = elem.elementValueForPath("maxnum") as? Int else {

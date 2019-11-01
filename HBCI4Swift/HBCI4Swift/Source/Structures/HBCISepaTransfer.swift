@@ -82,5 +82,13 @@ open class HBCISepaTransfer {
         
         return true;
     }
+    
+    open func total() -> NSDecimalNumber {
+        var total = NSDecimalNumber.zero;
+        for item in self.items {
+            total = total.adding(item.value);
+        }
+        return total;
+    }
 
 }

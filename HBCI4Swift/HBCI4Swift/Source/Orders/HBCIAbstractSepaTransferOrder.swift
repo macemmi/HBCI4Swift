@@ -19,6 +19,9 @@ open class HBCIAbstractSepaTransferOrder : HBCIOrder {
         }
     }
     
+    func enrich(_ values: inout Dictionary<String,Any>) {
+    }
+    
     func enqueue() ->Bool {
         if !transfer.validate() {
             return false;
@@ -34,11 +37,12 @@ open class HBCIAbstractSepaTransferOrder : HBCIOrder {
         if let gen = HBCISepaGeneratorFactory.creditGenerator(self.user) {
             if let data = gen.documentForTransfer(transfer) {
                 if let iban = transfer.account.iban, let bic = transfer.account.bic {
-                    let values:Dictionary<String,Any> = [
+                    var values:Dictionary<String,Any> = [
                         "My.iban":iban,
                         "My.bic":bic,
                         "sepapain":data,
                         "sepadescr":gen.sepaFormat.urn];
+                    enrich(&values);
                     if self.segment.setElementValues(values) {
                         // add to dialog
                         return msg.addOrder(self);
