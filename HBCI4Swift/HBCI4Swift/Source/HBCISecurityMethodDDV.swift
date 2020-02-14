@@ -12,10 +12,10 @@ import CommonCrypto
 open class HBCISecurityMethodDDV : HBCISecurityMethod {
     
     var card:HBCISmartcardDDV!
-    var sigKeyNumber:Int!;
-    var sigKeyVersion:Int!;
-    var cryptKeyNumber:Int!
-    var cryptKeyVersion:Int!
+    var sigKeyNumber:Int?
+    var sigKeyVersion:Int?
+    var cryptKeyNumber:Int?
+    var cryptKeyVersion:Int?
     
     public init(card:HBCISmartcardDDV) {
         self.card = card;
@@ -59,8 +59,6 @@ open class HBCISecurityMethodDDV : HBCISecurityMethod {
                 cryptKeyNumber = Int(cryptKeys.keyNumber);
                 cryptKeyVersion = Int(cryptKeys.keyVersion);
             }
-            
-            
         } else {
             logInfo("No chipcard assigned to DDV security method");
             return false;
@@ -77,6 +75,10 @@ open class HBCISecurityMethodDDV : HBCISecurityMethod {
         
         
         // setup sighead segment
+        guard let sigKeyNumber = self.sigKeyNumber, let sigKeyVersion = self.sigKeyVersion else {
+            return false;
+        }
+        
         var values_head = ["SigHead.secfunc":"2",
             "SigHead.seccheckref":secref, "SigHead.range":"1", "SigHead.role":"1", "SigHead.SecIdnDetails.func":"1",
             "SigHead.SecIdnDetails.cid":card.cardID!, "SigHead.secref":sigid, "SigHead.SecTimestamp.type":"1",
@@ -118,6 +120,10 @@ open class HBCISecurityMethodDDV : HBCISecurityMethod {
             version = seg.version;
         } else {
             logInfo("CryptHead segment not found");
+            return false;
+        }
+        
+        guard let cryptKeyNumber = self.cryptKeyNumber, let cryptKeyVersion = self.cryptKeyVersion else {
             return false;
         }
 
@@ -162,7 +168,6 @@ open class HBCISecurityMethodDDV : HBCISecurityMethod {
 
         if let lastSegNum = msg.lastSegmentNumber() {
             if let dialogId = dialog.dialogId {
-                var cryptedData:Data!
                 let msgBody = msg.messageDataForEncryption();
                 
                 // encrypt message body
@@ -191,7 +196,7 @@ open class HBCISecurityMethodDDV : HBCISecurityMethod {
                         return nil;
                     }
                     
-                    cryptedData = Data(bytes: UnsafePointer<UInt8>(encrypted), count: encSize);
+                    let cryptedData = Data(bytes: UnsafePointer<UInt8>(encrypted), count: encSize)
                     
                     //self.decryptTest(plain, encData: cryptedData);
                     

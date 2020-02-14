@@ -129,8 +129,10 @@ class RIPEMD160 {
     func digest() ->Data {
         let blocks = paddedData.count / 64;
         
-        paddedData.withUnsafeBytes { (p:UnsafePointer<UInt32>) in
-            var x = p;
+        paddedData.withUnsafeBytes { (p:UnsafeRawBufferPointer) in
+            
+            let q = p.bindMemory(to: UInt32.self)
+            var x = q.baseAddress!
             for _ in 0 ..< blocks {
                 hash(x);
                 x = x.advanced(by: 16);

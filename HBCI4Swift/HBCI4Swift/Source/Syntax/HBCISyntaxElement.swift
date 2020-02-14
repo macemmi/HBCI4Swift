@@ -244,7 +244,8 @@ open class HBCISyntaxElement {
         let content = data.bytes.assumingMemoryBound(to: CChar.self);
         for _ in 0..<self.children.count {
             let p = content.advanced(by: size-1);
-            if p.pointee == delim {
+            let q = content.advanced(by: size-2);
+            if p.pointee == delim && q.pointee != HBCIChar.qmark.rawValue {
                 size -= 1;
             } else {
                 break;

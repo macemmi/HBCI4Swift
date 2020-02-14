@@ -284,6 +284,15 @@ open class HBCIResultMessage {
             return nil;
         }
     }
+    
+    func hasParameterSegments() ->Bool {
+        for seg in segments {
+            if seg.name == "BPA" || seg.name == "UPA" {
+                return true;
+            }
+        }
+        return false;
+    }
         
     func updateParameterForUser(_ user:HBCIUser) {
         // find BPD version

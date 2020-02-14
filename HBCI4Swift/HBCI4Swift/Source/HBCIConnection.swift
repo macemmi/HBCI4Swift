@@ -47,7 +47,6 @@ class HBCIPinTanConnection : HBCIConnection {
                 throw HBCIError.connection(url.path);
             }
             
-            
             let decoded = Data(base64Encoded: result, options: NSData.Base64DecodingOptions.ignoreUnknownCharacters);
             
             if let value = decoded {

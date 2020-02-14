@@ -29,7 +29,7 @@ open class HBCIAccountStatementOrder: HBCIOrder {
         self.account = account;
         super.init(name: "AccountStatement", message: message);
 
-        adjustNeedsTanForPSD2();
+        //adjustNeedsTanForPSD2();
 
         if self.segment == nil {
             return nil;

@@ -31,7 +31,7 @@ class HBCISynchronizeMessage : HBCIDialogInitMessage {
             return false;
         }
         if let segment = order.segment {
-            if !segment.setElementValue("HKSYN", path: "ordersegcode") {
+            if !segment.setElementValue("HKIDN", path: "ordersegcode") {
                 return false;
             }
             return addOrder(order, afterSegmentCode: "HKVVB");

@@ -596,6 +596,13 @@ class HBCIMT94xParser {
     func repairStatements() -> NSString {
         var result = self.mt94xString;
         
+        if result.hasPrefix(":20:") {
+            result = NSString(format: "\r\n%@", result);
+        }
+        if result.hasSuffix("-\r\n") {
+            result = result.substring(to: result.length-2) as NSString;
+        }
+        
         if self.mt94xString.hasPrefix("@@") || self.mt94xString.hasSuffix("@@") {
             // e.g. GLS Bank
             result = self.mt94xString.replacingOccurrences(of: "@@@@", with: "\r\n-\r\n") as NSString;

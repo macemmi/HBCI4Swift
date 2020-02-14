@@ -32,14 +32,15 @@ class HBCITanOrder : HBCIOrder {
     
     func finalize(_ refOrder:HBCIOrder?) ->Bool {
         if let process = self.process {
-            var values:Dictionary<String,Any> = ["process":process];
+            var values:Dictionary<String,Any> = ["process":process, "notlasttan":false];
             if tanMediumName != nil {
                 values["tanmedia"] = tanMediumName!
             }
+            /*
             if process == "1" || process == "2" {
                 values["notlasttan"] = false;
             }
-            
+            */
             if orderRef != nil {
                 values["orderref"] = orderRef;
             }

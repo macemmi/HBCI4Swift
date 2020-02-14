@@ -271,6 +271,10 @@ open class HBCIParameters {
         return false;
     }
     
+    open func isOrderSupportedByBank(_ segmentName:String) ->Bool {
+        return supportedSegmentVersion(segmentName) != nil;
+    }
+    
     open func isOrderSupported(_ segmentName:String) ->Bool {
         guard let sd = supportedSegmentVersion(segmentName) else {
             return false;

@@ -183,7 +183,7 @@ open class HBCIDialog {
                                                "Idn.sysStatus":"1",
                                                "ProcPrep.BPD":user.parameters.bpdVersion,
                                                "ProcPrep.UPD":user.parameters.updVersion,
-                                               "ProcPrep.lang":"0",
+                                               "ProcPrep.lang":"1",
                                                "ProcPrep.prodName":product,
                                                "ProcPrep.prodVersion":version ];
         
@@ -240,7 +240,7 @@ open class HBCIDialog {
             let dialog = try HBCIAnonymousDialog(hbciVersion: hbciVersion, product: product);
             if let url = URL(string: user.bankURL) {
                 if let result = try dialog.dialogWithURL(url, bankCode: user.bankCode) {
-                    if result.isOk() {
+                    if result.isOk() || result.hasParameterSegments() {
                         user.parameters.bpdVersion = 0; // make sure parameters are updated
                         result.updateParameterForUser(user);
                         return user.parameters.getAllTanMethods();
@@ -299,7 +299,7 @@ open class HBCIDialog {
                                              "ProcPrep.BPD":"0",
                                              "Sync.mode":0,
                                              "ProcPrep.UPD":"0",
-                                             "ProcPrep.lang":"0",
+                                             "ProcPrep.lang":"1",
                                              "ProcPrep.prodName":product,
                                              "ProcPrep.prodVersion":version];
         
@@ -351,7 +351,7 @@ open class HBCIDialog {
                                              "ProcPrep.BPD":"0",
                                              "Sync.mode":0,
                                              "ProcPrep.UPD":"0",
-                                             "ProcPrep.lang":"0",
+                                             "ProcPrep.lang":"1",
                                              "ProcPrep.prodName":product,
                                              "ProcPrep.prodVersion":version];
         
@@ -423,7 +423,7 @@ open class HBCIDialog {
                                              "Idn.sysStatus":"1",
                                              "ProcPrep.BPD":user.parameters.bpdVersion,
                                              "ProcPrep.UPD":user.parameters.updVersion,
-                                             "ProcPrep.lang":"0",
+                                             "ProcPrep.lang":"1",
                                              "ProcPrep.prodName":product,
                                              "ProcPrep.prodVersion":version ];
         

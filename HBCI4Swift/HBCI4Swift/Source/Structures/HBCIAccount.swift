@@ -9,14 +9,14 @@
 import Foundation
 
 open class HBCIAccount {
-    public let  number:String!
+    public let  number:String
     public let  subNumber:String?
-    public let  bankCode:String!
+    public let  bankCode:String
     open var    iban:String?
     open var    bic:String?
     open var    name:String?
-    public let  owner:String!
-    public let  currency:String!
+    public let  owner:String
+    public let  currency:String
     open var    type:Int?
     open var    allowed = Array<String>();
     
@@ -29,18 +29,27 @@ open class HBCIAccount {
     }
     
     init?(segment:HBCISegment) {
-        self.number = segment.elementValueForPath("KTV.number") as? String;
+        guard let number = segment.elementValueForPath("KTV.number") as? String else {
+            return nil;
+        }
         self.subNumber = segment.elementValueForPath("KTV.subnumber") as? String;
-        self.bankCode = segment.elementValueForPath("KTV.KIK.blz") as? String;
-        var owner = segment.elementValueForPath("name1") as? String;
-        if owner != nil {
-            if let name2 = segment.elementValueForPath("name2") as? String {
-                owner = owner! + name2;
-            }
+        guard let bankCode = segment.elementValueForPath("KTV.KIK.blz") as? String else {
+            return nil;
+        }
+        self.number = number;
+        self.bankCode = bankCode;
+        guard var owner = segment.elementValueForPath("name1") as? String else {
+            return nil;
+        }
+        if let name2 = segment.elementValueForPath("name2") as? String {
+            owner = owner + name2;
         }
         self.owner = owner;
         self.name = segment.elementValueForPath("konto") as? String;
-        self.currency = segment.elementValueForPath("cur") as? String;
+        guard let currency = segment.elementValueForPath("cur") as? String else {
+            return nil;
+        }
+        self.currency = currency;
         
         if segment.version >= 5 {
             self.type = segment.elementValueForPath("acctype") as? Int;
@@ -48,10 +57,6 @@ open class HBCIAccount {
         
         if segment.version >= 6 {
             self.iban = segment.elementValueForPath("iban") as? String;
-        }
-        
-        if self.number == nil || self.bankCode == nil || self.owner == nil || self.currency == nil {
-            return nil;
         }
         
         // allowed processes

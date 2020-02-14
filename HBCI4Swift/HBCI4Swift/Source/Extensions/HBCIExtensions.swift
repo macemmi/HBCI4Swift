@@ -104,7 +104,11 @@ extension String {
         if let chars = self.cString(using: String.Encoding.isoLatin1) {
             var res = Array<CChar>();
             for x in chars {
-                if x == HBCIChar.plus.rawValue || x == HBCIChar.dpoint.rawValue || x == HBCIChar.quote.rawValue || x == HBCIChar.qmark.rawValue {
+                if  x == HBCIChar.plus.rawValue ||
+                    x == HBCIChar.dpoint.rawValue ||
+                    x == HBCIChar.quote.rawValue ||
+                    x == HBCIChar.qmark.rawValue ||
+                    x == HBCIChar.amper.rawValue {
                     res.append(HBCIChar.qmark.rawValue);
                 }
                 res.append(x);

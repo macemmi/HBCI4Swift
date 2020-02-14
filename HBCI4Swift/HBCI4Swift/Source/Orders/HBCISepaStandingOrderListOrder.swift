@@ -17,8 +17,6 @@ open class HBCISepaStandingOrderListOrder : HBCIOrder {
         self.account = account;
         super.init(name: "SepaStandingOrderList", message: message);
         
-        adjustNeedsTanForPSD2();
-
         if self.segment == nil {
             return nil;
         }

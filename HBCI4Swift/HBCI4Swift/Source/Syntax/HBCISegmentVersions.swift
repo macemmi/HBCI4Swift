@@ -90,7 +90,7 @@ class HBCISegmentVersions {
     }
     
     func isVersionSupported(_ version:Int) ->Bool {
-        return versionNumbers.index(of: version) != nil;
+        return versionNumbers.firstIndex(of: version) != nil;
     }
     
     func segmentWithVersion(_ version:Int) -> HBCISegmentDescription? {

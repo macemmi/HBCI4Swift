@@ -68,8 +68,8 @@ open class HBCIAnonymousDialog {
     open func dialogWithURL(_ url:URL, bankCode:String) throws ->HBCIResultMessage? {
         self.connection = HBCIPinTanConnection(url: url);
         
-        let values:Dictionary<String,Any> = ["ProcPrep.BPD":"0", "ProcPrep.UPD":"0", "ProcPrep.lang":"0", "ProcPrep.prodName":product,
-                                             "ProcPrep.prodVersion":version, "Idn.KIK.country":"280", "Idn.KIK.blz":bankCode, "TAN.process":"4" ];
+        let values:Dictionary<String,Any> = ["ProcPrep.BPD":"0", "ProcPrep.UPD":"0", "ProcPrep.lang":"1", "ProcPrep.prodName":product,
+                                             "ProcPrep.prodVersion":version, "Idn.KIK.country":"280", "Idn.KIK.blz":bankCode, "TAN.process":"4", "TAN.ordersegcode":"HKIDN" ];
         
         if let resultMsg = try sendMessage("DialogInitAnon", values: values) {
             // get dialog id

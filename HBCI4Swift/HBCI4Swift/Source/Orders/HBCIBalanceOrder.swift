@@ -18,7 +18,7 @@ open class HBCIBalanceOrder : HBCIOrder {
         self.account = account;
         super.init(name: "AccountBalance", message: message);
 
-        adjustNeedsTanForPSD2();
+        //adjustNeedsTanForPSD2();
 
         if self.segment == nil {
             return nil;

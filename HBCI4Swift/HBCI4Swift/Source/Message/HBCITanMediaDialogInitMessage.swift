@@ -35,7 +35,7 @@ class HBCITanMediaDialogInitMessage : HBCIDialogInitMessage {
                 return false;
             }
             if order.tanMediumName == nil {
-                if !segment.setElementValue("dummy", path: "tanmedia") {
+                if !segment.setElementValue("noref", path: "tanmedia") {
                     return false;
                 }
             }
