@@ -573,10 +573,11 @@ class HBCIMT94xParser {
         let rawStatements = repairedStatements.components(separatedBy: "\r\n:20:") ;
         for raw in rawStatements {
             if raw.count > 2 {
-                var trimmed = raw.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) as NSString;
+                //var trimmed = raw.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) as NSString;
+                var trimmed = (":20:" + raw) as NSString;
                 let ending = trimmed.substring(from: trimmed.length-3);
                 if ending != "\r\n-" {
-                    logInfo("MT94xParse error: cannot parse MT94x statement: "+(trimmed as String));
+                    logInfo("MT94xParse error: cannot parse MT94x statement (incorrect or no endmark): "+(trimmed as String));
                     throw HBCIError.parseError;
                 }
                 trimmed = trimmed.substring(to: trimmed.length-3) as NSString;
@@ -612,9 +613,20 @@ class HBCIMT94xParser {
             }
             result = result.replacingOccurrences(of: "@@", with: "\r\n") as NSString;
         }
+        if result.hasPrefix("STARTUMS") {
+            let r = result.range(of: "\r\n");
+            if r.location != NSNotFound {
+                result = result.substring(from: r.location) as NSString;
+            }
+         }
         let ending = result.substring(from: result.length-3);
-        if ending.hasSuffix("\r\n") {
-            result = result.appending("-") as NSString;
+        if ending != "\r\n-" {
+            if ending.hasSuffix("\r\n") {
+                result = result.appending("-") as NSString;
+            } else {
+                // try to fix missing endmark
+                result = result.appending("\r\n-") as NSString;
+            }
         }
         return result;
     }

@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		0165FAA11C5CAAFC0076AC81 /* HBCISyntaxTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0165FAA01C5CAAFC0076AC81 /* HBCISyntaxTest.swift */; };
 		0165FAA31C5CC76C0076AC81 /* HBCIFlickerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0165FAA21C5CC76C0076AC81 /* HBCIFlickerTest.swift */; };
+		B106934C246B303100A234E8 /* pain.001.001.03.xsd in Resources */ = {isa = PBXBuildFile; fileRef = B106934B246B303100A234E8 /* pain.001.001.03.xsd */; };
+		B106934E246B34E700A234E8 /* HBCISepaGenerator_001_001_03.swift in Sources */ = {isa = PBXBuildFile; fileRef = B106934D246B34E700A234E8 /* HBCISepaGenerator_001_001_03.swift */; };
+		B106934F246B34E700A234E8 /* HBCISepaGenerator_001_001_03.swift in Sources */ = {isa = PBXBuildFile; fileRef = B106934D246B34E700A234E8 /* HBCISepaGenerator_001_001_03.swift */; };
 		B1158B8C232D428D0032D5F1 /* HBCITanMediaDialogInitMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1158B8B232D428D0032D5F1 /* HBCITanMediaDialogInitMessage.swift */; };
 		B1158B8D232D428D0032D5F1 /* HBCITanMediaDialogInitMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1158B8B232D428D0032D5F1 /* HBCITanMediaDialogInitMessage.swift */; };
 		B1158B95232D87AF0032D5F1 /* HBCISynchronizeMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1158B94232D87AF0032D5F1 /* HBCISynchronizeMessage.swift */; };
@@ -210,6 +213,8 @@
 /* Begin PBXFileReference section */
 		0165FAA01C5CAAFC0076AC81 /* HBCISyntaxTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISyntaxTest.swift; sourceTree = "<group>"; };
 		0165FAA21C5CC76C0076AC81 /* HBCIFlickerTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIFlickerTest.swift; sourceTree = "<group>"; };
+		B106934B246B303100A234E8 /* pain.001.001.03.xsd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = pain.001.001.03.xsd; sourceTree = "<group>"; };
+		B106934D246B34E700A234E8 /* HBCISepaGenerator_001_001_03.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCISepaGenerator_001_001_03.swift; sourceTree = "<group>"; };
 		B1158B8B232D428D0032D5F1 /* HBCITanMediaDialogInitMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCITanMediaDialogInitMessage.swift; sourceTree = "<group>"; };
 		B1158B94232D87AF0032D5F1 /* HBCISynchronizeMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCISynchronizeMessage.swift; sourceTree = "<group>"; };
 		B14184321AF5610000F9B6FA /* HBCISepaInfoOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = HBCISepaInfoOrder.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -354,6 +359,7 @@
 		019E075E1B19AE4B0078C268 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				B106934B246B303100A234E8 /* pain.001.001.03.xsd */,
 				B1AE54A71B1A57D1008C7BBE /* pain.001.003.03.xsd */,
 				B19B35AF1AF28AC500F20B9A /* hbci220.xml */,
 				B19B35B01AF28AC500F20B9A /* hbci300.xml */,
@@ -505,6 +511,7 @@
 				B19B35E81AF28B4900F20B9A /* HBCISepaGenerator.swift */,
 				B19B35E91AF28B4900F20B9A /* HBCISepaGeneratorCredit.swift */,
 				B19B35EA1AF28B4900F20B9A /* HBCISepaGenerator_001_003_03.swift */,
+				B106934D246B34E700A234E8 /* HBCISepaGenerator_001_001_03.swift */,
 				B141844B1B0FBE4200F9B6FA /* HBCISepaParser.swift */,
 				B141844E1B0FC0A600F9B6FA /* HBCISepaParserCredit.swift */,
 				B14184541B0FD9A200F9B6FA /* HBCISepaParserFactory.swift */,
@@ -785,6 +792,7 @@
 				B19B35C11AF28AC500F20B9A /* hbci300.xml in Resources */,
 				B1AE54A81B1A57D1008C7BBE /* pain.001.003.03.xsd in Resources */,
 				B19B35BF1AF28AC500F20B9A /* hbci220.xml in Resources */,
+				B106934C246B303100A234E8 /* pain.001.001.03.xsd in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -854,6 +862,7 @@
 				B1E26C562210853F0033603E /* HBCIBankMessage.swift in Sources */,
 				B14184461B07A0A000F9B6FA /* HBCISepaStandingOrderNewOrder.swift in Sources */,
 				B19B35FC1AF28BA500F20B9A /* HBCIExtensions.swift in Sources */,
+				B106934E246B34E700A234E8 /* HBCISepaGenerator_001_001_03.swift in Sources */,
 				B19B36051AF28BB900F20B9A /* HBCIResponse.swift in Sources */,
 				B1AC507C22F22B1A00826F1F /* HBCIDialogInitMessage.swift in Sources */,
 				B19B362D1AF28BF900F20B9A /* HBCIStatement.swift in Sources */,
@@ -944,6 +953,7 @@
 				B141844A1B07E34E00F9B6FA /* HBCISepaStandingOrderListOrder.swift in Sources */,
 				B163F0E41CCAC51B001E1009 /* HBCISyntaxExtension.swift in Sources */,
 				B19B35EE1AF28B4900F20B9A /* HBCISepaGenerator.swift in Sources */,
+				B106934F246B34E700A234E8 /* HBCISepaGenerator_001_001_03.swift in Sources */,
 				B141845C1B10871100F9B6FA /* HBCISepaFormat.swift in Sources */,
 				B19B35FD1AF28BA500F20B9A /* HBCIExtensions.swift in Sources */,
 				B19B36021AF28BB900F20B9A /* HBCIResultMessage.swift in Sources */,

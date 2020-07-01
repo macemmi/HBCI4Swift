@@ -13,19 +13,8 @@ enum HBCISepaFormatType : String {
 }
 
 let urns = [
-    
-    "001.001.02":"urn:sepade:xsd:pain.001.001.02",
-    "001.002.02":"urn:swift:xsd:$pain.001.002.02",
-    "001.002.03":"urn:iso:std:iso:20022:tech:xsd:pain.001.002.03",
-    "001.003.03":"urn:iso:std:iso:20022:tech:xsd:pain.001.003.03",
-    
-    "002.002.02":"urn:swift:xsd:$pain.002.002.02",
-    "002.003.03":"urn:iso:std:iso:20022:tech:xsd:pain.002.003.03",
-    
-    "008.001.01":"urn:sepade:xsd:pain.008.001.01",
-    "008.002.01":"urn:swift:xsd:$pain.008.002.01",
-    "008.002.02":"urn:iso:std:iso:20022:tech:xsd:pain.008.002.02",
-    "008.003.02":"urn:iso:std:iso:20022:tech:xsd:pain.008.003.02"
+    "001.001.03":"urn:iso:std:iso:20022:tech:xsd:pain.001.001.03",
+    "001.003.03":"urn:iso:std:iso:20022:tech:xsd:pain.001.003.03"
 ];
 
 
@@ -48,8 +37,10 @@ class HBCISepaFormat {
     
     init?(urn:String) {
         let pattern = "[0-9]{3}.[0-9]{3}.[0-9]{2}";
-        
+        //let pattern = "pain.[0-9]{3}.[0-9]{3}.[0-9]{2}(_GBIC_[0-9])?";
+
         if let match = urn.range(of: pattern, options: NSString.CompareOptions.regularExpression, range: nil, locale: nil) {
+            //let prefix = urn.prefix(upTo: match.lowerBound);
             let format = String(urn[match]);
             self.type = HBCISepaFormatType(rawValue: format.substringToIndex(3));
             self.variant = format.substringWithRange(NSMakeRange(4, 3));

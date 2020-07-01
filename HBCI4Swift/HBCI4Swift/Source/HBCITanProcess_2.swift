@@ -123,14 +123,16 @@ class HBCITanProcess_2 {
             if tanOrder.hasResponseWithCode("3076") {
                 // if that response is sent back, we don't need a TAN
                 logInfo("Response 3076 found - no TAN needed");
-                order?.updateResult(msg.result!);
+                // if TAN is not needed, the update did already happen during sendNoTan above
+                //order?.updateResult(msg.result!);
                 return true;
             }
             
             if tanOrder.challenge == "nochallenge" {
                 // if that response is sent back, we don't need a TAN
                 logInfo("Value 'nochallenge' found - no TAN needed");
-                order?.updateResult(msg.result!);
+                // if TAN is not needed, the update did already happen during sendNoTan above
+                //order?.updateResult(msg.result!);
                 return true;
             }
             
