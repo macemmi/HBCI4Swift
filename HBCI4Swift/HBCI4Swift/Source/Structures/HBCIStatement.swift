@@ -43,6 +43,14 @@ open class HBCIStatementItem {
     open var currency:String?
     open var primaNota:String?
     
+    open var endToEndId:String?
+    open var debitorId:String?
+    open var creditorId:String?
+    open var ultimateDebitorId:String?
+    open var ultimateCreditorId:String?
+    open var purposeCode:String?
+    open var mandateId:String?
+    
     open var isCancellation:Bool?
     open var isSEPA:Bool?
     

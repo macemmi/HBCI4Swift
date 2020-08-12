@@ -410,6 +410,17 @@ open class HBCIParameters {
         return result;
     }
     
+    func camtFormats() ->[String] {
+        for seg in bpSegments {
+            if seg.name == "CamtStatementsPar" {
+                if let formats = seg.elementValuesForPath("StatementsPar.suppformats") as? [String] {
+                    return formats;
+                }
+            }
+        }
+        return [String]();
+    }
+    
     open func getAccounts() ->Array<HBCIAccount> {
         var result = Array<HBCIAccount>();
         

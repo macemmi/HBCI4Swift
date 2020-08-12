@@ -362,7 +362,8 @@ class HBCIMT94xParser {
         }
     }
     
-    func parseBalance(_ s:NSString) ->HBCIAccountBalance? {
+    func parseBalance(_ tag:HBCIMT94xTag) ->HBCIAccountBalance? {
+        let s = tag.value;
         let debitcredit = s.substring(to: 1);
         let dateString = s.substring(with: NSRange(location: 1, length: 6));
         let postingDate = HBCIUtils.dateFormatter().date(from: dateString);
@@ -379,11 +380,22 @@ class HBCIMT94xParser {
             
             // round
             value = HBCIUtils.round(value);
-            return HBCIAccountBalance(value: value, date: postingDate!, currency: currency);
+            var balanceType:AccountBalanceType;
+            switch tag.tag {
+                case "60F": balanceType = AccountBalanceType.PreviouslyClosedBooked; break;
+                case "60M": balanceType = AccountBalanceType.InterimBooked; break;
+                case "62F": balanceType = AccountBalanceType.ClosingBooked; break;
+                case "62M": balanceType = AccountBalanceType.InterimBooked; break;
+                case "64": balanceType = AccountBalanceType.ClosingAvailable; break;
+                case "65": balanceType = AccountBalanceType.ForwardAvailable; break;
+                default: balanceType = AccountBalanceType.Unknown;
+            }
+            return HBCIAccountBalance(value: value, date: postingDate!, currency: currency, type: balanceType);
         } else {
             logInfo("MT94xParse error: cannot parse value from "+valueString);
             return nil;
         }
+        
     }
     
     func parseAccountName(_ name:NSString, statement:HBCIStatement) {
@@ -488,7 +500,7 @@ class HBCIMT94xParser {
         }
         tag = tags[idx]; idx += 1;
         if tag.tag == "60F" || tag.tag == "60M" {
-            statement.startBalance = parseBalance(tag.value);
+            statement.startBalance = parseBalance(tag);
             if statement.startBalance == nil {
                 logInfo("MT94xParse error: cannot parse start balance in MT94x entry "+rawStatementString);
                 throw HBCIError.parseError;
@@ -539,7 +551,7 @@ class HBCIMT94xParser {
         
         // end balance
         if tag.tag == "62F" || tag.tag == "62M" {
-            statement.endBalance = parseBalance(tag.value);
+            statement.endBalance = parseBalance(tag);
             if statement.startBalance == nil {
                 logInfo("MT94xParse error: cannot parse end balance in MT94x entry "+rawStatementString);
                 // we will nevertheless go on                
@@ -555,12 +567,12 @@ class HBCIMT94xParser {
 
             // valuta balace
             if tag.tag == "64" {
-                statement.valutaBalance = parseBalance(tag.value);
+                statement.valutaBalance = parseBalance(tag);
             }
             
             // future valuta balance
             if tag.tag == "65" {
-                statement.futureValutaBalance = parseBalance(tag.value);
+                statement.futureValutaBalance = parseBalance(tag);
             }
         }
         

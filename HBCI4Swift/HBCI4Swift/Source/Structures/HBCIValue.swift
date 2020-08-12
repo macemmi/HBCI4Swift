@@ -29,4 +29,20 @@ public struct HBCIValue {
             return nil;
         }
     }
+    
+    public init?(element: XMLElement) {
+        let utility = HBCISepaUtility();
+        
+        guard let stringValue = element.stringValue else {
+            return nil;
+        }
+        guard let value = utility.stringToNumber(stringValue) else {
+            return nil;
+        }
+        self.value = value;
+        guard let currency = element.attribute(forName: "Ccy")?.stringValue else {
+            return nil;
+        }
+        self.currency = currency;
+    }
 }
