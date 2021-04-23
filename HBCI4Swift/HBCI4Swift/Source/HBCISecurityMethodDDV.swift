@@ -196,7 +196,7 @@ open class HBCISecurityMethodDDV : HBCISecurityMethod {
                         return nil;
                     }
                     
-                    let cryptedData = Data(bytes: UnsafePointer<UInt8>(encrypted), count: encSize)
+                    let cryptedData = Data(bytes: encrypted, count: encSize)
                     
                     //self.decryptTest(plain, encData: cryptedData);
                     
@@ -247,7 +247,7 @@ open class HBCISecurityMethodDDV : HBCISecurityMethod {
                         return nil;
                     }
                     
-                    let msgData = Data(bytes: UnsafePointer<UInt8>(decrypted), count: plainSize);
+                    let msgData = Data(bytes: decrypted, count: plainSize);
                     
                     let result = HBCIResultMessage(syntax: dialog.syntax);
                     if !result.parse(msgData) {

@@ -110,19 +110,92 @@ open class HBCIResultMessage {
         }
         return result;
     }
+    
+    class func debugDataDescription(start: UnsafePointer<CChar>, length: Int) -> String? {
+        var i=0;
+        // check if we have non-printable characters
+        while i<length {
+            let c = UInt8(bitPattern: start[i]);
+            if c < 32 && c != 10 && c != 13 {
+                break;
+            }
+            if c > 127 {
+                if  c != 0xC4 &&    //Ä
+                    c != 0xD6 &&    //Ö
+                    c != 0xDC &&    //Ü
+                    c != 0xDF &&    //ß
+                    c != 0xE4 &&    //ä
+                    c != 0xF6 &&    //ö
+                    c != 0xFC {     //ü
+                    break;
+                }
+            }
+            i += 1;
+        }
+        let data = Data(bytes: start, count: length);
+        if i==length {
+            return String(data: data, encoding: String.Encoding.isoLatin1);
+        } else {
+            return data.debugDescription;
+        }
+    }
 
-    func extractSegmentData(_ msgData:Data) ->Array<Data>? {
-        var segmentData = Array<Data>();
+    class func debugDescription(_ msgData:Data) ->String {
+        var result = "";
+        let source = UnsafeMutableBufferPointer<CChar>.allocate(capacity: msgData.count);
+        let target = UnsafeMutableBufferPointer<CChar>.allocate(capacity: msgData.count);
+        defer {
+            source.deallocate();
+            target.deallocate()
+        }
+        target.initialize(repeating: 0);
+        _ = msgData.copyBytes(to: source);
+        var i=0;
 
-        // first extract binary data
-        let content = (msgData as NSData).bytes.bindMemory(to: CChar.self, capacity: msgData.count);
-        var target = [CChar](repeating: 0, count: msgData.count);
-        var i = 0, j = 0;
-        var p = UnsafeMutablePointer<CChar>(mutating: content);
+        while i<msgData.count {
+            if source[i] == HBCIChar.amper.rawValue && i>0 {
+                let p = source.baseAddress!.advanced(by: i);
+                let (bin_size, tag_size) = checkForDataTag(p);
+                if bin_size > 0 {
+                    let bin_start = p.advanced(by: tag_size);
+                    let data = Data(bytes: bin_start, count: bin_size);
+                    if data.hasNonPrintableChars() {
+                        result += data.debugDescription;
+                    } else {
+                        result += String(data: data, encoding: String.Encoding.isoLatin1) ?? "<unknown>";
+                    }
+                    if let descr = self.debugDataDescription(start: bin_start, length: bin_size) {
+                        result += descr;
+                    } else {
+                        result += "<unknown>";
+                    }
+                }
+                i += tag_size+bin_size;
+            } else {
+                let c = UInt8(bitPattern: source[i]);
+                result.append(Character(Unicode.Scalar(c)));
+                i+=1;
+            }
+        }
+        return result;
+    }
+    
+    func extractSegmentData(_ msgData:Data) ->[Data]? {
+        var segmentData = [Data]();
+        var i=0, j=0;
+        
+        let source = UnsafeMutableBufferPointer<CChar>.allocate(capacity: msgData.count);
+        let target = UnsafeMutableBufferPointer<CChar>.allocate(capacity: msgData.count);
+        defer {
+            source.deallocate();
+            target.deallocate();
+        }
+        _ = msgData.copyBytes(to: source);
         
         while i < msgData.count {
-            if p.pointee == HBCIChar.amper.rawValue && i > 0 {
+            if source[i] == HBCIChar.amper.rawValue && i > 0 {
                 // first check if we have binary data
+                let p = source.baseAddress!.advanced(by: i);
                 let (bin_size, tag_size) = checkForDataTag(p);
                 if bin_size > 0 {
                     // now we have binary data
@@ -140,7 +213,6 @@ open class HBCIResultMessage {
                             }
                         }
                         i += tag_size+bin_size;
-                        p = p.advanced(by: tag_size+bin_size);
                     } else {
                         // issue during conversion
                         logInfo("tag \(tag) cannot be converted to Latin1");
@@ -150,10 +222,9 @@ open class HBCIResultMessage {
                 }
             }
             
-            target[j] = p.pointee;
+            target[j] = source[i];
             j += 1;
             i += 1;
-            p = p.advanced(by: 1);
         }
         
         // now we have data that does not contain binary data any longer
@@ -163,11 +234,11 @@ open class HBCIResultMessage {
         i = 0;
         var segSize = 0;
         
-        p = UnsafeMutablePointer<CChar>(mutating: target);
         while i < messageSize {
-            segContent[segSize] = p.pointee;
+            segContent[segSize] = target[i];
             segSize += 1;
-            if p.pointee == HBCIChar.quote.rawValue && !isEscaped(p) {
+            let p = UnsafeMutablePointer<CChar>(target.baseAddress)!.advanced(by: i);
+            if target[i] == HBCIChar.quote.rawValue && !isEscaped(p) {
                 // now we have a segment in segContent
                 let data = Data(bytes: segContent, count: segSize);
                 segmentData.append(data);
@@ -179,7 +250,6 @@ open class HBCIResultMessage {
                 segSize = 0;
             }
             i += 1;
-            p = p.advanced(by: 1);
         }
         return segmentData;
     }

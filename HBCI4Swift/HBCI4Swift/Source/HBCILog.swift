@@ -36,6 +36,22 @@ func logDebug(_ message:String?, file:String = #file, function:String = #functio
     }
 }
 
+func logDebug(data: Data?, file:String = #file, function:String = #function, line:Int = #line) {
+    var result = ""
+    if let data = data {
+        data.forEach { byte in
+            if byte < 32 || byte > 126 {
+                result = result.appendingFormat("<%.02X>", byte)
+            } else {
+                result = result + String(Unicode.Scalar(byte))          //Character(Unicode.Scalar(byte))
+            }
+        }
+    }
+    if let log = _log {
+        log.logDebug(result, file: file, function: function, line: line);
+    }
+}
+
 public protocol HBCILog {
      func logError(_ message:String?, file:String, function:String, line:Int);
      func logWarning(_ message:String?, file:String, function:String, line:Int);

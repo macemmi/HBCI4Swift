@@ -75,7 +75,8 @@ open class HBCISecurityMethodPinTan : HBCISecurityMethod {
         var version = 0;
         
         let encKey = [UInt8](repeating: 0, count: 8);
-        let encKeyData = Data(bytes: UnsafePointer<UInt8>(encKey), count: 8);
+        //let encKeyData = Data(bytes: UnsafePointer<UInt8>(encKey), count: 8);
+        let encKeyData = Data(encKey);
         
         if user.sysId == nil {
             logInfo("Signing failed: missing sysId");

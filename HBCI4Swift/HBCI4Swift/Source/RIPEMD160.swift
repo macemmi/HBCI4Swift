@@ -66,6 +66,10 @@ class RIPEMD160 {
         let zeros = (64 - ((data.count+9) % 64)) % 64;
         var n = data.count * 8;
         paddedData.append(paddingData, count: zeros+1);
+        
+        let p = UnsafeMutablePointer<Int>.allocate(capacity: 1)
+        memcpy(p, &n,MemoryLayout.size(ofValue: n))
+        
         paddedData.append(UnsafeBufferPointer<Int>(start: &n, count: 1));
         return paddedData;
     }

@@ -83,6 +83,17 @@ class HBCICamtParser_052_001_02  {
                         for purpElem in detElem.elementsForPath("RmtInf.Ustrd") {
                             purpose = purpose + (purpElem.stringValue ?? "");
                         }
+                        if purpose.count == 0 {
+                            if let transactionText = item.transactionText {
+                                if transactionText.count > 0 {
+                                    let parts = transactionText.split(separator: ";");
+                                    item.transactionText = String(parts.first ?? "");
+                                    for part in parts {
+                                        purpose += part;
+                                    }
+                                }
+                            }
+                        }
                         item.purpose = purpose;
                         
                         item.endToEndId = detElem.stringValueForPath("Refs.EndToEndId");

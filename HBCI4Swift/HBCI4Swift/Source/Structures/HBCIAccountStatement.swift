@@ -27,6 +27,7 @@ open class HBCIAccountStatement {
     public let startDate:Date!
     public let endDate:Date!
     public let booked:Data!
+    public let bookedStatements: [HBCIStatement]?
     open var closingInfo:String?
     open var conditionInfo:String?
     open var advertisement:String?
@@ -45,12 +46,28 @@ open class HBCIAccountStatement {
         self.endDate = segment.elementValueForPath("TimeRange.enddate") as? Date;
         self.booked = segment.elementValueForPath("booked") as? Data;
         
+        var statements = [HBCIStatement]();
+        if let format = self.format {
+            if format == HBCIAccountStatementFormat.mt940 {
+                if let mt94x = NSString(data: booked, encoding: String.Encoding.isoLatin1.rawValue) {
+                    let parser = HBCIMT94xParser(mt94xString: mt94x);
+                    do {
+                        statements.append(contentsOf: try parser.parse());
+                    }
+                    catch {
+                        // ignore errors here so that we can continue with next account
+                    }
+                }
+            }
+        }
+        self.bookedStatements = statements.count > 0 ? statements:nil;
+
         if self.format == nil || self.startDate == nil || self.endDate == nil || self.booked == nil {
             logInfo("AccountStatement: mandatory parameter is missing");
             logInfo(segment.description);
             return nil;
         }
-        
+                
         self.closingInfo = segment.elementValueForPath("closingInfo") as? String;
         self.conditionInfo = segment.elementValueForPath("conditionInfo") as? String;
         self.conditionInfo = segment.elementValueForPath("conditionInfo") as? String;

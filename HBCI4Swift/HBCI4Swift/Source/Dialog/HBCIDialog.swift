@@ -102,8 +102,8 @@ open class HBCIDialog {
             do {
                 let result = try self.connection.sendMessage(msgData);
                 logDebug("Message received:");
-                logDebug(String(data: result, encoding: String.Encoding.isoLatin1));
-                
+                logDebug(HBCIResultMessage.debugDescription(result));
+
                 let resultMsg_crypted = HBCIResultMessage(syntax: self.syntax);
                 if resultMsg_crypted.parse(result) {
                     if let dialogId = resultMsg_crypted.valueForPath("MsgHead.dialogid") as? String {
@@ -116,15 +116,16 @@ open class HBCIDialog {
                             logDebug(value.description);
                             return value
                         } else {
-                            logInfo("Message received:");
-                            logInfo(String(data:result, encoding:String.Encoding.isoLatin1));
+                            logDebug("Message received:");
+                            logDebug(HBCIResultMessage.debugDescription(result));
                             logInfo("Message sent:");
                             logInfo(msg.messageString());
                             return value;
                         }
                     }
                     logInfo("Message could not be decrypted");
-                    logInfo(String(data: result, encoding: String.Encoding.isoLatin1));
+                    logDebug(HBCIResultMessage.debugDescription(result));
+                    logDebug(data: result);
                     logInfo("Message sent:");
                     logInfo(msg.messageString());
 
@@ -133,7 +134,8 @@ open class HBCIDialog {
                     return resultMsg_crypted;
                 } else {
                     logInfo("Message could not be parsed");
-                    logInfo(String(data: result, encoding: String.Encoding.isoLatin1));
+                    logDebug(HBCIResultMessage.debugDescription(result));
+                    logDebug(data: result);
                     return nil;
                 }
             } catch {
