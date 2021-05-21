@@ -235,7 +235,6 @@ class HBCISyntax {
         } else {
             // load syntax
             var path = Bundle.main.bundlePath;
-            path = path.replacingOccurrences(of: " ", with: "%20");
             path = path + "/Contents/Frameworks/HBCI4Swift.framework/Resources/hbci\(version).xml";
             let syntax = try HBCISyntax(path: path);
             

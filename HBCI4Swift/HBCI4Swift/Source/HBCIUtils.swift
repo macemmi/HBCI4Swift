@@ -12,6 +12,7 @@ var _instance:HBCIUtils?
 
 private var __dateFormatter:DateFormatter?
 private var __timeFormatter:DateFormatter?
+private var __dateTimeFormatter:DateFormatter?
 private var __numberFormatter:NumberFormatter?
 private var __numberHandler:NSDecimalNumberHandler?
 
@@ -51,6 +52,19 @@ class HBCIUtils {
             formatter.timeZone = TimeZone(identifier: "Europe/Berlin");
             __timeFormatter = formatter;
             return formatter;
+        }
+    }
+    
+    class func dateTimeFormatter() ->DateFormatter {
+        if let formatter = __dateTimeFormatter {
+            return formatter;
+        } else {
+            let formatter = DateFormatter();
+            formatter.dateFormat = "yyyyMMddHHmmss";
+            formatter.timeZone = TimeZone(identifier: "Europe/Berlin");
+            __dateTimeFormatter = formatter;
+            return formatter;
+
         }
     }
     

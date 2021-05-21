@@ -12,7 +12,7 @@ public struct HBCIValue {
     public let value:NSDecimalNumber;
     public let currency:String;
     
-    public init(value:NSDecimalNumber, date:Date, currency:String) {
+    public init(value:NSDecimalNumber, currency:String) {
         self.value = value;
         self.currency = currency;
     }
@@ -44,5 +44,16 @@ public struct HBCIValue {
             return nil;
         }
         self.currency = currency;
+    }
+    
+    // String in form EUR123,45
+    public init?(s:String) {
+        self.currency = String(s.prefix(3));
+        var x = s;
+        x.removeFirst(3);
+        guard let value = HBCIUtils.numberFormatter().number(from: x) as? NSDecimalNumber else {
+            return nil;
+        }
+        self.value = value;
     }
 }
