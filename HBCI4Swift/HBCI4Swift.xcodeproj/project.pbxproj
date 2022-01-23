@@ -21,6 +21,7 @@
 		B121B0BC24AD1ED00010627A /* HBCICamtStatementsOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B121B0BB24AD1ED00010627A /* HBCICamtStatementsOrder.swift */; };
 		B121B0BE24AE47170010627A /* HBCICamtParser_052_001_02.swift in Sources */ = {isa = PBXBuildFile; fileRef = B121B0BD24AE47170010627A /* HBCICamtParser_052_001_02.swift */; };
 		B121B0C024AFC5F80010627A /* HBCISepaUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = B121B0BF24AFC5F80010627A /* HBCISepaUtility.swift */; };
+		B13F6ACD278247B50077B590 /* HBCISepaParser_001_001_03.swift in Sources */ = {isa = PBXBuildFile; fileRef = B13F6ACC278247B50077B590 /* HBCISepaParser_001_001_03.swift */; };
 		B14184331AF5610000F9B6FA /* HBCISepaInfoOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14184321AF5610000F9B6FA /* HBCISepaInfoOrder.swift */; };
 		B14184341AF5610000F9B6FA /* HBCISepaInfoOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14184321AF5610000F9B6FA /* HBCISepaInfoOrder.swift */; };
 		B14184371B0634B300F9B6FA /* HBCISepaDatedTransferOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14184361B0634B300F9B6FA /* HBCISepaDatedTransferOrder.swift */; };
@@ -232,6 +233,7 @@
 		B121B0BB24AD1ED00010627A /* HBCICamtStatementsOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCICamtStatementsOrder.swift; sourceTree = "<group>"; };
 		B121B0BD24AE47170010627A /* HBCICamtParser_052_001_02.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCICamtParser_052_001_02.swift; sourceTree = "<group>"; };
 		B121B0BF24AFC5F80010627A /* HBCISepaUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCISepaUtility.swift; sourceTree = "<group>"; };
+		B13F6ACC278247B50077B590 /* HBCISepaParser_001_001_03.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCISepaParser_001_001_03.swift; sourceTree = "<group>"; };
 		B14184321AF5610000F9B6FA /* HBCISepaInfoOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = HBCISepaInfoOrder.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B14184361B0634B300F9B6FA /* HBCISepaDatedTransferOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaDatedTransferOrder.swift; sourceTree = "<group>"; };
 		B14184391B06902500F9B6FA /* HBCISepaInternalTransferOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaInternalTransferOrder.swift; sourceTree = "<group>"; };
@@ -536,6 +538,7 @@
 				B141844E1B0FC0A600F9B6FA /* HBCISepaParserCredit.swift */,
 				B14184541B0FD9A200F9B6FA /* HBCISepaParserFactory.swift */,
 				B14184571B0FDACD00F9B6FA /* HBCISepaParser_001_003_03.swift */,
+				B13F6ACC278247B50077B590 /* HBCISepaParser_001_001_03.swift */,
 				B141845A1B10871100F9B6FA /* HBCISepaFormat.swift */,
 				B121B0BD24AE47170010627A /* HBCICamtParser_052_001_02.swift */,
 				B121B0BF24AFC5F80010627A /* HBCISepaUtility.swift */,
@@ -869,6 +872,7 @@
 				B19B364D1AF28C1800F20B9A /* HBCICallback.swift in Sources */,
 				B141845B1B10871100F9B6FA /* HBCISepaFormat.swift in Sources */,
 				B19B35E41AF28B1500F20B9A /* HBCIDialog.swift in Sources */,
+				B13F6ACD278247B50077B590 /* HBCISepaParser_001_001_03.swift in Sources */,
 				B19B362B1AF28BF900F20B9A /* HBCIUser.swift in Sources */,
 				B19B35EB1AF28B4900F20B9A /* HBCISepaGeneratorFactory.swift in Sources */,
 				B19B35C91AF28AC500F20B9A /* HBCISyntaxElementDescription.swift in Sources */,

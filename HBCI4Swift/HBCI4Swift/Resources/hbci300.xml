@@ -2107,6 +2107,18 @@
         </SEGdef>
         <!-- ================== Custody Account Balance  ========================= -->
         <SEGdef id="CustodyAccountBalance" code="HKWPD">
+            <SEGVersion id="5">
+                <DEG type="SegHead" name="SegHead"/>
+                <DEG type="KTV2" name="KTV" minnum="1"/>
+                <DE name="currency" type="Cur" minnum="0"/>
+                <DE name="quality" type="Code" minnum="0"/>
+                <DE name="maxentries" type="Num" minnum="0"/>
+                <DE name="offset" type="AN" maxsize="35" minnum="0"/>
+                <valids path="quality">
+                    <validvalue>1</validvalue>
+                    <validvalue>2</validvalue>
+                </valids>        
+            </SEGVersion>
             <SEGVersion id="6">
                 <DEG type="SegHead" name="SegHead"/>
                 <DEG type="KTV2" name="KTV" minnum="1"/>
@@ -2122,6 +2134,10 @@
         </SEGdef>
         
         <SEGdef id="CustodyAccountBalanceRes" code="HIWPD">
+            <SEGVersion id="5">
+                <DEG type="SegHead" name="SegHead"/>
+                <DE name="info" type="Bin" minnum="1"/>                
+            </SEGVersion>
             <SEGVersion id="6">
                 <DEG type="SegHead" name="SegHead"/>
                 <DE name="info" type="Bin" minnum="1"/>                
@@ -2129,6 +2145,9 @@
         </SEGdef>
         
         <SEGdef id="CustodyAccountBalancePar" code="HIWPDS">
+            <SEGVersion id="5">
+                <DEG type="ParCustodyAccountBalance"/>
+            </SEGVersion>
             <SEGVersion id="6">
                 &GVP2;
                 <DEG type="ParCustodyAccountBalance"/>

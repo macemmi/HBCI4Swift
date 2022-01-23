@@ -10,13 +10,13 @@ import Foundation
 
 
 public class HBCICustodyAccountBalance {
-    public enum NumberType {
-        case pieces, values
+    public enum NumberType : Int16 {
+        case pieces=0, values
     }
     
     public class FinancialInstrument {
         public class SubBalance {
-            public let balance:NSDecimalNumber
+            public let balance:NSDecimalNumber  // in pieces or value, according to numberType
             public let qualifier:String
             public let numberType:NumberType
             public let isAvailable:Bool;
@@ -31,25 +31,26 @@ public class HBCICustodyAccountBalance {
         
         public let isin:String?
         public let wkn:String?
-        public let description:String
-        public var totalNumber:NSDecimalNumber?
-        public var numberType:NumberType?
+        public let name:String
+        public var totalNumber:NSDecimalNumber!
+        public var numberType:NumberType!
         public var currentPrice: HBCIValue?
         public var priceLocation:String?
         public var priceDate:Date?
-        public var stockValue:HBCIValue?
-        public var stockInterestValue:HBCIValue?
+        public var depotValue:HBCIValue?                // in depot currency
+        public var accruedInterestValue:HBCIValue?
         public var depotCurrency:String?
         public var startPrice:HBCIValue?
+        public var interestRate:NSDecimalNumber?
         public var balances = Array<SubBalance>();
         
-        init?(isin:String?, wkn:String?, description:String) {
+        init?(isin:String?, wkn:String?, name:String) {
             if isin == nil && wkn == nil {
                 return nil;
             }
             self.isin = isin;
             self.wkn = wkn;
-            self.description = description;
+            self.name = name;
         }
         
         func addBalance(balance:SubBalance) {
@@ -74,7 +75,7 @@ public class HBCICustodyAccountBalance {
     public let exists:Bool;
     public var balanceNumber:Int?
     public var prepDate:Date?
-    public var depotValue:HBCIValue?
+    public var depotValue:HBCIValue!
     public var instruments = Array<FinancialInstrument>();
     
 }

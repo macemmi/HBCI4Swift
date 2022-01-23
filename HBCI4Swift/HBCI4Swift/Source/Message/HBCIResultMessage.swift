@@ -153,7 +153,7 @@ open class HBCIResultMessage {
         var i=0;
 
         while i<msgData.count {
-            if source[i] == HBCIChar.amper.rawValue && i>0 {
+            if i>0 && source[i] == HBCIChar.amper.rawValue && source[i-1] != HBCIChar.qmark.rawValue {
                 let p = source.baseAddress!.advanced(by: i);
                 let (bin_size, tag_size) = checkForDataTag(p);
                 if bin_size > 0 {
@@ -169,13 +169,13 @@ open class HBCIResultMessage {
                     } else {
                         result += "<unknown>";
                     }
+                    i += tag_size+bin_size;
+                    continue;
                 }
-                i += tag_size+bin_size;
-            } else {
-                let c = UInt8(bitPattern: source[i]);
-                result.append(Character(Unicode.Scalar(c)));
-                i+=1;
             }
+            let c = UInt8(bitPattern: source[i]);
+            result.append(Character(Unicode.Scalar(c)));
+            i+=1;
         }
         return result;
     }
@@ -193,7 +193,7 @@ open class HBCIResultMessage {
         _ = msgData.copyBytes(to: source);
         
         while i < msgData.count {
-            if source[i] == HBCIChar.amper.rawValue && i > 0 {
+            if i>0 && source[i] == HBCIChar.amper.rawValue && source[i-1] != HBCIChar.qmark.rawValue {
                 // first check if we have binary data
                 let p = source.baseAddress!.advanced(by: i);
                 let (bin_size, tag_size) = checkForDataTag(p);

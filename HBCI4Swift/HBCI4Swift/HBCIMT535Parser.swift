@@ -212,7 +212,7 @@ class HBCIMT535Parser {
     func createInstrument(s: String) -> HBCICustodyAccountBalance.FinancialInstrument? {
         var isin:String?
         var wkn:String?
-        var description = "";
+        var name = "";
 
         var lines = s.split(separator: "\n");
         if let idLine = lines.first {
@@ -232,14 +232,14 @@ class HBCIMT535Parser {
             }
         }
         for line in lines {
-            description = description + line + "\n";
+            name = name + line + "\n";
         }
-        description = description.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines);
+        name = name.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines);
         
         if isin == nil && wkn == nil {
             return nil;
         }
-        return HBCICustodyAccountBalance.FinancialInstrument(isin: isin, wkn: wkn, description: description);
+        return HBCICustodyAccountBalance.FinancialInstrument(isin: isin, wkn: wkn, name: name);
     }
     
     func parse70E(s: String, instrument: inout HBCICustodyAccountBalance.FinancialInstrument) {
@@ -258,7 +258,10 @@ class HBCIMT535Parser {
                     } else {
                         logInfo("MT535 Parse error: cannot parse instrument price from "+String(fields[0]));
                     }
-                }                
+                }
+                if fields.count > 2 && fields[2].count > 0 {
+                    instrument.interestRate = HBCIUtils.numberFormatter().number(from: String(fields[2])) as? NSDecimalNumber;
+                }
             }
         }
     }
@@ -360,7 +363,11 @@ class HBCIMT535Parser {
                     logInfo("MT535 Parse error: cannot parse total number from "+val);
                     throw HBCIError.parseError;
                 }
-                
+                break;
+            case "94B":
+                var val = tag.value;
+                val.removeFirst(7);
+                result.priceLocation = val;
                 break;
             case "19A":
                 var val = tag.value;
@@ -375,7 +382,7 @@ class HBCIMT535Parser {
                         if negative {
                             value = HBCIValue(value: value.value.multiplying(by: NSDecimalNumber(-1)), currency: value.currency);
                         }
-                        result.stockValue = value;
+                        result.depotValue = value;
                     } else {
                         logInfo("MT535 Parse error: cannot parse stock value from "+val);
                     }
@@ -391,7 +398,7 @@ class HBCIMT535Parser {
                         if negative {
                             value = HBCIValue(value: value.value.multiplying(by: NSDecimalNumber(-1)), currency: value.currency);
                         }
-                        result.stockInterestValue = value;
+                        result.accruedInterestValue = value;
                     } else {
                         logInfo("MT535 Parse error: cannot parse stock interest value from "+val);
                     }
