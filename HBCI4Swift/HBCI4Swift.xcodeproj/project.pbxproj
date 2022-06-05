@@ -21,6 +21,9 @@
 		B121B0BC24AD1ED00010627A /* HBCICamtStatementsOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B121B0BB24AD1ED00010627A /* HBCICamtStatementsOrder.swift */; };
 		B121B0BE24AE47170010627A /* HBCICamtParser_052_001_02.swift in Sources */ = {isa = PBXBuildFile; fileRef = B121B0BD24AE47170010627A /* HBCICamtParser_052_001_02.swift */; };
 		B121B0C024AFC5F80010627A /* HBCISepaUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = B121B0BF24AFC5F80010627A /* HBCISepaUtility.swift */; };
+		B12593EF284B599A00C03C22 /* HBCICamtParser_052_001_08.swift in Sources */ = {isa = PBXBuildFile; fileRef = B12593EE284B599A00C03C22 /* HBCICamtParser_052_001_08.swift */; };
+		B12593F1284BA7BD00C03C22 /* HBCICamtParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B12593F0284BA7BD00C03C22 /* HBCICamtParser.swift */; };
+		B12593F3284C09B100C03C22 /* camt.052.001.08.xsd in Resources */ = {isa = PBXBuildFile; fileRef = B12593F2284C09B100C03C22 /* camt.052.001.08.xsd */; };
 		B13F6ACD278247B50077B590 /* HBCISepaParser_001_001_03.swift in Sources */ = {isa = PBXBuildFile; fileRef = B13F6ACC278247B50077B590 /* HBCISepaParser_001_001_03.swift */; };
 		B14184331AF5610000F9B6FA /* HBCISepaInfoOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14184321AF5610000F9B6FA /* HBCISepaInfoOrder.swift */; };
 		B14184341AF5610000F9B6FA /* HBCISepaInfoOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14184321AF5610000F9B6FA /* HBCISepaInfoOrder.swift */; };
@@ -49,6 +52,7 @@
 		B141845E1B12765000F9B6FA /* HBCISepaCollectiveTransferOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B141845D1B12765000F9B6FA /* HBCISepaCollectiveTransferOrder.swift */; };
 		B141845F1B12765000F9B6FA /* HBCISepaCollectiveTransferOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B141845D1B12765000F9B6FA /* HBCISepaCollectiveTransferOrder.swift */; };
 		B1454F23214EF527001F91E0 /* HBCIMT94xTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1454F22214EF527001F91E0 /* HBCIMT94xTest.swift */; };
+		B14DB52627FCA4730046F756 /* HBCISepaParser_001_001_03.swift in Sources */ = {isa = PBXBuildFile; fileRef = B13F6ACC278247B50077B590 /* HBCISepaParser_001_001_03.swift */; };
 		B155FA1C1B598C1800C122E1 /* HBCISecurityMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = B155FA1B1B598C1800C122E1 /* HBCISecurityMethod.swift */; };
 		B155FA1D1B598C1800C122E1 /* HBCISecurityMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = B155FA1B1B598C1800C122E1 /* HBCISecurityMethod.swift */; };
 		B155FA221B598CFC00C122E1 /* HBCISecurityMethodPinTan.swift in Sources */ = {isa = PBXBuildFile; fileRef = B155FA211B598CFC00C122E1 /* HBCISecurityMethodPinTan.swift */; };
@@ -213,13 +217,6 @@
 			remoteGlobalIDString = B1AF0FF71BC45A6D00365496;
 			remoteInfo = PCSCard;
 		};
-		B1AFEC6A1B5B9FBD002F1DDF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = B19B35891AF1792A00F20B9A /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = B1AFEC481B5B9E7D002F1DDF;
-			remoteInfo = CommonCrypto;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -233,6 +230,9 @@
 		B121B0BB24AD1ED00010627A /* HBCICamtStatementsOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCICamtStatementsOrder.swift; sourceTree = "<group>"; };
 		B121B0BD24AE47170010627A /* HBCICamtParser_052_001_02.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCICamtParser_052_001_02.swift; sourceTree = "<group>"; };
 		B121B0BF24AFC5F80010627A /* HBCISepaUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCISepaUtility.swift; sourceTree = "<group>"; };
+		B12593EE284B599A00C03C22 /* HBCICamtParser_052_001_08.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCICamtParser_052_001_08.swift; sourceTree = "<group>"; };
+		B12593F0284BA7BD00C03C22 /* HBCICamtParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCICamtParser.swift; sourceTree = "<group>"; };
+		B12593F2284C09B100C03C22 /* camt.052.001.08.xsd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = camt.052.001.08.xsd; sourceTree = "<group>"; };
 		B13F6ACC278247B50077B590 /* HBCISepaParser_001_001_03.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCISepaParser_001_001_03.swift; sourceTree = "<group>"; };
 		B14184321AF5610000F9B6FA /* HBCISepaInfoOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = HBCISepaInfoOrder.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B14184361B0634B300F9B6FA /* HBCISepaDatedTransferOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaDatedTransferOrder.swift; sourceTree = "<group>"; };
@@ -329,7 +329,6 @@
 		B1AF10001BC45ADB00365496 /* pcsc.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = pcsc.modulemap; sourceTree = "<group>"; };
 		B1AF10011BC45ADB00365496 /* PCSC.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = PCSC.xcconfig; sourceTree = "<group>"; };
 		B1AFEC3E1B5B0244002F1DDF /* reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = reader.h; path = Source/reader.h; sourceTree = "<group>"; };
-		B1AFEC491B5B9E7D002F1DDF /* CommonCrypto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CommonCrypto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1AFEC4C1B5B9E7E002F1DDF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B1AFEC621B5B9F12002F1DDF /* CommonCrypto.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = CommonCrypto.xcconfig; sourceTree = "<group>"; };
 		B1AFECA21B5C28D7002F1DDF /* iphoneos.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = iphoneos.modulemap; sourceTree = "<group>"; };
@@ -366,19 +365,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B1AFEC451B5B9E7D002F1DDF /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		019E075E1B19AE4B0078C268 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				B12593F2284C09B100C03C22 /* camt.052.001.08.xsd */,
 				B106934B246B303100A234E8 /* pain.001.001.03.xsd */,
 				B1AE54A71B1A57D1008C7BBE /* pain.001.003.03.xsd */,
 				B19B35AF1AF28AC500F20B9A /* hbci220.xml */,
@@ -423,7 +416,6 @@
 			children = (
 				B19B35921AF1792A00F20B9A /* HBCI4Swift.framework */,
 				B19B359D1AF1792B00F20B9A /* HBCI4SwiftTests.xctest */,
-				B1AFEC491B5B9E7D002F1DDF /* CommonCrypto.framework */,
 				B1AF0FF81BC45A6D00365496 /* PCSCard.framework */,
 			);
 			name = Products;
@@ -541,6 +533,8 @@
 				B13F6ACC278247B50077B590 /* HBCISepaParser_001_001_03.swift */,
 				B141845A1B10871100F9B6FA /* HBCISepaFormat.swift */,
 				B121B0BD24AE47170010627A /* HBCICamtParser_052_001_02.swift */,
+				B12593F0284BA7BD00C03C22 /* HBCICamtParser.swift */,
+				B12593EE284B599A00C03C22 /* HBCICamtParser_052_001_08.swift */,
 				B121B0BF24AFC5F80010627A /* HBCISepaUtility.swift */,
 			);
 			name = Sepa;
@@ -678,13 +672,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B1AFEC461B5B9E7D002F1DDF /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -701,7 +688,6 @@
 			);
 			dependencies = (
 				B1AF10041BC45B3C00365496 /* PBXTargetDependency */,
-				B1AFEC6B1B5B9FBD002F1DDF /* PBXTargetDependency */,
 			);
 			name = HBCI4Swift;
 			productName = HBCI4Swift;
@@ -744,24 +730,6 @@
 			productReference = B1AF0FF81BC45A6D00365496 /* PCSCard.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		B1AFEC481B5B9E7D002F1DDF /* CommonCrypto */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = B1AFEC5C1B5B9E7E002F1DDF /* Build configuration list for PBXNativeTarget "CommonCrypto" */;
-			buildPhases = (
-				B1AFEC441B5B9E7D002F1DDF /* Sources */,
-				B1AFEC451B5B9E7D002F1DDF /* Frameworks */,
-				B1AFEC461B5B9E7D002F1DDF /* Headers */,
-				B1AFEC471B5B9E7D002F1DDF /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = CommonCrypto;
-			productName = CommonCrypto;
-			productReference = B1AFEC491B5B9E7D002F1DDF /* CommonCrypto.framework */;
-			productType = "com.apple.product-type.framework";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -785,10 +753,6 @@
 						CreatedOnToolsVersion = 7.0.1;
 						LastSwiftMigration = 0820;
 					};
-					B1AFEC481B5B9E7D002F1DDF = {
-						CreatedOnToolsVersion = 6.3.2;
-						LastSwiftMigration = 0820;
-					};
 				};
 			};
 			buildConfigurationList = B19B358C1AF1792A00F20B9A /* Build configuration list for PBXProject "HBCI4Swift" */;
@@ -806,7 +770,6 @@
 			targets = (
 				B19B35911AF1792A00F20B9A /* HBCI4Swift */,
 				B19B359C1AF1792B00F20B9A /* HBCI4SwiftTests */,
-				B1AFEC481B5B9E7D002F1DDF /* CommonCrypto */,
 				B1AF0FF71BC45A6D00365496 /* PCSCard */,
 			);
 		};
@@ -820,6 +783,7 @@
 				B19B35C11AF28AC500F20B9A /* hbci300.xml in Resources */,
 				B1AE54A81B1A57D1008C7BBE /* pain.001.003.03.xsd in Resources */,
 				B19B35BF1AF28AC500F20B9A /* hbci220.xml in Resources */,
+				B12593F3284C09B100C03C22 /* camt.052.001.08.xsd in Resources */,
 				B106934C246B303100A234E8 /* pain.001.001.03.xsd in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -834,13 +798,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		B1AF0FF61BC45A6D00365496 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B1AFEC471B5B9E7D002F1DDF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -871,6 +828,7 @@
 				B19B35D71AF28AC500F20B9A /* HBCIDataElement.swift in Sources */,
 				B19B364D1AF28C1800F20B9A /* HBCICallback.swift in Sources */,
 				B141845B1B10871100F9B6FA /* HBCISepaFormat.swift in Sources */,
+				B12593EF284B599A00C03C22 /* HBCICamtParser_052_001_08.swift in Sources */,
 				B19B35E41AF28B1500F20B9A /* HBCIDialog.swift in Sources */,
 				B13F6ACD278247B50077B590 /* HBCISepaParser_001_001_03.swift in Sources */,
 				B19B362B1AF28BF900F20B9A /* HBCIUser.swift in Sources */,
@@ -880,6 +838,7 @@
 				B14184431B07281800F9B6FA /* HBCIStandingOrder.swift in Sources */,
 				B19B35E21AF28B1500F20B9A /* HBCIAnonymousDialog.swift in Sources */,
 				B174E8AB1CAB0FE8004FD3F0 /* HBCIAbstractStandingOrderOrder.swift in Sources */,
+				B12593F1284BA7BD00C03C22 /* HBCICamtParser.swift in Sources */,
 				B19B36451AF28C1800F20B9A /* HBCIUtils.swift in Sources */,
 				B174E89B1CA1E3E0004FD3F0 /* HBCIAccountStatementOrder.swift in Sources */,
 				B19B36151AF28BCE00F20B9A /* HBCISepaTransferOrder.swift in Sources */,
@@ -982,6 +941,7 @@
 				B19B35D61AF28AC500F20B9A /* HBCISyntaxElement.swift in Sources */,
 				B163F0E11CC96350001E1009 /* HBCIValue.swift in Sources */,
 				B19B35C61AF28AC500F20B9A /* HBCISyntax.swift in Sources */,
+				B14DB52627FCA4730046F756 /* HBCISepaParser_001_001_03.swift in Sources */,
 				B19B36221AF28BE500F20B9A /* HBCITanProcessInformation.swift in Sources */,
 				B174F667264E626E000C11F1 /* HBCISepaUtility.swift in Sources */,
 				B19B36341AF28BF900F20B9A /* HBCISepaTransfer.swift in Sources */,
@@ -1049,13 +1009,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B1AFEC441B5B9E7D002F1DDF /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1068,11 +1021,6 @@
 			isa = PBXTargetDependency;
 			target = B1AF0FF71BC45A6D00365496 /* PCSCard */;
 			targetProxy = B1AF10031BC45B3C00365496 /* PBXContainerItemProxy */;
-		};
-		B1AFEC6B1B5B9FBD002F1DDF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = B1AFEC481B5B9E7D002F1DDF /* CommonCrypto */;
-			targetProxy = B1AFEC6A1B5B9FBD002F1DDF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1336,46 +1284,6 @@
 			};
 			name = Release;
 		};
-		B1AFEC5D1B5B9E7E002F1DDF /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = B1AFEC621B5B9F12002F1DDF /* CommonCrypto.xcconfig */;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = CommonCrypto/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "de.pecuniabanking.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
-			};
-			name = Debug;
-		};
-		B1AFEC5E1B5B9E7E002F1DDF /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = B1AFEC621B5B9F12002F1DDF /* CommonCrypto.xcconfig */;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = CommonCrypto/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "de.pecuniabanking.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1411,15 +1319,6 @@
 			buildConfigurations = (
 				B1AF0FFE1BC45A6D00365496 /* Debug */,
 				B1AF0FFF1BC45A6D00365496 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		B1AFEC5C1B5B9E7E002F1DDF /* Build configuration list for PBXNativeTarget "CommonCrypto" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				B1AFEC5D1B5B9E7E002F1DDF /* Debug */,
-				B1AFEC5E1B5B9E7E002F1DDF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

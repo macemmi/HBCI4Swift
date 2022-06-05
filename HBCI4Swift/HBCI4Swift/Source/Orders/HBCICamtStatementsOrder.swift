@@ -71,12 +71,14 @@ open class HBCICamtStatementsOrder: HBCIOrder {
             return false;
         }
         for format in formats {
-            if !format.hasSuffix("052.001.02") {
-                logDebug("Camt format "+format+" is not supported");
-            } else {
+            if format.hasSuffix("052.001.02") || format.hasSuffix("052.001.08") {
                 camtFormat = format;
+                //break;
+            } else {
+                logDebug("Camt format "+format+" is not supported");
             }
         }
+        
         guard let format = camtFormat else {
             logInfo("No supported Camt formats found");
             return false;
@@ -116,6 +118,8 @@ open class HBCICamtStatementsOrder: HBCIOrder {
     }
 
     override open func updateResult(_ result: HBCIResultMessage) {
+        var parser:HBCICamtParser!
+        
         super.updateResult(result);
         
         // check whether result is incomplete
@@ -124,6 +128,12 @@ open class HBCICamtStatementsOrder: HBCIOrder {
             if response.code == "3040" && response.parameters.count > 0 {
                 self.offset = response.parameters[0];
             }
+        }
+        
+        if camtFormat!.hasSuffix("052.001.02") {
+            parser = HBCICamtParser_052_001_02();
+        } else {
+            parser = HBCICamtParser_052_001_08();
         }
         
         // now parse statements
@@ -148,16 +158,13 @@ open class HBCICamtStatementsOrder: HBCIOrder {
                     if isPartial {
                         self.bookedPart = booked;
                     } else {
-                        // parser code goes here
-                        let parser = HBCICamtParser_052_001_02();
-                        if let statements = parser.parse(account, data: booked) {
+                        if let statements = parser.parse(account, data: booked, isPreliminary: false) {
                             self.statements.append(contentsOf: statements);
                         }
                     }
                 }
             }
             if let notbooked = seg.elementValueForPath("notbooked") as? Data {
-                let parser = HBCICamtParser_052_001_02();
                 if let statements = parser.parse(account, data: notbooked, isPreliminary: true) {
                     self.statements.append(contentsOf: statements);
                 }

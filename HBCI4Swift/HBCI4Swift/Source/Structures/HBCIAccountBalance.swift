@@ -9,7 +9,7 @@
 import Foundation
 
 public enum AccountBalanceType : String {
-    case ClosingBooked = "CLBD", ClosingAvailable = "CLAV", ForwardAvailable = "FWAV", InterimBooked = "ITBD", PreviouslyClosedBooked = "PRCD", Unknown = ""
+    case ClosingBooked = "CLBD", ClosingAvailable = "CLAV", ForwardAvailable = "FWAV", InterimBooked = "ITBD", PreviouslyClosedBooked = "PRCD", OpeningBooked = "OPBD", InterimOpen = "ITOP", Unknown = ""
 }
 
 public struct HBCIAccountBalance {
@@ -60,7 +60,16 @@ public struct HBCIAccountBalance {
         guard let balanceType = element.stringValueForPath("Tp.CdOrPrtry.Cd") else {
             return nil;
         }
-        self.type = AccountBalanceType(rawValue: balanceType)!
+        
+        if let balanceSubType = element.stringValueForPath("Tp.SubTp.Cd") {
+            if balanceSubType == "CLBD" {
+                self.type = .InterimBooked
+            } else {
+                self.type = .InterimOpen
+            }
+        } else {
+            self.type = AccountBalanceType(rawValue: balanceType)!
+        }
         
         guard let dc = element.stringValueForPath("CdtDbtInd") else {
             return nil;

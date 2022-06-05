@@ -251,7 +251,7 @@ class HBCIMT535Parser {
             }
             if line.hasPrefix("2") {
                 line.removeFirst(1);
-                let fields = line.split(separator: "+");
+                let fields = line.split(separator: "+", maxSplits: 3, omittingEmptySubsequences: false);
                 if fields.count > 1 && fields[0].count > 0 && fields[1].count > 0 {
                     if let price = HBCIUtils.numberFormatter().number(from: String(fields[0])) as? NSDecimalNumber {
                         instrument.startPrice = HBCIValue(value: price, currency: String(fields[1]));

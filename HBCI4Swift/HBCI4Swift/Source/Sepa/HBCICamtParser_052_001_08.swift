@@ -1,14 +1,14 @@
 //
-//  HBCICamtParser_052_001_02.swift
+//  HBCICamtParser_052_001_08.swift
 //  HBCI4Swift
 //
-//  Created by Frank Emminghaus on 02.07.20.
-//  Copyright © 2020 Frank Emminghaus. All rights reserved.
+//  Created by Frank Emminghaus on 04.06.22.
+//  Copyright © 2022 Frank Emminghaus. All rights reserved.
 //
 
 import Foundation
 
-class HBCICamtParser_052_001_02 : HBCICamtParser {
+class HBCICamtParser_052_001_08 : HBCICamtParser {
     
     func parse(_ account:HBCIAccount, data:Data, isPreliminary:Bool) ->[HBCIStatement]? {
         
@@ -45,7 +45,7 @@ class HBCICamtParser_052_001_02 : HBCICamtParser {
                     for entry in report.elements(forName: "Ntry") {
                         let item = HBCIStatementItem();
                         
-                        guard let status = entry.stringValueForPath("Sts") else {
+                        guard let status = entry.stringValueForPath("Sts.Cd") else {
                             return nil;
                         }
                         
@@ -87,11 +87,11 @@ class HBCICamtParser_052_001_02 : HBCICamtParser {
                         if dc == "DBIT" {
                             item.remoteIBAN = detElem.stringValueForPath("RltdPties.CdtrAcct.Id.IBAN");
                             item.remoteBIC = detElem.stringValueForPath("RltdAgts.CdtrAgt.FinInstnId.BICFI");
-                            item.remoteName = detElem.stringValueForPath("RltdPties.Cdtr.Nm");
+                            item.remoteName = detElem.stringValueForPath("RltdPties.Cdtr.Pty.Nm");
                         } else {
                             item.remoteIBAN = detElem.stringValueForPath("RltdPties.DbtrAcct.Id.IBAN");
                             item.remoteBIC = detElem.stringValueForPath("RltdAgts.DbtrAgt.FinInstnId.BICFI");
-                            item.remoteName = detElem.stringValueForPath("RltdPties.Dbtr.Nm");
+                            item.remoteName = detElem.stringValueForPath("RltdPties.Dbtr.Pty.Nm");
                         }
                         var purpose = "";
                         for purpElem in detElem.elementsForPath("RmtInf.Ustrd") {
@@ -113,10 +113,10 @@ class HBCICamtParser_052_001_02 : HBCICamtParser {
                         item.endToEndId = detElem.stringValueForPath("Refs.EndToEndId");
                         item.customerReference = detElem.stringValueForPath("Refs.InstrId");
                         item.mandateId = detElem.stringValueForPath("Refs.MndtId");
-                        item.debitorId = detElem.stringValueForPath("RltdPties.Dbtr.Nm");
-                        item.creditorId = detElem.stringValueForPath("RltdPties.Cdtr.Nm");
-                        item.ultimateDebitorId = detElem.stringValueForPath("RltdPties.UltmtDbtr.Nm");
-                        item.ultimateCreditorId = detElem.stringValueForPath("RltdPties.UltmtCdtr.Nm");
+                        item.debitorId = detElem.stringValueForPath("RltdPties.Dbtr.Pty.Nm");
+                        item.creditorId = detElem.stringValueForPath("RltdPties.Cdtr.Pty.Nm");
+                        item.ultimateDebitorId = detElem.stringValueForPath("RltdPties.UltmtDbtr.Pty.Nm");
+                        item.ultimateCreditorId = detElem.stringValueForPath("RltdPties.UltmtCdtr.Pty.Nm");
                         item.purposeCode = detElem.stringValueForPath("Purp.Cd");
                         
                         item.isSEPA = true;
