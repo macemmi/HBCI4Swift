@@ -93,6 +93,10 @@ class HBCICamtParser_052_001_08 : HBCICamtParser {
                             item.remoteBIC = detElem.stringValueForPath("RltdAgts.DbtrAgt.FinInstnId.BICFI");
                             item.remoteName = detElem.stringValueForPath("RltdPties.Dbtr.Pty.Nm");
                         }
+                        if item.remoteName == "not provided" {
+                            item.remoteName = "";
+                        }
+                        
                         var purpose = "";
                         for purpElem in detElem.elementsForPath("RmtInf.Ustrd") {
                             purpose = purpose + (purpElem.stringValue ?? "");
