@@ -606,6 +606,43 @@ class HBCIMT94xParser {
         return statements;
     }
     
+    // remove faulty ':'s after newlines in tag 86
+    func repairTag86(statementString: NSString) -> NSString {
+        var result = statementString;
+        let pattern = "\r\n:86:";
+        var nextTagRange, residualRange, searchRange: NSRange;
+        var finished:Bool = false;
+        
+        residualRange = NSRange(location:0, length: result.length);
+        
+        do {
+            let regex = try NSRegularExpression(pattern: pattern, options: NSRegularExpression.Options.caseInsensitive)
+            while !finished {
+                nextTagRange = regex.rangeOfFirstMatch(in: result as String, options: NSRegularExpression.MatchingOptions(), range: residualRange);
+                if nextTagRange.location != NSNotFound {
+                    searchRange = NSRange(location: nextTagRange.location+6, length: result.length-nextTagRange.location-6);
+                    let r = result.range(of: "\r\n:", options: NSString.CompareOptions.init(), range: searchRange);
+                    if r.location != NSNotFound {
+                        // now check for allowed tags
+                        if result.substring(with: NSRange(location: r.location+3, length: 2)) != "61" &&
+                           result.substring(with: NSRange(location: r.location+3, length: 2)) != "62"
+                        {
+                            // we have a wrong tag - remove CR
+                            result = result.replacingCharacters(in: NSRange(location: r.location, length: 2), with: "") as NSString;
+                        }
+                    }
+                    residualRange.location = nextTagRange.location+nextTagRange.length;
+                    residualRange.length = result.length-residualRange.location;
+                } else {
+                    finished = true;
+                }
+            }
+        } catch let err as NSError {
+            logInfo("MT94xParse error in repairTag86: "+err.description);
+        }
+        return result;
+    }
+    
     func repairStatements() -> NSString {
         var result = self.mt94xString;
         
@@ -640,6 +677,9 @@ class HBCIMT94xParser {
                 result = result.appending("\r\n-") as NSString;
             }
         }
+        
+        result = repairTag86(statementString: result);
+        
         return result;
     }
 
