@@ -17,6 +17,7 @@ public enum TanProcess:String {
 open class HBCITanMethod {
     public let
     identifier:String!,
+    version:Int!,
     secfunc:String!,
     inputInfo:String!,
     name:String!,
@@ -28,8 +29,10 @@ open class HBCITanMethod {
     process:TanProcess!,
     zkaMethodName:String?,
     zkaMethodVersion:String?,
-    numActiveMedia:Int?
-    
+    numActiveMedia:Int?,
+    maxPollsDecoupled:Int?,
+    waitDecoupled:Int?
+
     
     init?(element:HBCISyntaxElement, version:Int) {
         self.secfunc = element.elementValueForPath("secfunc") as? String;
@@ -39,6 +42,7 @@ open class HBCITanMethod {
         self.format = element.elementValueForPath("tanformat") as? String;
         self.maxTanLength = element.elementValueForPath("maxlentan") as? Int;
         self.process = TanProcess(rawValue: (element.elementValueForPath("process") as? String) ?? "0");
+        self.version = version;
         
         if version >= 3 {
             self.needTanMedia = element.elementValueForPath("needtanmedia") as? String;
@@ -48,13 +52,25 @@ open class HBCITanMethod {
             self.zkaMethodName = element.elementValueForPath("zkamethod_name") as? String;
             self.zkaMethodVersion = element.elementValueForPath("zkamethod_version") as? String;
         }
+        if version >= 7 {
+            self.maxPollsDecoupled = element.elementValueForPath("maxpolls_decoupled") as? Int;
+            self.waitDecoupled = element.elementValueForPath("nextwait_decoupled") as? Int;
+        }
         
         
-        if self.identifier == nil || self.secfunc == nil || self.inputInfo == nil || self.name == nil || self.format == nil || self.maxTanLength == nil || self.process == nil {
+        if self.identifier == nil || self.secfunc == nil || self.inputInfo == nil || self.name == nil || self.process == nil {
                 logInfo("TanMethod \(self.identifier ?? unknown): not all mandatory fields are provided for version \(version)");
                 logInfo(element.description);
                 return nil;
         }
+        
+        if version < 7 && (self.format == nil || self.maxTanLength == nil) {
+            logInfo("TanMethod \(self.identifier ?? unknown): not all mandatory fields are provided for version \(version)");
+            logInfo(element.description);
+            return nil;
+        }
+        
+        
     }
     
 }

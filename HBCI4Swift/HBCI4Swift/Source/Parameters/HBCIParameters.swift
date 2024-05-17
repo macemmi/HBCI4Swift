@@ -15,8 +15,9 @@ open class HBCIParameters {
     open var pinTanInfos:HBCIPinTanInformation?
     var bpData:Data?
     var bpSegments = Array<HBCISegment>();
-    var tanProcessInfos:HBCITanProcessInformation?
-    var supportedTanMethods = Array<String>();
+    var tanProcessInfos = Array<HBCITanProcessInformation>();
+    var supportedSecfuncs = Array<String>();
+    var supportedTanMethods = Array<HBCITanMethod>();
     var syntax:HBCISyntax
     
     init(_ syntax: HBCISyntax) {
@@ -54,9 +55,9 @@ open class HBCIParameters {
                             let values = element.elementValuesForPath("parm");
                             for value in values {
                                 if let secfunc = value as? String {
-                                    if !self.supportedTanMethods.contains(secfunc) {
+                                    if !self.supportedSecfuncs.contains(secfunc) {
                                         logDebug("add TAN method "+secfunc);
-                                        self.supportedTanMethods.append(secfunc);
+                                        self.supportedSecfuncs.append(secfunc);
                                     }
                                 }
                             }
@@ -79,19 +80,18 @@ open class HBCIParameters {
             if seg.name == "TANPar" {
                 // update TAN Process information - take highest version supported by us
                 let infos = HBCITanProcessInformation(segment: seg);
-                if self.tanProcessInfos != nil {
-                    if self.tanProcessInfos!.version! > infos.version! {
-                        continue;
-                    }
-                }
+                
                 // now check if we support this version
                 if let segVersions = syntax.segs["TANPar"] {
                     if segVersions.isVersionSupported(infos.version!) {
-                        self.tanProcessInfos = infos;
+                        self.tanProcessInfos.append(infos);
                     }
                 }
             }
         }
+        // now calculate supported TAN methods
+        getSupportedMethods();
+        
     }
     
     convenience init(data:Data, syntax:HBCISyntax) throws {
@@ -139,32 +139,44 @@ open class HBCIParameters {
         bpData = data;
     }
     
-    open func getTanMethods() ->Array<HBCITanMethod> {
-        var result = Array<HBCITanMethod>();
-        
-        if let tpi = self.tanProcessInfos {
-            for method in tpi.tanMethods {
-                if self.supportedTanMethods.contains(method.secfunc) {
-                    result.append(method);
+    // calculate supported TAN Methods. For each supported secfunc we take the latest HITANS version
+    func getSupportedMethods() {
+        for secfunc in supportedSecfuncs {
+            var tanMethod:HBCITanMethod?
+            for info in self.tanProcessInfos {
+                for method in info.tanMethods {
+                    if method.secfunc == secfunc {
+                        if let oldMethod = tanMethod {
+                            if oldMethod.version < method.version {
+                                tanMethod = method;
+                            }
+                        } else {
+                            tanMethod = method;
+                        }
+                    }
                 }
             }
-            if result.count == 0 {
-                logInfo("No supported TAN methods found - we return all methods we have infos for...");
-                result = tpi.tanMethods;
+            if let method = tanMethod {
+                self.supportedTanMethods.append(method);
             }
-        } else {
-            logError("Keine unterstützten TAN-Methoden gefunden");
         }
-        return result;
+    }
+    
+    open func getTanMethod(secfunc:String) -> HBCITanMethod? {
+        for method in self.supportedTanMethods {
+            if method.secfunc == secfunc {
+                return method;
+            }
+        }
+        return nil;
+    }
+    
+    open func getTanMethods() ->Array<HBCITanMethod> {
+        return self.supportedTanMethods;
     }
     
     open func getAllTanMethods() ->Array<HBCITanMethod> {
-        if let tpi = self.tanProcessInfos {
-            return tpi.tanMethods;
-        } else {
-            logError("Keine unterstützten TAN-Methoden gefunden");
-        }
-        return [HBCITanMethod]();
+        return self.supportedTanMethods;
     }
     
     open func supportedVersionsForOrder(_ name:String) ->Array<Int> {

@@ -93,7 +93,25 @@ open class HBCICustomMessage : HBCIMessage {
         return addOrder(order, afterSegmentCode: refOrder.segment.code);
     }
     
-    func segmentWithName(_ segName:String) ->HBCISegment? {
+    func segmentWithNameVersion(segName:String, version:Int) ->HBCISegment? {
+        guard let segVersions = self.descr.syntax.segs[segName] else {
+            logInfo("Segment \(segName) is not supported by HBCI4Swift");
+            return nil;
+        }
+        guard let sd = segVersions.segmentWithVersion(version) else {
+            logInfo("Segment \(segName) is not supported for version \(version)");
+            return nil;
+        }
+        if let segment = sd.compose() as? HBCISegment {
+            segment.name = segName;
+            return segment;
+        } else {
+            logInfo("Segment \(segName) could not be composed");
+        }
+        return nil;
+    }
+    
+    func segmentWithName(_ segName:String, version:Int = 0) ->HBCISegment? {
         if let segVersions = self.descr.syntax.segs[segName] {
             // now find the right segment version
             // check which segment versions are supported by the bank
@@ -116,8 +134,9 @@ open class HBCICustomMessage : HBCIMessage {
             }
             // now sort the versions - we take the latest supported version
             supportedVersions.sort(by: >);
+            let segVersion = version == 0 ? supportedVersions.first! : version;
             
-            if let sd = segVersions.segmentWithVersion(supportedVersions.first!) {
+            if let sd = segVersions.segmentWithVersion(segVersion) {
                 if let segment = sd.compose() as? HBCISegment {
                     segment.name = segName;
                     return segment;

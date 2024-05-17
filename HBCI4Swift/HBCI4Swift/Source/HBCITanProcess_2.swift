@@ -51,6 +51,88 @@ class HBCITanProcess_2 {
         return nil;
     }
     
+
+    func processDecoupledMessage(_ msg:HBCICustomMessage, order:HBCIOrder?, tanOrder:HBCITanOrder) throws -> Bool {
+        guard let tanMsg = HBCICustomMessage.newInstance(dialog) else {
+            logDebug("processDecoupledMessage: customer message could not be created");
+            return false;
+        }
+        guard let tanOrder2 = HBCITanOrder(message: tanMsg) else {
+            logDebug("processDecoupledMessage: TAN order could not be created");
+            return false;
+        }
+        
+        guard let secfunc = dialog.user.tanMethod else {
+            logError("No TAN method specified");
+            return false;
+        }
+        
+        guard let tanMethod = dialog.user.parameters.getTanMethod(secfunc: secfunc) else {
+            logError("No TAN process parameters available for secfunc \(secfunc)");
+            return false;
+        }
+        HBCIDialog.callback!.decoupledNotification(msg.dialog.user, challenge: tanOrder.challenge);
+        
+        tanOrder2.process = "S";
+        tanOrder2.orderRef = tanOrder.orderRef;
+        
+        // add order to message
+        if !tanOrder2.enqueue() { return false; }
+        
+        let maxcount = tanMethod.maxPollsDecoupled != nil ? tanMethod.maxPollsDecoupled! : 100;
+        //let wait = tanMethod.waitDecoupled != nil ? tanMethod.waitDecoupled! : 3;
+        var wait = tanMethod.waitDecoupled ?? 3;
+        if wait < 2 {
+            wait = 2;
+        }
+        
+        var count = 0
+        sleep(UInt32(wait));
+        do {
+            var accepted = false;
+            while !accepted && count < maxcount {
+                if try tanMsg.sendNoTan() {
+                    // check response
+                    var doWait = false;
+                    if let responses = tanMsg.result?.segmentResponses {
+                        for response in responses {
+                            if response.code == "3956" {
+                                logDebug("response code 3956 found - we wait...")
+                                doWait = true;
+                            }
+                        }
+                    }
+                    if !doWait {
+                        accepted = true;
+                        continue;
+                    }
+                } else {
+                    // error or user did reject
+                    return false;
+                }
+                sleep(UInt32(wait));
+                count += 1;
+            }
+            if count == maxcount {
+                logError("Wartezeit überschritten");
+                return false;
+            }
+            
+            logDebug("response code 3956 not found - we continue...");
+            
+            // now we need to extract the return segment for the original order
+            order?.updateResult(tanMsg.result!);
+            
+            // update original message with result
+            msg.result = tanMsg.result!;
+            return true;
+        } catch {
+            // order could not be sent
+            logInfo("Error sending second TAN step message");
+            throw error;
+        }
+    }
+    
     func processMessage(_ msg:HBCICustomMessage, _ order:HBCIOrder?) throws ->Bool {
         
         if let tanOrder = HBCITanOrder(message: msg) {
@@ -58,40 +140,39 @@ class HBCITanProcess_2 {
             
             var hhducString:String?
             var tanMethodID = "";
+            var zkaName = "";
             var challengeType:HBCIChallengeType = .none;
             
             // do we need tan medium information?
             let parameters = dialog.user.parameters;
-            if let processInfos = parameters.tanProcessInfos, let secfunc = dialog.user.tanMethod {
-                logDebug("we work with secfunc \(secfunc)");
-                
-                for tanMethod in processInfos.tanMethods {
-                    if tanMethod.secfunc == secfunc {
-                        // check parameters for the selected Tan Method
-                        let needMedia = tanMethod.needTanMedia ?? "0";
-                        let numMedia = tanMethod.numActiveMedia ?? 0;
-                        if needMedia == "2" { //&& numMedia > 0 {
-                            tanOrder.tanMediumName = dialog.user.tanMediumName;
-                            if tanOrder.tanMediumName == nil {
-                                tanOrder.tanMediumName = "noref";
-                            }
-                            logDebug("we work with TanMediumName \(tanOrder.tanMediumName ?? "<none>")");
-                        }
-                        
-                        tanMethodID = tanMethod.identifier;
-                    }
-                }
-                if tanMethodID == "" {
-                    logInfo("No tan method found for secfunc \(secfunc)");
-                }
-            } else {
-                if parameters.tanProcessInfos == nil {
-                    logInfo("No TAN process parameters available");
-                }
-                if dialog.user.tanMethod == nil {
-                    logInfo("No TAN method specified");
-                }
+            
+            guard let secfunc = dialog.user.tanMethod else {
+                logError("No TAN method specified");
+                return false;
             }
+            
+            guard let tanMethod = parameters.getTanMethod(secfunc: secfunc) else {
+                logError("No TAN process parameters available for secfunc \(secfunc)");
+                return false;
+            }
+            
+            logDebug("we work with secfunc \(secfunc)");
+            
+            let needMedia = tanMethod.needTanMedia ?? "0";
+            if needMedia == "2" { 
+                tanOrder.tanMediumName = dialog.user.tanMediumName;
+                if tanOrder.tanMediumName == nil {
+                    tanOrder.tanMediumName = "noref";
+                }
+                logDebug("we work with TanMediumName \(tanOrder.tanMediumName ?? "<none>")");
+            }
+            
+            
+            tanMethodID = tanMethod.identifier;
+            if let name = tanMethod.zkaMethodName {
+                zkaName = name;
+            }
+            
             logDebug("tanMethodID is \(tanMethodID)");
             
             // now add Tan order to the same message
@@ -164,6 +245,9 @@ class HBCITanProcess_2 {
                 } else {
                     logInfo("TanMethod is \(tanMethodID) but HHDUC is empty!");
                 }
+            }
+            if tanMethodID.hasPrefix("DECOUPLED") || zkaName.hasPrefix("Decoupled") {
+                return try processDecoupledMessage(msg, order: order, tanOrder: tanOrder);
             }
             
             let tan = try HBCIDialog.callback!.getTan(dialog.user, challenge: tanOrder.challenge, challenge_hhd_uc: hhducString, type: challengeType);

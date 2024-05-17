@@ -25,9 +25,22 @@ class HBCITanOrder : HBCIOrder {
     
     init?(message:HBCICustomMessage) {
         super.init(name: "TAN", message: message);
-        if self.segment == nil {
+        
+        // check witch TAN version segment we need
+        guard let secfunc = message.dialog.user.tanMethod else {
+            logInfo("cannot create HKTAN segment, no tanMethod defined - quit");
             return nil;
         }
+        guard let tanMethod = message.dialog.user.parameters.getTanMethod(secfunc: secfunc) else {
+            logInfo("TAN process information for method \(secfunc) not found");
+            return nil;
+        }
+        
+        guard let seg = message.segmentWithName("TAN", version: tanMethod.version) else {
+            return nil;
+        }
+        self.segment = seg;
+
     }
     
     func finalize(_ refOrder:HBCIOrder?) ->Bool {

@@ -17,7 +17,7 @@ public enum HBCIChallengeType {
 
 public protocol HBCICallback {
     func getTan(_ user:HBCIUser, challenge:String?, challenge_hhd_uc:String?, type:HBCIChallengeType) throws ->String;
-    
+    func decoupledNotification(_ user:HBCIUser, challenge:String?);
 }
 
 open class HBCICallbackConsole : HBCICallback {
@@ -30,5 +30,9 @@ open class HBCICallbackConsole : HBCICallback {
         let data = Data(stdIn.availableData.dropLast());
         let input = String(data: data, encoding: String.Encoding.utf8);
         return input!;
+    }
+    
+    open func decoupledNotification(_ user: HBCIUser, challenge: String?) {
+        print("\(challenge ?? "")");
     }
 }

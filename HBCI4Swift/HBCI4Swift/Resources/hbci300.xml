@@ -564,6 +564,44 @@
             </valids>
         </DEGdef>
         
+        <DEGdef id="TANProcessParams7">
+            <DE name="secfunc" type="Code" maxsize="3"/>
+            <DE name="process" type="Code" maxsize="1"/>
+            <DE name="id" type="ID"/>
+            <DE name="zkamethod_name" type="AN" maxsize="32" minnum="0" />
+            <DE name="zkamethod_version" type="AN" maxsize="10" minnum="0" />
+            <DE name="name" type="AN" maxsize="30"/>
+            <DE name="maxlentan" type="Num" maxsize="2" minnum="0"/>
+            <DE name="tanformat" type="Code" maxsize="1" minnum="0"/>
+            <DE name="inputinfo" type="AN" maxsize="30"/>
+            <DE name="maxleninput" type="Num" maxsize="4"/>
+            <DE name="canmultitan" type="JN"/>
+            <DE name="cantandelay" type="Code" maxsize="1"/>
+            <DE name="canstorno" type="JN"/>
+            <DE name="needsmsaccount" type="Code" maxsize="1"/>
+            <DE name="needorderaccount" type="Code" maxsize="1"/>
+            <DE name="needchallengeclass" type="JN"/>
+            <DE name="ischallengestructured" type="JN" />
+            <DE name="initmode" type="Code"/>
+            <DE name="needtanmedia" type="Code"/>
+            <DE name="needHHDUCanswer" type="JN"/>
+            <DE name="nofactivetanmedia" type="Num" maxsize="1" minnum="0"/>
+            <DE name="maxpolls_decoupled" type="Num" maxsize="3" minnum="0"/>
+            <DE name="firstwait_decoupled" type="Num" maxsize="3" minnum="0"/>
+            <DE name="nextwait_decoupled" type="Num" maxsize="3" minnum="0"/>
+            <DE name="canconfirm_decoupled" type="JN" minnum="0"/>
+            <DE name="canpoll_decoupled" type="JN" minnum="0"/>
+            
+            <valids path="process">
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+            </valids>
+            <valids path="tanformat">
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+            </valids>
+        </DEGdef>       
+        
          <DEGdef id="ParTAN1">
             <DE name="can1step" type="JN"/>
             <DE name="canmultitangvs" type="JN"/>
@@ -647,7 +685,20 @@
                 <validvalue>2</validvalue>
             </valids>
         </DEGdef>
-
+        
+        <DEGdef id="ParTAN7">
+            <DE name="can1step" type="JN"/>
+            <DE name="canmultitangvs" type="JN"/>
+            <DE name="orderhashmode" type="Code" maxsize="1"/>
+            <DEG type="TANProcessParams7" name="TANProcessParams" maxnum="98"/>
+            
+            <valids path="orderhashmode">
+                <validvalue>0</validvalue>
+                <validvalue>1</validvalue>
+                <validvalue>2</validvalue>
+            </valids>
+        </DEGdef>
+        
         <DEGdef id="CryptAlg">
             <DE name="use" type="Code" maxsize="3"/>
             <DE name="mode" type="Code" maxsize="3"/>
@@ -1274,12 +1325,28 @@
                 <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
                 <DEG type="AnswerHHD_UC" minnum="0"/>
             </SEGVersion>
-            
+            <SEGVersion id="7">
+                <DEG type="SegHead" name="SegHead"/>
+                <DE name="process" type="Code" maxsize="1"/>
+                <DE name="ordersegcode" type="AN" maxsize="6" minnum="0"/>
+                <DEG name="OrderAccount" type="KTV2" minnum="0" />
+                <DE name="orderhash" type="Bin" maxsize="256" minnum="0"/>
+                <DE name="orderref" type="AN" maxsize="35" minnum="0"/>
+                <DE name="notlasttan" type="JN" minnum="0"/>
+                <DE name="storno" type="JN" minnum="0"/>
+                <DEG name="SMSAccount" type="KTV2" minnum="0" />
+                <DE name="challengeclass" type="Num" maxsize="2" minnum="0"/>
+                <DEG name="ChallengeClassParams" type="ChallengeClassParams" minnum="0" />
+                <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
+                <DEG type="AnswerHHD_UC" minnum="0"/>
+            </SEGVersion>
+
             <valids path="process">
                 <validvalue>1</validvalue>
                 <validvalue>2</validvalue>
                 <validvalue>3</validvalue>
                 <validvalue>4</validvalue>
+                <validvalue>S</validvalue>
             </valids>
         </SEGdef>
         
@@ -1349,12 +1416,23 @@
                 <DEG type="ChallengeValidity" minnum="0"/>
                 <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
             </SEGVersion>
+            <SEGVersion id="7">
+                <DEG type="SegHead" name="SegHead"/>
+                <DE name="process" type="Code" maxsize="1"/>
+                <DE name="orderhash" type="Bin" maxsize="256" minnum="0"/>
+                <DE name="orderref" type="AN" maxsize="35" minnum="0"/>
+                <DE name="challenge" type="AN" maxsize="2048" minnum="0"/>
+                <DE name="challenge_hhd_uc" type="Bin" maxsize="0" minnum="0" />
+                <DEG type="ChallengeValidity" minnum="0"/>
+                <DE name="tanmedia" type="AN" maxsize="32" minnum="0"/>
+            </SEGVersion>
             
             <valids path="process">
                 <validvalue>1</validvalue>
                 <validvalue>2</validvalue>
                 <validvalue>3</validvalue>
                 <validvalue>4</validvalue>
+                <validvalue>S</validvalue>
             </valids>
 
         </SEGdef>
@@ -1384,7 +1462,11 @@
                 &GVP2;
                 <DEG type="ParTAN6" name="ParTAN"/>
             </SEGVersion>
-    
+            <SEGVersion id="7">
+                &GVP2;
+                <DEG type="ParTAN7" name="ParTAN"/>
+            </SEGVersion>
+            
             &SecClassValids;
         </SEGdef>
         

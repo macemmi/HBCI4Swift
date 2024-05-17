@@ -46,25 +46,25 @@ open class HBCIOrder {
         self.name = name;
         self.msg = message;
         self.user = msg.dialog.user;
-        if let seg = message.segmentWithName(name) {
+                
+        // check if TAN is needed
+        if name != "TAN" {
+            guard let seg = message.segmentWithName(name) else {
+                return nil;
+            }
             self.segment = seg;
             
-            // check if TAN is needed
-            if name != "TAN" {
-                if let ptInfo = self.user.parameters.pinTanInfos {
-                    if let tan_needed = ptInfo.supportedSegs[seg.code] {
-                        self.needsTan = tan_needed;
-                    } else {
-                        logInfo(name + " is not supported!");
-                        return nil;
-                    }
+            if let ptInfo = self.user.parameters.pinTanInfos {
+                if let tan_needed = ptInfo.supportedSegs[seg.code] {
+                    self.needsTan = tan_needed;
                 } else {
-                    logInfo("Missing PIN/TAN information for user \(self.user.anonymizedId)");
+                    logInfo(name + " is not supported!");
                     return nil;
                 }
+            } else {
+                logInfo("Missing PIN/TAN information for user \(self.user.anonymizedId)");
+                return nil;
             }
-        } else {
-            return nil;
         }
     }
     
