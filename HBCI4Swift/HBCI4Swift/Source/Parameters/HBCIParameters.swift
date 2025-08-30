@@ -141,6 +141,21 @@ open class HBCIParameters {
     
     // calculate supported TAN Methods. For each supported secfunc we take the latest HITANS version
     func getSupportedMethods() {
+        logDebug("We have \(supportedSecfuncs.count) supported TAN methods");
+        if supportedSecfuncs.count == 0 {
+            logDebug("no supported TAN methods found, check TAN process information");
+            if tanProcessInfos.count == 0 {
+                logDebug("no TAN process information found - give up");
+            } else {
+                for tanProcessInfo in tanProcessInfos {
+                    for tanMethod in tanProcessInfo.tanMethods {
+                        logDebug("add TAN method \(tanMethod.secfunc ?? "none")...");
+                        supportedSecfuncs.append(tanMethod.secfunc);
+                    }
+                }
+            }
+        }
+        
         for secfunc in supportedSecfuncs {
             var tanMethod:HBCITanMethod?
             for info in self.tanProcessInfos {
@@ -431,6 +446,15 @@ open class HBCIParameters {
             }
         }
         return [String]();
+    }
+    
+    func sepaInfoParameters() -> HBCISepaInfoParameters? {
+        for seg in bpSegments {
+            if seg.name == "SepaInfoPar" {
+                return HBCISepaInfoParameters(segment: seg);
+            }
+        }
+        return nil;
     }
     
     open func getAccounts() ->Array<HBCIAccount> {

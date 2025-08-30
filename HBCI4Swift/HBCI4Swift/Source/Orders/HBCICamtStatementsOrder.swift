@@ -47,11 +47,23 @@ open class HBCICamtStatementsOrder: HBCIOrder {
         }
         
         values = ["KTV.bic":account.bic!, "KTV.iban":account.iban!, "KTV.number":account.number, "KTV.KIK.country":"280", "KTV.KIK.blz":account.bankCode, "allaccounts":false];
+        if account.subNumber != nil {
+            values["KTV.subnumber"] = account.subNumber!
+        }
 
+        if let sepaInfo = user.parameters.sepaInfoParameters() {
+            if !sepaInfo.allowsNationalAccounts {
+                values.removeValue(forKey: "KTV.number");
+                values.removeValue(forKey: "KTV.subnumber");
+                values.removeValue(forKey: "KTV.KIK.country");
+                values.removeValue(forKey: "KTV.KIK.blz");
+            }
+        }
+        
         if var date = dateFrom {
             if let maxdays = user.parameters.maxStatementDays() {
                 let currentDate = Date();
-                let minDate = currentDate.addingTimeInterval((Double)((maxdays-1) * 24 * 3600 * -1));
+                let minDate = currentDate.addingTimeInterval((Double)(maxdays * 24 * 3600 * -1));
                 if minDate > date {
                     date = minDate;
                 }

@@ -245,7 +245,23 @@ open class HBCIDialog {
                     if result.isOk() || result.hasParameterSegments() {
                         user.parameters.bpdVersion = 0; // make sure parameters are updated
                         result.updateParameterForUser(user);
-                        return user.parameters.getAllTanMethods();
+                        // first we try to get the supported TAN methods
+                        var methods = user.parameters.getAllTanMethods();
+                        if methods.count > 0 {
+                            return methods;
+                        }
+                        logInfo("No supported TAN methods found...check if we have any TAN method at all")
+                        // now check for methods in HITANS
+                        let tanInfos = user.parameters.tanProcessInfos;
+                        methods = Array<HBCITanMethod>();
+                        for info in tanInfos {
+                            methods.append(contentsOf: info.tanMethods);
+                        }
+                        if methods.count > 0 {
+                            return methods;
+                        }
+                        // no method information at all...
+                        logInfo("No supported TAN methods found at all...")
                     }
                 } else {
                     logInfo("Anonymous dialog failed with no result");
@@ -260,10 +276,12 @@ open class HBCIDialog {
         return nil;
     }
     
-    /*
-    open func getTanMethods() throws ->HBCIResultMessage? {
+    
+    open func getTanMethods() ->[HBCITanMethod]? {
         user.tanMethod = "999";
         user.sysId = "0";
+        
+        logInfo("get TAN methods from bank using secfunc 999");
         
         let values:Dictionary<String,Any> = ["Idn.KIK.country":"280",
                                              "Idn.KIK.blz":user.bankCode,
@@ -278,16 +296,25 @@ open class HBCIDialog {
         
         self.dialogId = "0";
 
-        if let result = try sendMessage("DialogInit", values: values) {
-            if result.isOk() {
-                result.updateParameterForUser(self.user);
-                checkBPD_for_PSD2(result);
-                return result;
+        do {
+            if let result = try sendMessage("DialogInit", values: values) {
+                if result.isOk() {
+                    result.updateParameterForUser(self.user);
+                    //checkBPD_for_PSD2(result);
+                    let methods = user.parameters.getAllTanMethods();
+                    logInfo("we found \(methods.count) supported TAN  methods");
+                    
+                    return methods;
+                }
             }
         }
+        catch {
+            logInfo("getTANMethods failed with exception");
+        }
+
         return nil;
     }
-    */
+    
     
     open func syncInitWithTan(_ tanMethod:String) throws -> HBCIResultMessage? {
         user.tanMethod = tanMethod;
@@ -393,7 +420,8 @@ open class HBCIDialog {
         if let result = try sendMessage("Synchronize", values: values) {
             if result.isOk() {
                 result.updateParameterForUser(self.user);
-                checkBPD_for_PSD2(result);
+                // is this still required?
+                //checkBPD_for_PSD2(result);
                 
                 for seg in result.segments {
                     if seg.name == "SyncRes" {

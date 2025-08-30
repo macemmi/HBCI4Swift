@@ -22,36 +22,42 @@ open class HBCISepaInfoOrder : HBCIOrder {
     open func enqueue() ->Bool {
         
         var idx = 0;
-        for account in accounts {
-            // check if order is supported
-            if !user.parameters.isOrderSupportedForAccount(self, number: account.number, subNumber: account.subNumber) {
-                logInfo(self.name + " is not supported for account " + account.number);
-                continue;
-            }
-            
-            if idx == 0 {
-                var values:Dictionary<String,Any> = ["KTV.number":account.number, "KTV.KIK.country":"280", "KTV.KIK.blz":account.bankCode];
-                if account.subNumber != nil {
-                    values["KTV.subnumber"] = account.subNumber!
-                }
-                if !segment.setElementValues(values) {
-                    logInfo("Sepa Info Order values could not be set");
-                    return false;
-                }
-            } else {
-                if let element = self.segment.addElement("KTV") {
-                    var values:Dictionary<String,Any> = ["number":account.number, "KIK.country":"280", "KIK.blz":account.bankCode];
-                    if account.subNumber != nil {
-                        values["subnumber"] = account.subNumber!
+        
+        if let parameters = user.parameters.sepaInfoParameters() {
+            if parameters.allowsSingleAccounts {
+                for account in accounts {
+                    // check if order is supported
+                    if !user.parameters.isOrderSupportedForAccount(self, number: account.number, subNumber: account.subNumber) {
+                        logInfo(self.name + " is not supported for account " + account.number);
+                        continue;
                     }
-                    if !element.setElementValues(values) {
-                        logInfo("Sepa Info Order values could not be set");
-                        return false;
+                    
+                    if idx == 0 {
+                        var values:Dictionary<String,Any> = ["KTV.number":account.number, "KTV.KIK.country":"280", "KTV.KIK.blz":account.bankCode];
+                        if account.subNumber != nil {
+                            values["KTV.subnumber"] = account.subNumber!
+                        }
+                        if !segment.setElementValues(values) {
+                            logInfo("Sepa Info Order values could not be set");
+                            return false;
+                        }
+                    } else {
+                        if let element = self.segment.addElement("KTV") {
+                            var values:Dictionary<String,Any> = ["number":account.number, "KIK.country":"280", "KIK.blz":account.bankCode];
+                            if account.subNumber != nil {
+                                values["subnumber"] = account.subNumber!
+                            }
+                            if !element.setElementValues(values) {
+                                logInfo("Sepa Info Order values could not be set");
+                                return false;
+                            }
+                        }
                     }
+                    idx += 1;
                 }
             }
-            idx += 1;
         }
+        
         // add to message
         return msg.addOrder(self);
     }

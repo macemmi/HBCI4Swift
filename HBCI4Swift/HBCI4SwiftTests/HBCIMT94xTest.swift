@@ -31,6 +31,9 @@ class HBCIMT94xTest: XCTestCase {
             let parser = HBCIMT94xParser(mt94xString: ums as NSString);
             var statements = try parser.parse();
             statements.removeAll();
+            
+            let iban = parser.extractIBAN("DE19500400240004020470/DE19500400240004020470")
+            XCTAssert(iban == "DE19500400240004020470", "");
         }
         catch {
             XCTAssertTrue(false, "");

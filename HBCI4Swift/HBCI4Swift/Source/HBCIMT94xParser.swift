@@ -121,7 +121,7 @@ class HBCIMT94xParser {
         var residualRange = NSRange(location: 0, length: tag86String.length);
 
         do {
-            let regex = try NSRegularExpression(pattern: "\\?\\s?[0-9]\\s?[0-9]", options: NSRegularExpression.Options.caseInsensitive)
+            let regex = try NSRegularExpression(pattern: "\\?[0-9][0-9]", options: NSRegularExpression.Options.caseInsensitive)
             var range1 = regex.rangeOfFirstMatch(in: tag86String as String, options: NSRegularExpression.MatchingOptions(), range: residualRange);
             while range1.location != NSNotFound {
                 residualRange.location = range1.location+range1.length;
@@ -166,6 +166,22 @@ class HBCIMT94xParser {
                     return (calendar as NSCalendar).date(byAdding: NSCalendar.Unit.day, value: -1, to: date, options: NSCalendar.Options.wrapComponents);
                 }
             }
+        }
+        return nil;
+    }
+    
+    func extractIBAN(_ str:String) -> String? {
+        if str.count == 0 {
+            return nil;
+        }
+        do {
+            let regex = try NSRegularExpression(pattern: "[A-Z][A-Z][0-9]+", options: NSRegularExpression.Options.caseInsensitive)
+            var range = regex.rangeOfFirstMatch(in: str as String, options: NSRegularExpression.MatchingOptions(), range: NSRange(location: 0, length: str.count));
+            if range.location == 0 {
+                return String(str.prefix(range.length));
+            }
+        } catch {
+            return nil;
         }
         return nil;
     }
@@ -330,9 +346,10 @@ class HBCIMT94xParser {
                         let remoteIBAN = field.value;
                         if remoteIBAN.count > 34 {
                             logInfo("MT94xParse error: remoteIBAN too long: "+remoteIBAN);
-                            throw HBCIError.parseError;
+                            item.remoteIBAN = extractIBAN(remoteIBAN);
+                        } else {
+                            item.remoteIBAN = remoteIBAN;
                         }
-                        item.remoteIBAN = remoteIBAN;
                     } else {
                         item.remoteAccountNumber = field.value;
                     }
