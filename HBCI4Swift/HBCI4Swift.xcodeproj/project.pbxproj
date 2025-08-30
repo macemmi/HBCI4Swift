@@ -198,6 +198,8 @@
 		B1C1DBE2264B1424006E92E1 /* HBCIMT535Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C1DBE0264B1424006E92E1 /* HBCIMT535Parser.swift */; };
 		B1C1DBE8264B1B90006E92E1 /* HBCICustodyAccountBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C1DBE7264B1B90006E92E1 /* HBCICustodyAccountBalance.swift */; };
 		B1C1DBE9264B1B90006E92E1 /* HBCICustodyAccountBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C1DBE7264B1B90006E92E1 /* HBCICustodyAccountBalance.swift */; };
+		B1D04ED72D177C5C00A0C260 /* HBCISepaInfoParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D04ED62D177C4300A0C260 /* HBCISepaInfoParameters.swift */; };
+		B1D04ED82D177C5C00A0C260 /* HBCISepaInfoParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D04ED62D177C4300A0C260 /* HBCISepaInfoParameters.swift */; };
 		B1E26C562210853F0033603E /* HBCIBankMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E26C552210853F0033603E /* HBCIBankMessage.swift */; };
 		B1E26C572210853F0033603E /* HBCIBankMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E26C552210853F0033603E /* HBCIBankMessage.swift */; };
 /* End PBXBuildFile section */
@@ -337,6 +339,7 @@
 		B1AFECA81B5C313C002F1DDF /* HBCI4SwiftTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HBCI4SwiftTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		B1C1DBE0264B1424006E92E1 /* HBCIMT535Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCIMT535Parser.swift; sourceTree = "<group>"; };
 		B1C1DBE7264B1B90006E92E1 /* HBCICustodyAccountBalance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCICustodyAccountBalance.swift; sourceTree = "<group>"; };
+		B1D04ED62D177C4300A0C260 /* HBCISepaInfoParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCISepaInfoParameters.swift; sourceTree = "<group>"; };
 		B1E26C552210853F0033603E /* HBCIBankMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCIBankMessage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -562,6 +565,7 @@
 		B19B35F41AF28B6100F20B9A /* Parameters */ = {
 			isa = PBXGroup;
 			children = (
+				B1D04ED62D177C4300A0C260 /* HBCISepaInfoParameters.swift */,
 				B19B36191AF28BE500F20B9A /* HBCIParameters.swift */,
 				B19B361A1AF28BE500F20B9A /* HBCIPinTanInformation.swift */,
 				B19B361B1AF28BE500F20B9A /* HBCITanProcessInformation.swift */,
@@ -821,6 +825,7 @@
 				B19B36471AF28C1800F20B9A /* HBCIMT94xParser.swift in Sources */,
 				B141844C1B0FBE4200F9B6FA /* HBCISepaParser.swift in Sources */,
 				B19B36411AF28C1800F20B9A /* HBCIError.swift in Sources */,
+				B1D04ED72D177C5C00A0C260 /* HBCISepaInfoParameters.swift in Sources */,
 				B15B72FF1B559CA6008D2E55 /* HBCISmartcardDDV.swift in Sources */,
 				B19B36111AF28BCE00F20B9A /* HBCIBalanceOrder.swift in Sources */,
 				B19B36031AF28BB900F20B9A /* HBCICustomMessage.swift in Sources */,
@@ -942,6 +947,7 @@
 				B163F0E11CC96350001E1009 /* HBCIValue.swift in Sources */,
 				B19B35C61AF28AC500F20B9A /* HBCISyntax.swift in Sources */,
 				B14DB52627FCA4730046F756 /* HBCISepaParser_001_001_03.swift in Sources */,
+				B1D04ED82D177C5C00A0C260 /* HBCISepaInfoParameters.swift in Sources */,
 				B19B36221AF28BE500F20B9A /* HBCITanProcessInformation.swift in Sources */,
 				B174F667264E626E000C11F1 /* HBCISepaUtility.swift in Sources */,
 				B19B36341AF28BF900F20B9A /* HBCISepaTransfer.swift in Sources */,
