@@ -135,149 +135,235 @@ class HBCITanProcess_2 {
     
     func processMessage(_ msg:HBCICustomMessage, _ order:HBCIOrder?) throws ->Bool {
         
-        if let tanOrder = HBCITanOrder(message: msg) {
-            tanOrder.process = "4";
-            
-            var hhducString:String?
-            var tanMethodID = "";
-            var zkaName = "";
-            var challengeType:HBCIChallengeType = .none;
-            
-            // do we need tan medium information?
-            let parameters = dialog.user.parameters;
-            
-            guard let secfunc = dialog.user.tanMethod else {
-                logError("No TAN method specified");
+        guard let vopOrder = HBCIVoPRequestOrder(message: msg) else {
+            logDebug("VoPRequestOrder could not be created");
+            return false }
+        guard let tanOrder = HBCITanOrder(message: msg) else {
+            logDebug("TAN Order could not be created");
+            return false }
+        tanOrder.process = "4";
+        
+        var hhducString:String?
+        var tanMethodID = "";
+        var zkaName = "";
+        var challengeType:HBCIChallengeType = .none;
+        
+        var vopRequired = msg.isVoPRequired();
+        
+        // do we need tan medium information?
+        let parameters = dialog.user.parameters;
+        
+        guard let secfunc = dialog.user.tanMethod else {
+            logError("No TAN method specified");
+            return false;
+        }
+        
+        guard let tanMethod = parameters.getTanMethod(secfunc: secfunc) else {
+            logError("No TAN process parameters available for secfunc \(secfunc)");
+            return false;
+        }
+        
+        logDebug("we work with secfunc \(secfunc)");
+        
+        let needMedia = tanMethod.needTanMedia ?? "0";
+        if needMedia == "2" {
+            tanOrder.tanMediumName = dialog.user.tanMediumName;
+            if tanOrder.tanMediumName == nil {
+                tanOrder.tanMediumName = "noref";
+            }
+            logDebug("we work with TanMediumName \(tanOrder.tanMediumName ?? "<none>")");
+        }
+        
+        
+        tanMethodID = tanMethod.identifier;
+        if let name = tanMethod.zkaMethodName {
+            zkaName = name;
+        }
+        
+        logDebug("tanMethodID is \(tanMethodID)");
+        
+        // now add Tan order to the same message
+        if !msg.addTanOrder(tanOrder) {
+            return false;
+        }
+        
+        // add VoP
+        if vopRequired {
+            logDebug("VoP is required");
+            if(!vopOrder.enqueue()) {
                 return false;
             }
-            
-            guard let tanMethod = parameters.getTanMethod(secfunc: secfunc) else {
-                logError("No TAN process parameters available for secfunc \(secfunc)");
+        }
+        
+        // now send message
+        do {
+            if !(try msg.sendNoTan()) { return false };
+        } catch {
+            logInfo("Error sending first TAN step message");
+            throw error;
+        }
+                        
+        guard var result = msg.result else { return false }
+        
+        if result.hasSegmentResponseWithCode("3091") {
+            logDebug("response code 3091 received - no VoP required");
+            vopRequired = false;
+        }
+        
+        if vopRequired {
+            if vopOrder.vop_id == nil {
+                logInfo("VoP is required but no vop id available");
                 return false;
             }
-            
-            logDebug("we work with secfunc \(secfunc)");
-            
-            let needMedia = tanMethod.needTanMedia ?? "0";
-            if needMedia == "2" { 
-                tanOrder.tanMediumName = dialog.user.tanMediumName;
-                if tanOrder.tanMediumName == nil {
-                    tanOrder.tanMediumName = "noref";
-                }
-                logDebug("we work with TanMediumName \(tanOrder.tanMediumName ?? "<none>")");
-            }
-            
-            
-            tanMethodID = tanMethod.identifier;
-            if let name = tanMethod.zkaMethodName {
-                zkaName = name;
-            }
-            
-            logDebug("tanMethodID is \(tanMethodID)");
-            
-            // now add Tan order to the same message
-            if !msg.addTanOrder(tanOrder) {
+            guard let vopResult = vopOrder.result else {
+                logInfo("VoP is required but vop result could not be determined");
                 return false;
-            }
-            
-            // now send message
-            do {
-                if !(try msg.sendNoTan()) { return false };
-            } catch {
-                logInfo("Error sending first TAN step message");
-                throw error;
-                //return false;
-            }
-            
-            // check if we have a valid reference
-            if tanOrder.orderRef == nil {
-                // check if we have a HITAN segment at all...
-                if let segments = msg.result?.segmentsWithName("TAN"), segments.count > 0 {
-                    logInfo("TAN order reference could not be determined");
-                    return false;
-                } else {
-                    return true;
-                }
             }
 
-            // check if we need to have a TAN
-            if tanOrder.hasResponseWithCode("3076") {
-                // if that response is sent back, we don't need a TAN
-                logInfo("Response 3076 found - no TAN needed");
-                // if TAN is not needed, the update did already happen during sendNoTan above
-                //order?.updateResult(msg.result!);
-                return true;
+            // VoP Confirmation
+            let vopCallbackResult = HBCIDialog.callback!.vopConfirmation(vopResult);
+            switch vopCallbackResult {
+            case .abort:
+                logError("Abbruch durch Benutzer");
+                return false;
+            case .replace:
+                if msg.updateRemoteNameForVoP(vopResult: vopResult) {
+                    logError("Korrektur der Nachricht nicht möglich, bitte Überweisung ändern und neu senden");
+                    return false;
+                }
+                break;
+            case .proceed: break
             }
             
-            if tanOrder.challenge == "nochallenge" {
-                // if that response is sent back, we don't need a TAN
-                logInfo("Value 'nochallenge' found - no TAN needed");
-                // if TAN is not needed, the update did already happen during sendNoTan above
-                //order?.updateResult(msg.result!);
-                return true;
-            }
-            
-            // now we need the TAN -> callback
-            if tanMethodID.prefix(3) == "HHD" && tanMethodID.suffix(3) == "OPT" {
-                challengeType = .flicker;
-                if tanOrder.challenge_hhd_uc == nil {
-                    logInfo("TAN method is \(tanMethodID) but no HHD challenge - we nevertheless go on");
+            if result.hasSegmentResponseWithCode("3945") {
+                // change message, replace vop request by vop confirmation
+                guard let vopConfOrder = HBCIVoPConfirmationOrder(message: msg) else {
+                    logInfo("was not able to create VoP confirmation order")
+                    return false;
                 }
-                // try to parse flicker code out of HHD_UC or challenge itself
-                hhducString = parseFlickerCode(tanOrder.challenge, hhduc: tanOrder.challenge_hhd_uc);
-                if hhducString == nil {
-                    logWarning("TAN method is \(tanMethodID) but no HHD challenge");
+                if !vopConfOrder.enqueue(vop_id: vopOrder.vop_id!) {
+                    logInfo("was not able to enqeue VoP confirmation order")
+                    return false;
                 }
-                // check if HHDUC is part of the challenge string and if yes, remove it
-                if let challenge = tanOrder.challenge, let index = challenge.range(of: "CHLGTEXT") {
-                    logDebug("Challenge contains HHDUC data - remove that: \(challenge)");
-                    let newIndex = challenge.index(index.lowerBound, offsetBy: 10);
-                    tanOrder.challenge = String(challenge.suffix(from: newIndex));
+
+                // now send VoP confirmation message
+                logDebug("send VoP confirmation message");
+                do {
+                    if !(try msg.sendNoTan()) { return false };
+                } catch {
+                    logInfo("Error sending first TAN step message");
+                    throw error;
                 }
-            }
-            if tanMethodID.prefix(2) == "MS" {
-                challengeType = .photo;
-                if let hhduc = tanOrder.challenge_hhd_uc {
-                    hhducString = hhduc.base64EncodedString();
-                    if hhducString == nil {
-                        logInfo("TanMethod is \(tanMethodID) but hhducString data is empty!");
-                    }
+                
+                // check message result
+                if let res = msg.result {
+                    result = res;
                 } else {
-                    logInfo("TanMethod is \(tanMethodID) but HHDUC is empty!");
+                    return false;
                 }
+                
+                vopRequired = false;   // no further vop handling required
             }
-            if tanMethodID.hasPrefix("DECOUPLED") || zkaName.hasPrefix("Decoupled") {
-                return try processDecoupledMessage(msg, order: order, tanOrder: tanOrder);
+        }
+        
+        // check if we have a valid reference
+        if tanOrder.orderRef == nil {
+            // check if we have a HITAN segment at all...
+            if let segments = msg.result?.segmentsWithName("TAN"), segments.count > 0 {
+                logInfo("TAN order reference could not be determined");
+                return false;
+            } else {
+                return true;
             }
-            
-            let tan = try HBCIDialog.callback!.getTan(dialog.user, challenge: tanOrder.challenge, challenge_hhd_uc: hhducString, type: challengeType);
-            
-            if let tanMsg = HBCICustomMessage.newInstance(dialog) {
-                if let tanOrder2 = HBCITanOrder(message: tanMsg) {
-                    tanOrder2.process = "2";
-                    tanOrder2.orderRef = tanOrder.orderRef;
-                    
-                    // add order to message
-                    if !tanOrder2.enqueue() { return false; }
-                    
-                    // now send TAN
-                    tanMsg.tan = tan;
-                    do {
-                        if try tanMsg.sendNoTan() {
-                            // now we need to extract the return segment for the original order
-                            order?.updateResult(tanMsg.result!);
-                            
-                            // update original message with result
-                            msg.result = tanMsg.result!;
-                            return true;
-                        } else {
-                            return false;
+        }
+
+        // check if we need to have a TAN
+        if tanOrder.hasResponseWithCode("3076") {
+            // if that response is sent back, we don't need a TAN
+            logInfo("Response 3076 found - no TAN needed");
+            // if TAN is not needed, the update did already happen during sendNoTan above
+            //order?.updateResult(msg.result!);
+            return true;
+        }
+        
+        if tanOrder.challenge == "nochallenge" {
+            // if that response is sent back, we don't need a TAN
+            logInfo("Value 'nochallenge' found - no TAN needed");
+            // if TAN is not needed, the update did already happen during sendNoTan above
+            //order?.updateResult(msg.result!);
+            return true;
+        }
+        
+        // now we need the TAN -> callback
+        if tanMethodID.prefix(3) == "HHD" && tanMethodID.suffix(3) == "OPT" {
+            challengeType = .flicker;
+            if tanOrder.challenge_hhd_uc == nil {
+                logInfo("TAN method is \(tanMethodID) but no HHD challenge - we nevertheless go on");
+            }
+            // try to parse flicker code out of HHD_UC or challenge itself
+            hhducString = parseFlickerCode(tanOrder.challenge, hhduc: tanOrder.challenge_hhd_uc);
+            if hhducString == nil {
+                logWarning("TAN method is \(tanMethodID) but no HHD challenge");
+            }
+            // check if HHDUC is part of the challenge string and if yes, remove it
+            if let challenge = tanOrder.challenge, let index = challenge.range(of: "CHLGTEXT") {
+                logDebug("Challenge contains HHDUC data - remove that: \(challenge)");
+                let newIndex = challenge.index(index.lowerBound, offsetBy: 10);
+                tanOrder.challenge = String(challenge.suffix(from: newIndex));
+            }
+        }
+        if tanMethodID.prefix(2) == "MS" {
+            challengeType = .photo;
+            if let hhduc = tanOrder.challenge_hhd_uc {
+                hhducString = hhduc.base64EncodedString();
+                if hhducString == nil {
+                    logInfo("TanMethod is \(tanMethodID) but hhducString data is empty!");
+                }
+            } else {
+                logInfo("TanMethod is \(tanMethodID) but HHDUC is empty!");
+            }
+        }
+        if tanMethodID.hasPrefix("DECOUPLED") || zkaName.hasPrefix("Decoupled") {
+            return try processDecoupledMessage(msg, order: order, tanOrder: tanOrder);
+        }
+        
+        let tan = try HBCIDialog.callback!.getTan(dialog.user, challenge: tanOrder.challenge, challenge_hhd_uc: hhducString, type: challengeType);
+        
+        if let tanMsg = HBCICustomMessage.newInstance(dialog) {
+            if let tanOrder2 = HBCITanOrder(message: tanMsg) {
+                tanOrder2.process = "2";
+                tanOrder2.orderRef = tanOrder.orderRef;
+                
+                // add order to message
+                if !tanOrder2.enqueue() { return false; }
+
+                if vopRequired {
+                    if let vop_id = vopOrder.vop_id {
+                        if let vopConfOrder = HBCIVoPConfirmationOrder(message: tanMsg) {
+                            if !vopConfOrder.enqueue(vop_id: vop_id) {
+                                return false;
+                            }
                         }
-                    } catch {
-                        // order could not be sent
-                        logInfo("Error sending second TAN step message");
-                        throw error;
                     }
+                }
+                                
+                // now send TAN
+                tanMsg.tan = tan;
+                do {
+                    if try tanMsg.sendNoTan() {
+                        // now we need to extract the return segment for the original order
+                        order?.updateResult(tanMsg.result!);
+                        
+                        // update original message with result
+                        msg.result = tanMsg.result!;
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } catch {
+                    // order could not be sent
+                    logInfo("Error sending second TAN step message");
+                    throw error;
                 }
             }
         }

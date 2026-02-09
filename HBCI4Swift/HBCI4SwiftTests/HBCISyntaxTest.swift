@@ -163,7 +163,17 @@ class HBCISyntaxTest: XCTestCase {
         if let segment = parseSEG("TANMediaListRes", version: 3, toParse: toParse) {
             print(segment.description);
         }
+    }
+    
+    func testParVoP() {
+        let toParse = "HIVPPS:94:1:4+1+0+0+1000:N:V:J:N:urn?:iso?:std?:iso?:20022?:tech?:xsd?:pain.002.001.10:HKCUM:HKCUI:HKCCS:HKCDE:HKCDN:HKIPD:HKIDA:HKCSE:HKCSA:HKIPT:HKTIA:HKIPZ:HKCCM:HKCME:HKIPM:HKIPE:DKZDF'";
         
+        if let segment = parseSEG("VerificationOfPayeePar", version: 1, toParse: toParse) {
+            print(segment.description);
+            let vopParam = HBCIVoPParameters(segment: segment);
+            XCTAssertTrue(vopParam.segments.count == 17, "");
+            
+        }
     }
     
     func testComposeMsgHead() {

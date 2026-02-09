@@ -189,6 +189,22 @@
 		B19B364D1AF28C1800F20B9A /* HBCICallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B363E1AF28C1800F20B9A /* HBCICallback.swift */; };
 		B19B364E1AF28C1800F20B9A /* HBCICallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19B363E1AF28C1800F20B9A /* HBCICallback.swift */; };
 		B1A296D51B62E86B00B1E3AB /* HBCISecurityMethodDDV.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15B81C71B5450B5006B6366 /* HBCISecurityMethodDDV.swift */; };
+		B1A664182E6C2ED400B0909C /* pain.002.001.10.xsd in Resources */ = {isa = PBXBuildFile; fileRef = B1A664172E6C2ED400B0909C /* pain.002.001.10.xsd */; };
+		B1A6641A2E6C2EE800B0909C /* pain.001.001.09.xsd in Resources */ = {isa = PBXBuildFile; fileRef = B1A664192E6C2EE800B0909C /* pain.001.001.09.xsd */; };
+		B1A6641C2E6C6F1A00B0909C /* HBCIVoPRequestOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A6641B2E6C6EED00B0909C /* HBCIVoPRequestOrder.swift */; };
+		B1A6641D2E6C6F1A00B0909C /* HBCIVoPRequestOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A6641B2E6C6EED00B0909C /* HBCIVoPRequestOrder.swift */; };
+		B1A664222E6CBFE200B0909C /* HBCIVoPParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A664212E6CBFD000B0909C /* HBCIVoPParameters.swift */; };
+		B1A664232E6CBFE200B0909C /* HBCIVoPParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A664212E6CBFD000B0909C /* HBCIVoPParameters.swift */; };
+		B1A664252E6F175200B0909C /* HBCIVoPConfirmationOder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A664242E6F174300B0909C /* HBCIVoPConfirmationOder.swift */; };
+		B1A664262E6F175200B0909C /* HBCIVoPConfirmationOder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A664242E6F174300B0909C /* HBCIVoPConfirmationOder.swift */; };
+		B1AB66542E73563600EE36B4 /* HBCIVoPResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AB66532E73562F00EE36B4 /* HBCIVoPResult.swift */; };
+		B1AB66552E73563600EE36B4 /* HBCIVoPResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AB66532E73562F00EE36B4 /* HBCIVoPResult.swift */; };
+		B1AB66572E735CA900EE36B4 /* HBCISepaPaymentStatusParser_002_001_10.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AB66562E735C9200EE36B4 /* HBCISepaPaymentStatusParser_002_001_10.swift */; };
+		B1AB66582E735CA900EE36B4 /* HBCISepaPaymentStatusParser_002_001_10.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AB66562E735C9200EE36B4 /* HBCISepaPaymentStatusParser_002_001_10.swift */; };
+		B1AB665A2E74A3BD00EE36B4 /* HBCIpain_002_001_10Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AB66592E74A3A000EE36B4 /* HBCIpain_002_001_10Test.swift */; };
+		B1AB66612E83276500EE36B4 /* HBCISepaGenerator_001_001_09.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AB66602E83276500EE36B4 /* HBCISepaGenerator_001_001_09.swift */; };
+		B1AB66632E872E4300EE36B4 /* HBCISepaInstantTransferOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AB66622E872E4300EE36B4 /* HBCISepaInstantTransferOrder.swift */; };
+		B1AB66642E9ADD6400EE36B4 /* HBCISepaGenerator_001_001_09.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AB66602E83276500EE36B4 /* HBCISepaGenerator_001_001_09.swift */; };
 		B1AC507C22F22B1A00826F1F /* HBCIDialogInitMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AC507B22F22B1A00826F1F /* HBCIDialogInitMessage.swift */; };
 		B1AC507D22F22B1A00826F1F /* HBCIDialogInitMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AC507B22F22B1A00826F1F /* HBCIDialogInitMessage.swift */; };
 		B1AE54A81B1A57D1008C7BBE /* pain.001.003.03.xsd in Resources */ = {isa = PBXBuildFile; fileRef = B1AE54A71B1A57D1008C7BBE /* pain.001.003.03.xsd */; };
@@ -324,6 +340,16 @@
 		B19B363C1AF28C1800F20B9A /* HBCITanProcess_2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCITanProcess_2.swift; path = Source/HBCITanProcess_2.swift; sourceTree = "<group>"; };
 		B19B363D1AF28C1800F20B9A /* HBCISigningOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCISigningOption.swift; path = Source/HBCISigningOption.swift; sourceTree = "<group>"; };
 		B19B363E1AF28C1800F20B9A /* HBCICallback.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HBCICallback.swift; path = Source/HBCICallback.swift; sourceTree = "<group>"; };
+		B1A664172E6C2ED400B0909C /* pain.002.001.10.xsd */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = pain.002.001.10.xsd; sourceTree = "<group>"; };
+		B1A664192E6C2EE800B0909C /* pain.001.001.09.xsd */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = pain.001.001.09.xsd; sourceTree = "<group>"; };
+		B1A6641B2E6C6EED00B0909C /* HBCIVoPRequestOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCIVoPRequestOrder.swift; sourceTree = "<group>"; };
+		B1A664212E6CBFD000B0909C /* HBCIVoPParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCIVoPParameters.swift; sourceTree = "<group>"; };
+		B1A664242E6F174300B0909C /* HBCIVoPConfirmationOder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCIVoPConfirmationOder.swift; sourceTree = "<group>"; };
+		B1AB66532E73562F00EE36B4 /* HBCIVoPResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCIVoPResult.swift; sourceTree = "<group>"; };
+		B1AB66562E735C9200EE36B4 /* HBCISepaPaymentStatusParser_002_001_10.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCISepaPaymentStatusParser_002_001_10.swift; sourceTree = "<group>"; };
+		B1AB66592E74A3A000EE36B4 /* HBCIpain_002_001_10Test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCIpain_002_001_10Test.swift; sourceTree = "<group>"; };
+		B1AB66602E83276500EE36B4 /* HBCISepaGenerator_001_001_09.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaGenerator_001_001_09.swift; sourceTree = "<group>"; };
+		B1AB66622E872E4300EE36B4 /* HBCISepaInstantTransferOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HBCISepaInstantTransferOrder.swift; sourceTree = "<group>"; };
 		B1AC507B22F22B1A00826F1F /* HBCIDialogInitMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBCIDialogInitMessage.swift; sourceTree = "<group>"; };
 		B1AE54A71B1A57D1008C7BBE /* pain.001.003.03.xsd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = pain.001.003.03.xsd; sourceTree = "<group>"; };
 		B1AF0FF81BC45A6D00365496 /* PCSCard.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PCSCard.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -374,6 +400,8 @@
 		019E075E1B19AE4B0078C268 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				B1A664172E6C2ED400B0909C /* pain.002.001.10.xsd */,
+				B1A664192E6C2EE800B0909C /* pain.001.001.09.xsd */,
 				B12593F2284C09B100C03C22 /* camt.052.001.08.xsd */,
 				B106934B246B303100A234E8 /* pain.001.001.03.xsd */,
 				B1AE54A71B1A57D1008C7BBE /* pain.001.003.03.xsd */,
@@ -469,6 +497,7 @@
 		B19B35A11AF1792B00F20B9A /* HBCI4SwiftTests */ = {
 			isa = PBXGroup;
 			children = (
+				B1AB66592E74A3A000EE36B4 /* HBCIpain_002_001_10Test.swift */,
 				0165FAA01C5CAAFC0076AC81 /* HBCISyntaxTest.swift */,
 				B1AFECA81B5C313C002F1DDF /* HBCI4SwiftTests-Bridging-Header.h */,
 				B19B35A41AF1792B00F20B9A /* HBCI4SwiftTests.swift */,
@@ -524,11 +553,13 @@
 		B19B35E61AF28B3700F20B9A /* Sepa */ = {
 			isa = PBXGroup;
 			children = (
+				B1AB66562E735C9200EE36B4 /* HBCISepaPaymentStatusParser_002_001_10.swift */,
 				B19B35E71AF28B4900F20B9A /* HBCISepaGeneratorFactory.swift */,
 				B19B35E81AF28B4900F20B9A /* HBCISepaGenerator.swift */,
 				B19B35E91AF28B4900F20B9A /* HBCISepaGeneratorCredit.swift */,
 				B19B35EA1AF28B4900F20B9A /* HBCISepaGenerator_001_003_03.swift */,
 				B106934D246B34E700A234E8 /* HBCISepaGenerator_001_001_03.swift */,
+				B1AB66602E83276500EE36B4 /* HBCISepaGenerator_001_001_09.swift */,
 				B141844B1B0FBE4200F9B6FA /* HBCISepaParser.swift */,
 				B141844E1B0FC0A600F9B6FA /* HBCISepaParserCredit.swift */,
 				B14184541B0FD9A200F9B6FA /* HBCISepaParserFactory.swift */,
@@ -547,6 +578,7 @@
 		B19B35F31AF28B5200F20B9A /* Structures */ = {
 			isa = PBXGroup;
 			children = (
+				B1AB66532E73562F00EE36B4 /* HBCIVoPResult.swift */,
 				B19B36251AF28BF900F20B9A /* HBCIUser.swift */,
 				B19B36261AF28BF900F20B9A /* HBCIStatement.swift */,
 				B19B36271AF28BF900F20B9A /* HBCIAccount.swift */,
@@ -565,6 +597,7 @@
 		B19B35F41AF28B6100F20B9A /* Parameters */ = {
 			isa = PBXGroup;
 			children = (
+				B1A664212E6CBFD000B0909C /* HBCIVoPParameters.swift */,
 				B1D04ED62D177C4300A0C260 /* HBCISepaInfoParameters.swift */,
 				B19B36191AF28BE500F20B9A /* HBCIParameters.swift */,
 				B19B361A1AF28BE500F20B9A /* HBCIPinTanInformation.swift */,
@@ -579,6 +612,8 @@
 		B19B35F51AF28B7000F20B9A /* Orders */ = {
 			isa = PBXGroup;
 			children = (
+				B1A6641B2E6C6EED00B0909C /* HBCIVoPRequestOrder.swift */,
+				B1A664242E6F174300B0909C /* HBCIVoPConfirmationOder.swift */,
 				B19B36071AF28BCE00F20B9A /* HBCIOrder.swift */,
 				B19B36081AF28BCE00F20B9A /* HBCIStatementsOrder.swift */,
 				B121B0BB24AD1ED00010627A /* HBCICamtStatementsOrder.swift */,
@@ -586,6 +621,7 @@
 				B19B360A1AF28BCE00F20B9A /* HBCITanOrder.swift */,
 				B141843C1B06925800F9B6FA /* HBCIAbstractSepaTransferOrder.swift */,
 				B19B360B1AF28BCE00F20B9A /* HBCISepaTransferOrder.swift */,
+				B1AB66622E872E4300EE36B4 /* HBCISepaInstantTransferOrder.swift */,
 				B14184391B06902500F9B6FA /* HBCISepaInternalTransferOrder.swift */,
 				B14184361B0634B300F9B6FA /* HBCISepaDatedTransferOrder.swift */,
 				B19B360C1AF28BCE00F20B9A /* HBCITanMediaOrder.swift */,
@@ -786,9 +822,11 @@
 			files = (
 				B19B35C11AF28AC500F20B9A /* hbci300.xml in Resources */,
 				B1AE54A81B1A57D1008C7BBE /* pain.001.003.03.xsd in Resources */,
+				B1A664182E6C2ED400B0909C /* pain.002.001.10.xsd in Resources */,
 				B19B35BF1AF28AC500F20B9A /* hbci220.xml in Resources */,
 				B12593F3284C09B100C03C22 /* camt.052.001.08.xsd in Resources */,
 				B106934C246B303100A234E8 /* pain.001.001.03.xsd in Resources */,
+				B1A6641A2E6C2EE800B0909C /* pain.001.001.09.xsd in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -839,12 +877,15 @@
 				B19B362B1AF28BF900F20B9A /* HBCIUser.swift in Sources */,
 				B19B35EB1AF28B4900F20B9A /* HBCISepaGeneratorFactory.swift in Sources */,
 				B19B35C91AF28AC500F20B9A /* HBCISyntaxElementDescription.swift in Sources */,
+				B1AB66552E73563600EE36B4 /* HBCIVoPResult.swift in Sources */,
 				B19B35EF1AF28B4900F20B9A /* HBCISepaGeneratorCredit.swift in Sources */,
 				B14184431B07281800F9B6FA /* HBCIStandingOrder.swift in Sources */,
+				B1A664262E6F175200B0909C /* HBCIVoPConfirmationOder.swift in Sources */,
 				B19B35E21AF28B1500F20B9A /* HBCIAnonymousDialog.swift in Sources */,
 				B174E8AB1CAB0FE8004FD3F0 /* HBCIAbstractStandingOrderOrder.swift in Sources */,
 				B12593F1284BA7BD00C03C22 /* HBCICamtParser.swift in Sources */,
 				B19B36451AF28C1800F20B9A /* HBCIUtils.swift in Sources */,
+				B1AB66632E872E4300EE36B4 /* HBCISepaInstantTransferOrder.swift in Sources */,
 				B174E89B1CA1E3E0004FD3F0 /* HBCIAccountStatementOrder.swift in Sources */,
 				B19B36151AF28BCE00F20B9A /* HBCISepaTransferOrder.swift in Sources */,
 				B141845E1B12765000F9B6FA /* HBCISepaCollectiveTransferOrder.swift in Sources */,
@@ -862,6 +903,7 @@
 				B106934E246B34E700A234E8 /* HBCISepaGenerator_001_001_03.swift in Sources */,
 				B19B36051AF28BB900F20B9A /* HBCIResponse.swift in Sources */,
 				B1AC507C22F22B1A00826F1F /* HBCIDialogInitMessage.swift in Sources */,
+				B1A664232E6CBFE200B0909C /* HBCIVoPParameters.swift in Sources */,
 				B19B362D1AF28BF900F20B9A /* HBCIStatement.swift in Sources */,
 				B19B35F11AF28B4900F20B9A /* HBCISepaGenerator_001_003_03.swift in Sources */,
 				B19B35CF1AF28AC500F20B9A /* HBCISegmentDescription.swift in Sources */,
@@ -879,8 +921,10 @@
 				B14184491B07E34E00F9B6FA /* HBCISepaStandingOrderListOrder.swift in Sources */,
 				B19B35CB1AF28AC500F20B9A /* HBCIDataElementDescription.swift in Sources */,
 				B14184331AF5610000F9B6FA /* HBCISepaInfoOrder.swift in Sources */,
+				B1A6641D2E6C6F1A00B0909C /* HBCIVoPRequestOrder.swift in Sources */,
 				B19B35ED1AF28B4900F20B9A /* HBCISepaGenerator.swift in Sources */,
 				B19B36311AF28BF900F20B9A /* HBCIAccountBalance.swift in Sources */,
+				B1AB66572E735CA900EE36B4 /* HBCISepaPaymentStatusParser_002_001_10.swift in Sources */,
 				B141843A1B06902500F9B6FA /* HBCISepaInternalTransferOrder.swift in Sources */,
 				B19B36231AF28BE500F20B9A /* HBCITanMethod.swift in Sources */,
 				B141844F1B0FC0A600F9B6FA /* HBCISepaParserCredit.swift in Sources */,
@@ -899,6 +943,7 @@
 				B1158B95232D87AF0032D5F1 /* HBCISynchronizeMessage.swift in Sources */,
 				B121B0BE24AE47170010627A /* HBCICamtParser_052_001_02.swift in Sources */,
 				B19B36171AF28BCE00F20B9A /* HBCITanMediaOrder.swift in Sources */,
+				B1AB66612E83276500EE36B4 /* HBCISepaGenerator_001_001_09.swift in Sources */,
 				B174E8A81CAB0E34004FD3F0 /* HBCIStandingOrderEditOrder.swift in Sources */,
 				B155FA221B598CFC00C122E1 /* HBCISecurityMethodPinTan.swift in Sources */,
 				B19B360F1AF28BCE00F20B9A /* HBCIStatementsOrder.swift in Sources */,
@@ -930,6 +975,7 @@
 				B1158B8D232D428D0032D5F1 /* HBCITanMediaDialogInitMessage.swift in Sources */,
 				B16A22401B7A811D005E84FC /* RIPEMD160.swift in Sources */,
 				B19B364C1AF28C1800F20B9A /* HBCISigningOption.swift in Sources */,
+				B1A6641C2E6C6F1A00B0909C /* HBCIVoPRequestOrder.swift in Sources */,
 				B14184441B07281800F9B6FA /* HBCIStandingOrder.swift in Sources */,
 				B14184561B0FD9A200F9B6FA /* HBCISepaParserFactory.swift in Sources */,
 				B141845F1B12765000F9B6FA /* HBCISepaCollectiveTransferOrder.swift in Sources */,
@@ -937,6 +983,7 @@
 				B19B36101AF28BCE00F20B9A /* HBCIStatementsOrder.swift in Sources */,
 				B174E8A91CAB0E34004FD3F0 /* HBCIStandingOrderEditOrder.swift in Sources */,
 				B19B36181AF28BCE00F20B9A /* HBCITanMediaOrder.swift in Sources */,
+				B1A664252E6F175200B0909C /* HBCIVoPConfirmationOder.swift in Sources */,
 				B19B35F01AF28B4900F20B9A /* HBCISepaGeneratorCredit.swift in Sources */,
 				B19B36361AF28BF900F20B9A /* HBCITanMedium.swift in Sources */,
 				B19B36141AF28BCE00F20B9A /* HBCITanOrder.swift in Sources */,
@@ -958,6 +1005,7 @@
 				B19B35EE1AF28B4900F20B9A /* HBCISepaGenerator.swift in Sources */,
 				B106934F246B34E700A234E8 /* HBCISepaGenerator_001_001_03.swift in Sources */,
 				B141845C1B10871100F9B6FA /* HBCISepaFormat.swift in Sources */,
+				B1A664222E6CBFE200B0909C /* HBCIVoPParameters.swift in Sources */,
 				B19B35FD1AF28BA500F20B9A /* HBCIExtensions.swift in Sources */,
 				B19B36021AF28BB900F20B9A /* HBCIResultMessage.swift in Sources */,
 				B19B35DE1AF28AC500F20B9A /* HBCIMessage.swift in Sources */,
@@ -974,6 +1022,7 @@
 				B19B361E1AF28BE500F20B9A /* HBCIParameters.swift in Sources */,
 				B19B35D41AF28AC500F20B9A /* HBCISegmentVersions.swift in Sources */,
 				B19B364E1AF28C1800F20B9A /* HBCICallback.swift in Sources */,
+				B1AB66542E73563600EE36B4 /* HBCIVoPResult.swift in Sources */,
 				B19B36241AF28BE500F20B9A /* HBCITanMethod.swift in Sources */,
 				B19B35E51AF28B1500F20B9A /* HBCIDialog.swift in Sources */,
 				B19B35FB1AF28BA500F20B9A /* HBCIString.swift in Sources */,
@@ -985,6 +1034,7 @@
 				B19B36121AF28BCE00F20B9A /* HBCIBalanceOrder.swift in Sources */,
 				B174E8A51CA88D1F004FD3F0 /* HBCISepaStandingOrderDeleteOrder.swift in Sources */,
 				0165FAA31C5CC76C0076AC81 /* HBCIFlickerTest.swift in Sources */,
+				B1AB665A2E74A3BD00EE36B4 /* HBCIpain_002_001_10Test.swift in Sources */,
 				B19B36061AF28BB900F20B9A /* HBCIResponse.swift in Sources */,
 				B103921E264598BD00AEF6FF /* HBCICustodyAccountBalanceOrder.swift in Sources */,
 				B15B72FE1B559CA6008D2E55 /* HBCISmartcardData.swift in Sources */,
@@ -996,7 +1046,9 @@
 				B19B35EC1AF28B4900F20B9A /* HBCISepaGeneratorFactory.swift in Sources */,
 				B19B36461AF28C1800F20B9A /* HBCIUtils.swift in Sources */,
 				B14184501B0FC0A600F9B6FA /* HBCISepaParserCredit.swift in Sources */,
+				B1AB66582E735CA900EE36B4 /* HBCISepaPaymentStatusParser_002_001_10.swift in Sources */,
 				B19B36421AF28C1800F20B9A /* HBCIError.swift in Sources */,
+				B1AB66642E9ADD6400EE36B4 /* HBCISepaGenerator_001_001_09.swift in Sources */,
 				B19B35CA1AF28AC500F20B9A /* HBCISyntaxElementDescription.swift in Sources */,
 				B155FA231B598CFC00C122E1 /* HBCISecurityMethodPinTan.swift in Sources */,
 				B19B362C1AF28BF900F20B9A /* HBCIUser.swift in Sources */,

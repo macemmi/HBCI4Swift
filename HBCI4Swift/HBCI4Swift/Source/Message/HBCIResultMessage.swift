@@ -554,6 +554,15 @@ open class HBCIResultMessage {
         return false;
     }
     
+    func hasSegmentResponseWithCode(_ code:String) -> Bool {
+        for response in responsesForSegments() {
+            if response.code == code {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     open func bankMessages() ->Array<HBCIBankMessage> {
         var messages = Array<HBCIBankMessage>();
         
@@ -605,6 +614,9 @@ open class HBCIResultMessage {
                 if response.description.contains("PIN") {
                     throw HBCIError.PINError;
                 }
+                if Int(response.code) == 9942 {
+                    throw HBCIError.PINError;
+                }
             }
         }
         for response in responsesForSegments() {
@@ -612,6 +624,9 @@ open class HBCIResultMessage {
                 logError("Banknachricht: "+response.description);
                 success = false;
                 if response.description.contains("PIN") {
+                    throw HBCIError.PINError;
+                }
+                if Int(response.code) == 9942 {
                     throw HBCIError.PINError;
                 }
             }
@@ -623,7 +638,6 @@ open class HBCIResultMessage {
         if self.messageResponses.count == 0 {
             for segment in self.segments {
                 if segment.name == "RetGlob" {
-                    
                     let values = segment.elementsForPath("RetVal");
                     for retVal in values {
                         if let response = HBCIMessageResponse(element: retVal) {

@@ -15,20 +15,28 @@ public struct HBCISepaStandingOrderDeletePar {
     public var requiresOrderData:Bool;
 }
 
-open class HBCISepaStandingOrderDeleteOrder: HBCIOrder {
-    var standingOrder:HBCIStandingOrder;
+open class HBCISepaStandingOrderDeleteOrder: HBCIAbstractStandingOrderOrder {
     var orderId:String?
-    
-    
+        
     public init?(message: HBCICustomMessage, order:HBCIStandingOrder, orderId:String?) {
         self.orderId = orderId;
-        self.standingOrder = order;
-        super.init(name: "SepaStandingOrderDelete", message: message);
+        super.init(name: "SepaStandingOrderDelete", message: message, order: order);
         if self.segment == nil {
             return nil;
         }
     }
     
+    open override func enqueue() -> Bool {
+        if super.enqueue() {
+            if let id = self.orderId {
+                if(!self.segment.setElementValue(id, path: "orderid")) { return false };
+            }
+            return msg.addOrder(self);
+        }
+        return false;
+    }
+
+    /*
     open func enqueue() ->Bool {
         
         // todo: validation only needed if transfer data is mandatory
@@ -73,6 +81,7 @@ open class HBCISepaStandingOrderDeleteOrder: HBCIOrder {
         }
         return false;
     }
+    */
 
     open class func getParameters(_ user:HBCIUser) ->HBCISepaStandingOrderDeletePar? {
         guard let (elem, seg) = self.getParameterElement(user, orderName: "SepaStandingOrderDelete") else {

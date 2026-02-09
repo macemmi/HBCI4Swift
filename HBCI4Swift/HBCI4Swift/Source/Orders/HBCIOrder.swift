@@ -42,30 +42,34 @@ open class HBCIOrder {
     open var segment:HBCISegment!
     open var resultSegments = Array<HBCISegment>();
     
+    func checkTANParameters() -> Bool {
+        if let ptInfo = self.user.parameters.pinTanInfos {
+            if let tan_needed = ptInfo.supportedSegs[segment.code] {
+                self.needsTan = tan_needed;
+            } else {
+                logInfo(name + " is not supported!");
+                return false;
+            }
+        } else {
+            logInfo("Missing PIN/TAN information for user \(self.user.anonymizedId)");
+            return false;
+        }
+        return true;
+    }
+    
     public init?(name:String, message:HBCICustomMessage) {
         self.name = name;
         self.msg = message;
         self.user = msg.dialog.user;
-                
-        // check if TAN is needed
-        if name != "TAN" {
-            guard let seg = message.segmentWithName(name) else {
-                return nil;
-            }
-            self.segment = seg;
-            
-            if let ptInfo = self.user.parameters.pinTanInfos {
-                if let tan_needed = ptInfo.supportedSegs[seg.code] {
-                    self.needsTan = tan_needed;
-                } else {
-                    logInfo(name + " is not supported!");
-                    return nil;
-                }
-            } else {
-                logInfo("Missing PIN/TAN information for user \(self.user.anonymizedId)");
-                return nil;
-            }
+
+        guard let seg = message.segmentWithName(name) else {
+            return nil;
         }
+        self.segment = seg;
+
+        if !checkTANParameters() {
+            return nil;
+        }        
     }
     
     open func updateResult(_ result:HBCIResultMessage) {
@@ -119,6 +123,10 @@ open class HBCIOrder {
             }
         }
         return false;
+    }
+    
+    func removeLeadingZeroes(_ s: String) -> String {
+        return String(s.drop(while: {$0 == "0"}));
     }
     
     func adjustNeedsTanForPSD2() {

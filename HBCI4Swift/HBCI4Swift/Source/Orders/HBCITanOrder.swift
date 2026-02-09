@@ -43,6 +43,10 @@ class HBCITanOrder : HBCIOrder {
 
     }
     
+    override func checkTANParameters() -> Bool {
+        return true;
+    }
+    
     func finalize(_ refOrder:HBCIOrder?) ->Bool {
         if let process = self.process {
             var values:Dictionary<String,Any> = ["process":process];

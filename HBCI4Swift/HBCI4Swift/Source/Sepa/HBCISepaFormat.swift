@@ -9,12 +9,17 @@
 import Foundation
 
 enum HBCISepaFormatType : String {
-    case CreditTransfer = "001", PaymentStatus = "002", DebitTransfer = "008";
+    case CreditTransfer = "001", PaymentStatus = "002", DebitTransfer = "008", CAMTStatement = "052";
 }
 
+// for document validation
 let urns = [
     "001.001.03":"urn:iso:std:iso:20022:tech:xsd:pain.001.001.03",
-    "001.003.03":"urn:iso:std:iso:20022:tech:xsd:pain.001.003.03"
+    "001.001.09":"urn:iso:std:iso:20022:tech:xsd:pain.001.001.09",
+    "001.003.03":"urn:iso:std:iso:20022:tech:xsd:pain.001.003.03",
+    "002.001.10":"urn:iso:std:iso:20022:tech:xsd:pain.002.001.10",
+    "052.001.02":"urn:iso:std:iso:20022:tech:xsd:pain.052.001.02",
+    "052.001.08":"urn:iso:std:iso:20022:tech:xsd:pain.052.001.08"
 ];
 
 
@@ -34,6 +39,7 @@ class HBCISepaFormat {
     let type:HBCISepaFormatType!
     let variant:String!
     let version:String!
+    let urn_inst:String!            // this is the original format of the bank, potentially with GBIC*
     
     init?(urn:String) {
         let pattern = "[0-9]{3}.[0-9]{3}.[0-9]{2}";
@@ -42,6 +48,7 @@ class HBCISepaFormat {
         if let match = urn.range(of: pattern, options: NSString.CompareOptions.regularExpression, range: nil, locale: nil) {
             //let prefix = urn.prefix(upTo: match.lowerBound);
             let format = String(urn[match]);
+            self.urn_inst = urn;
             self.type = HBCISepaFormatType(rawValue: format.substringToIndex(3));
             self.variant = format.substringWithRange(NSMakeRange(4, 3));
             self.version = format.substringFromIndex(8);
@@ -84,7 +91,7 @@ class HBCISepaFormat {
     }
     
     var urn:String {
-        return urns[formatString]!;
+        return urns[formatString]!
     }
     
     

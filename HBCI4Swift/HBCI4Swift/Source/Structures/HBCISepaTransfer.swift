@@ -29,6 +29,7 @@ open class HBCISepaTransfer {
     
     open var account:HBCIAccount;
     open var batchbook:Bool = false;
+    open var realtime:Bool = false;
     open var sepaId:String?
     open var paymentInfoId:String?
     open var date:Date?

@@ -316,7 +316,11 @@
         
         <DEGdef id="SuppCamtFormats">
             <DE name="camt_descriptor" type="AN" minsize="1" maxsize="256" minnum="1" maxnum="99"/>
-        </DEGdef>      
+        </DEGdef>
+        
+        <DEGdef id="SuppPayStatusReports">
+            <DE name="sepa_descriptor" type="AN" minsize="1" maxsize="256" minnum="1" maxnum="99" />
+        </DEGdef>
         
         <DEGdef id="SuppSecMethods">
             <DE name="method" type="AN" minsize="3" maxsize="3"/>
@@ -1025,8 +1029,51 @@
             <DE name="canselectcurrency" type="JN" minnum="1"/>
             <DE name="canselectquality" type="JN" minnum="1"/>
         </DEGdef>
-
-
+        
+        <DEGdef id="ParVerificationOfPayee">
+            <DE name="maxtransfercount" type="Num" minnum="1" maxnum="1" maxsize="7"/>
+            <DE name="text_is_structured" type="JN" minnum="1" maxnum="1" />
+            <DE name="type_of_delivery" type="Code" minnum="1" maxnum="1" maxsize="1"/>
+            <DE name="collectivetransfersallowed" type="JN" minnum="1" maxnum="1" maxsize="1"/>
+            <DE name="entertransfercountallowed" type="JN" minnum="1" maxnum="1" maxsize="1"/>
+            <DE name="supportedstatusformats" type="AN" minnum="1" maxnum="1" maxsize="1024"/>
+            <DE name="vop_segment" type="AN" maxsize="6" minnum="0" maxnum="99" />
+            
+            <valids path="type_of_delivery">
+                <validvalue>V</validvalue>
+                <validvalue>S</validvalue>
+            </valids>
+        </DEGdef>
+        
+        <DEGdef id="VOPResult">
+            <DE name="IBAN_receiver" type="AN" minnum="1" maxnum="1" maxsize="34"/>
+            <DE name="IBAN_info" type="AN" minnum="0" maxnum="1" maxsize="140" />
+            <DE name="alt_receiver" type="AN" minnum="0" maxnum="1" maxsize="140" />
+            <DE name="alt_id" type="AN" minnum="0" maxnum="1" maxsize="256" />
+            <DE name="result" type="Code" minnum="1" maxnum="1" />
+            <DE name="rnva_reason" type="AN" minnum="0" maxnum="1" maxsize="256" />
+            
+            <valids path="result">
+                <validvalue>RVMC</validvalue>
+                <validvalue>RCVC</validvalue>
+                <validvalue>RVNM</validvalue>
+                <validvalue>RVNA</validvalue>
+                <validvalue>PDNG</validvalue>
+            </valids>
+            
+        </DEGdef>
+        
+        <DEGdef id="ParSepaInstantPayment1">
+            <DE name="purposeCodes" type="AN" minnum="0"/>
+            <DE name="suppformats" type="AN" maxsize="256" minnum="0" maxnum="9" />
+        </DEGdef>
+        
+        <DEGdef id="ParSepaInstantPayment2">
+            <DE name="canChange" type="JN" />
+            <DE name="purposeCodes" type="AN" minnum="0"/>
+            <DE name="suppformats" type="AN" maxsize="256" minnum="0" maxnum="9" />
+        </DEGdef>
+        
     </DEGs>
     
     
@@ -2236,7 +2283,88 @@
                 &SecClassValids;
             </SEGVersion>
         </SEGdef>
-
+        
+        <!-- ================== Verification of Payee  ========================= -->
+        <SEGdef id="VerificationOfPayee" code="HKVPP">
+            <SEGVersion id="1">
+                <DEG type="SegHead" name="SegHead"/>
+                <DEG type="SuppPayStatusReports" name="supported_reports"/>
+                <DE name="pollingId" type="Bin" minnum="0" maxnum="1"/>
+                <DE name="maxentries" type="Num" minnum="0" maxnum="1" maxsize="4"/>
+                <DE name="offset" type="AN" minnum="0" maxnum="1" maxsize="35" />
+                
+            </SEGVersion>
+        </SEGdef>
+        
+        <SEGdef id="VerificationOfPayeeRes" code="HIVPP">
+            <SEGVersion id="1">
+                <DEG type="SegHead" name="SegHead"/>
+                <DE name="vopid" type="Bin" minnum="0" maxnum="1" />
+                <DEG type="Timestamp" name="validto" minnum="0" maxnum="1"/>
+                <DE name="pollingId" type="Bin" minnum="0" maxnum="1" />
+                <DE name="descriptor" type="AN" minnum="0" maxnum="1" maxsize="256" />
+                <DE name="report" type="Bin" minnum="0" maxnum="1" />
+                <DEG type="VOPResult" name="result" minnum="0" maxnum="1" />
+                <DE name="failMessage" type="AN" minnum="0" maxnum="1" maxsize="65535" />
+                <DE name="waitTime" type="Num" minnum="0" maxnum="1" maxsize="1" />
+                
+            </SEGVersion>
+        </SEGdef>
+        
+        <SEGdef id="VerificationOfPayeePar" code="HIVPPS">
+            <SEGVersion id="1">
+                &GVP2;
+                <DEG type="ParVerificationOfPayee"/>
+                &SecClassValids;
+            </SEGVersion>
+        </SEGdef>
+        
+        <!-- ================== Verification of Payee Confirmation ========================= -->
+        <SEGdef id="VerificationOfPayeeConfirmation" code="HKVPA">
+            <SEGVersion id="1">
+                <DEG type="SegHead" name="SegHead"/>
+                <DE name="vopid" type="Bin" minnum="1" maxnum="1"/>
+            </SEGVersion>
+        </SEGdef>
+        
+        <SEGdef id="VerificationOfPayeeConfirmationPar" code="HIVPAS">
+            <SEGVersion id="1">
+                &GVP2;
+                &SecClassValids;
+            </SEGVersion>
+        </SEGdef>
+        
+        <!-- ================== SEPA Instant Payment ========================= -->
+        <SEGdef id="SepaInstantPayment" code="HKIPZ">
+            <SEGVersion id="1">
+                <DEG type="SegHead" name="SegHead"/>
+                <DEG type="KTVInt" name="My"/>
+                <DE name="sepadescr" type="AN" maxsize="256"/>
+                <DE name="sepapain" type="Bin" maxsize="0"/>                
+            </SEGVersion>
+            <SEGVersion id="2">
+                <DEG type="SegHead" name="SegHead"/>
+                <DEG type="KTVInt" name="KTV"/>
+                <DE name="sepadescr" type="AN" maxsize="256"/>
+                <DE name="sepapain" type="Bin" maxsize="0"/>
+                <DE name="allowChange" type="JN" minnum="0"/>
+            </SEGVersion>
+        </SEGdef>
+        
+        <SEGdef id="SepaInstantPaymentPar" code="HIIPZS">
+            <SEGVersion id="1">
+                &GVP2;
+                <DEG type="ParSepaInstantPayment1" />
+                &SecClassValids;
+            </SEGVersion>
+            <SEGVersion id="2">
+                &GVP2;
+                <DEG type="ParSepaInstantPayment2" />
+                &SecClassValids;                
+            </SEGVersion>
+        </SEGdef>
+        
+        
     </SEGs>
     
     <MSGs>

@@ -437,15 +437,24 @@ open class HBCIParameters {
         return result;
     }
     
-    func camtFormats() ->[String] {
+    func camtFormats() ->[HBCISepaFormat] {
+        var result:[HBCISepaFormat] = [];
         for seg in bpSegments {
             if seg.name == "CamtStatementsPar" {
                 if let formats = seg.elementValuesForPath("StatementsPar.suppformats") as? [String] {
-                    return formats;
+                    for urn in formats {
+                        if let format = HBCISepaFormat(urn: urn) {
+                            if format.type == HBCISepaFormatType.CAMTStatement {
+                                result.append(format);
+                            }
+                        }
+                    }
                 }
             }
         }
-        return [String]();
+        // sort array by version
+        result.sort(by: {$1 < $0})
+        return result;
     }
     
     func sepaInfoParameters() -> HBCISepaInfoParameters? {
@@ -468,6 +477,15 @@ open class HBCIParameters {
             }
         }
         return result;
+    }
+    
+    func getVoPParameters() -> HBCIVoPParameters? {
+        for seg in bpSegments {
+            if seg.name == "VerificationOfPayeePar" {
+                return HBCIVoPParameters(segment: seg);
+            }
+        }
+        return nil;
     }
     
     open var description:String {

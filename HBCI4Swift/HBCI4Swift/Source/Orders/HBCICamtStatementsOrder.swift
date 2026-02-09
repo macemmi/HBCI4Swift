@@ -83,12 +83,8 @@ open class HBCICamtStatementsOrder: HBCIOrder {
             return false;
         }
         for format in formats {
-            if format.hasSuffix("052.001.02") || format.hasSuffix("052.001.08") {
-                camtFormat = format;
-                //break;
-            } else {
-                logDebug("Camt format "+format+" is not supported");
-            }
+            // take first supported
+            camtFormat = format.urn_inst
         }
         
         guard let format = camtFormat else {

@@ -21,10 +21,13 @@ class HBCISepaGeneratorFactory {
             }
         }
         
-        if let format = creditFormats.first(where: { $0.variant == "001" }) {
+        if let format = creditFormats.first(where: { $0.variant == "001" && $0.version == "09" }) {
+            return HBCISepaGenerator_001_001_09(format: format);
+        }
+        if let format = creditFormats.first(where: { $0.variant == "001" && $0.version == "03" }) {
             return HBCISepaGenerator_001_001_03(format: format);
         }
-        if let format = creditFormats.first(where: { $0.variant == "003" }) {
+        if let format = creditFormats.first(where: { $0.variant == "003" && $0.version == "03" }) {
             return HBCISepaGenerator_001_003_03(format: format);
         }
         

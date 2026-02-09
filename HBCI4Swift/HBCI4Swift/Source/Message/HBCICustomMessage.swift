@@ -37,6 +37,7 @@ open class HBCICustomMessage : HBCIMessage {
     var success = false;
     var tan:String?
     open var orders = Array<HBCIOrder>();
+    open var mainOrder: HBCIOrder?             // main order remains nil in Dialog Init Messages
     var result:HBCIResultMessage?
     
     init(msg:HBCIMessage, dialog:HBCIDialog) {
@@ -66,7 +67,19 @@ open class HBCICustomMessage : HBCIMessage {
     
     open func addOrder(_ order:HBCIOrder, afterSegmentCode:String? = nil) -> Bool {
         if let segment = order.segment {
+            if segment.code == "HKVPP" || segment.code == "HKVAP" {
+                logDebug("segment not allowed in addOrder")
+                return false;
+            }
+            
             orders.append(order);
+            if segment.code != "HKTAN" {
+                // we can have only one main order
+                guard mainOrder == nil else {
+                    logDebug("only one main order is supported")
+                    return false }
+                mainOrder = order;
+            }
             if let segmentCode = afterSegmentCode {
                 if !self.insertAfterSegmentCode(segment, segmentCode) {
                     logInfo("Error adding segment after "+segmentCode);
@@ -82,8 +95,48 @@ open class HBCICustomMessage : HBCIMessage {
         return true;
     }
     
+    func addVoPRequestOrder(_ order:HBCIVoPRequestOrder) -> Bool {
+        if let segment = order.segment {
+            orders.append(order);
+            
+            // we have to make sure that this segment comes first
+            self.children.insert(segment, at: 2);
+        } else {
+            logInfo("VoP request order comes without segment!");
+            return false;
+        }
+        return true;
+    }
+    
+    func addVoPConfirmationOrder(_ order:HBCIVoPConfirmationOrder) -> Bool {
+        if let segment = order.segment {
+            orders.append(order);
+            
+            // we first need to remove the request order
+            if !removeSegmentWithCode("HKVPP") {
+                return false;
+            }
+            
+            // we have to make sure that this segment comes first
+            self.children.insert(segment, at: 2);
+        } else {
+            logInfo("VoP confirmation order comes without segment!");
+            return false;
+        }
+        return true;
+    }
+    
+    func updateRemoteNameForVoP(vopResult:HBCIVoPResult) -> Bool {
+        for order in self.orders {
+            if let transferOrder = order as? HBCIAbstractSepaTransferOrder {
+                return transferOrder.updateRemoteNameForVoP(vopResult: vopResult);
+            }
+        }
+        return false;
+    }
+    
     func addTanOrder(_ order:HBCITanOrder) ->Bool {
-        guard let refOrder = orders.last else {
+        guard let refOrder = mainOrder else {
             logInfo("No order in message");
             return false;
         }
@@ -150,7 +203,7 @@ open class HBCICustomMessage : HBCIMessage {
     
     open func send() throws ->Bool {
         // check
-        if orders.count == 0 {
+        if orders.count == 0 || mainOrder == nil {
             logInfo("Custom message contains no orders");
             return false;
         }
@@ -208,6 +261,20 @@ open class HBCICustomMessage : HBCIMessage {
             }
         }
         return false;
+    }
+    
+    func isVoPRequired() -> Bool {
+        guard let par = dialog.user.parameters.getVoPParameters() else { return false }
+        
+        // check if message contains VoP-relevant orders
+        var vop_req = false;
+        for order in self.orders {
+            if par.segments.contains(order.segment.code) {
+                vop_req = true;
+                break;
+            }
+        }
+        return vop_req;
     }
     
     override func validate() ->Bool {

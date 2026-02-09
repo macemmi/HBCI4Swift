@@ -18,18 +18,25 @@ public struct HBCISepaStandingOrderNewPar {
     public var daysPerWeek:String?
 }
 
-open class HBCISepaStandingOrderNewOrder : HBCIOrder {
-    var standingOrder:HBCIStandingOrder;
+open class HBCISepaStandingOrderNewOrder : HBCIAbstractStandingOrderOrder {
+    //var standingOrder:HBCIStandingOrder;
     
     public init?(message: HBCICustomMessage, order:HBCIStandingOrder) {
-        self.standingOrder = order;
-        super.init(name: "SepaStandingOrderNew", message: message);
+        super.init(name: "SepaStandingOrderNew", message: message, order: order);
         if self.segment == nil {
             return nil;
         }
     }
     
-    open func enqueue() ->Bool {
+    open override func enqueue() -> Bool {
+        if super.enqueue() {
+            return msg.addOrder(self);
+        }
+        return false;
+    }
+   
+    /*
+    open override func enqueue() ->Bool {
         if !standingOrder.validate() {
             return false;
         }
@@ -73,6 +80,7 @@ open class HBCISepaStandingOrderNewOrder : HBCIOrder {
         }
         return false;
     }
+    */
     
     override open func updateResult(_ result:HBCIResultMessage) {
         super.updateResult(result);

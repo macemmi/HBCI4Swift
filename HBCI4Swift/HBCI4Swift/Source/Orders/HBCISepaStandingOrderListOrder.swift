@@ -32,7 +32,27 @@ open class HBCISepaStandingOrderListOrder : HBCIOrder {
 
         if let gen = HBCISepaGeneratorFactory.creditGenerator(self.user) {
             if let iban = account.iban, let bic = account.bic {
-                var values:Dictionary<String,Any> = ["My.iban":iban, "My.bic":bic, "sepadescr":gen.sepaFormat.urn];
+                var values:Dictionary<String,Any> = [
+                    "My.iban":iban,
+                    "My.bic":bic,
+                    "My.number":removeLeadingZeroes(account.number),
+                    "My.KIK.country":"280",
+                    "My.KIK.blz":account.bankCode,
+                    "sepadescr":gen.sepaFormat.urn];
+
+                if account.subNumber != nil {
+                    values["My.subnumber"] = account.subNumber!
+                }
+
+                if let sepaInfo = user.parameters.sepaInfoParameters() {
+                    if !sepaInfo.allowsNationalAccounts {
+                        values.removeValue(forKey: "My.number");
+                        values.removeValue(forKey: "My.subnumber");
+                        values.removeValue(forKey: "My.KIK.country");
+                        values.removeValue(forKey: "My.KIK.blz");
+                    }
+                }
+                
                 if let ofs = offset {
                     values["offset"] = ofs;
                 }

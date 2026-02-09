@@ -53,6 +53,18 @@ open class HBCIMessage: HBCISyntaxElement {
         return true;
     }
     
+    func removeSegmentWithCode(_ code:String) -> Bool {
+        guard let segments = self.children as? [HBCISegment] else {
+            logInfo("Wrong message setup");
+            logInfo(self.debugDescription);
+            return false;
+        }
+        if let index = segments.firstIndex(where: {$0.code == code}) {
+            self.children.remove(at: index);
+        }
+        return true;
+    }
+    
     override func elementDescription() -> String {
         return "MSG name: \(self.name)\n";
     }

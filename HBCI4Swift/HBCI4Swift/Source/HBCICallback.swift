@@ -14,10 +14,17 @@ public enum HBCIChallengeType {
     case photo
 }
 
+public enum HBCIVopConfirmationCallbackResult {
+    case proceed
+    case abort
+    case replace
+}
+
 
 public protocol HBCICallback {
     func getTan(_ user:HBCIUser, challenge:String?, challenge_hhd_uc:String?, type:HBCIChallengeType) throws ->String;
     func decoupledNotification(_ user:HBCIUser, challenge:String?);
+    func vopConfirmation(_ vopResult:HBCIVoPResult) -> HBCIVopConfirmationCallbackResult;
 }
 
 open class HBCICallbackConsole : HBCICallback {
@@ -34,5 +41,12 @@ open class HBCICallbackConsole : HBCICallback {
     
     open func decoupledNotification(_ user: HBCIUser, challenge: String?) {
         print("\(challenge ?? "")");
+    }
+    
+    open func vopConfirmation(_ vopResult: HBCIVoPResult) -> HBCIVopConfirmationCallbackResult {
+        if vopResult.status == HBCIVoPResultStatus.match {
+            return .proceed;
+        }
+        return .abort;
     }
 }

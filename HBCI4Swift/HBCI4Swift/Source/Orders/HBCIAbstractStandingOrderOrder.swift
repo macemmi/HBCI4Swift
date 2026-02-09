@@ -35,19 +35,42 @@ open class HBCIAbstractStandingOrderOrder: HBCIOrder {
         if let gen = HBCISepaGeneratorFactory.creditGenerator(self.user) {
             if let data = gen.documentForTransfer(standingOrder) {
                 if let iban = standingOrder.account.iban, let bic = standingOrder.account.bic {
+                    guard let urn_inst = gen.sepaFormat.urn_inst else {
+                        logInfo("Sepa format not available");
+                        return false;
+                    }
+
                     var values:Dictionary<String,Any> = [
                         "My.iban":iban,
                         "My.bic":bic,
+                        "My.number":removeLeadingZeroes(standingOrder.account.number),
+                        "My.KIK.country":"280",
+                        "My.KIK.blz":standingOrder.account.bankCode,
                         "sepapain":data,
-                        "sepadescr":gen.sepaFormat.urn,
+                        "sepadescr":urn_inst,
                         "details.firstdate":standingOrder.startDate,
                         "details.timeunit":(standingOrder.cycleUnit == HBCIStandingOrderCycleUnit.monthly ? "M":"W"),
                         "details.turnus":standingOrder.cycle,
                         "details.execday":standingOrder.executionDay
                     ];
+                    
+                    if standingOrder.account.subNumber != nil {
+                        values["My.subnumber"] = standingOrder.account.subNumber!
+                    }
+                    
+                    if let sepaInfo = user.parameters.sepaInfoParameters() {
+                        if !sepaInfo.allowsNationalAccounts {
+                            values.removeValue(forKey: "My.number");
+                            values.removeValue(forKey: "My.subnumber");
+                            values.removeValue(forKey: "My.KIK.country");
+                            values.removeValue(forKey: "My.KIK.blz");
+                        }
+                    }
+
                     if let lastDate = standingOrder.lastDate {
                         values["details.lastdate"] = lastDate;
                     }
+                    
                     if self.segment.setElementValues(values) {
                         return true;
                     } else {
