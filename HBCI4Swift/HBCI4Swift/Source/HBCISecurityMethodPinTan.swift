@@ -102,7 +102,7 @@ open class HBCISecurityMethodPinTan : HBCISecurityMethod {
         
         if version > 2 {
             values["CryptHead.SecProfile.method"] = "PIN";
-            values["CryptHead.SecProfile.version"] = "2";
+            values["CryptHead.SecProfile.version"] = user.tanMethod == "999" ? "1" : "2";
         }
         
         return msg.setElementValues(values);
